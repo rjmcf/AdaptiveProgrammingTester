@@ -1,4 +1,4 @@
-package miniJAST;
+package miniJAST.expressions;
 
 public abstract class Expression {
 }

@@ -1,7 +1,7 @@
-package miniJAST.ForLoops;
+package miniJAST.statements.ForLoops;
 
-import miniJAST.LocalVarDec;
-import miniJAST.StatementExpr;
+import miniJAST.statements.LocalVarDec;
+import miniJAST.expressions.StatementExpr;
 
 import java.util.ArrayList;
 

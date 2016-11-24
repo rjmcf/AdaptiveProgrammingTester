@@ -1,8 +1,8 @@
-package miniJAST.ForLoops;
+package miniJAST.statements.ForLoops;
 
-import miniJAST.BoolExpression;
-import miniJAST.Statement;
-import miniJAST.StatementExpr;
+import miniJAST.expressions.BoolExpression;
+import miniJAST.statements.Statement;
+import miniJAST.expressions.StatementExpr;
 
 import java.util.ArrayList;
 

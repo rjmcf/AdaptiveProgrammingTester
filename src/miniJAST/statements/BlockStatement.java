@@ -1,3 +1,3 @@
-package miniJAST;
+package miniJAST.statements;
 
 public interface BlockStatement { }

@@ -1,4 +1,6 @@
-package miniJAST;
+package miniJAST.statements;
+
+import miniJAST.expressions.Expression;
 
 public class VarDeclarator {
     private String id;

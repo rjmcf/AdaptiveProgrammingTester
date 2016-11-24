@@ -1,4 +1,4 @@
-package miniJAST;
+package miniJAST.statements;
 
 import java.util.ArrayList;
 

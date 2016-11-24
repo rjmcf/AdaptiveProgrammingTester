@@ -1,4 +1,4 @@
-package miniJAST;
+package miniJAST.expressions;
 
 public class BoolExpression extends Expression {
     private boolean isVar;
