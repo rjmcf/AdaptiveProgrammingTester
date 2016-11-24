@@ -1,5 +1,5 @@
 package miniJAST;
 
-public enum SingleWordStmnt implements Statement, StatementNoShortIf{
+public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     EMPTY, BREAK, CONTINUE, RETURN
 }
