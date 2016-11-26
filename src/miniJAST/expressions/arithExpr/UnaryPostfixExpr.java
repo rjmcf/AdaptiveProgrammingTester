@@ -1,6 +1,8 @@
 package miniJAST.expressions.arithExpr;
 
-public class UnaryPostfixExpr extends UnaryPrefixExpr {
+import miniJAST.expressions.StatementExpr;
+
+public class UnaryPostfixExpr extends UnaryExpr implements StatementExpr {
     private boolean isIncrement;
     private UnaryPostfixExpr expr;
 }

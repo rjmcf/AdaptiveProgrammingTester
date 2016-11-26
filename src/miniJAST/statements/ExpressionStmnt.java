@@ -1,3 +1,3 @@
 package miniJAST.statements;
 
-public abstract class ExpressionStmnt implements StmntNoTrailSubstmnt{ }
+public interface ExpressionStmnt extends StmntNoTrailSubstmnt{ }
