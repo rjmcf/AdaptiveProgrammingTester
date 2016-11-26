@@ -1,9 +1,9 @@
 package miniJAST.statements;
 
-import miniJAST.expressions.BoolExpression;
+import miniJAST.expressions.boolExpr.BoolExpr;
 
 public class IfThenElseStmnt implements Statement{
-    private BoolExpression cond;
+    private BoolExpr cond;
     private StatementNoShortIf trueStmnt;
     private Statement falseStmnt;
 }

@@ -1,6 +1,6 @@
 package miniJAST.statements;
 
-import miniJAST.UnannType;
+import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
