@@ -1,8 +1,8 @@
 package miniJAST.statements;
 
-import miniJAST.expressions.boolExpr.BoolExpr;
+import miniJAST.expressions.Expression;
 
 public class WhileStmntNoShortIf implements StatementNoShortIf {
-    private BoolExpr cond;
+    private Expression cond;
     private StatementNoShortIf stmnt;
 }
