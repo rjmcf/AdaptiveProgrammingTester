@@ -1,5 +1,5 @@
 package miniJAST.types;
 
 public enum UnannType {
-    BOOLEAN, BYTE, SHORT, INT, LONG, CHAR, FLOAT, DOUBLE
+    BOOLEAN, BYTE, CHAR, SHORT, INT, LONG, FLOAT, DOUBLE
 }
