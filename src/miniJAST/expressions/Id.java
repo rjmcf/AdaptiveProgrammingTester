@@ -45,4 +45,6 @@ public class Id extends GroundExpr implements AssignLHS{
         } else
             throw new Exception("Variable " + name + " not available in context.");
     }
+
+    public String getName() { return name; }
 }
