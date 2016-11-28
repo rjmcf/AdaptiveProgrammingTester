@@ -3,6 +3,7 @@ package miniJAST.expressions.boolExpr;
 import miniJAST.Context;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ReturnValues;
+import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 public class CondExpr extends Expression {
@@ -26,31 +27,25 @@ public class CondExpr extends Expression {
         type = trueExpr.getType();
 
         ReturnValues result = new ReturnValues();
+        result.type = trueExpr.getType();
 
         switch (type) {
             case BOOLEAN:
+                result.gType = GeneralType.BOOL;
                 result.boolVal = outcome ? t.boolVal : f.boolVal;
                 return result;
             case BYTE:
-                result.byteVal = outcome ? t.byteVal : f.byteVal;
-                return result;
             case CHAR:
-                result.cVal = outcome ? t.cVal : f.cVal;
-                return result;
             case SHORT:
-                result.sVal = outcome ? t.sVal : f.sVal;
-                return result;
             case INT:
-                result.iVal = outcome ? t.iVal : f.iVal;
-                return result;
             case LONG:
-                result.lVal = outcome ? t.lVal : f.lVal;
+                result.gType = GeneralType.INTEGER;
+                result.intVal = outcome ? t.intVal : f.intVal;
                 return result;
             case FLOAT:
-                result.fVal = outcome ? t.fVal : f.fVal;
-                return result;
             case DOUBLE:
-                result.dVal = outcome ? t.dVal : f.dVal;
+                result.gType = GeneralType.FP;
+                result.fpVal = outcome ? t.fpVal : f.fpVal;
                 return result;
             default:
                 throw new Exception("Type of expressions is not one of the possible UnannTypes.");

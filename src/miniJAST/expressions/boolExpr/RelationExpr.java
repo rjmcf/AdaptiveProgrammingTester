@@ -3,6 +3,7 @@ package miniJAST.expressions.boolExpr;
 import miniJAST.Context;
 import miniJAST.expressions.ReturnValues;
 import miniJAST.expressions.arithExpr.ShiftExpr;
+import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 public class RelationExpr extends EqExpr {
@@ -27,30 +28,22 @@ public class RelationExpr extends EqExpr {
         type = UnannType.BOOLEAN;
 
         ReturnValues result = new ReturnValues();
+        result.type = UnannType.BOOLEAN;
+        result.gType = GeneralType.BOOL;
 
         switch (op) {
             case LT:
                 switch (leftSide.getType()) {
                     case BYTE:
-                        result.boolVal = l.byteVal < r.byteVal;
-                        return result;
                     case CHAR:
-                        result.boolVal = l.cVal < r.cVal;
-                        return result;
                     case SHORT:
-                        result.boolVal = l.sVal < r.sVal;
-                        return result;
                     case INT:
-                        result.boolVal = l.iVal < r.iVal;
-                        return result;
                     case LONG:
-                        result.boolVal = l.lVal < r.lVal;
+                        result.boolVal = l.intVal < r.intVal;
                         return result;
                     case FLOAT:
-                        result.boolVal = l.fVal < r.fVal;
-                        return result;
                     case DOUBLE:
-                        result.boolVal = l.dVal < r.dVal;
+                        result.boolVal = l.fpVal < r.fpVal;
                         return result;
                     default:
                         throw new Exception("LHS type is not one of possible UnannTypes.");
@@ -66,25 +59,15 @@ public class RelationExpr extends EqExpr {
             case GT:
                 switch (leftSide.getType()) {
                     case BYTE:
-                        result.boolVal = l.byteVal > r.byteVal;
-                        return result;
                     case CHAR:
-                        result.boolVal = l.cVal > r.cVal;
-                        return result;
                     case SHORT:
-                        result.boolVal = l.sVal > r.sVal;
-                        return result;
                     case INT:
-                        result.boolVal = l.iVal > r.iVal;
-                        return result;
                     case LONG:
-                        result.boolVal = l.lVal > r.lVal;
+                        result.boolVal = l.intVal > r.intVal;
                         return result;
                     case FLOAT:
-                        result.boolVal = l.fVal > r.fVal;
-                        return result;
                     case DOUBLE:
-                        result.boolVal = l.dVal > r.dVal;
+                        result.boolVal = l.fpVal > r.fpVal;
                         return result;
                     default:
                         throw new Exception("LHS type is not one of possible UnannTypes.");
