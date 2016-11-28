@@ -6,6 +6,7 @@ import miniJAST.expressions.Id;
 import miniJAST.expressions.ReturnValues;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 public class AssignExpr extends Expression implements StatementExpr {
@@ -24,111 +25,228 @@ public class AssignExpr extends Expression implements StatementExpr {
 
         if (UnannType.canBeAssigned(id.getType(), expr.getType())) {
             type = id.getType();
+            ReturnValues result = new ReturnValues();
+            result.type = id.getType();
+            switch(id.getType()) {
+                case BOOLEAN:
+                    result.gType = GeneralType.BOOL;
+                    break;
+                case BYTE:
+                case CHAR:
+                case SHORT:
+                case INT:
+                case LONG:
+                    result.gType = GeneralType.INTEGER;
+                    break;
+                case FLOAT:
+                case DOUBLE:
+                    result.gType = GeneralType.FP;
+                    break;
+                default:
+                    throw new Exception("Type of id not one of possible UnannTypes.");
+
+            }
+
             switch (op) {
                 case EQ:
-                    c.namesToValues.put(id.getName(), ex.objectVal(expr.getType()));
-                    return null;
+                    switch (result.gType) {
+                        case BOOL:
+                            c.namesToValues.put(id.getName(), ex.boolVal);
+                            result.boolVal = ex.boolVal;
+                            return result;
+                        case INTEGER:
+                            c.namesToValues.put(id.getName(), ex.intVal);
+                            result.intVal = ex.intVal;
+                            return result;
+                        case FP:
+                            c.namesToValues.put(id.getName(), ex.fpVal);
+                            result.fpVal = ex.fpVal;
+                            return result;
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
                 case PLUSEQ:
-                    if (type == UnannType.BOOLEAN)
-                        throw new Exception("Cannot use += on type boolean");
-                    else c.namesToValues.put(id.getName(), plusEq(current, type, ex, expr.getType()));
-                    return null;
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use += on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal + ex.intVal));
+                                result.intVal = current.intVal + ex.intVal;
+                            } else {
+                                c.namesToValues.put(id.getName(), (long)(current.intVal + ex.fpVal));
+                                result.intVal = (long)(current.intVal + ex.fpVal);
+                            }
+                            return result;
+                        case FP:
+                            c.namesToValues.put(id.getName(), current.fpVal + ex.fpVal);
+                            result.fpVal = current.fpVal + ex.fpVal;
+                            return result;
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case SUBEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use -= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal - ex.intVal));
+                                result.intVal = current.intVal - ex.intVal;
+                            } else {
+                                c.namesToValues.put(id.getName(), (long)(current.intVal - ex.fpVal));
+                                result.intVal = (long)(current.intVal - ex.fpVal);
+                            }
+                            return result;
+                        case FP:
+                            c.namesToValues.put(id.getName(), current.fpVal - ex.fpVal);
+                            result.fpVal = current.fpVal - ex.fpVal;
+                            return result;
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case TIMESEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use *= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal * ex.intVal));
+                                result.intVal = current.intVal * ex.intVal;
+                            } else {
+                                c.namesToValues.put(id.getName(), (long)(current.intVal * ex.fpVal));
+                                result.intVal = (long)(current.intVal * ex.fpVal);
+                            }
+                            return result;
+                        case FP:
+                            c.namesToValues.put(id.getName(), current.fpVal * ex.fpVal);
+                            result.fpVal = current.fpVal * ex.fpVal;
+                            return result;
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case DIVEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use /= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal / ex.intVal));
+                                result.intVal = current.intVal / ex.intVal;
+                            } else {
+                                c.namesToValues.put(id.getName(), (long)(current.intVal / ex.fpVal));
+                                result.intVal = (long)(current.intVal / ex.fpVal);
+                            }
+                            return result;
+                        case FP:
+                            c.namesToValues.put(id.getName(), current.fpVal / ex.fpVal);
+                            result.fpVal = current.fpVal / ex.fpVal;
+                            return result;
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case MODEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use %= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal % ex.intVal));
+                                result.intVal = current.intVal % ex.intVal;
+                            } else {
+                                c.namesToValues.put(id.getName(), (long)(current.intVal % ex.fpVal));
+                                result.intVal = (long)(current.intVal % ex.fpVal);
+                            }
+                            return result;
+                        case FP:
+                            c.namesToValues.put(id.getName(), current.fpVal % ex.fpVal);
+                            result.fpVal = current.fpVal % ex.fpVal;
+                            return result;
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case LSEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use <<= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal << ex.intVal));
+                                result.intVal = current.intVal << ex.intVal;
+                            } else {
+                                throw new Exception("Cannot use <<= with operand of FP type");
+                            }
+                            return result;
+                        case FP:
+                            throw new Exception("Cannot use <<= with operand of FP type");
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case RSEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use >>= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal >> ex.intVal));
+                                result.intVal = current.intVal >> ex.intVal;
+                            } else {
+                                throw new Exception("Cannot use >>= with operand of FP type");
+                            }
+                            return result;
+                        case FP:
+                            throw new Exception("Cannot use >>= with operand of FP type");
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case ZFRSEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            throw new Exception("Cannot use >>>= on type boolean");
+                        case INTEGER:
+                            if (ex.gType == GeneralType.INTEGER) {
+                                c.namesToValues.put(id.getName(), (current.intVal >>> ex.intVal));
+                                result.intVal = current.intVal >>> ex.intVal;
+                            } else {
+                                throw new Exception("Cannot use >>>= with operand of FP type");
+                            }
+                            return result;
+                        case FP:
+                            throw new Exception("Cannot use >>>= with operand of FP type");
+                        default:
+                            throw new Exception("gType not one of possible GeneralTypes");
+                    }
+                case BANDEQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            c.namesToValues.put(id.getName(), current.boolVal & ex.boolVal);
+                            result.boolVal = current.boolVal & ex.boolVal;
+                            return result;
+                        default:
+                            throw new Exception("Cannot use &= on operands that aren't Boolean");
+                    }
+                case BOREQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            c.namesToValues.put(id.getName(), current.boolVal | ex.boolVal);
+                            result.boolVal = current.boolVal | ex.boolVal;
+                            return result;
+                        default:
+                            throw new Exception("Cannot use |= on operands that aren't Boolean");
+                    }
+                case BXOREQ:
+                    switch (result.gType) {
+                        case BOOL:
+                            c.namesToValues.put(id.getName(), current.boolVal ^ ex.boolVal);
+                            result.boolVal = current.boolVal ^ ex.boolVal;
+                            return result;
+                        default:
+                            throw new Exception("Cannot use ^= on operands that aren't Boolean");
+                    }
                 default:
-                    throw new Exception("Only = and += are yet implemented");
+                    throw new Exception("op not one of possible relation operators");
             }
         } else
             throw new Exception(expr.getType() + " cannot be assigned to a variable of type " + id.getType() +".");
-    }
-
-    private Object plusEq(ReturnValues l, UnannType lt, ReturnValues r, UnannType rt) throws Exception{
-        switch (lt) {
-            case BYTE:
-                switch (rt) {
-                    case BYTE:
-                        return l.byteVal + r.byteVal;
-                    case CHAR:
-                        return l.byteVal + r.cVal;
-                    case SHORT:
-                        return l.byteVal + r.sVal;
-                    case INT:
-                        return l.byteVal + r.iVal;
-                    case LONG:
-                        return l.byteVal + r.lVal;
-                    case FLOAT:
-                        return l.byteVal + r.fVal;
-                    case DOUBLE:
-                        return l.byteVal + r.dVal;
-                }
-                break;
-            case CHAR:
-                switch (rt) {
-                    case CHAR:
-                        return l.cVal + r.cVal;
-                    case SHORT:
-                        return l.cVal + r.sVal;
-                    case INT:
-                        return l.cVal + r.iVal;
-                    case LONG:
-                        return l.cVal + r.lVal;
-                    case FLOAT:
-                        return l.cVal + r.fVal;
-                    case DOUBLE:
-                        return l.cVal + r.dVal;
-                }
-                break;
-            case SHORT:
-                switch (rt) {
-                    case SHORT:
-                        return l.sVal + r.sVal;
-                    case INT:
-                        return l.sVal + r.iVal;
-                    case LONG:
-                        return l.sVal + r.lVal;
-                    case FLOAT:
-                        return l.sVal + r.fVal;
-                    case DOUBLE:
-                        return l.sVal + r.dVal;
-                }
-                break;
-            case INT:
-                switch(rt) {
-                    case INT:
-                        return l.iVal + r.iVal;
-                    case LONG:
-                        return l.iVal + r.lVal;
-                    case FLOAT:
-                        return l.iVal + r.fVal;
-                    case DOUBLE:
-                        return l.iVal + r.dVal;
-                }
-                break;
-            case LONG:
-                switch (rt) {
-                    case LONG:
-                        return l.lVal + r.lVal;
-                    case FLOAT:
-                        return l.lVal + r.fVal;
-                    case DOUBLE:
-                        return l.lVal + r.fVal;
-                }
-                break;
-            case FLOAT:
-                switch (rt) {
-                    case FLOAT:
-                        return l.fVal + r.fVal;
-                    case DOUBLE:
-                        return l.fVal + r.dVal;
-                }
-                break;
-            case DOUBLE:
-                switch (rt) {
-                    case DOUBLE:
-                        return l.dVal + r.dVal;
-                }
-                break;
-            default:
-                throw new Exception("LHS type was not one of possible UnannTypes.");
-        }
-        throw new Exception("RHS type was not one of possible UnannTypes");
     }
 }
