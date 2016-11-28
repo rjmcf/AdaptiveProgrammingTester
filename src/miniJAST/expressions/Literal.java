@@ -1,6 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 public class Literal extends PrimaryExpr{
@@ -10,8 +11,10 @@ public class Literal extends PrimaryExpr{
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
         ReturnValues result = new ReturnValues();
+        result.type = litType;
         switch(litType) {
             case BOOLEAN:
+                result.gType = GeneralType.BOOL;
                 if (value.equals("true"))
                     result.boolVal = true;
                 else if (value.equals("false"))
@@ -19,28 +22,23 @@ public class Literal extends PrimaryExpr{
                 else
                     throw new Exception("Type is boolean, but val is not true or false.");
                 break;
-            case BYTE:
-                result.byteVal = Byte.valueOf(value);
-                break;
             case CHAR:
+                result.gType = GeneralType.INTEGER;
                 if (value.length() > 1)
                     throw new Exception("Type is char, but value is more than one character.");
-                result.cVal = value.charAt(0);
+                result.intVal = value.charAt(0);
                 break;
+            case BYTE:
             case SHORT:
-                result.sVal = Short.valueOf(value);
-                break;
             case INT:
-                result.iVal = Integer.valueOf(value);
-                break;
             case LONG:
-                result.lVal = Long.valueOf(value);
+                result.gType = GeneralType.INTEGER;
+                result.intVal = Long.valueOf(value);
                 break;
             case FLOAT:
-                result.fVal = Float.valueOf(value);
-                break;
             case DOUBLE:
-                result.dVal = Double.valueOf(value);
+                result.gType = GeneralType.FP;
+                result.fpVal = Double.valueOf(value);
                 break;
             default:
                 throw new Exception("'litType' was not one of possible UnannTypes");
