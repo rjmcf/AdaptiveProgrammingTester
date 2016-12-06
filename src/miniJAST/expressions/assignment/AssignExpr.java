@@ -3,7 +3,7 @@ package miniJAST.expressions.assignment;
 import miniJAST.Context;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
-import miniJAST.expressions.ReturnValues;
+import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.types.GeneralType;

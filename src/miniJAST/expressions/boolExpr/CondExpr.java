@@ -2,7 +2,7 @@ package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.ReturnValues;
+import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 

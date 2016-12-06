@@ -1,7 +1,7 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
-import miniJAST.expressions.ReturnValues;
+import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.types.GeneralType;
 
 public class AddExpr extends ShiftExpr {

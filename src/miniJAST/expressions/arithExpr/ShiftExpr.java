@@ -1,7 +1,7 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
-import miniJAST.expressions.ReturnValues;
+import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.types.GeneralType;
 

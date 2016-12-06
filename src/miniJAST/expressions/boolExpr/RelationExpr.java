@@ -1,7 +1,7 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.expressions.ReturnValues;
+import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.arithExpr.ShiftExpr;
 import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;

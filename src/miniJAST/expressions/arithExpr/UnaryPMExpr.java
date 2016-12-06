@@ -1,7 +1,7 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
-import miniJAST.expressions.ReturnValues;
+import miniJAST.expressions.returnValues.ReturnValues;
 
 public class UnaryPMExpr extends UnaryExpr {
     private boolean isPlus;
