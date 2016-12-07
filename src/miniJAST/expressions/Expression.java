@@ -2,10 +2,10 @@ package miniJAST.expressions;
 
 import miniJAST.Context;
 import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.types.UnannType;
+import miniJAST.types.Type;
 
 public abstract class Expression {
-    protected UnannType type;
+    protected Type type;
     public abstract ReturnValues evaluate(Context c) throws Exception;
-    public UnannType getType() { return type; }
+    public Type getType() { return type; }
 }
