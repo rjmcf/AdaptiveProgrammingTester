@@ -5,7 +5,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
-public class EqExpr extends AndExpr {
+public class EqExpr extends XOrExpr {
     private boolean equalityTest;
     private EqExpr leftSide; // Left associative (allows arith eq test on left side)
     private RelationExpr rightSide;

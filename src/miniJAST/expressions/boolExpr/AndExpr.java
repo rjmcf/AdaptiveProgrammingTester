@@ -6,7 +6,7 @@ import miniJAST.types.UnannType;
 
 public class AndExpr extends OrExpr {
     private AndExpr leftSide; // Left associative
-    private IncOrExpr rightSide;
+    private XOrExpr rightSide;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {

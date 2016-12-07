@@ -1,6 +1,7 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
+import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.arithExpr.ShiftExpr;
 import miniJAST.types.GeneralType;
@@ -9,11 +10,7 @@ import miniJAST.types.UnannType;
 public class RelationExpr extends EqExpr {
     private RelationOp op;
     private RelationExpr leftSide; // Left associative
-    private ShiftExpr rightSide;
-
-    public void setOp(RelationOp o) { op = o; }
-    public void setLeft(RelationExpr l) { leftSide = l; }
-    public void setRight(ShiftExpr r) { rightSide = r; }
+    private AddExpr rightSide;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {

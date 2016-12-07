@@ -1,10 +1,11 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
+import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.types.GeneralType;
 
-public class AddExpr extends ShiftExpr {
+public class AddExpr extends RelationExpr {
     private boolean isPlus;
     private AddExpr leftSide; // Left associative
     private MultExpr rightSide;

@@ -4,9 +4,9 @@ import miniJAST.Context;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.types.UnannType;
 
-public class XOrExpr extends IncOrExpr {
+public class XOrExpr extends AndExpr {
     private XOrExpr leftSide; // Left associative
-    private AndExpr rightSide;
+    private EqExpr rightSide;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
