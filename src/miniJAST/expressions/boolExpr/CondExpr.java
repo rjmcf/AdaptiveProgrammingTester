@@ -7,7 +7,7 @@ import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 public class CondExpr extends Expression {
-    private CondOrExpr cond;
+    private OrExpr cond;
     private Expression trueExpr;
     private CondExpr falseExpr; // Right associative
 

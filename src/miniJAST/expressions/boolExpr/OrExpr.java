@@ -4,9 +4,9 @@ import miniJAST.Context;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.types.UnannType;
 
-public class CondAndExpr extends CondOrExpr {
-    private CondAndExpr leftSide; // Left associative
-    private IncOrExpr rightSide;
+public class OrExpr extends CondExpr {
+    private OrExpr leftSide; // Left associative
+    private AndExpr rightSide;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
@@ -18,7 +18,7 @@ public class CondAndExpr extends CondOrExpr {
 
         type = UnannType.BOOLEAN;
 
-        l.boolVal = l.boolVal && r.boolVal;
+        l.boolVal = l.boolVal || r.boolVal;
         return l;
     }
 }
