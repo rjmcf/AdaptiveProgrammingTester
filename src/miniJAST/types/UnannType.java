@@ -1,7 +1,7 @@
 package miniJAST.types;
 
 public enum UnannType {
-    BOOLEAN, BYTE, CHAR, SHORT, INT, LONG, FLOAT, DOUBLE;
+    BOOLEAN, CHAR, INT, DOUBLE;
 
     public static boolean canBeAssigned(UnannType l, UnannType r) {
         if (l == BOOLEAN && r == BOOLEAN)
