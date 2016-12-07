@@ -2,41 +2,35 @@ package miniJAST.expressions;
 
 import miniJAST.Context;
 import miniJAST.expressions.assignment.AssignLHS;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.types.GeneralType;
-import miniJAST.types.UnannType;
+import miniJAST.expressions.returnValues.*;
+import miniJAST.types.Type;
+
+import java.util.ArrayList;
 
 public class Id extends GroundExpr implements AssignLHS{
-    private UnannType varType;
+    private Type varType;
     private String name;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception{
         if (c.namesToTypes.get(name).equals(varType)) {
-            type = varType;
-            ReturnValues result = new ReturnValues();
-            result.type = varType;
             Object v = c.namesToValues.get(name);
-            switch (varType) {
-                case BOOLEAN:
-                    result.gType = GeneralType.BOOL;
-                    result.boolVal = (boolean) v;
-                    return result;
-                case BYTE:
-                case CHAR:
-                case SHORT:
-                case INT:
-                case LONG:
-                    result.gType = GeneralType.INTEGER;
-                    result.intVal = (long) v;
-                    return result;
-                case FLOAT:
-                case DOUBLE:
-                    result.gType = GeneralType.FP;
-                    result.fpVal = (double) v;
-                    return result;
-                default:
-                    throw new Exception("'varType' was not one of possible UnannTypes.");
+            if (varType.dims == 0) {
+                switch (varType.uType) {
+                    case BOOLEAN:
+                        return new ReturnValuesBoolean((boolean) c.namesToValues.get(name));
+                    case CHAR:
+                        return new ReturnValuesChar((char) c.namesToValues.get(name));
+                    case INT:
+                        return new ReturnValuesInt((int) c.namesToValues.get(name));
+                    case DOUBLE:
+                        return new ReturnValuesDouble((double) c.namesToValues.get(name));
+                    default:
+                        throw new Exception("'varType' was not one of possible UnannTypes.");
+                }
+            } else {
+                ArrayList<Integer> dimData = c.namesToDimData.get(name);
+                return new ReturnValuesMDArray(varType.uType, dimData.get(0), (ArrayList<Integer>)dimData.subList(1,dimData.size()));
             }
         } else
             throw new Exception("Variable " + name + " not available in context.");

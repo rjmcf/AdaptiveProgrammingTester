@@ -1,8 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.types.GeneralType;
+import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
 public class Literal extends PrimaryExpr{
@@ -11,40 +10,26 @@ public class Literal extends PrimaryExpr{
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
-        ReturnValues result = new ReturnValues();
-        result.type = litType;
         switch(litType) {
             case BOOLEAN:
-                result.gType = GeneralType.BOOL;
+                boolean v;
                 if (value.equals("true"))
-                    result.boolVal = true;
+                    v = true;
                 else if (value.equals("false"))
-                    result.boolVal = false;
+                    v = false;
                 else
                     throw new Exception("Type is boolean, but val is not true or false.");
-                break;
+                return new ReturnValuesBoolean(v);
             case CHAR:
-                result.gType = GeneralType.INTEGER;
                 if (value.length() > 1)
                     throw new Exception("Type is char, but value is more than one character.");
-                result.intVal = value.charAt(0);
-                break;
-            case BYTE:
-            case SHORT:
+                return new ReturnValuesChar(value.charAt(0));
             case INT:
-            case LONG:
-                result.gType = GeneralType.INTEGER;
-                result.intVal = Long.valueOf(value);
-                break;
-            case FLOAT:
+                return new ReturnValuesInt(Integer.valueOf(value));
             case DOUBLE:
-                result.gType = GeneralType.FP;
-                result.fpVal = Double.valueOf(value);
-                break;
+                return new ReturnValuesDouble(Double.valueOf(value));
             default:
                 throw new Exception("'litType' was not one of possible UnannTypes");
         }
-        type = litType;
-        return result;
     }
 }

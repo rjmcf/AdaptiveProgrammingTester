@@ -8,8 +8,6 @@ public class BracketedExpr extends PrimaryExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
-        ReturnValues result = expr.evaluate(c);
-        type = expr.type;
-        return result;
+        return expr.evaluate(c);
     }
 }

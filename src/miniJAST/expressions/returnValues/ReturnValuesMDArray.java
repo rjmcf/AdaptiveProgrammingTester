@@ -1,20 +1,18 @@
 package miniJAST.expressions.returnValues;
 
-import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ReturnValuesMDArray<T> extends ReturnValues{
-    public int[] dimensionSizes;
+    public ArrayList<Integer> dimensionSizes;
     public int size;
     protected ArrayList<T> values;
 
-    public ReturnValuesMDArray(UnannType t, int dims, int[] dimSizes) throws Exception{
-        super(t==UnannType.BOOLEAN ? GeneralType.BOOL : t.compareTo(UnannType.FLOAT) < 0 ? GeneralType.INTEGER : GeneralType.FP,
-                t, dims);
-        if (dimSizes.length != dims) {
+    public ReturnValuesMDArray(UnannType t, int dims,  ArrayList<Integer> dimSizes) throws Exception{
+        super(t, dims);
+        if (dimSizes.size() != dims) {
             throw new Exception("Dimension size must be specified for all dimensions!");
         }
         dimensionSizes = dimSizes;
@@ -34,40 +32,23 @@ public class ReturnValuesMDArray<T> extends ReturnValues{
         int index = 0;
         int valCount = 1;
         for (int i = 0; i < indices.length; i++) {
-            for (int j = i+1; j < dimensionSizes.length; j++) {
-                valCount *= dimensionSizes[j];
+            for (int j = i+1; j < dimensionSizes.size(); j++) {
+                valCount *= dimensionSizes.get(j);
             }
             index += indices[i]*valCount;
             valCount = 1;
         }
 
-        ReturnValues r;
         if (indices.length == type.dims) {
             switch (t) {
                 case BOOLEAN:
-                    r = new ReturnValuesBoolean((Boolean)values.get(index));
-                    return r;
-                case BYTE:
-                    r = new ReturnValuesByte((Byte)values.get(index));
-                    return r;
+                    return new ReturnValuesBoolean((Boolean)values.get(index));
                 case CHAR:
-                    r = new ReturnValuesChar((Character) values.get(index));
-                    return r;
-                case SHORT:
-                    r = new ReturnValuesShort((Short) values.get(index));
-                    return r;
+                    return new ReturnValuesChar((Character) values.get(index));
                 case INT:
-                    r = new ReturnValuesInt((Integer) values.get(index));
-                    return r;
-                case LONG:
-                    r = new ReturnValuesLong((Long) values.get(index));
-                    return r;
-                case FLOAT:
-                    r = new ReturnValuesFloat((Float) values.get(index));
-                    return r;
+                    return new ReturnValuesInt((Integer) values.get(index));
                 case DOUBLE:
-                    r = new ReturnValuesDouble((Double) values.get(index));
-                    return r;
+                    return new ReturnValuesDouble((Double) values.get(index));
                 default:
                     throw new Exception("t is not one of possible UnanTypes");
             }
@@ -75,13 +56,13 @@ public class ReturnValuesMDArray<T> extends ReturnValues{
 
         int newDims = type.dims - indices.length;
         int numValues = 1;
-        for (int i = indices.length; i < dimensionSizes.length; i++) {
-            numValues *= dimensionSizes[i];
+        for (int i = indices.length; i < dimensionSizes.size(); i++) {
+            numValues *= dimensionSizes.get(i);
         }
         ArrayList<T> newVals = (ArrayList<T>)values.subList(index,index+numValues);
 
-        r = new ReturnValuesMDArray<T>(t, newDims, Arrays.copyOfRange(dimensionSizes, indices.length, dimensionSizes.length));
-        ((ReturnValuesMDArray<T>)r).values = newVals;
+        ReturnValuesMDArray<T> r = new ReturnValuesMDArray<>(t, newDims, (ArrayList<Integer>) dimensionSizes.subList(indices.length, dimensionSizes.size()));
+        r.values = newVals;
 
         return r;
     }
@@ -94,8 +75,8 @@ public class ReturnValuesMDArray<T> extends ReturnValues{
         int index = 0;
         int valCount = 1;
         for (int i = 0; i < indices.length; i++) {
-            for (int j = i+1; j < dimensionSizes.length; j++) {
-                valCount *= dimensionSizes[j];
+            for (int j = i+1; j < dimensionSizes.size(); j++) {
+                valCount *= dimensionSizes.get(j);
             }
             index += indices[i]*valCount;
             valCount = 1;
