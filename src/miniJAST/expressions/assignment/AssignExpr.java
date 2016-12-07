@@ -3,10 +3,9 @@ package miniJAST.expressions.assignment;
 import miniJAST.Context;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
-import miniJAST.expressions.returnValues.ReturnValues;
+import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
-import miniJAST.types.GeneralType;
 import miniJAST.types.UnannType;
 
 public class AssignExpr extends Expression implements StatementExpr {
@@ -18,235 +17,250 @@ public class AssignExpr extends Expression implements StatementExpr {
     public ReturnValues evaluate(Context c) throws Exception {
         if (lhs instanceof ArrayAccess)
             throw new Exception("Arrays not yet implemented");
+        // TODO implement arrays and update this.
 
-        Id id = ((Id)lhs);
+        Id id = ((Id) lhs);
         ReturnValues current = id.evaluate(c);
         ReturnValues ex = expr.evaluate(c);
 
-        if (UnannType.canBeAssigned(id.getType(), expr.getType())) {
-            type = id.getType();
-            ReturnValues result = new ReturnValues();
-            result.type = id.getType();
-            switch(id.getType()) {
-                case BOOLEAN:
-                    result.gType = GeneralType.BOOL;
-                    break;
-                case BYTE:
-                case CHAR:
-                case SHORT:
-                case INT:
-                case LONG:
-                    result.gType = GeneralType.INTEGER;
-                    break;
-                case FLOAT:
-                case DOUBLE:
-                    result.gType = GeneralType.FP;
-                    break;
-                default:
-                    throw new Exception("Type of id not one of possible UnannTypes.");
+        ReturnValues result;
 
-            }
+        switch (op) {
+            case EQ:
+                switch (current.getType().uType) {
+                    case BOOLEAN:
+                        if (ex.getType().uType != UnannType.BOOLEAN)
+                            throw new Exception("Cannot assign anything but a boolean value to a boolean variable");
+                        boolean b = ((ReturnValuesBoolean) ex).value;
+                        c.namesToValues.put(id.getName(), b);
+                        return new ReturnValuesBoolean(b);
+                    case CHAR:
+                        if (ex.getType().uType != UnannType.CHAR)
+                            throw new Exception("Cannot assign anything but a char value to a char variable");
+                        char ch = ((ReturnValuesChar) ex).value;
+                        c.namesToValues.put(id.getName(), ch);
+                        return new ReturnValuesChar(ch);
+                    case INT:
+                        if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
+                            throw new Exception("Can only assign char or int to int variable");
+                        int i;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                i = ((ReturnValuesChar) ex).value;
+                                break;
+                            case INT:
+                                i = ((ReturnValuesInt) ex).value;
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), i);
+                        return new ReturnValuesInt(i);
+                    default: // DOUBLE
+                        if (ex.getType().uType == UnannType.BOOLEAN)
+                            throw new Exception("Cannot assign boolean to double variable");
+                        double d;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                d = ((ReturnValuesChar) ex).value;
+                                break;
+                            case INT:
+                                d = ((ReturnValuesInt) ex).value;
+                                break;
+                            case DOUBLE:
+                                d = ((ReturnValuesDouble) ex).value;
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), d);
+                        return new ReturnValuesDouble(d);
+                }
+            case PLUSEQ:
+                switch (current.getType().uType) {
+                    case CHAR:
+                        if (ex.getType().uType != UnannType.CHAR)
+                            throw new Exception("Cannot assign anything but a char value to a char variable");
+                        char ch = (char)(((ReturnValuesChar) ex).value + ((char)c.namesToValues.get(id.getName())));
+                        c.namesToValues.put(id.getName(), ch);
+                        return new ReturnValuesChar(ch);
+                    case INT:
+                        if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
+                            throw new Exception("Can only assign char or int to int variable");
+                        int i;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                i = ((ReturnValuesChar) ex).value + (int)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                i = ((ReturnValuesInt) ex).value + (int)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), i);
+                        return new ReturnValuesInt(i);
+                    case DOUBLE:
+                        if (ex.getType().uType == UnannType.BOOLEAN)
+                            throw new Exception("Cannot assign boolean to double variable");
+                        double d;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                d = ((ReturnValuesChar) ex).value  + (double)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                d = ((ReturnValuesInt) ex).value  + (double)c.namesToValues.get(id.getName());
+                                break;
+                            case DOUBLE:
+                                d = ((ReturnValuesDouble) ex).value  + (double)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), d);
+                        return new ReturnValuesDouble(d);
+                    default:
+                        throw new Exception("Cannot use += on variable of type boolean");
+                }
+            case SUBEQ:
+                switch (current.getType().uType) {
+                    case CHAR:
+                        if (ex.getType().uType != UnannType.CHAR)
+                            throw new Exception("Cannot assign anything but a char value to a char variable");
+                        char ch = (char)(((ReturnValuesChar) ex).value - ((char)c.namesToValues.get(id.getName())));
+                        c.namesToValues.put(id.getName(), ch);
+                        return new ReturnValuesChar(ch);
+                    case INT:
+                        if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
+                            throw new Exception("Can only assign char or int to int variable");
+                        int i;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                i = ((ReturnValuesChar) ex).value - (int)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                i = ((ReturnValuesInt) ex).value - (int)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), i);
+                        return new ReturnValuesInt(i);
+                    case DOUBLE:
+                        if (ex.getType().uType == UnannType.BOOLEAN)
+                            throw new Exception("Cannot assign boolean to double variable");
+                        double d;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                d = ((ReturnValuesChar) ex).value  - (double)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                d = ((ReturnValuesInt) ex).value  - (double)c.namesToValues.get(id.getName());
+                                break;
+                            case DOUBLE:
+                                d = ((ReturnValuesDouble) ex).value  - (double)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), d);
+                        return new ReturnValuesDouble(d);
+                    default:
+                        throw new Exception("Cannot use -= on variable of type boolean");
+                }
+            case TIMESEQ:
+                switch (current.getType().uType) {
+                    case CHAR:
+                        if (ex.getType().uType != UnannType.CHAR)
+                            throw new Exception("Cannot assign anything but a char value to a char variable");
+                        char ch = (char)(((ReturnValuesChar) ex).value * ((char)c.namesToValues.get(id.getName())));
+                        c.namesToValues.put(id.getName(), ch);
+                        return new ReturnValuesChar(ch);
+                    case INT:
+                        if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
+                            throw new Exception("Can only assign char or int to int variable");
+                        int i;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                i = ((ReturnValuesChar) ex).value * (int)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                i = ((ReturnValuesInt) ex).value * (int)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), i);
+                        return new ReturnValuesInt(i);
+                    case DOUBLE:
+                        if (ex.getType().uType == UnannType.BOOLEAN)
+                            throw new Exception("Cannot assign boolean to double variable");
+                        double d;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                d = ((ReturnValuesChar) ex).value  * (double)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                d = ((ReturnValuesInt) ex).value  * (double)c.namesToValues.get(id.getName());
+                                break;
+                            case DOUBLE:
+                                d = ((ReturnValuesDouble) ex).value  * (double)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), d);
+                        return new ReturnValuesDouble(d);
+                    default:
+                        throw new Exception("Cannot use *= on variable of type boolean");
+                }
+            default: // DIVEQ
+                switch (current.getType().uType) {
+                    case CHAR:
+                        if (ex.getType().uType != UnannType.CHAR)
+                            throw new Exception("Cannot assign anything but a char value to a char variable");
+                        char ch = (char)(((ReturnValuesChar) ex).value / ((char)c.namesToValues.get(id.getName())));
+                        c.namesToValues.put(id.getName(), ch);
+                        return new ReturnValuesChar(ch);
+                    case INT:
+                        if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
+                            throw new Exception("Can only assign char or int to int variable");
+                        int i;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                i = ((ReturnValuesChar) ex).value / (int)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                i = ((ReturnValuesInt) ex).value / (int)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), i);
+                        return new ReturnValuesInt(i);
+                    case DOUBLE:
+                        if (ex.getType().uType == UnannType.BOOLEAN)
+                            throw new Exception("Cannot assign boolean to double variable");
+                        double d;
+                        switch (ex.getType().uType) {
+                            case CHAR:
+                                d = ((ReturnValuesChar) ex).value  / (double)c.namesToValues.get(id.getName());
+                                break;
+                            case INT:
+                                d = ((ReturnValuesInt) ex).value  / (double)c.namesToValues.get(id.getName());
+                                break;
+                            case DOUBLE:
+                                d = ((ReturnValuesDouble) ex).value  / (double)c.namesToValues.get(id.getName());
+                                break;
+                            default:
+                                throw new Exception("You shouldn't be here!");
+                        }
+                        c.namesToValues.put(id.getName(), d);
+                        return new ReturnValuesDouble(d);
+                    default:
+                        throw new Exception("Cannot use /= on variable of type boolean");
+                }
 
-            switch (op) {
-                case EQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            c.namesToValues.put(id.getName(), ex.boolVal);
-                            result.boolVal = ex.boolVal;
-                            return result;
-                        case INTEGER:
-                            c.namesToValues.put(id.getName(), ex.intVal);
-                            result.intVal = ex.intVal;
-                            return result;
-                        case FP:
-                            c.namesToValues.put(id.getName(), ex.fpVal);
-                            result.fpVal = ex.fpVal;
-                            return result;
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case PLUSEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use += on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal + ex.intVal));
-                                result.intVal = current.intVal + ex.intVal;
-                            } else {
-                                c.namesToValues.put(id.getName(), (long)(current.intVal + ex.fpVal));
-                                result.intVal = (long)(current.intVal + ex.fpVal);
-                            }
-                            return result;
-                        case FP:
-                            c.namesToValues.put(id.getName(), current.fpVal + ex.fpVal);
-                            result.fpVal = current.fpVal + ex.fpVal;
-                            return result;
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case SUBEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use -= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal - ex.intVal));
-                                result.intVal = current.intVal - ex.intVal;
-                            } else {
-                                c.namesToValues.put(id.getName(), (long)(current.intVal - ex.fpVal));
-                                result.intVal = (long)(current.intVal - ex.fpVal);
-                            }
-                            return result;
-                        case FP:
-                            c.namesToValues.put(id.getName(), current.fpVal - ex.fpVal);
-                            result.fpVal = current.fpVal - ex.fpVal;
-                            return result;
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case TIMESEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use *= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal * ex.intVal));
-                                result.intVal = current.intVal * ex.intVal;
-                            } else {
-                                c.namesToValues.put(id.getName(), (long)(current.intVal * ex.fpVal));
-                                result.intVal = (long)(current.intVal * ex.fpVal);
-                            }
-                            return result;
-                        case FP:
-                            c.namesToValues.put(id.getName(), current.fpVal * ex.fpVal);
-                            result.fpVal = current.fpVal * ex.fpVal;
-                            return result;
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case DIVEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use /= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal / ex.intVal));
-                                result.intVal = current.intVal / ex.intVal;
-                            } else {
-                                c.namesToValues.put(id.getName(), (long)(current.intVal / ex.fpVal));
-                                result.intVal = (long)(current.intVal / ex.fpVal);
-                            }
-                            return result;
-                        case FP:
-                            c.namesToValues.put(id.getName(), current.fpVal / ex.fpVal);
-                            result.fpVal = current.fpVal / ex.fpVal;
-                            return result;
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case MODEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use %= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal % ex.intVal));
-                                result.intVal = current.intVal % ex.intVal;
-                            } else {
-                                c.namesToValues.put(id.getName(), (long)(current.intVal % ex.fpVal));
-                                result.intVal = (long)(current.intVal % ex.fpVal);
-                            }
-                            return result;
-                        case FP:
-                            c.namesToValues.put(id.getName(), current.fpVal % ex.fpVal);
-                            result.fpVal = current.fpVal % ex.fpVal;
-                            return result;
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case LSEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use <<= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal << ex.intVal));
-                                result.intVal = current.intVal << ex.intVal;
-                            } else {
-                                throw new Exception("Cannot use <<= with operand of FP type");
-                            }
-                            return result;
-                        case FP:
-                            throw new Exception("Cannot use <<= with operand of FP type");
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case RSEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use >>= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal >> ex.intVal));
-                                result.intVal = current.intVal >> ex.intVal;
-                            } else {
-                                throw new Exception("Cannot use >>= with operand of FP type");
-                            }
-                            return result;
-                        case FP:
-                            throw new Exception("Cannot use >>= with operand of FP type");
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case ZFRSEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            throw new Exception("Cannot use >>>= on type boolean");
-                        case INTEGER:
-                            if (ex.gType == GeneralType.INTEGER) {
-                                c.namesToValues.put(id.getName(), (current.intVal >>> ex.intVal));
-                                result.intVal = current.intVal >>> ex.intVal;
-                            } else {
-                                throw new Exception("Cannot use >>>= with operand of FP type");
-                            }
-                            return result;
-                        case FP:
-                            throw new Exception("Cannot use >>>= with operand of FP type");
-                        default:
-                            throw new Exception("gType not one of possible GeneralTypes");
-                    }
-                case BANDEQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            c.namesToValues.put(id.getName(), current.boolVal & ex.boolVal);
-                            result.boolVal = current.boolVal & ex.boolVal;
-                            return result;
-                        default:
-                            throw new Exception("Cannot use &= on operands that aren't Boolean");
-                    }
-                case BOREQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            c.namesToValues.put(id.getName(), current.boolVal | ex.boolVal);
-                            result.boolVal = current.boolVal | ex.boolVal;
-                            return result;
-                        default:
-                            throw new Exception("Cannot use |= on operands that aren't Boolean");
-                    }
-                case BXOREQ:
-                    switch (result.gType) {
-                        case BOOL:
-                            c.namesToValues.put(id.getName(), current.boolVal ^ ex.boolVal);
-                            result.boolVal = current.boolVal ^ ex.boolVal;
-                            return result;
-                        default:
-                            throw new Exception("Cannot use ^= on operands that aren't Boolean");
-                    }
-                default:
-                    throw new Exception("op not one of possible relation operators");
-            }
-        } else
-            throw new Exception(expr.getType() + " cannot be assigned to a variable of type " + id.getType() +".");
+        }
     }
 }
