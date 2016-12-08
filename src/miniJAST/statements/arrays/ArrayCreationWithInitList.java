@@ -8,4 +8,7 @@ import java.util.ArrayList;
 public class ArrayCreationWithInitList extends ArrayCreation {
     private ArrayList<Expression> values;
 
+    public ArrayCreationWithInitList() { hasInitList = true; }
+    public ArrayList<Expression> getValues () { return values; }
+
 }

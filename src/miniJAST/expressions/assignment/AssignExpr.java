@@ -96,6 +96,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
+                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -115,6 +117,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(riaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -137,6 +141,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -150,7 +156,9 @@ public class AssignExpr extends Expression implements StatementExpr {
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)((char)rcaa.value - ((ReturnValuesChar) ex).value);
+                            char ch = (char)(rcaa.value - ((ReturnValuesChar) ex).value);
+                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -170,6 +178,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(riaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -192,6 +202,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -205,7 +217,9 @@ public class AssignExpr extends Expression implements StatementExpr {
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)((char)rcaa.value * ((ReturnValuesChar) ex).value);
+                            char ch = (char)(rcaa.value * ((ReturnValuesChar) ex).value);
+                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -225,6 +239,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(riaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -247,6 +263,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -260,7 +278,9 @@ public class AssignExpr extends Expression implements StatementExpr {
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)((char)rcaa.value / ((ReturnValuesChar) ex).value);
+                            char ch = (char)(rcaa.value / ((ReturnValuesChar) ex).value);
+                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -280,6 +300,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(riaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -302,6 +324,8 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
+                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                                throw new Exception("Variable not initialised");
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);

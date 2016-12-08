@@ -1,3 +1,7 @@
 package miniJAST.statements;
 
-public interface BlockStatement { }
+import miniJAST.Context;
+
+public interface BlockStatement {
+    FlowControl execute(Context c) throws Exception;
+}

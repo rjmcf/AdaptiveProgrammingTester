@@ -17,6 +17,8 @@ public class Id extends GroundExpr implements AssignLHS{
     @Override
     public ReturnValues evaluate(Context c) throws Exception{
         if (c.namesToTypes.get(name).equals(varType)) {
+            if (!c.namesToValues.containsKey(name))
+                throw new Exception("Variable not initialised");
             if (varType.size == 1) {
                 switch (varType.uType) {
                     case BOOLEAN:

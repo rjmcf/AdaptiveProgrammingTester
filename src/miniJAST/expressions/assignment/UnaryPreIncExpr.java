@@ -25,6 +25,8 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                 case CHAR:
                     ReturnValuesCharAA rcaa = (ReturnValuesCharAA) raa;
                     char ch = isPlus ? (char) (rcaa.value + 1) : (char) (rcaa.value - 1);
+                    if (!c.namesToValues.containsKey(rcaa.getName()))
+                        throw new Exception("Variable not initialised");
                     ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                     chs.set(rcaa.getIndex(), ch);
                     c.namesToValues.put(rcaa.getName(), chs);
@@ -32,13 +34,17 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                 case INT:
                     ReturnValuesIntAA riaa = (ReturnValuesIntAA) raa;
                     int i = isPlus ? riaa.value + 1 :  riaa.value - 1;
+                    if (!c.namesToValues.containsKey(riaa.getName()))
+                        throw new Exception("Variable not initialised");
                     ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
-                        is.set(riaa.getIndex(), i);
+                    is.set(riaa.getIndex(), i);
                     c.namesToValues.put(riaa.getName(), is);
                     return new ReturnValuesInt(i);
                 case DOUBLE:
                     ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) raa;
                     double d = isPlus ? rdaa.value + 1 : rdaa.value - 1;
+                    if (!c.namesToValues.containsKey(rdaa.getName()))
+                        throw new Exception("Variable not initialised");
                     ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                     ds.set(rdaa.getIndex(), d);
                     c.namesToValues.put(rdaa.getName(), ds);
