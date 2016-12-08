@@ -12,7 +12,7 @@ public class RelationExpr extends EqExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
-        ReturnValuesBoolean result;
+        ReturnValuesBool result;
 
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);
@@ -26,29 +26,29 @@ public class RelationExpr extends EqExpr {
                     case CHAR:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value > ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value > ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value > ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value > ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value > ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value > ((ReturnValuesDouble)r).value);
                         }
                     case INT:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value > ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value > ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value > ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value > ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value > ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value > ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value > ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value > ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value > ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value > ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value > ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value > ((ReturnValuesDouble)r).value);
                         }
 
 
@@ -58,29 +58,29 @@ public class RelationExpr extends EqExpr {
                     case CHAR:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value < ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value < ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value < ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value < ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value < ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value < ((ReturnValuesDouble)r).value);
                         }
                     case INT:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value < ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value < ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value < ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value < ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value < ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value < ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value < ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value < ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value < ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value < ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value < ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value < ((ReturnValuesDouble)r).value);
                         }
                 }
             case GTE:
@@ -88,29 +88,29 @@ public class RelationExpr extends EqExpr {
                     case CHAR:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value >= ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value >= ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value >= ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value >= ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value >= ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value >= ((ReturnValuesDouble)r).value);
                         }
                     case INT:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value >= ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value >= ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value >= ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value >= ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value >= ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value >= ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value >= ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value >= ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value >= ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value >= ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value >= ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value >= ((ReturnValuesDouble)r).value);
                         }
                 }
             default: // LTE
@@ -118,29 +118,29 @@ public class RelationExpr extends EqExpr {
                     case CHAR:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value <= ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value <= ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value <= ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value <= ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value <= ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesChar)l).value <= ((ReturnValuesDouble)r).value);
                         }
                     case INT:
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value <= ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value <= ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value <= ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value <= ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value <= ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesInt)l).value <= ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
                         switch (r.getType().uType) {
                             case CHAR:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value <= ((ReturnValuesChar)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value <= ((ReturnValuesChar)r).value);
                             case INT:
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value <= ((ReturnValuesInt)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value <= ((ReturnValuesInt)r).value);
                             default: // DOUBLE
-                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value <= ((ReturnValuesDouble)r).value);
+                                return new ReturnValuesBool(((ReturnValuesDouble)l).value <= ((ReturnValuesDouble)r).value);
                         }
                 }
         }

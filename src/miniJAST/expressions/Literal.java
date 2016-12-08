@@ -19,7 +19,7 @@ public class Literal extends PrimaryExpr{
                     v = false;
                 else
                     throw new Exception("Type is boolean, but val is not true or false.");
-                return new ReturnValuesBoolean(v);
+                return new ReturnValuesBool(v);
             case CHAR:
                 if (value.length() > 1)
                     throw new Exception("Type is char, but value is more than one character.");

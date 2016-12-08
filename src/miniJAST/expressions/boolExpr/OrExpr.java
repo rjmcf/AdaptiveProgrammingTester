@@ -2,7 +2,7 @@ package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
 import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesBoolean;
+import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
 public class OrExpr extends CondExpr {
@@ -11,15 +11,15 @@ public class OrExpr extends CondExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
-        ReturnValuesBoolean result;
+        ReturnValuesBool result;
 
         ReturnValues l = leftSide.evaluate(c);
 
         if (l.getType().uType != UnannType.BOOLEAN)
             throw new Exception("|| operator not applicable to operands that aren't of type boolean");
 
-        if (((ReturnValuesBoolean)l).value) {
-            result = new ReturnValuesBoolean(true);
+        if (((ReturnValuesBool)l).value) {
+            result = new ReturnValuesBool(true);
             return result;
         }
 
@@ -28,7 +28,7 @@ public class OrExpr extends CondExpr {
         if (r.getType().uType != UnannType.BOOLEAN)
             throw new Exception("|| operator not applicable to operands that aren't of type boolean");
 
-        result = new ReturnValuesBoolean(((ReturnValuesBoolean)r).value);
+        result = new ReturnValuesBool(((ReturnValuesBool)r).value);
         return result;
     }
 }

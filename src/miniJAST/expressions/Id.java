@@ -18,7 +18,7 @@ public class Id extends GroundExpr implements AssignLHS{
             if (varType.size == 1) {
                 switch (varType.uType) {
                     case BOOLEAN:
-                        return new ReturnValuesBoolean((boolean) c.namesToValues.get(name));
+                        return new ReturnValuesBool((boolean) c.namesToValues.get(name));
                     case CHAR:
                         return new ReturnValuesChar((char) c.namesToValues.get(name));
                     case INT:

@@ -3,7 +3,7 @@ package miniJAST.expressions.boolExpr;
 import miniJAST.Context;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesBoolean;
+import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
 public class CondExpr extends Expression {
@@ -17,7 +17,7 @@ public class CondExpr extends Expression {
         if (condV.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Conditional expression must have type Boolean");
 
-        if (((ReturnValuesBoolean)condV).value)
+        if (((ReturnValuesBool)condV).value)
             return trueExpr.evaluate(c);
         else
             return falseExpr.evaluate(c);

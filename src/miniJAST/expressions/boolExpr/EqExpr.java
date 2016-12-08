@@ -10,7 +10,7 @@ public class EqExpr extends AndExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
-        ReturnValuesBoolean result;
+        ReturnValuesBool result;
 
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);
@@ -20,17 +20,17 @@ public class EqExpr extends AndExpr {
 
         switch (l.getType().uType) {
             case BOOLEAN:
-                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesBoolean)l).value == ((ReturnValuesBoolean)r).value)
-                        : new ReturnValuesBoolean(((ReturnValuesBoolean)l).value != ((ReturnValuesBoolean)r).value);
+                return equalityTest ? new ReturnValuesBool(((ReturnValuesBool)l).value == ((ReturnValuesBool)r).value)
+                        : new ReturnValuesBool(((ReturnValuesBool)l).value != ((ReturnValuesBool)r).value);
             case CHAR:
-                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesChar)l).value == ((ReturnValuesChar)r).value)
-                        : new ReturnValuesBoolean(((ReturnValuesChar)l).value != ((ReturnValuesChar)r).value);
+                return equalityTest ? new ReturnValuesBool(((ReturnValuesChar)l).value == ((ReturnValuesChar)r).value)
+                        : new ReturnValuesBool(((ReturnValuesChar)l).value != ((ReturnValuesChar)r).value);
             case INT:
-                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesInt)l).value == ((ReturnValuesInt)r).value)
-                        : new ReturnValuesBoolean(((ReturnValuesInt)l).value != ((ReturnValuesInt)r).value);
+                return equalityTest ? new ReturnValuesBool(((ReturnValuesInt)l).value == ((ReturnValuesInt)r).value)
+                        : new ReturnValuesBool(((ReturnValuesInt)l).value != ((ReturnValuesInt)r).value);
             case DOUBLE:
-                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesDouble)l).value == ((ReturnValuesDouble)r).value)
-                        : new ReturnValuesBoolean(((ReturnValuesDouble)l).value != ((ReturnValuesDouble)r).value);
+                return equalityTest ? new ReturnValuesBool(((ReturnValuesDouble)l).value == ((ReturnValuesDouble)r).value)
+                        : new ReturnValuesBool(((ReturnValuesDouble)l).value != ((ReturnValuesDouble)r).value);
             default:
                 throw new Exception("Type of left operand is not one of possible UnannTypes.");
         }

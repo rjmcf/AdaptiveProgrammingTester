@@ -28,11 +28,11 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             if (ex.getType().uType != UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign anything but a boolean value to a boolean variable");
-                            boolean b = ((ReturnValuesBoolean) ex).value;
+                            boolean b = ((ReturnValuesBool) ex).value;
                             ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.get(access.name);
                             bs.set(access.index, (boolean)access.value);
                             c.namesToValues.put(access.name, bs);
-                            return new ReturnValuesBoolean(b);
+                            return new ReturnValuesBool(b);
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
@@ -301,9 +301,9 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             if (ex.getType().uType != UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign anything but a boolean value to a boolean variable");
-                            boolean b = ((ReturnValuesBoolean) ex).value;
+                            boolean b = ((ReturnValuesBool) ex).value;
                             c.namesToValues.put(id.getName(), b);
-                            return new ReturnValuesBoolean(b);
+                            return new ReturnValuesBool(b);
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");

@@ -2,7 +2,7 @@ package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
 import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesBoolean;
+import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
 public class UnaryComplementExpr extends UnaryExpr {
@@ -16,6 +16,6 @@ public class UnaryComplementExpr extends UnaryExpr {
         if (e.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Cannot apply ! to non-boolean type.");
 
-        return new ReturnValuesBoolean(!((ReturnValuesBoolean)e).value);
+        return new ReturnValuesBool(!((ReturnValuesBool)e).value);
     }
 }
