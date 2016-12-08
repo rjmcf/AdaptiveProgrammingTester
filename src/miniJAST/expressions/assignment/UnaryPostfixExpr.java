@@ -17,27 +17,30 @@ public class UnaryPostfixExpr extends UnaryExpr implements StatementExpr {
     public ReturnValues evaluate(Context c) throws Exception {
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;
-            ReturnValuesArrayAccess raa = (ReturnValuesArrayAccess) aa.evaluate(c);
+            ReturnValues raa = aa.evaluate(c);
 
             switch (raa.getType().uType) {
                 case CHAR:
-                    char ch = isPlus ? (char) ((char)raa.value + 1) : (char) ((char)raa.value - 1);
-                    ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(raa.name);
-                    chs.set(raa.index, ch);
-                    c.namesToValues.put(raa.name, chs);
-                    return new ReturnValuesChar((char)raa.value);
+                    ReturnValuesCharAA rcaa = (ReturnValuesCharAA) raa;
+                    char ch = isPlus ? (char) (rcaa.value + 1) : (char) (rcaa.value - 1);
+                    ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                    chs.set(rcaa.getIndex(), ch);
+                    c.namesToValues.put(rcaa.getName(), chs);
+                    return new ReturnValuesChar(rcaa.value);
                 case INT:
-                    int i = isPlus ? (int)raa.value + 1 :  (int)raa.value - 1;
-                    ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(raa.name);
-                    is.set(raa.index, i);
-                    c.namesToValues.put(raa.name, is);
-                    return new ReturnValuesInt((int)raa.value);
+                    ReturnValuesIntAA riaa = (ReturnValuesIntAA) raa;
+                    int i = isPlus ? riaa.value + 1 :  riaa.value - 1;
+                    ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                    is.set(riaa.getIndex(), i);
+                    c.namesToValues.put(riaa.getName(), is);
+                    return new ReturnValuesInt(riaa.value);
                 case DOUBLE:
-                    double d = isPlus ? (double)raa.value + 1 : (double)raa.value - 1;
-                    ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(raa.name);
-                    ds.set(raa.index, d);
-                    c.namesToValues.put(raa.name, ds);
-                    return new ReturnValuesDouble((double)raa.value);
+                    ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) raa;
+                    double d = isPlus ? rdaa.value + 1 : rdaa.value - 1;
+                    ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                    ds.set(rdaa.getIndex(), d);
+                    c.namesToValues.put(rdaa.getName(), ds);
+                    return new ReturnValuesDouble(rdaa.value);
                 default: // BOOLEAN
                     throw new Exception("Cannot increment or decrement a Boolean expression");
             }

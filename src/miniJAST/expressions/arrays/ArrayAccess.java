@@ -5,10 +5,7 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.PrimaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesArray;
-import miniJAST.expressions.returnValues.ReturnValuesArrayAccess;
-import miniJAST.expressions.returnValues.ReturnValuesInt;
+import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
 public class ArrayAccess extends PrimaryExpr implements AssignLHS {
@@ -31,17 +28,13 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
 
         switch (r.getType().uType) {
             case BOOLEAN:
-                return new ReturnValuesArrayAccess<Boolean>(UnannType.BOOLEAN, id.getName(), index,
-                        (boolean)ar.get(index));
+                return new ReturnValuesBoolAA(id.getName(), index, (boolean)ar.get(index));
             case CHAR:
-                return new ReturnValuesArrayAccess<Character>(UnannType.CHAR, id.getName(), index,
-                        (char)ar.get(index));
+                return new ReturnValuesCharAA(id.getName(), index, (char)ar.get(index));
             case INT:
-                return new ReturnValuesArrayAccess<Integer>(UnannType.CHAR, id.getName(), index,
-                        (int)ar.get(index));
+                return new ReturnValuesIntAA(id.getName(), index, (int)ar.get(index));
             default: // DOUBLE
-                return new ReturnValuesArrayAccess<Double>(UnannType.CHAR, id.getName(), index,
-                        (double)ar.get(index));
+                return new ReturnValuesDoubleAA(id.getName(), index, (double)ar.get(index));
         }
     }
 }

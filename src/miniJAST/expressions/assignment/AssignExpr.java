@@ -19,29 +19,32 @@ public class AssignExpr extends Expression implements StatementExpr {
     public ReturnValues evaluate(Context c) throws Exception {
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;
-            ReturnValuesArrayAccess access = (ReturnValuesArrayAccess)arac.evaluate(c);
+            ReturnValues access = arac.evaluate(c);
             ReturnValues ex = expr.evaluate(c);
 
             switch (op) {
                 case EQ:
                     switch (access.getType().uType) {
                         case BOOLEAN:
+                            ReturnValuesBoolAA rbaa = (ReturnValuesBoolAA) access;
                             if (ex.getType().uType != UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
-                            ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.get(access.name);
-                            bs.set(access.index, (boolean)access.value);
-                            c.namesToValues.put(access.name, bs);
+                            ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.get(rbaa.getName());
+                            bs.set(rbaa.getIndex(), rbaa.value);
+                            c.namesToValues.put(rbaa.getName(), bs);
                             return new ReturnValuesBool(b);
                         case CHAR:
+                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(access.name);
-                            chs.set(access.index, (char)access.value);
-                            c.namesToValues.put(access.name, chs);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            chs.set(rcaa.getIndex(), rcaa.value);
+                            c.namesToValues.put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
+                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
                                 throw new Exception("Can only assign char or int to int variable");
                             int i;
@@ -55,11 +58,12 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(access.name);
-                            is.set(access.index, (int)access.value);
-                            c.namesToValues.put(access.name, is);
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            is.set(riaa.getIndex(), riaa.value);
+                            c.namesToValues.put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
+                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign boolean to double variable");
                             double d;
@@ -76,9 +80,9 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(access.name);
-                            ds.set(access.index, (double)access.value);
-                            c.namesToValues.put(access.name, ds);
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ds.set(rdaa.getIndex(), rdaa.value);
+                            c.namesToValues.put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
@@ -86,51 +90,54 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             throw new Exception("Cannot use += on Boolean");
                         case CHAR:
+                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(((ReturnValuesChar) ex).value + (char)access.value);
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(access.name);
-                            chs.set(access.index, (char)access.value);
-                            c.namesToValues.put(access.name, chs);
+                            char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            chs.set(rcaa.getIndex(), rcaa.value);
+                            c.namesToValues.put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
+                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
                                 throw new Exception("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = ((ReturnValuesChar) ex).value + (int)access.value;
+                                    i = ((ReturnValuesChar) ex).value + riaa.value;
                                     break;
                                 case INT:
-                                    i = ((ReturnValuesInt) ex).value + (int)access.value;
+                                    i = ((ReturnValuesInt) ex).value + riaa.value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(access.name);
-                            is.set(access.index, (int)access.value);
-                            c.namesToValues.put(access.name, is);
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            is.set(riaa.getIndex(), riaa.value);
+                            c.namesToValues.put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
+                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = ((ReturnValuesChar) ex).value + (double)access.value;
+                                    d = ((ReturnValuesChar) ex).value + rdaa.value;
                                     break;
                                 case INT:
-                                    d = ((ReturnValuesInt) ex).value + (double)access.value;
+                                    d = ((ReturnValuesInt) ex).value + rdaa.value;
                                     break;
                                 case DOUBLE:
-                                    d = ((ReturnValuesDouble) ex).value + (double)access.value;
+                                    d = ((ReturnValuesDouble) ex).value + rdaa.value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(access.name);
-                            ds.set(access.index, (double)access.value);
-                            c.namesToValues.put(access.name, ds);
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ds.set(rdaa.getIndex(), rdaa.value);
+                            c.namesToValues.put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case SUBEQ:
@@ -138,51 +145,54 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             throw new Exception("Cannot use -= on Boolean");
                         case CHAR:
+                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)((char)access.value - ((ReturnValuesChar) ex).value);
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(access.name);
-                            chs.set(access.index, (char)access.value);
-                            c.namesToValues.put(access.name, chs);
+                            char ch = (char)((char)rcaa.value - ((ReturnValuesChar) ex).value);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            chs.set(rcaa.getIndex(), rcaa.value);
+                            c.namesToValues.put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
+                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
                                 throw new Exception("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = (int)access.value - ((ReturnValuesChar) ex).value;
+                                    i = riaa.value - ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    i = (int)access.value - ((ReturnValuesInt) ex).value;
+                                    i = riaa.value - ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(access.name);
-                            is.set(access.index, (int)access.value);
-                            c.namesToValues.put(access.name, is);
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            is.set(riaa.getIndex(), riaa.value);
+                            c.namesToValues.put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
+                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = (double)access.value - ((ReturnValuesChar) ex).value;
+                                    d = rdaa.value - ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    d = (double)access.value - ((ReturnValuesInt) ex).value;
+                                    d = rdaa.value - ((ReturnValuesInt) ex).value;
                                     break;
                                 case DOUBLE:
-                                    d = (double)access.value - ((ReturnValuesDouble) ex).value;
+                                    d = rdaa.value - ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(access.name);
-                            ds.set(access.index, (double)access.value);
-                            c.namesToValues.put(access.name, ds);
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ds.set(rdaa.getIndex(), rdaa.value);
+                            c.namesToValues.put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case TIMESEQ:
@@ -190,51 +200,54 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             throw new Exception("Cannot use -= on Boolean");
                         case CHAR:
+                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)((char)access.value * ((ReturnValuesChar) ex).value);
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(access.name);
-                            chs.set(access.index, (char)access.value);
-                            c.namesToValues.put(access.name, chs);
+                            char ch = (char)((char)rcaa.value * ((ReturnValuesChar) ex).value);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            chs.set(rcaa.getIndex(), rcaa.value);
+                            c.namesToValues.put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
+                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
                                 throw new Exception("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = (int)access.value * ((ReturnValuesChar) ex).value;
+                                    i = riaa.value * ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    i = (int)access.value * ((ReturnValuesInt) ex).value;
+                                    i = riaa.value * ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(access.name);
-                            is.set(access.index, (int)access.value);
-                            c.namesToValues.put(access.name, is);
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            is.set(riaa.getIndex(), riaa.value);
+                            c.namesToValues.put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
+                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = (double)access.value * ((ReturnValuesChar) ex).value;
+                                    d = rdaa.value * ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    d = (double)access.value * ((ReturnValuesInt) ex).value;
+                                    d = rdaa.value * ((ReturnValuesInt) ex).value;
                                     break;
                                 case DOUBLE:
-                                    d = (double)access.value * ((ReturnValuesDouble) ex).value;
+                                    d = rdaa.value * ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(access.name);
-                            ds.set(access.index, (double)access.value);
-                            c.namesToValues.put(access.name, ds);
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ds.set(rdaa.getIndex(), rdaa.value);
+                            c.namesToValues.put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 default: // DIVEQ
@@ -242,51 +255,54 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             throw new Exception("Cannot use -= on Boolean");
                         case CHAR:
+                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new Exception("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)((char)access.value / ((ReturnValuesChar) ex).value);
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(access.name);
-                            chs.set(access.index, (char)access.value);
-                            c.namesToValues.put(access.name, chs);
+                            char ch = (char)((char)rcaa.value / ((ReturnValuesChar) ex).value);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            chs.set(rcaa.getIndex(), rcaa.value);
+                            c.namesToValues.put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
+                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
                                 throw new Exception("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = (int)access.value / ((ReturnValuesChar) ex).value;
+                                    i = riaa.value / ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    i = (int)access.value / ((ReturnValuesInt) ex).value;
+                                    i = riaa.value / ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(access.name);
-                            is.set(access.index, (int)access.value);
-                            c.namesToValues.put(access.name, is);
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            is.set(riaa.getIndex(), riaa.value);
+                            c.namesToValues.put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
+                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
                                 throw new Exception("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = (double)access.value / ((ReturnValuesChar) ex).value;
+                                    d = rdaa.value / ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    d = (double)access.value / ((ReturnValuesInt) ex).value;
+                                    d = rdaa.value / ((ReturnValuesInt) ex).value;
                                     break;
                                 case DOUBLE:
-                                    d = (double)access.value / ((ReturnValuesDouble) ex).value;
+                                    d = rdaa.value / ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
                                     throw new Exception("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(access.name);
-                            ds.set(access.index, (double)access.value);
-                            c.namesToValues.put(access.name, ds);
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ds.set(rdaa.getIndex(), rdaa.value);
+                            c.namesToValues.put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
             }
