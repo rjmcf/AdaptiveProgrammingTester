@@ -8,4 +8,6 @@ import miniJAST.expressions.assignment.AssignLHS;
 public class ArrayAccess extends PrimaryExpr implements AssignLHS {
     private Id id;
     private Expression index;
+
+
 }

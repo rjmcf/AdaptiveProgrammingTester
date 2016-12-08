@@ -5,10 +5,10 @@ import miniJAST.types.UnannType;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ReturnValuesMDArray<T> extends ReturnValues{
+public class ReturnValuesArray<T> extends ReturnValues{
     protected ArrayList<T> values;
 
-    public ReturnValuesMDArray(UnannType t, int s) throws Exception{
+    public ReturnValuesArray(UnannType t, int s) throws Exception{
         super(t, s);
 
         values = new ArrayList<>(type.size);

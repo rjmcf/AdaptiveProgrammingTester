@@ -26,7 +26,7 @@ public class Id extends GroundExpr implements AssignLHS{
                         throw new Exception("'varType' was not one of possible UnannTypes.");
                 }
             } else {
-                return new ReturnValuesMDArray(varType.uType, varType.size);
+                return new ReturnValuesArray(varType.uType, varType.size);
             }
         } else
             throw new Exception("Variable " + name + " not available in context.");
