@@ -12,6 +12,8 @@ public class Id extends GroundExpr implements AssignLHS{
     private Type varType;
     private String name;
 
+    public Id(Type vT, String n) { varType = vT; name = n; }
+
     @Override
     public ReturnValues evaluate(Context c) throws Exception{
         if (c.namesToTypes.get(name).equals(varType)) {

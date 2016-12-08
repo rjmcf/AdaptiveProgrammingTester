@@ -9,6 +9,8 @@ public class UnaryComplementExpr extends UnaryExpr {
     // Only logical complement here
     private UnaryExpr expr;
 
+    public UnaryComplementExpr(UnaryExpr e) { expr = e; }
+
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
         ReturnValues e = expr.evaluate(c);

@@ -8,6 +8,8 @@ public class Literal extends PrimaryExpr{
     private UnannType litType;
     private String value;
 
+    public Literal(UnannType lT, String v) { litType = lT; value = v; }
+
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
         switch(litType) {

@@ -12,6 +12,8 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
     private Id id;
     private Expression index;
 
+    public ArrayAccess(Id i, Expression e) { id = i; index = e; }
+
     public ReturnValues evaluate(Context c) throws Exception {
         ReturnValues r = id.evaluate(c);
 
