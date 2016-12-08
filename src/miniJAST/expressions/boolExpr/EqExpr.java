@@ -1,44 +1,36 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.types.GeneralType;
-import miniJAST.types.UnannType;
+import miniJAST.expressions.returnValues.*;
 
-public class EqExpr extends XOrExpr {
+public class EqExpr extends AndExpr {
     private boolean equalityTest;
     private EqExpr leftSide; // Left associative (allows arith eq test on left side)
     private RelationExpr rightSide;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
+        ReturnValuesBoolean result;
+
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);
 
-        if (leftSide.getType() != rightSide.getType())
+        if (l.getType().uType != r.getType().uType)
             throw new Exception("Type mismatch between arguments of ==");
 
-        type = UnannType.BOOLEAN;
-
-        ReturnValues result = new ReturnValues();
-        result.type = UnannType.BOOLEAN;
-        result.gType = GeneralType.BOOL;
-
-        switch (leftSide.getType()) {
+        switch (l.getType().uType) {
             case BOOLEAN:
-                result.boolVal = l.boolVal == r.boolVal;
-                return result;
-            case BYTE:
+                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesBoolean)l).value == ((ReturnValuesBoolean)r).value)
+                        : new ReturnValuesBoolean(((ReturnValuesBoolean)l).value != ((ReturnValuesBoolean)r).value);
             case CHAR:
-            case SHORT:
+                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesChar)l).value == ((ReturnValuesChar)r).value)
+                        : new ReturnValuesBoolean(((ReturnValuesChar)l).value != ((ReturnValuesChar)r).value);
             case INT:
-            case LONG:
-                result.boolVal = l.intVal == r.intVal;
-                return result;
-            case FLOAT:
+                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesInt)l).value == ((ReturnValuesInt)r).value)
+                        : new ReturnValuesBoolean(((ReturnValuesInt)l).value != ((ReturnValuesInt)r).value);
             case DOUBLE:
-                result.boolVal = l.fpVal == r.fpVal;
-                return result;
+                return equalityTest ? new ReturnValuesBoolean(((ReturnValuesDouble)l).value == ((ReturnValuesDouble)r).value)
+                        : new ReturnValuesBoolean(((ReturnValuesDouble)l).value != ((ReturnValuesDouble)r).value);
             default:
                 throw new Exception("Type of left operand is not one of possible UnannTypes.");
         }

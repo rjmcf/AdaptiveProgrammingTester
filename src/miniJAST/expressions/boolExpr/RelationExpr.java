@@ -2,9 +2,7 @@ package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
 import miniJAST.expressions.arithExpr.AddExpr;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.arithExpr.ShiftExpr;
-import miniJAST.types.GeneralType;
+import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
 public class RelationExpr extends EqExpr {
@@ -14,73 +12,137 @@ public class RelationExpr extends EqExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
+        ReturnValuesBoolean result;
+
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);
 
-        if (leftSide.getType() != rightSide.getType())
-            throw new Exception("Type mismatch between arguments of relational operator.");
-        if (leftSide.getType() == UnannType.BOOLEAN || rightSide.getType() == UnannType.BOOLEAN)
-            throw new Exception("Cannot use relation operators on operands of type Boolean.");
-
-        type = UnannType.BOOLEAN;
-
-        ReturnValues result = new ReturnValues();
-        result.type = UnannType.BOOLEAN;
-        result.gType = GeneralType.BOOL;
+        if (l.getType().uType == UnannType.BOOLEAN || r.getType().uType == UnannType.BOOLEAN)
+            throw new Exception("Cannot relate boolean values");
 
         switch (op) {
-            case LT:
-                switch (leftSide.getType()) {
-                    case BYTE:
+            case GT:
+                switch (l.getType().uType) {
                     case CHAR:
-                    case SHORT:
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value > ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value > ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value > ((ReturnValuesDouble)r).value);
+                        }
                     case INT:
-                    case LONG:
-                        result.boolVal = l.intVal < r.intVal;
-                        return result;
-                    case FLOAT:
-                    case DOUBLE:
-                        result.boolVal = l.fpVal < r.fpVal;
-                        return result;
-                    default:
-                        throw new Exception("LHS type is not one of possible UnannTypes.");
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value > ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value > ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value > ((ReturnValuesDouble)r).value);
+                        }
+                    default: // DOUBLE
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value > ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value > ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value > ((ReturnValuesDouble)r).value);
+                        }
+
+
+                }
+            case LT:
+                switch (l.getType().uType) {
+                    case CHAR:
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value < ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value < ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value < ((ReturnValuesDouble)r).value);
+                        }
+                    case INT:
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value < ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value < ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value < ((ReturnValuesDouble)r).value);
+                        }
+                    default: // DOUBLE
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value < ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value < ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value < ((ReturnValuesDouble)r).value);
+                        }
                 }
             case GTE:
-                RelationExpr reGTE = new RelationExpr();
-                reGTE.setLeft(leftSide);
-                reGTE.setRight(rightSide);
-                reGTE.setOp(RelationOp.LT);
-                ReturnValues notRGTE = reGTE.evaluate(c);
-                result.boolVal = !(notRGTE.boolVal);
-                return result;
-            case GT:
-                switch (leftSide.getType()) {
-                    case BYTE:
+                switch (l.getType().uType) {
                     case CHAR:
-                    case SHORT:
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value >= ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value >= ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value >= ((ReturnValuesDouble)r).value);
+                        }
                     case INT:
-                    case LONG:
-                        result.boolVal = l.intVal > r.intVal;
-                        return result;
-                    case FLOAT:
-                    case DOUBLE:
-                        result.boolVal = l.fpVal > r.fpVal;
-                        return result;
-                    default:
-                        throw new Exception("LHS type is not one of possible UnannTypes.");
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value >= ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value >= ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value >= ((ReturnValuesDouble)r).value);
+                        }
+                    default: // DOUBLE
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value >= ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value >= ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value >= ((ReturnValuesDouble)r).value);
+                        }
                 }
-            case LTE:
-                RelationExpr reLTE = new RelationExpr();
-                reLTE.setLeft(leftSide);
-                reLTE.setRight(rightSide);
-                reLTE.setOp(RelationOp.GT);
-                ReturnValues notRLTE = reLTE.evaluate(c);
-                result.boolVal = !(notRLTE.boolVal);
-                return result;
-            case INSTANCEOF:
-                throw new Exception("Instance of not yet implemented");
-            default:
-                throw new Exception("Op is not one of possible RelationOps.");
+            default: // LTE
+                switch (l.getType().uType) {
+                    case CHAR:
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value <= ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value <= ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesChar)l).value <= ((ReturnValuesDouble)r).value);
+                        }
+                    case INT:
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value <= ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value <= ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesInt)l).value <= ((ReturnValuesDouble)r).value);
+                        }
+                    default: // DOUBLE
+                        switch (r.getType().uType) {
+                            case CHAR:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value <= ((ReturnValuesChar)r).value);
+                            case INT:
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value <= ((ReturnValuesInt)r).value);
+                            default: // DOUBLE
+                                return new ReturnValuesBoolean(((ReturnValuesDouble)l).value <= ((ReturnValuesDouble)r).value);
+                        }
+                }
         }
     }
 }
