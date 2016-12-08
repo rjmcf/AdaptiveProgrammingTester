@@ -3,7 +3,10 @@ package miniJAST.expressions.arithExpr;
 import miniJAST.Context;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.types.GeneralType;
+import miniJAST.expressions.returnValues.ReturnValuesChar;
+import miniJAST.expressions.returnValues.ReturnValuesDouble;
+import miniJAST.expressions.returnValues.ReturnValuesInt;
+import miniJAST.types.UnannType;
 
 public class AddExpr extends RelationExpr {
     private boolean isPlus;
@@ -15,38 +18,46 @@ public class AddExpr extends RelationExpr {
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);
 
-        if (left.gType == GeneralType.BOOL || right.gType == GeneralType.BOOL)
+        if (left.getType().uType == UnannType.BOOLEAN || right.getType().uType == UnannType.BOOLEAN)
             throw new Exception("Cannot use + or - on operands of type Boolean");
 
-        ReturnValues result = new ReturnValues();
-        result.type = left.type.compareTo(right.type) >= 0 ? left.type : right.type;
-
-        switch (left.gType) {
-            case INTEGER:
-                switch (right.gType) {
-                    case INTEGER:
-                        result.gType = GeneralType.INTEGER;
-                        result.intVal = isPlus ? left.intVal + right.intVal : left.intVal - right.intVal;
-                        break;
-                    case FP:
-                        result.gType = GeneralType.FP;
-                        result.fpVal = isPlus ? left.intVal + right.fpVal : left.intVal - right.fpVal;
-                        break;
+        switch (left.getType().uType) {
+            case CHAR:
+                switch (right.getType().uType) {
+                    case CHAR:
+                        return new ReturnValuesInt(isPlus ? ((ReturnValuesChar)left).value + ((ReturnValuesChar)right).value
+                                : ((ReturnValuesChar)left).value - ((ReturnValuesChar)right).value);
+                    case INT:
+                        return new ReturnValuesInt(isPlus ? ((ReturnValuesChar)left).value + ((ReturnValuesInt)right).value
+                                : ((ReturnValuesChar)left).value - ((ReturnValuesInt)right).value);
+                    default: // DOUBLE
+                        return new ReturnValuesDouble(isPlus ? ((ReturnValuesChar)left).value + ((ReturnValuesDouble)right).value
+                                : ((ReturnValuesChar)left).value - ((ReturnValuesDouble)right).value);
                 }
-                break;
-            case FP:
-                result.gType = GeneralType.FP;
-                switch (right.gType) {
-                    case INTEGER:
-                        result.fpVal = isPlus ? left.fpVal + right.intVal : left.fpVal - right.intVal;
-                        break;
-                    case FP:
-                        result.fpVal = isPlus ? left.fpVal + right.fpVal : left.fpVal - right.fpVal;
-                        break;
+            case INT:
+                switch (right.getType().uType) {
+                    case CHAR:
+                        return new ReturnValuesInt(isPlus ? ((ReturnValuesInt)left).value + ((ReturnValuesChar)right).value
+                                : ((ReturnValuesInt)left).value - ((ReturnValuesChar)right).value);
+                    case INT:
+                        return new ReturnValuesInt(isPlus ? ((ReturnValuesInt)left).value + ((ReturnValuesInt)right).value
+                                : ((ReturnValuesInt)left).value - ((ReturnValuesInt)right).value);
+                    default: // DOUBLE
+                        return new ReturnValuesDouble(isPlus ? ((ReturnValuesInt)left).value + ((ReturnValuesDouble)right).value
+                                : ((ReturnValuesInt)left).value - ((ReturnValuesDouble)right).value);
                 }
-                break;
+            default: // DOUBLE
+                switch (right.getType().uType) {
+                    case CHAR:
+                        return new ReturnValuesDouble(isPlus ? ((ReturnValuesDouble)left).value + ((ReturnValuesChar)right).value
+                                : ((ReturnValuesDouble)left).value - ((ReturnValuesChar)right).value);
+                    case INT:
+                        return new ReturnValuesDouble(isPlus ? ((ReturnValuesDouble)left).value + ((ReturnValuesInt)right).value
+                                : ((ReturnValuesDouble)left).value - ((ReturnValuesInt)right).value);
+                    default: // DOUBLE
+                        return new ReturnValuesDouble(isPlus ? ((ReturnValuesDouble)left).value + ((ReturnValuesDouble)right).value
+                                : ((ReturnValuesDouble)left).value - ((ReturnValuesDouble)right).value);
+                }
         }
-
-        return result;
     }
 }

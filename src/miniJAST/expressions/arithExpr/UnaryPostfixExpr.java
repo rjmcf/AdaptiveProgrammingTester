@@ -2,39 +2,41 @@ package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
 import miniJAST.expressions.Id;
+import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.StatementExpr;
+import miniJAST.expressions.returnValues.ReturnValuesChar;
+import miniJAST.expressions.returnValues.ReturnValuesDouble;
+import miniJAST.expressions.returnValues.ReturnValuesInt;
 
 public class UnaryPostfixExpr extends UnaryExpr implements StatementExpr {
     private boolean isPlus;
-    private Id expr;
+    private AssignLHS expr;
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
-        ReturnValues e = expr.evaluate(c);
-        ReturnValues result = new ReturnValues();
+        if (expr instanceof ArrayAccess)
+            throw new Exception("Arrays not implemented yet");
 
-        type = e.type;
-        result.type = e.type;
-        result.gType = e.gType;
+        Id id = (Id)expr;
+        ReturnValues e = id.evaluate(c);
 
-        switch (e.gType) {
-            case BOOL:
-                throw new Exception("Only numeric types can be post-incremented/decremented");
-            case INTEGER:
-                if(c.namesToTypes.get(expr.getName()).equals(e.type)) {
-                    c.namesToValues.put(expr.getName(), isPlus ? e.intVal + 1 : e.intVal - 1);
-                    result.intVal = e.intVal;
-                } else throw new Exception("Variable " + expr.getName() + " not visible in this scope");
-                break;
-            case FP:
-                if(c.namesToTypes.get(expr.getName()).equals(e.type)) {
-                    c.namesToValues.put(expr.getName(), isPlus ? e.fpVal + 1 : e.fpVal - 1);
-                    result.fpVal = e.fpVal;
-                } else throw new Exception("Variable " + expr.getName() + " not visible in this scope");
-                break;
+        switch (e.getType().uType) {
+            case CHAR:
+                char ch = isPlus ? (char)(((ReturnValuesChar)e).value + 1) : (char)(((ReturnValuesChar)e).value - 1);
+                c.namesToValues.put(id.getName(), ch);
+                return new ReturnValuesChar(ch);
+            case INT:
+                int i = isPlus ? ((ReturnValuesInt)e).value + 1 : ((ReturnValuesInt)e).value - 1;
+                c.namesToValues.put(id.getName(), i);
+                return new ReturnValuesInt(i);
+            case DOUBLE:
+                double d = isPlus ? ((ReturnValuesDouble)e).value + 1 : ((ReturnValuesDouble)e).value - 1;
+                c.namesToValues.put(id.getName(), d);
+                return new ReturnValuesDouble(d);
+            default: // BOOLEAN
+                throw new Exception("Cannot increment or decrement a Boolean expression");
         }
-
-        return result;
     }
 }
