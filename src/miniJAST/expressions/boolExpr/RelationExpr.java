@@ -20,6 +20,9 @@ public class RelationExpr extends EqExpr {
         if (l.getType().uType == UnannType.BOOLEAN || r.getType().uType == UnannType.BOOLEAN)
             throw new Exception("Cannot relate boolean values");
 
+        if (l.getIsArray() || r.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
+
         switch (op) {
             case GT:
                 switch (l.getType().uType) {

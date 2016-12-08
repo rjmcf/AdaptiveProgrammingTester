@@ -16,6 +16,9 @@ public class UnaryComplementExpr extends UnaryExpr {
         if (e.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Cannot apply ! to non-boolean type.");
 
+        if (e.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
+
         return new ReturnValuesBool(!((ReturnValuesBool)e).value);
     }
 }

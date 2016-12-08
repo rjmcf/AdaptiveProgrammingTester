@@ -18,6 +18,9 @@ public class OrExpr extends CondExpr {
         if (l.getType().uType != UnannType.BOOLEAN)
             throw new Exception("|| operator not applicable to operands that aren't of type boolean");
 
+        if (l.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
+
         if (((ReturnValuesBool)l).value) {
             result = new ReturnValuesBool(true);
             return result;
@@ -27,6 +30,9 @@ public class OrExpr extends CondExpr {
 
         if (r.getType().uType != UnannType.BOOLEAN)
             throw new Exception("|| operator not applicable to operands that aren't of type boolean");
+
+        if (r.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
 
         result = new ReturnValuesBool(((ReturnValuesBool)r).value);
         return result;

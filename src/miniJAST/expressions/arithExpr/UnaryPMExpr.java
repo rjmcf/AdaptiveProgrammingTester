@@ -14,7 +14,8 @@ public class UnaryPMExpr extends UnaryExpr {
     public ReturnValues evaluate(Context c) throws Exception {
         ReturnValues e = expr.evaluate(c);
 
-        ReturnValues result;
+        if (e.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
 
         switch (e.getType().uType) {
             case CHAR:

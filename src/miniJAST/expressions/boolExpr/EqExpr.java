@@ -18,6 +18,9 @@ public class EqExpr extends AndExpr {
         if (l.getType().uType != r.getType().uType)
             throw new Exception("Type mismatch between arguments of ==");
 
+        if (l.getIsArray() || r.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
+
         switch (l.getType().uType) {
             case BOOLEAN:
                 return equalityTest ? new ReturnValuesBool(((ReturnValuesBool)l).value == ((ReturnValuesBool)r).value)

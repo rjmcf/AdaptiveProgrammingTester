@@ -17,6 +17,9 @@ public class CondExpr extends Expression {
         if (condV.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Conditional expression must have type Boolean");
 
+        if (condV.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
+
         if (((ReturnValuesBool)condV).value)
             return trueExpr.evaluate(c);
         else

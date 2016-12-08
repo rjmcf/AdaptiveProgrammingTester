@@ -20,6 +20,9 @@ public class MultExpr extends AddExpr {
         if (left.getType().uType == UnannType.BOOLEAN || right.getType().uType == UnannType.BOOLEAN)
             throw new Exception("Cannot use * or / on operands of type Boolean");
 
+        if (left.getIsArray() || right.getIsArray())
+            throw new Exception("Cannot operate on whole arrays");
+
 
         switch (left.getType().uType) {
             case CHAR:
