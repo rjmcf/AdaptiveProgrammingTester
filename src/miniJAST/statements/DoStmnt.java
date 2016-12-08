@@ -16,6 +16,8 @@ public class DoStmnt implements StmntNoTrailSubstmnt{
         ReturnValues rCond = cond.evaluate(c);
         if (rCond.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Condition does not have boolean type");
+        if (rCond.getIsArray())
+            throw new Exception("Can not operate on arrays!");
 
         loop:
         while(((ReturnValuesBool)rCond).value) {

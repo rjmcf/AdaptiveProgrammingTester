@@ -15,6 +15,8 @@ public class WhileStmnt implements Statement {
         ReturnValues rC = cond.evaluate(c);
         if (rC.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Condition must be boolean type");
+        if (rC.getIsArray())
+            throw new Exception("Can not operate on arrays!");
 
         loop:
         while (((ReturnValuesBool)rC).value) {

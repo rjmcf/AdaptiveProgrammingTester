@@ -23,6 +23,8 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
         ReturnValues condR = cond.evaluate(c);
         if (condR.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Condition must have boolean type");
+        if (condR.getIsArray())
+            throw new Exception("Can not operate on arrays!");
 
         loop:
         while(((ReturnValuesBool)condR).value) {

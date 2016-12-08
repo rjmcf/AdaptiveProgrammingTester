@@ -15,6 +15,8 @@ public class IfThenStmnt implements Statement {
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)
             throw new Exception("Condition must be Boolean type");
+        if (r.getIsArray())
+            throw new Exception("Can not operate on arrays!");
 
         if (((ReturnValuesBool)r).value)
             return stmnt.execute(c);
