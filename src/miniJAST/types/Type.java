@@ -2,7 +2,7 @@ package miniJAST.types;
 
 public class Type {
     public UnannType uType;
-    public boolean isArray;
+    public int size;
 
-    public Type(UnannType u, boolean a) { uType = u; isArray = a; }
+    public Type(UnannType u, int s) { uType = u; size = s; }
 }

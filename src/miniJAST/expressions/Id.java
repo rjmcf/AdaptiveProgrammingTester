@@ -5,8 +5,6 @@ import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.Type;
 
-import java.util.ArrayList;
-
 public class Id extends GroundExpr implements AssignLHS{
     private Type varType;
     private String name;
@@ -14,8 +12,7 @@ public class Id extends GroundExpr implements AssignLHS{
     @Override
     public ReturnValues evaluate(Context c) throws Exception{
         if (c.namesToTypes.get(name).equals(varType)) {
-            Object v = c.namesToValues.get(name);
-            if (varType.dims == 0) {
+            if (varType.size == 1) {
                 switch (varType.uType) {
                     case BOOLEAN:
                         return new ReturnValuesBoolean((boolean) c.namesToValues.get(name));
@@ -29,8 +26,7 @@ public class Id extends GroundExpr implements AssignLHS{
                         throw new Exception("'varType' was not one of possible UnannTypes.");
                 }
             } else {
-                ArrayList<Integer> dimData = c.namesToDimData.get(name);
-                return new ReturnValuesMDArray(varType.uType, dimData.get(0), (ArrayList<Integer>)dimData.subList(1,dimData.size()));
+                return new ReturnValuesMDArray(varType.uType, varType.size);
             }
         } else
             throw new Exception("Variable " + name + " not available in context.");

@@ -6,15 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ReturnValuesMDArray<T> extends ReturnValues{
-    public int size;
     protected ArrayList<T> values;
 
     public ReturnValuesMDArray(UnannType t, int s) throws Exception{
-        super(t, true);
+        super(t, s);
 
-        size = s;
-
-        values = new ArrayList<>(size);
+        values = new ArrayList<>(type.size);
     }
 
     public ReturnValues get(UnannType t, int index) throws Exception{
