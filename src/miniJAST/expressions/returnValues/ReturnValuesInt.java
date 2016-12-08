@@ -5,5 +5,5 @@ import miniJAST.types.UnannType;
 public class ReturnValuesInt extends ReturnValues {
     public int value;
 
-    public ReturnValuesInt(int v) { super(UnannType.INT, 0); }
+    public ReturnValuesInt(int v) { super(UnannType.INT, false); value = v;}
 }

@@ -6,7 +6,7 @@ import miniJAST.types.UnannType;
 public abstract class ReturnValues {
     protected Type type;
 
-    public ReturnValues(UnannType t, int d) { type = new Type(t,d);}
+    public ReturnValues(UnannType t, boolean a) { type = new Type(t,a);}
 
     public Type getType() {return type;}
 }
