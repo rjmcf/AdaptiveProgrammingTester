@@ -1,12 +1,11 @@
 package miniJAST.statements;
 
-import miniJAST.types.UnannType;
+import miniJAST.types.Type;
 
 import java.util.ArrayList;
 
 public class LocalVarDec implements BlockStatement {
-    private boolean isFinal;
-    private UnannType type;
-    private int arrayDims;
+    protected Type type;
+    private int size;
     private ArrayList<VarDeclarator> vars;
 }

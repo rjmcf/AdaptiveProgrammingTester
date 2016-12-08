@@ -8,25 +8,14 @@ import java.util.Arrays;
 public class ReturnValuesArray<T> extends ReturnValues{
     protected ArrayList<T> values;
 
-    public ReturnValuesArray(UnannType t, int s) throws Exception{
-        super(t, s);
+    public ReturnValuesArray(UnannType t, ArrayList<T> vs) throws Exception{
+        super(t, vs.size(), false);
 
-        values = new ArrayList<>(type.size);
+        values = vs;
     }
 
-    public ReturnValues get(UnannType t, int index) throws Exception{
-        switch (t) {
-            case BOOLEAN:
-                return new ReturnValuesBoolean((Boolean) values.get(index));
-            case CHAR:
-                return new ReturnValuesChar((Character) values.get(index));
-            case INT:
-                return new ReturnValuesInt((Integer) values.get(index));
-            case DOUBLE:
-                return new ReturnValuesDouble((Double) values.get(index));
-            default:
-                throw new Exception("t is not one of possible UnanTypes");
-        }
+    public T get(int index) throws Exception{
+        return values.get(index);
     }
 
     public void set(int index, T e) throws Exception{
