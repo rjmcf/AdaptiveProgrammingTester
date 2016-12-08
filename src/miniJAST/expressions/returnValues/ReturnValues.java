@@ -6,8 +6,9 @@ import miniJAST.types.UnannType;
 public abstract class ReturnValues {
     protected Type type;
     protected boolean isArrayAccess;
+    protected boolean isArray;
 
-    public ReturnValues(UnannType t, int s, boolean aa) { type = new Type(t,s); isArrayAccess = aa;}
+    public ReturnValues(UnannType t, int s, boolean a, boolean aa) { type = new Type(t,s); isArray = a; isArrayAccess = aa;}
 
     public Type getType() {return type;}
 }

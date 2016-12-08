@@ -9,7 +9,7 @@ public class ReturnValuesArray<T> extends ReturnValues{
     protected ArrayList<T> values;
 
     public ReturnValuesArray(UnannType t, ArrayList<T> vs) throws Exception{
-        super(t, vs.size(), false);
+        super(t, vs.size(), true, false);
 
         values = vs;
     }

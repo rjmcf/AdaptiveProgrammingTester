@@ -8,7 +8,7 @@ public class ReturnValuesArrayAccess<T> extends ReturnValues {
     public T value;
 
     public ReturnValuesArrayAccess(UnannType t, String n, int i, T e) {
-        super(t, 1, true);
+        super(t, 1, false, true);
         name = n;
         index = i;
         value = e;
