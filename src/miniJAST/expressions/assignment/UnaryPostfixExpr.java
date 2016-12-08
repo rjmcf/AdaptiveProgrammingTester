@@ -6,6 +6,7 @@ import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
+import miniJAST.statements.FlowControl;
 
 import java.util.ArrayList;
 
@@ -73,5 +74,12 @@ public class UnaryPostfixExpr extends UnaryExpr implements StatementExpr {
                     throw new Exception("Cannot increment or decrement a Boolean expression");
             }
         }
+    }
+
+    @Override
+    // This is never called but needs implementing to satisfy compiler
+    // This implements StatementExpression which extends ExpressionStatement which extends BlockStatement
+    public FlowControl execute(Context c) throws Exception {
+        return null;
     }
 }

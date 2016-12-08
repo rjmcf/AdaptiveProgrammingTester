@@ -6,6 +6,7 @@ import miniJAST.expressions.Id;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.statements.FlowControl;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
@@ -577,5 +578,12 @@ public class AssignExpr extends Expression implements StatementExpr {
         }
 
 
+    }
+
+    @Override
+    // This is never called but needs implementing to satisfy compiler
+    // This implements StatementExpression which extends ExpressionStatement which extends BlockStatement
+    public FlowControl execute(Context c) throws Exception {
+        return null;
     }
 }
