@@ -21,4 +21,6 @@ public class ReturnValuesArray<T> extends ReturnValues{
     public void set(int index, T e) throws Exception{
         values.set(index, e);
     }
+
+    public int getSize() { return values.size(); }
 }
