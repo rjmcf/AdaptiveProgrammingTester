@@ -22,7 +22,7 @@ public class PrintStatement implements BlockStatement {
                 if (i != var.getSize() - 1)
                     System.out.print(", ");
             }
-            System.out.print(" ]");
+            System.out.println(" ]");
         } else {
             switch (v.getType().uType) {
                 case BOOLEAN:
