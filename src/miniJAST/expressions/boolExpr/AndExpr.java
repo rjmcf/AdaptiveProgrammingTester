@@ -18,25 +18,18 @@ public class AndExpr extends OrExpr {
         ReturnValuesBool result;
 
         ReturnValues l = leftSide.evaluate(c);
+        ReturnValues r = rightSide.evaluate(c);
 
-        if (l.getType().uType != UnannType.BOOLEAN)
+        if (l.getType().uType != UnannType.BOOLEAN || r.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("&& operator not applicable to operands that aren't of type boolean");
 
-        if (l.getIsArray())
+        if (l.getIsArray() || r.getIsArray())
             throw new TypeException("Cannot operate on whole arrays");
 
         if (!((ReturnValuesBool)l).value) {
             result = new ReturnValuesBool(false);
             return result;
         }
-
-        ReturnValues r = rightSide.evaluate(c);
-
-        if (r.getType().uType != UnannType.BOOLEAN)
-            throw new TypeException("&& operator not applicable to operands that aren't of type boolean");
-
-        if (r.getIsArray())
-            throw new TypeException("Cannot operate on whole arrays");
 
         result = new ReturnValuesBool(((ReturnValuesBool)r).value);
         return result;

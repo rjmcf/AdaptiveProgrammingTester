@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
-public class AndExprTest {
-    AndExpr e;
+public class OrExprTest {
+    OrExpr e;
     Context c;
     Literal t;
     Literal f;
@@ -20,7 +20,7 @@ public class AndExprTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        e = new AndExpr();
+        e = new OrExpr();
         c = new Context();
         t = new Literal();
         t.setUp(UnannType.BOOLEAN, "true");
@@ -36,26 +36,26 @@ public class AndExprTest {
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
         e.setUp(t, f);
-        Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
+        Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
         e.setUp(f, t);
-        Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
+        Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
         e.setUp(f, f);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(i, f);
+        e.setUp(i, t);
         try {
             e.evaluate(c);
-            fail("Cannot use && on integers (left)");
+            fail("Cannot use || on integers (left)");
         } catch (TypeException te) {
             // pass test
         }
 
-        e.setUp(f, i);
+        e.setUp(t, i);
         try {
             e.evaluate(c);
-            fail("Cannot use && on integers (right)");
+            fail("Cannot use || on integers (right)");
         } catch (TypeException te) {
             // pass test
         }

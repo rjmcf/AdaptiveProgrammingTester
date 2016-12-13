@@ -24,9 +24,15 @@ public class CondExpr extends Expression {
         if (condV.getIsArray())
             throw new TypeException("Cannot operate on whole arrays");
 
+        ReturnValues t = trueExpr.evaluate(c);
+        ReturnValues f = falseExpr.evaluate(c);
+
+        if (t.getType().uType != f.getType().uType)
+            throw new TypeException("Types of two expressions must match");
+
         if (((ReturnValuesBool)condV).value)
-            return trueExpr.evaluate(c);
+            return t;
         else
-            return falseExpr.evaluate(c);
+            return f;
     }
 }
