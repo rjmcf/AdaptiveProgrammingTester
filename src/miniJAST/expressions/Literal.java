@@ -28,9 +28,9 @@ public class Literal extends PrimaryExpr{
                     throw new TypeException("Type is char, but value is more than one character.");
                 return new ReturnValuesChar(value.charAt(0));
             case INT:
-                return new ReturnValuesInt(Integer.valueOf(value));
+                return new ReturnValuesInt(Integer.parseInt(value));
             case DOUBLE:
-                return new ReturnValuesDouble(Double.valueOf(value));
+                return new ReturnValuesDouble(Double.parseDouble(value));
             default:
                 throw new TypeException("'litType' was not one of possible UnannTypes");
         }

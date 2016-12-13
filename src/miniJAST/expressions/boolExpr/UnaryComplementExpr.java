@@ -1,8 +1,9 @@
-package miniJAST.expressions.arithExpr;
+package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.Type;
