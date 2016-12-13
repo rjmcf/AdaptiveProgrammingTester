@@ -40,12 +40,11 @@ public class PrintStatementTest {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 ArrayList<Character> string = new  ArrayList<>();
-                string.add('H');
-                string.add('e');
-                string.add('l');
-                string.add('l');
-                string.add('o');
-                string.add('!');
+                string.add('P');
+                string.add('r');
+                string.add('i');
+                string.add('n');
+                string.add('t');
                 return new ReturnValuesArray<Character>(UnannType.CHAR, string);
             }
         };
