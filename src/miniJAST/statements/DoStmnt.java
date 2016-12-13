@@ -10,6 +10,8 @@ public class DoStmnt implements StmntNoTrailSubstmnt{
     private Statement stmnt;
     private Expression cond;
 
+    public void setUp(Statement s, Expression c) { stmnt = s; cond = c; }
+
     @Override
     public FlowControl execute(Context c) throws Exception {
         stmnt.execute(c);

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 public class Block implements StmntNoTrailSubstmnt {
     private ArrayList<BlockStatement> stmnts;
 
+    public Block() { stmnts = new ArrayList<>(); }
+    public void addBlockStmnt(BlockStatement b) { stmnts.add(b); }
+
     @Override
     public FlowControl execute(Context c) throws Exception{
         for (BlockStatement b : stmnts) {

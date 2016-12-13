@@ -10,6 +10,8 @@ public class WhileStmnt implements Statement {
     private Expression cond;
     private Statement stmnt;
 
+    public void setUp(Expression c, Statement s) { cond = c; stmnt = s; }
+
     @Override
     public FlowControl execute(Context c) throws Exception {
         ReturnValues rC = cond.evaluate(c);

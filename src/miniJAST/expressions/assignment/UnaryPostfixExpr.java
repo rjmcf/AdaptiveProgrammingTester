@@ -14,6 +14,8 @@ public class UnaryPostfixExpr extends UnaryExpr implements StatementExpr {
     private boolean isPlus;
     private AssignLHS expr;
 
+    public void setUp(boolean p, AssignLHS e) { isPlus = p; expr = e; }
+
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
         if (expr instanceof ArrayAccess) {

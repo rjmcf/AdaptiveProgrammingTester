@@ -16,7 +16,7 @@ public class AssignExpr extends Expression implements StatementExpr {
     private AssignOp op;
     private Expression expr;
 
-    public AssignExpr(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e; }
+    public void setUp(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e; }
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {

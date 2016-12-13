@@ -11,6 +11,8 @@ public class IfThenElseStmnt implements Statement{
     private StatementNoShortIf trueStmnt;
     private Statement falseStmnt;
 
+    public void setUp(Expression c, StatementNoShortIf t, Statement f) { cond = c; trueStmnt = t; falseStmnt = f; }
+
     @Override
     public FlowControl execute(Context c) throws Exception {
         ReturnValues r = cond.evaluate(c);

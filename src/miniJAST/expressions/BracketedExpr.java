@@ -6,7 +6,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 public class BracketedExpr extends PrimaryExpr {
     private Expression expr;
 
-    public BracketedExpr(Expression e) { expr = e; }
+    public void setUp(Expression e) { expr = e; }
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {

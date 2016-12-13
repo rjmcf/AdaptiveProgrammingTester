@@ -10,7 +10,7 @@ public class UnaryPMExpr extends UnaryExpr {
     private boolean isPlus;
     private UnaryExpr expr;
 
-    public UnaryPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; }
+    public void setUp(boolean p, UnaryExpr e) { isPlus = p; expr = e; }
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {

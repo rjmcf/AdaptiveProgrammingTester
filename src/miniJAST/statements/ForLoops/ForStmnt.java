@@ -17,6 +17,10 @@ public class ForStmnt implements Statement {
     private ArrayList<StatementExpr> updates;
     private Statement stmnt;
 
+    public ForStmnt() { updates = new ArrayList<>(); }
+    public void setUp( ForInit i, Expression c, Statement s) { init = i; cond = c; stmnt = s; }
+    public void addStmntExpr(StatementExpr se) { updates.add(se); }
+
     @Override
     public FlowControl execute(Context c) throws Exception {
         init.execute(c);

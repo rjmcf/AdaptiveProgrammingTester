@@ -11,6 +11,8 @@ public class CondExpr extends Expression {
     private Expression trueExpr;
     private CondExpr falseExpr; // Right associative
 
+    public void setUp(OrExpr c, Expression t, CondExpr f) { cond = c; trueExpr = t; falseExpr = f; }
+
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
         ReturnValues condV = cond.evaluate(c);

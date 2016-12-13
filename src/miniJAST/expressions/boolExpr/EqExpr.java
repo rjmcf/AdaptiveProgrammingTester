@@ -4,9 +4,12 @@ import miniJAST.Context;
 import miniJAST.expressions.returnValues.*;
 
 public class EqExpr extends AndExpr {
-    private boolean equalityTest;
+    private boolean isEqualityTest;
     private EqExpr leftSide; // Left associative (allows arith eq test on left side)
     private RelationExpr rightSide;
+
+    public void setUp(boolean e, EqExpr l, RelationExpr r) { isEqualityTest = e; leftSide = l; rightSide = r; }
+
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
@@ -23,16 +26,16 @@ public class EqExpr extends AndExpr {
 
         switch (l.getType().uType) {
             case BOOLEAN:
-                return equalityTest ? new ReturnValuesBool(((ReturnValuesBool)l).value == ((ReturnValuesBool)r).value)
+                return isEqualityTest ? new ReturnValuesBool(((ReturnValuesBool)l).value == ((ReturnValuesBool)r).value)
                         : new ReturnValuesBool(((ReturnValuesBool)l).value != ((ReturnValuesBool)r).value);
             case CHAR:
-                return equalityTest ? new ReturnValuesBool(((ReturnValuesChar)l).value == ((ReturnValuesChar)r).value)
+                return isEqualityTest ? new ReturnValuesBool(((ReturnValuesChar)l).value == ((ReturnValuesChar)r).value)
                         : new ReturnValuesBool(((ReturnValuesChar)l).value != ((ReturnValuesChar)r).value);
             case INT:
-                return equalityTest ? new ReturnValuesBool(((ReturnValuesInt)l).value == ((ReturnValuesInt)r).value)
+                return isEqualityTest ? new ReturnValuesBool(((ReturnValuesInt)l).value == ((ReturnValuesInt)r).value)
                         : new ReturnValuesBool(((ReturnValuesInt)l).value != ((ReturnValuesInt)r).value);
             case DOUBLE:
-                return equalityTest ? new ReturnValuesBool(((ReturnValuesDouble)l).value == ((ReturnValuesDouble)r).value)
+                return isEqualityTest ? new ReturnValuesBool(((ReturnValuesDouble)l).value == ((ReturnValuesDouble)r).value)
                         : new ReturnValuesBool(((ReturnValuesDouble)l).value != ((ReturnValuesDouble)r).value);
             default:
                 throw new Exception("Type of left operand is not one of possible UnannTypes.");

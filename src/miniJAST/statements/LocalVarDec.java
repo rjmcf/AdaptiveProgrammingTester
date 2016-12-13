@@ -15,6 +15,11 @@ public class LocalVarDec implements BlockStatement {
     protected UnannType type;
     private ArrayList<VarDeclarator> vars;
 
+    public LocalVarDec() { vars = new ArrayList<>(); }
+
+    public void setUp(UnannType t) { type = t; }
+    public void addVarDec(VarDeclarator v) { vars.add(v); }
+
     @Override
     public FlowControl execute(Context c) throws Exception {
         for (VarDeclarator v : vars) {

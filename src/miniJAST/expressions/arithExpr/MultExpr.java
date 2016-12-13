@@ -1,5 +1,6 @@
 package miniJAST.expressions.arithExpr;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import miniJAST.Context;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
@@ -11,6 +12,8 @@ public class MultExpr extends AddExpr {
     private boolean isTimes;
     private MultExpr leftSide; // Left associative
     private UnaryExpr rightSide;
+
+    public void setUp(boolean t, MultExpr l, UnaryExpr r) { isTimes = t; leftSide = l; rightSide = r; }
 
     @Override
     public ReturnValues evaluate(Context c) throws Exception {
