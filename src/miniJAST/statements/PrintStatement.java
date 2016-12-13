@@ -22,20 +22,20 @@ public class PrintStatement implements BlockStatement {
                     System.out.print(", ");
             }
             System.out.print(" ]");
-        }
-
-        switch (v.getType().uType) {
-            case BOOLEAN:
-                System.out.println(((ReturnValuesBool)v).value);
-                break;
-            case CHAR:
-                System.out.println(((ReturnValuesChar)v).value);
-                break;
-            case INT:
-                System.out.println(((ReturnValuesInt)v).value);
-                break;
-            default: // DOUBLE
-                System.out.println(((ReturnValuesDouble)v).value);
+        } else {
+            switch (v.getType().uType) {
+                case BOOLEAN:
+                    System.out.println(((ReturnValuesBool) v).value);
+                    break;
+                case CHAR:
+                    System.out.println(((ReturnValuesChar) v).value);
+                    break;
+                case INT:
+                    System.out.println(((ReturnValuesInt) v).value);
+                    break;
+                default: // DOUBLE
+                    System.out.println(((ReturnValuesDouble) v).value);
+            }
         }
 
         return FlowControl.NONE;
