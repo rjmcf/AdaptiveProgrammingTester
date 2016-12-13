@@ -1,6 +1,7 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.LocalVarDec;
 import miniJAST.expressions.StatementExpr;
@@ -16,7 +17,7 @@ public class ForInit {
     public void setUp(boolean l, LocalVarDec lv) { isList = l; lvd = lv; }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
 
-    public void execute(Context c) throws Exception {
+    public void execute(Context c) throws MiniJASTException {
         if (isList) {
             for (StatementExpr se : stmnts) {
                 se.evaluate(c);

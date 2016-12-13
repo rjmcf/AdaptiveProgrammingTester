@@ -1,6 +1,9 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
+import miniJAST.exceptions.VariableScopeException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
@@ -17,7 +20,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     public void setUp(boolean p, AssignLHS e) { isPlus = p; expr = e; }
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;
             ReturnValues raa = aa.evaluate(c);
@@ -27,7 +30,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     ReturnValuesCharAA rcaa = (ReturnValuesCharAA) raa;
                     char ch = isPlus ? (char) (rcaa.value + 1) : (char) (rcaa.value - 1);
                     if (!c.namesToValues.containsKey(rcaa.getName()))
-                        throw new Exception("Variable not initialised");
+                        throw new VariableScopeException(rcaa.getName(), false);
                     ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                     chs.set(rcaa.getIndex(), ch);
                     c.namesToValues.put(rcaa.getName(), chs);
@@ -36,7 +39,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     ReturnValuesIntAA riaa = (ReturnValuesIntAA) raa;
                     int i = isPlus ? riaa.value + 1 :  riaa.value - 1;
                     if (!c.namesToValues.containsKey(riaa.getName()))
-                        throw new Exception("Variable not initialised");
+                        throw new VariableScopeException(riaa.getName(), false);
                     ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                     is.set(riaa.getIndex(), i);
                     c.namesToValues.put(riaa.getName(), is);
@@ -45,13 +48,13 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) raa;
                     double d = isPlus ? rdaa.value + 1 : rdaa.value - 1;
                     if (!c.namesToValues.containsKey(rdaa.getName()))
-                        throw new Exception("Variable not initialised");
+                        throw new VariableScopeException(rdaa.getName(), false);
                     ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                     ds.set(rdaa.getIndex(), d);
                     c.namesToValues.put(rdaa.getName(), ds);
                     return new ReturnValuesDouble(d);
                 default: // BOOLEAN
-                    throw new Exception("Cannot increment or decrement a Boolean expression");
+                    throw new TypeException("Cannot increment or decrement a Boolean expression");
             }
         } else {
             Id id = (Id) expr;
@@ -76,7 +79,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     c.namesToValues.put(id.getName(), d);
                     return result;
                 default: // BOOLEAN
-                    throw new Exception("Cannot increment or decrement a Boolean expression");
+                    throw new TypeException("Cannot increment or decrement a Boolean expression");
             }
         }
     }
@@ -84,7 +87,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     @Override
     // This is never called but needs implementing to satisfy compiler
     // This implements StatementExpression which extends ExpressionStatement which extends BlockStatement
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) {
         return null;
     }
 }

@@ -1,9 +1,12 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
+import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 
 public class IfThenElseStmntNoShortIf implements StatementNoShortIf {
@@ -14,12 +17,12 @@ public class IfThenElseStmntNoShortIf implements StatementNoShortIf {
     public void setUp(Expression c, StatementNoShortIf t, StatementNoShortIf f) { cond = c; trueStmnt = t; falseStmnt = f; }
 
     @Override
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) throws MiniJASTException {
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)
-            throw new Exception("Condition must be Boolean type");
+            throw new TypeException("Condition must be Boolean type");
         if (r.getIsArray())
-            throw new Exception("Can not operate on arrays!");
+            throw new TypeException("Can not operate on arrays!");
 
         if (((ReturnValuesBool)r).value)
             return trueStmnt.execute(c);

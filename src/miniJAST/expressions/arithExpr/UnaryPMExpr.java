@@ -1,6 +1,8 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
@@ -13,11 +15,11 @@ public class UnaryPMExpr extends UnaryExpr {
     public void setUp(boolean p, UnaryExpr e) { isPlus = p; expr = e; }
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues e = expr.evaluate(c);
 
         if (e.getIsArray())
-            throw new Exception("Cannot operate on whole arrays");
+            throw new TypeException("Cannot operate on whole arrays");
 
         switch (e.getType().uType) {
             case CHAR:
@@ -27,7 +29,7 @@ public class UnaryPMExpr extends UnaryExpr {
             case DOUBLE:
                 return new ReturnValuesDouble(isPlus? +((ReturnValuesDouble)e).value : -((ReturnValuesDouble)e).value);
             default: // BOOLEAN
-                throw new Exception("Cannot apply + or - to boolean value");
+                throw new TypeException("Cannot apply + or - to boolean value");
         }
     }
 }

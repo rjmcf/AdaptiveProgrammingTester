@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 
@@ -10,7 +11,7 @@ public class PrintStatement implements BlockStatement {
     public void setUp(Expression e) { expr = e; }
 
     @Override
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) throws MiniJASTException {
         ReturnValues v = expr.evaluate(c);
 
         if (v.getIsArray()) {

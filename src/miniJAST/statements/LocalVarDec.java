@@ -1,6 +1,10 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.IncorrectEvaluationException;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
+import miniJAST.exceptions.VariableScopeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.arrays.ArrayCreation;
@@ -21,10 +25,10 @@ public class LocalVarDec implements BlockStatement {
     public void addVarDec(VarDeclarator v) { vars.add(v); }
 
     @Override
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) throws MiniJASTException {
         for (VarDeclarator v : vars) {
             if (c.namesToTypes.containsKey(v.getName()))
-                throw new Exception("Variable " + v.getName() + " already declared in environment");
+                throw new VariableScopeException(v.getName(), true);
 
             switch (type) {
                 case BOOLEAN:
@@ -32,9 +36,9 @@ public class LocalVarDec implements BlockStatement {
                         if (v.getExpr() != null) {
                             ReturnValues rb = v.getExpr().evaluate(c);
                             if (rb.getType().uType != UnannType.BOOLEAN)
-                                throw new Exception("boolean variable can only be initialised with boolean value");
+                                throw new TypeException("boolean variable can only be initialised with boolean value");
                             if (rb.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             c.namesToTypes.put(v.getName(), rb.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesBool) rb).value);
                         } else {
@@ -48,9 +52,9 @@ public class LocalVarDec implements BlockStatement {
                             for (Expression e : acwil.getValues()) {
                                 ReturnValues r = e.evaluate(c);
                                 if (r.getType().uType != UnannType.BOOLEAN)
-                                    throw new Exception("boolean array must be initialised with boolean values");
+                                    throw new TypeException("boolean array must be initialised with boolean values");
                                 if (r.getIsArray())
-                                    throw new Exception("Can not operate on arrays!");
+                                    throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesBool)r).value);
                             }
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
@@ -59,9 +63,9 @@ public class LocalVarDec implements BlockStatement {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
                             if (s.getType().uType != UnannType.INT)
-                                throw new Exception("Size must be an integer");
+                                throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN, size));
                             c.namesToValues.put(v.getName(), new ArrayList<>(size));
@@ -73,9 +77,9 @@ public class LocalVarDec implements BlockStatement {
                         if (v.getExpr() != null) {
                             ReturnValues rc = v.getExpr().evaluate(c);
                             if (rc.getType().uType != UnannType.CHAR)
-                                throw new Exception("char variable can only be initialised with char value");
+                                throw new TypeException("char variable can only be initialised with char value");
                             if (rc.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             c.namesToTypes.put(v.getName(), rc.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesChar) rc).value);
                         } else {
@@ -89,9 +93,9 @@ public class LocalVarDec implements BlockStatement {
                             for (Expression e : acwil.getValues()) {
                                 ReturnValues r = e.evaluate(c);
                                 if (r.getType().uType != UnannType.CHAR)
-                                    throw new Exception("char array must be initialised with char values");
+                                    throw new TypeException("char array must be initialised with char values");
                                 if (r.getIsArray())
-                                    throw new Exception("Can not operate on arrays!");
+                                    throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesChar)r).value);
                             }
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
@@ -100,9 +104,9 @@ public class LocalVarDec implements BlockStatement {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
                             if (s.getType().uType != UnannType.INT)
-                                throw new Exception("Size must be an integer");
+                                throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR, size));
                             c.namesToValues.put(v.getName(), new ArrayList<>(size));
@@ -114,9 +118,9 @@ public class LocalVarDec implements BlockStatement {
                         if (v.getExpr() != null) {
                             ReturnValues rc = v.getExpr().evaluate(c);
                             if (rc.getType().uType != UnannType.CHAR && rc.getType().uType != UnannType.INT)
-                                throw new Exception("int variable can only be initialised with char or int value");
+                                throw new TypeException("int variable can only be initialised with char or int value");
                             if (rc.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             c.namesToTypes.put(v.getName(), rc.getType());
                             switch (rc.getType().uType) {
                                 case CHAR:
@@ -126,7 +130,7 @@ public class LocalVarDec implements BlockStatement {
                                     c.namesToValues.put(v.getName(), ((ReturnValuesInt)rc).value);
                                     break;
                                 default:
-                                    throw new Exception("What are you doing here?");
+                                    throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
                             c.namesToTypes.put(v.getName(), new Type(UnannType.INT, 1));
@@ -139,9 +143,9 @@ public class LocalVarDec implements BlockStatement {
                             for (Expression e : acwil.getValues()) {
                                 ReturnValues r = e.evaluate(c);
                                 if (r.getType().uType != UnannType.INT)
-                                    throw new Exception("int array must be initialised with int values");
+                                    throw new TypeException("int array must be initialised with int values");
                                 if (r.getIsArray())
-                                    throw new Exception("Can not operate on arrays!");
+                                    throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesInt)r).value);
                             }
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
@@ -150,9 +154,9 @@ public class LocalVarDec implements BlockStatement {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
                             if (s.getType().uType != UnannType.INT)
-                                throw new Exception("Size must be an integer");
+                                throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.INT, size));
                             c.namesToValues.put(v.getName(), new ArrayList<>(size));
@@ -164,9 +168,9 @@ public class LocalVarDec implements BlockStatement {
                         if (v.getExpr() != null) {
                             ReturnValues rc = v.getExpr().evaluate(c);
                             if (rc.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("double variable cannot be initialised with boolean value");
+                                throw new TypeException("double variable cannot be initialised with boolean value");
                             if (rc.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             c.namesToTypes.put(v.getName(), rc.getType());
                             switch (rc.getType().uType) {
                                 case CHAR:
@@ -179,7 +183,7 @@ public class LocalVarDec implements BlockStatement {
                                     c.namesToValues.put(v.getName(), ((ReturnValuesDouble)rc).value);
                                     break;
                                 default:
-                                    throw new Exception("What are you doing here?");
+                                    throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
                             c.namesToTypes.put(v.getName(), new Type(UnannType.INT, 1));
@@ -192,9 +196,9 @@ public class LocalVarDec implements BlockStatement {
                             for (Expression e : acwil.getValues()) {
                                 ReturnValues r = e.evaluate(c);
                                 if (r.getType().uType != UnannType.DOUBLE)
-                                    throw new Exception("double array must be initialised with double values");
+                                    throw new TypeException("double array must be initialised with double values");
                                 if (r.getIsArray())
-                                    throw new Exception("Can not operate on arrays!");
+                                    throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesDouble)r).value);
                             }
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
@@ -203,9 +207,9 @@ public class LocalVarDec implements BlockStatement {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
                             if (s.getType().uType != UnannType.INT)
-                                throw new Exception("Size must be an integer");
+                                throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
-                                throw new Exception("Can not operate on arrays!");
+                                throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE, size));
                             c.namesToValues.put(v.getName(), new ArrayList<>(size));

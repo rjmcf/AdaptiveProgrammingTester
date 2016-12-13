@@ -1,12 +1,17 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.exceptions.IncorrectEvaluationException;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
+import miniJAST.exceptions.VariableScopeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.statements.FlowControl;
+import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
@@ -19,7 +24,7 @@ public class AssignExpr extends Expression implements StatementExpr {
     public void setUp(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e; }
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException{
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;
             ReturnValues access = arac.evaluate(c);
@@ -31,7 +36,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case BOOLEAN:
                             ReturnValuesBoolAA rbaa = (ReturnValuesBoolAA) access;
                             if (ex.getType().uType != UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign anything but a boolean value to a boolean variable");
+                                throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
                             ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.get(rbaa.getName());
                             bs.set(rbaa.getIndex(), rbaa.value);
@@ -40,7 +45,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
@@ -49,7 +54,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -59,7 +64,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
@@ -68,7 +73,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -81,7 +86,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
@@ -91,14 +96,14 @@ public class AssignExpr extends Expression implements StatementExpr {
                 case PLUSEQ:
                     switch (access.getType().uType) {
                         case BOOLEAN:
-                            throw new Exception("Cannot use += on Boolean");
+                            throw new TypeException("Cannot use += on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rcaa.getName(), false);
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -106,7 +111,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -116,10 +121,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = ((ReturnValuesInt) ex).value + riaa.value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(riaa.getName(), false);
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -127,7 +132,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -140,10 +145,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = ((ReturnValuesDouble) ex).value + rdaa.value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rdaa.getName(), false);
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -152,14 +157,14 @@ public class AssignExpr extends Expression implements StatementExpr {
                 case SUBEQ:
                     switch (access.getType().uType) {
                         case BOOLEAN:
-                            throw new Exception("Cannot use -= on Boolean");
+                            throw new TypeException("Cannot use -= on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value - ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rcaa.getName(), false);
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -167,7 +172,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -177,10 +182,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = riaa.value - ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(riaa.getName(), false);
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -188,7 +193,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -201,10 +206,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = rdaa.value - ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rdaa.getName(), false);
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -213,14 +218,14 @@ public class AssignExpr extends Expression implements StatementExpr {
                 case TIMESEQ:
                     switch (access.getType().uType) {
                         case BOOLEAN:
-                            throw new Exception("Cannot use -= on Boolean");
+                            throw new TypeException("Cannot use -= on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value * ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rcaa.getName(), false);
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -228,7 +233,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -238,10 +243,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = riaa.value * ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(riaa.getName(), false);
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -249,7 +254,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -262,10 +267,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = rdaa.value * ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rdaa.getName(), false);
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -274,14 +279,14 @@ public class AssignExpr extends Expression implements StatementExpr {
                 default: // DIVEQ
                     switch (access.getType().uType) {
                         case BOOLEAN:
-                            throw new Exception("Cannot use -= on Boolean");
+                            throw new TypeException("Cannot use -= on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value / ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rcaa.getName(), false);
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -289,7 +294,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -299,10 +304,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = riaa.value / ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(riaa.getName(), false);
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -310,7 +315,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -323,10 +328,10 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = rdaa.value / ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new Exception("Variable not initialised");
+                                throw new VariableScopeException(rdaa.getName(), false);
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -343,19 +348,19 @@ public class AssignExpr extends Expression implements StatementExpr {
                     switch (current.getType().uType) {
                         case BOOLEAN:
                             if (ex.getType().uType != UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign anything but a boolean value to a boolean variable");
+                                throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
                             c.namesToValues.put(id.getName(), b);
                             return new ReturnValuesBool(b);
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
                             c.namesToValues.put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -365,13 +370,13 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -384,7 +389,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), d);
                             return new ReturnValuesDouble(d);
@@ -393,13 +398,13 @@ public class AssignExpr extends Expression implements StatementExpr {
                     switch (current.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + ((char)c.namesToValues.get(id.getName())));
                             c.namesToValues.put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -409,13 +414,13 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = ((ReturnValuesInt) ex).value + (int)c.namesToValues.get(id.getName());
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -428,24 +433,24 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = ((ReturnValuesDouble) ex).value  + (double)c.namesToValues.get(id.getName());
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
-                            throw new Exception("Cannot use += on variable of type boolean");
+                            throw new TypeException("Cannot use += on variable of type boolean");
                     }
                 case SUBEQ:
                     switch (current.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((char)c.namesToValues.get(id.getName())) - ((ReturnValuesChar) ex).value);
                             c.namesToValues.put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -455,13 +460,13 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = (int)c.namesToValues.get(id.getName()) - ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -474,24 +479,24 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = (double)c.namesToValues.get(id.getName()) - ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
-                            throw new Exception("Cannot use -= on variable of type boolean");
+                            throw new TypeException("Cannot use -= on variable of type boolean");
                     }
                 case TIMESEQ:
                     switch (current.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value * ((char)c.namesToValues.get(id.getName())));
                             c.namesToValues.put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -501,13 +506,13 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = ((ReturnValuesInt) ex).value * (int)c.namesToValues.get(id.getName());
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -520,24 +525,24 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = ((ReturnValuesDouble) ex).value  * (double)c.namesToValues.get(id.getName());
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
-                            throw new Exception("Cannot use *= on variable of type boolean");
+                            throw new TypeException("Cannot use *= on variable of type boolean");
                     }
                 default: // DIVEQ
                     switch (current.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
-                                throw new Exception("Cannot assign anything but a char value to a char variable");
+                                throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((char)c.namesToValues.get(id.getName())) / ((ReturnValuesChar) ex).value);
                             c.namesToValues.put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == UnannType.BOOLEAN || ex.getType().uType == UnannType.DOUBLE)
-                                throw new Exception("Can only assign char or int to int variable");
+                                throw new TypeException("Can only assign char or int to int variable");
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -547,13 +552,13 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     i = (int)c.namesToValues.get(id.getName()) / ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == UnannType.BOOLEAN)
-                                throw new Exception("Cannot assign boolean to double variable");
+                                throw new TypeException("Cannot assign boolean to double variable");
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
@@ -566,24 +571,21 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     d = (double)c.namesToValues.get(id.getName()) / ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
-                                    throw new Exception("You shouldn't be here!");
+                                    throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             c.namesToValues.put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
-                            throw new Exception("Cannot use /= on variable of type boolean");
+                            throw new TypeException("Cannot use /= on variable of type boolean");
                     }
-
             }
         }
-
-
     }
 
     @Override
     // This is never called but needs implementing to satisfy compiler
     // This implements StatementExpression which extends ExpressionStatement which extends BlockStatement
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) {
         return null;
     }
 }

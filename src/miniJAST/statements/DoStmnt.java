@@ -1,6 +1,8 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
@@ -13,13 +15,13 @@ public class DoStmnt implements StmntNoTrailSubstmnt{
     public void setUp(Statement s, Expression c) { stmnt = s; cond = c; }
 
     @Override
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) throws MiniJASTException {
         stmnt.execute(c);
         ReturnValues rCond = cond.evaluate(c);
         if (rCond.getType().uType != UnannType.BOOLEAN)
-            throw new Exception("Condition does not have boolean type");
+            throw new TypeException("Condition does not have boolean type");
         if (rCond.getIsArray())
-            throw new Exception("Can not operate on arrays!");
+            throw new TypeException("Can not operate on arrays!");
 
         loop:
         while(((ReturnValuesBool)rCond).value) {

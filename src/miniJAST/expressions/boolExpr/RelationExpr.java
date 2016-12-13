@@ -1,6 +1,8 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
@@ -13,17 +15,17 @@ public class RelationExpr extends EqExpr {
     public void setUp(RelationOp o, RelationExpr l, AddExpr r) { op = o; leftSide = l; rightSide = r; }
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValuesBool result;
 
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);
 
         if (l.getType().uType == UnannType.BOOLEAN || r.getType().uType == UnannType.BOOLEAN)
-            throw new Exception("Cannot relate boolean values");
+            throw new TypeException("Cannot relate boolean values");
 
         if (l.getIsArray() || r.getIsArray())
-            throw new Exception("Cannot operate on whole arrays");
+            throw new TypeException("Cannot operate on whole arrays");
 
         switch (op) {
             case GT:

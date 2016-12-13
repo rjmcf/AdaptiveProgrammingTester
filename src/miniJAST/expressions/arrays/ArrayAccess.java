@@ -1,6 +1,8 @@
 package miniJAST.expressions.arrays;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.PrimaryExpr;
@@ -14,17 +16,17 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
 
     public void setUp(Id i, Expression e) { id = i; index = e; }
 
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues r = id.evaluate(c);
 
         if (!(r instanceof ReturnValuesArray))
-            throw new Exception("Cannot use array access on variable that isn't array");
+            throw new TypeException("Cannot use array access on variable that isn't array");
 
         ReturnValuesArray ar = (ReturnValuesArray)r;
 
         ReturnValues i = index.evaluate(c);
         if (i.getType().uType != UnannType.INT)
-            throw new Exception("Can only index with int value");
+            throw new TypeException("Can only index with int value");
 
         int index = ((ReturnValuesInt)i).value;
 

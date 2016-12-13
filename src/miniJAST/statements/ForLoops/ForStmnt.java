@@ -1,6 +1,8 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
@@ -22,13 +24,13 @@ public class ForStmnt implements Statement {
     public void addStmntExpr(StatementExpr se) { updates.add(se); }
 
     @Override
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) throws MiniJASTException{
         init.execute(c);
         ReturnValues condR = cond.evaluate(c);
         if (condR.getType().uType != UnannType.BOOLEAN)
-            throw new Exception("Condition must have boolean type");
+            throw new TypeException("Condition must have boolean type");
         if (condR.getIsArray())
-            throw new Exception("Can not operate on arrays!");
+            throw new TypeException("Can not operate on arrays!");
 
         loop:
         while(((ReturnValuesBool)condR).value) {

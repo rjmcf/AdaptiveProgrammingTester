@@ -1,7 +1,10 @@
 package miniJAST.expressions.arithExpr;
 
+import com.sun.org.apache.bcel.internal.generic.Type;
 import com.sun.org.apache.xpath.internal.operations.Mult;
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
@@ -16,15 +19,15 @@ public class MultExpr extends AddExpr {
     public void setUp(boolean t, MultExpr l, UnaryExpr r) { isTimes = t; leftSide = l; rightSide = r; }
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);
 
         if (left.getType().uType == UnannType.BOOLEAN || right.getType().uType == UnannType.BOOLEAN)
-            throw new Exception("Cannot use * or / on operands of type Boolean");
+            throw new TypeException("Cannot use * or / on operands of type Boolean");
 
         if (left.getIsArray() || right.getIsArray())
-            throw new Exception("Cannot operate on whole arrays");
+            throw new TypeException("Cannot operate on whole arrays");
 
 
         switch (left.getType().uType) {

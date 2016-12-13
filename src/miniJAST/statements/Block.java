@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class Block implements StmntNoTrailSubstmnt {
     public void addBlockStmnt(BlockStatement b) { stmnts.add(b); }
 
     @Override
-    public FlowControl execute(Context c) throws Exception{
+    public FlowControl execute(Context c) throws MiniJASTException{
         for (BlockStatement b : stmnts) {
             FlowControl fc = b.execute(c);
             switch (fc) {

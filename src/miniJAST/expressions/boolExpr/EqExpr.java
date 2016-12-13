@@ -1,7 +1,12 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
+import miniJAST.exceptions.IncorrectEvaluationException;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.*;
+
+import java.util.IllegalFormatCodePointException;
 
 public class EqExpr extends AndExpr {
     private boolean isEqualityTest;
@@ -12,17 +17,17 @@ public class EqExpr extends AndExpr {
 
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValuesBool result;
 
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);
 
         if (l.getType().uType != r.getType().uType)
-            throw new Exception("Type mismatch between arguments of ==");
+            throw new TypeException("Type mismatch between arguments of ==");
 
         if (l.getIsArray() || r.getIsArray())
-            throw new Exception("Cannot operate on whole arrays");
+            throw new TypeException("Cannot operate on whole arrays");
 
         switch (l.getType().uType) {
             case BOOLEAN:
@@ -38,7 +43,7 @@ public class EqExpr extends AndExpr {
                 return isEqualityTest ? new ReturnValuesBool(((ReturnValuesDouble)l).value == ((ReturnValuesDouble)r).value)
                         : new ReturnValuesBool(((ReturnValuesDouble)l).value != ((ReturnValuesDouble)r).value);
             default:
-                throw new Exception("Type of left operand is not one of possible UnannTypes.");
+                throw new IncorrectEvaluationException("Type of left operand is not one of possible UnannTypes.");
         }
     }
 }

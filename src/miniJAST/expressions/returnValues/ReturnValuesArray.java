@@ -8,17 +8,17 @@ import java.util.Arrays;
 public class ReturnValuesArray<T> extends ReturnValues{
     protected ArrayList<T> values;
 
-    public ReturnValuesArray(UnannType t, ArrayList<T> vs) throws Exception{
+    public ReturnValuesArray(UnannType t, ArrayList<T> vs){
         super(t, vs.size(), true, false);
 
         values = vs;
     }
 
-    public T get(int index) throws Exception{
+    public T get(int index){
         return values.get(index);
     }
 
-    public void set(int index, T e) throws Exception{
+    public void set(int index, T e){
         values.set(index, e);
     }
 

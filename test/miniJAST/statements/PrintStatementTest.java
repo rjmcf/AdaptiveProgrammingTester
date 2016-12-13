@@ -1,12 +1,14 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesIntAA;
 import miniJAST.types.UnannType;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -20,23 +22,23 @@ public class PrintStatementTest {
     Context c;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() {
         pr = new PrintStatement();
         boolExpr = new Expression() {
             @Override
-            public ReturnValues evaluate(Context c) throws Exception {
+            public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesBool(true);
             }
         };
         intAAExpr = new Expression() {
             @Override
-            public ReturnValues evaluate(Context c) throws Exception {
+            public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesIntAA("fakeArray", 2, 42);
             }
         };
         arrayExpr = new Expression() {
             @Override
-            public ReturnValues evaluate(Context c) throws Exception {
+            public ReturnValues evaluate(Context c) throws MiniJASTException {
                 ArrayList<Character> string = new  ArrayList<>();
                 string.add('H');
                 string.add('e');
@@ -51,14 +53,19 @@ public class PrintStatementTest {
     }
 
     @Test
-    public void testExecute() throws Exception {
-        pr.setUp(boolExpr);
-        pr.execute(c);
+    public void testExecute() {
+        try {
+            pr.setUp(boolExpr);
+            pr.execute(c);
 
-        pr.setUp(intAAExpr);
-        pr.execute(c);
+            pr.setUp(intAAExpr);
+            pr.execute(c);
 
-        pr.setUp(arrayExpr);
-        pr.execute(c);
+            pr.setUp(arrayExpr);
+            pr.execute(c);
+        } catch (MiniJASTException e) {
+            e.printStackTrace();
+            Assert.fail("A MiniJASTException was thrown");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
@@ -11,7 +12,7 @@ public class Literal extends PrimaryExpr{
     public void setUp(UnannType lT, String v) { litType = lT; value = v; }
 
     @Override
-    public ReturnValues evaluate(Context c) throws Exception {
+    public ReturnValues evaluate(Context c) throws TypeException {
         switch(litType) {
             case BOOLEAN:
                 boolean v;
@@ -20,18 +21,18 @@ public class Literal extends PrimaryExpr{
                 else if (value.equals("false"))
                     v = false;
                 else
-                    throw new Exception("Type is boolean, but val is not true or false.");
+                    throw new TypeException("Type is boolean, but val is not true or false.");
                 return new ReturnValuesBool(v);
             case CHAR:
                 if (value.length() > 1)
-                    throw new Exception("Type is char, but value is more than one character.");
+                    throw new TypeException("Type is char, but value is more than one character.");
                 return new ReturnValuesChar(value.charAt(0));
             case INT:
                 return new ReturnValuesInt(Integer.valueOf(value));
             case DOUBLE:
                 return new ReturnValuesDouble(Double.valueOf(value));
             default:
-                throw new Exception("'litType' was not one of possible UnannTypes");
+                throw new TypeException("'litType' was not one of possible UnannTypes");
         }
     }
 }

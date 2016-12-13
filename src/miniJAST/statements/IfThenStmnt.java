@@ -1,6 +1,8 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
@@ -13,12 +15,12 @@ public class IfThenStmnt implements Statement {
     public void setUp(Expression c, Statement t) { cond = c; stmnt = t; }
 
     @Override
-    public FlowControl execute(Context c) throws Exception {
+    public FlowControl execute(Context c) throws MiniJASTException {
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)
-            throw new Exception("Condition must be Boolean type");
+            throw new TypeException("Condition must be Boolean type");
         if (r.getIsArray())
-            throw new Exception("Can not operate on arrays!");
+            throw new TypeException("Can not operate on arrays!");
 
         if (((ReturnValuesBool)r).value)
             return stmnt.execute(c);
