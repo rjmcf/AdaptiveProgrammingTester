@@ -2,6 +2,7 @@ package miniJAST.expressions.arrays;
 
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.OutOfBoundsException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
@@ -19,7 +20,7 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues r = id.evaluate(c);
 
-        if (!(r instanceof ReturnValuesArray))
+        if (!(r.getIsArray()))
             throw new TypeException("Cannot use array access on variable that isn't array");
 
         ReturnValuesArray ar = (ReturnValuesArray)r;
@@ -29,6 +30,9 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
             throw new TypeException("Can only index with int value");
 
         int index = ((ReturnValuesInt)i).value;
+
+        if (index < 0 || index >= id.getType().size)
+            throw new OutOfBoundsException(index, id.getType().size);
 
         switch (r.getType().uType) {
             case BOOLEAN:

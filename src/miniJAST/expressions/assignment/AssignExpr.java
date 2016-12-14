@@ -38,7 +38,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
                             ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.get(rbaa.getName());
-                            bs.set(rbaa.getIndex(), rbaa.value);
+                            bs.set(rbaa.getIndex(), b);
                             c.namesToValues.put(rbaa.getName(), bs);
                             return new ReturnValuesBool(b);
                         case CHAR:
@@ -47,7 +47,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
-                            chs.set(rcaa.getIndex(), rcaa.value);
+                            chs.set(rcaa.getIndex(), ch);
                             c.namesToValues.put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
@@ -66,7 +66,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
-                            is.set(riaa.getIndex(), riaa.value);
+                            is.set(riaa.getIndex(), i);
                             c.namesToValues.put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
@@ -88,7 +88,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
-                            ds.set(rdaa.getIndex(), rdaa.value);
+                            ds.set(rdaa.getIndex(), d);
                             c.namesToValues.put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }

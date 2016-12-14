@@ -65,7 +65,10 @@ public class LocalVarDec implements BlockStatement {
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN, size));
-                            c.namesToValues.put(v.getName(), new ArrayList<>(size));
+                            ArrayList<Boolean> bools = new ArrayList<>(size);
+                            while (bools.size() < size)
+                                bools.add(false);
+                            c.namesToValues.put(v.getName(), bools);
                         }
                     }
                     break;
@@ -106,7 +109,10 @@ public class LocalVarDec implements BlockStatement {
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR, size));
-                            c.namesToValues.put(v.getName(), new ArrayList<>(size));
+                            ArrayList<Character> chars = new ArrayList<>(size);
+                            while (chars.size() < size)
+                                chars.add('\0');
+                            c.namesToValues.put(v.getName(), chars);
                         }
                     }
                     break;
@@ -156,7 +162,10 @@ public class LocalVarDec implements BlockStatement {
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.INT, size));
-                            c.namesToValues.put(v.getName(), new ArrayList<>(size));
+                            ArrayList<Integer> ints = new ArrayList<>(size);
+                            while (ints.size() < size)
+                                ints.add(0);
+                            c.namesToValues.put(v.getName(), ints);
                         }
                     }
                     break;
@@ -209,7 +218,10 @@ public class LocalVarDec implements BlockStatement {
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE, size));
-                            c.namesToValues.put(v.getName(), new ArrayList<>(size));
+                            ArrayList<Double> dubs = new ArrayList<>(size);
+                            while (dubs.size() < size)
+                                dubs.add(0.0);
+                            c.namesToValues.put(v.getName(), dubs);
                         }
                     }
                     break;
