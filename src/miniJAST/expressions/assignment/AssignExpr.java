@@ -4,14 +4,13 @@ import miniJAST.Context;
 import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
-import miniJAST.exceptions.VariableScopeException;
+import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.statements.FlowControl;
-import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
@@ -103,7 +102,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new VariableScopeException(rcaa.getName(), false);
+                                throw new VariableNotInitException(rcaa.getName());
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -124,7 +123,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new VariableScopeException(riaa.getName(), false);
+                                throw new VariableNotInitException(riaa.getName());
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -148,7 +147,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new VariableScopeException(rdaa.getName(), false);
+                                throw new VariableNotInitException(rdaa.getName());
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -164,7 +163,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value - ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new VariableScopeException(rcaa.getName(), false);
+                                throw new VariableNotInitException(rcaa.getName());
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -185,7 +184,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new VariableScopeException(riaa.getName(), false);
+                                throw new VariableNotInitException(riaa.getName());
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -209,7 +208,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new VariableScopeException(rdaa.getName(), false);
+                                throw new VariableNotInitException(rdaa.getName());
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -225,7 +224,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value * ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new VariableScopeException(rcaa.getName(), false);
+                                throw new VariableNotInitException(rcaa.getName());
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -246,7 +245,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new VariableScopeException(riaa.getName(), false);
+                                throw new VariableNotInitException(riaa.getName());
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -270,7 +269,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new VariableScopeException(rdaa.getName(), false);
+                                throw new VariableNotInitException(rdaa.getName());
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -286,7 +285,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value / ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.containsKey(rcaa.getName()))
-                                throw new VariableScopeException(rcaa.getName(), false);
+                                throw new VariableNotInitException(rcaa.getName());
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
                             c.namesToValues.put(rcaa.getName(), chs);
@@ -307,7 +306,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(riaa.getName()))
-                                throw new VariableScopeException(riaa.getName(), false);
+                                throw new VariableNotInitException(riaa.getName());
                             ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
                             c.namesToValues.put(riaa.getName(), is);
@@ -331,7 +330,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
                             if (!c.namesToValues.containsKey(rdaa.getName()))
-                                throw new VariableScopeException(rdaa.getName(), false);
+                                throw new VariableNotInitException(rdaa.getName());
                             ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
                             c.namesToValues.put(rdaa.getName(), ds);
@@ -340,12 +339,11 @@ public class AssignExpr extends Expression implements StatementExpr {
             }
         } else {
             Id id = (Id) lhs;
-            ReturnValues current = id.evaluate(c);
             ReturnValues ex = expr.evaluate(c);
 
             switch (op) {
                 case EQ:
-                    switch (current.getType().uType) {
+                    switch (id.getType().uType) {
                         case BOOLEAN:
                             if (ex.getType().uType != UnannType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
@@ -395,7 +393,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (current.getType().uType) {
+                    switch (id.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -441,7 +439,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                             throw new TypeException("Cannot use += on variable of type boolean");
                     }
                 case SUBEQ:
-                    switch (current.getType().uType) {
+                    switch (id.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -487,7 +485,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                             throw new TypeException("Cannot use -= on variable of type boolean");
                     }
                 case TIMESEQ:
-                    switch (current.getType().uType) {
+                    switch (id.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -533,7 +531,7 @@ public class AssignExpr extends Expression implements StatementExpr {
                             throw new TypeException("Cannot use *= on variable of type boolean");
                     }
                 default: // DIVEQ
-                    switch (current.getType().uType) {
+                    switch (id.getType().uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");

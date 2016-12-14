@@ -3,7 +3,8 @@ package miniJAST.expressions;
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
-import miniJAST.exceptions.VariableScopeException;
+import miniJAST.exceptions.VariableDecException;
+import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.Type;
@@ -21,7 +22,7 @@ public class Id extends GroundExpr implements AssignLHS{
     public ReturnValues evaluate(Context c) throws MiniJASTException{
         if (c.namesToTypes.get(name).equals(varType)) {
             if (!c.namesToValues.containsKey(name))
-                throw new VariableScopeException(name, false);
+                throw new VariableNotInitException(name);
             if (varType.size == 1) {
                 switch (varType.uType) {
                     case BOOLEAN:
@@ -52,8 +53,9 @@ public class Id extends GroundExpr implements AssignLHS{
                 }
             }
         } else
-            throw new VariableScopeException(name, false);
+            throw new VariableDecException(name, false);
     }
 
     public String getName() { return name; }
+    public Type getType() { return varType; }
 }

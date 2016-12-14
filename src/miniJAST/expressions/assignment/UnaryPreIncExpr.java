@@ -3,7 +3,7 @@ package miniJAST.expressions.assignment;
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
-import miniJAST.exceptions.VariableScopeException;
+import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
@@ -30,7 +30,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     ReturnValuesCharAA rcaa = (ReturnValuesCharAA) raa;
                     char ch = isPlus ? (char) (rcaa.value + 1) : (char) (rcaa.value - 1);
                     if (!c.namesToValues.containsKey(rcaa.getName()))
-                        throw new VariableScopeException(rcaa.getName(), false);
+                        throw new VariableNotInitException(rcaa.getName());
                     ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
                     chs.set(rcaa.getIndex(), ch);
                     c.namesToValues.put(rcaa.getName(), chs);
@@ -39,7 +39,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     ReturnValuesIntAA riaa = (ReturnValuesIntAA) raa;
                     int i = isPlus ? riaa.value + 1 :  riaa.value - 1;
                     if (!c.namesToValues.containsKey(riaa.getName()))
-                        throw new VariableScopeException(riaa.getName(), false);
+                        throw new VariableNotInitException(riaa.getName());
                     ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
                     is.set(riaa.getIndex(), i);
                     c.namesToValues.put(riaa.getName(), is);
@@ -48,7 +48,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
                     ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) raa;
                     double d = isPlus ? rdaa.value + 1 : rdaa.value - 1;
                     if (!c.namesToValues.containsKey(rdaa.getName()))
-                        throw new VariableScopeException(rdaa.getName(), false);
+                        throw new VariableNotInitException(rdaa.getName());
                     ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
                     ds.set(rdaa.getIndex(), d);
                     c.namesToValues.put(rdaa.getName(), ds);

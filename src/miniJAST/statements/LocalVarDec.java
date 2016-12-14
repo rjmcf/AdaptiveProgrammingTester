@@ -1,10 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
-import miniJAST.exceptions.IncorrectEvaluationException;
-import miniJAST.exceptions.MiniJASTException;
-import miniJAST.exceptions.TypeException;
-import miniJAST.exceptions.VariableScopeException;
+import miniJAST.exceptions.*;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.arrays.ArrayCreation;
@@ -28,7 +25,7 @@ public class LocalVarDec implements BlockStatement {
     public FlowControl execute(Context c) throws MiniJASTException {
         for (VarDeclarator v : vars) {
             if (c.namesToTypes.containsKey(v.getName()))
-                throw new VariableScopeException(v.getName(), true);
+                throw new VariableDecException(v.getName(), true);
 
             switch (type) {
                 case BOOLEAN:
