@@ -28,34 +28,34 @@ public class CondExprTest {
         e = new CondExpr();
         c = new Context();
         t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(UnannType.BOOLEAN, "true");
         f = new Literal();
-        f.setUp(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(UnannType.BOOLEAN, "false");
         int2 = new Literal();
-        int2.setUp(UnannType.INT, "2");
+        int2.setUpLiteral(UnannType.INT, "2");
         int3 = new Literal();
-        int3.setUp(UnannType.INT, "3");
+        int3.setUpLiteral(UnannType.INT, "3");
         doubHalf = new Literal();
-        doubHalf.setUp(UnannType.DOUBLE, "0.5");
+        doubHalf.setUpLiteral(UnannType.DOUBLE, "0.5");
         doubQuart = new Literal();
-        doubQuart.setUp(UnannType.DOUBLE, "0.25");
+        doubQuart.setUpLiteral(UnannType.DOUBLE, "0.25");
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(t, int2, int3);
+        e.setUpCondExpr(t, int2, int3);
         Assert.assertEquals(2, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(f, int2, int3);
+        e.setUpCondExpr(f, int2, int3);
         Assert.assertEquals(3, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(t, doubHalf, doubQuart);
+        e.setUpCondExpr(t, doubHalf, doubQuart);
         Assert.assertEquals(0.5, ((ReturnValuesDouble)e.evaluate(c)).value);
 
-        e.setUp(f, doubHalf, doubQuart);
+        e.setUpCondExpr(f, doubHalf, doubQuart);
         Assert.assertEquals(0.25, ((ReturnValuesDouble)e.evaluate(c)).value);
 
-        e.setUp(t, f, int2);
+        e.setUpCondExpr(t, f, int2);
         try {
             e.evaluate(c);
             fail("Should not have expressions of different types");

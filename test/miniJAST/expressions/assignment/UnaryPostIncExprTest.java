@@ -30,8 +30,8 @@ public class UnaryPostIncExprTest {
 
     @Test
     public void testIds() throws Exception {
-        id.setUp(new Type(UnannType.BOOLEAN,1), "t");
-        e.setUp(true, id);
+        id.setUpId(new Type(UnannType.BOOLEAN,1), "t");
+        e.setUpPostIncExpr(true, id);
         try {
             e.evaluate(c);
             fail("Cannot increment a boolean");
@@ -39,12 +39,12 @@ public class UnaryPostIncExprTest {
             // pass test
         }
 
-        id.setUp(new Type(UnannType.INT, 1), "i");
-        e.setUp(true, id);
+        id.setUpId(new Type(UnannType.INT, 1), "i");
+        e.setUpPostIncExpr(true, id);
         Assert.assertEquals(0, ((ReturnValuesInt)e.evaluate(c)).value);
         Assert.assertEquals(1, ((ReturnValuesInt)id.evaluate(c)).value);
 
-        e.setUp(false, id);
+        e.setUpPostIncExpr(false, id);
         Assert.assertEquals(1, ((ReturnValuesInt)e.evaluate(c)).value);
         Assert.assertEquals(0, ((ReturnValuesInt)id.evaluate(c)).value);
     }

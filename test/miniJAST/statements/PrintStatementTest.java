@@ -54,13 +54,13 @@ public class PrintStatementTest {
     @Test
     public void testExecute() {
         try {
-            pr.setUp(boolExpr);
+            pr.setUpPrint(boolExpr);
             pr.execute(c);
 
-            pr.setUp(intAAExpr);
+            pr.setUpPrint(intAAExpr);
             pr.execute(c);
 
-            pr.setUp(arrayExpr);
+            pr.setUpPrint(arrayExpr);
             pr.execute(c);
         } catch (MiniJASTException e) {
             e.printStackTrace();

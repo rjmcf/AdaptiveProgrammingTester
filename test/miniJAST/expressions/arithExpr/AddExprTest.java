@@ -30,28 +30,28 @@ public class AddExprTest {
         e = new AddExpr();
         c = new Context();
         intTwo = new Literal();
-        intTwo.setUp(UnannType.INT, "2");
+        intTwo.setUpLiteral(UnannType.INT, "2");
         intThree = new Literal();
-        intThree.setUp(UnannType.INT, "3");
+        intThree.setUpLiteral(UnannType.INT, "3");
         doubHalf = new Literal();
-        doubHalf.setUp(UnannType.DOUBLE, "0.5");
+        doubHalf.setUpLiteral(UnannType.DOUBLE, "0.5");
         boolTrue = new Literal();
-        boolTrue.setUp(UnannType.BOOLEAN, "true");
+        boolTrue.setUpLiteral(UnannType.BOOLEAN, "true");
 
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(true, intTwo, intThree);
+        e.setUpAddExpr(true, intTwo, intThree);
         Assert.assertEquals(5, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(false, intThree, intTwo);
+        e.setUpAddExpr(false, intThree, intTwo);
         Assert.assertEquals(1, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(true, doubHalf, intTwo);
+        e.setUpAddExpr(true, doubHalf, intTwo);
         Assert.assertEquals(2.5, ((ReturnValuesDouble)e.evaluate(c)).value);
 
-        e.setUp(true, boolTrue, intThree);
+        e.setUpAddExpr(true, boolTrue, intThree);
         try {
             e.evaluate(c);
             fail("Should not be able to add true to 2");

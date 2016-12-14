@@ -16,7 +16,7 @@ public class Id extends GroundExpr implements AssignLHS{
     private Type varType;
     private String name;
 
-    public void setUp(Type vT, String n) { varType = vT; name = n; }
+    public void setUpId(Type vT, String n) { varType = vT; name = n; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{

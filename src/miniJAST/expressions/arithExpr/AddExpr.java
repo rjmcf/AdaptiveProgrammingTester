@@ -15,7 +15,7 @@ public class AddExpr extends RelationExpr {
     private AddExpr leftSide; // Left associative
     private MultExpr rightSide;
 
-    public void setUp(boolean p, AddExpr l, MultExpr r) { isPlus = p; leftSide = l; rightSide = r; }
+    public void setUpAddExpr(boolean p, AddExpr l, MultExpr r) { isPlus = p; leftSide = l; rightSide = r; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

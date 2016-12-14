@@ -26,7 +26,7 @@ public class AssignExprTest {
         c = new Context();
         c.namesToTypes.put("t", new Type(UnannType.BOOLEAN, 1));
         id = new Id();
-        id.setUp(new Type(UnannType.BOOLEAN, 1), "t");
+        id.setUpId(new Type(UnannType.BOOLEAN, 1), "t");
         eT = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
@@ -43,11 +43,11 @@ public class AssignExprTest {
 
     @Test
     public void testEq() throws Exception {
-        aE.setUp(id, AssignOp.EQ, eT);
+        aE.setUpAssignExpr(id, AssignOp.EQ, eT);
         aE.evaluate(c);
         Assert.assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
-        aE.setUp(id, AssignOp.EQ, eF);
+        aE.setUpAssignExpr(id, AssignOp.EQ, eF);
         aE.evaluate(c);
         Assert.assertFalse(((ReturnValuesBool)id.evaluate(c)).value);
     }

@@ -20,7 +20,7 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
     private StatementNoShortIf stmnt;
 
     public ForStmntNoShortIf() { updates = new ArrayList<>(); }
-    public void setUp(ForInit i, Expression c, StatementNoShortIf s) { init = i; cond = c; stmnt = s; }
+    public void setUpForStmntNSI(ForInit i, Expression c, StatementNoShortIf s) { init = i; cond = c; stmnt = s; }
     public void addStmntExpr(StatementExpr se) { updates.add(se); }
 
     @Override

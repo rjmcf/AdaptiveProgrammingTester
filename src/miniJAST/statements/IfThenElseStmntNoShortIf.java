@@ -14,7 +14,7 @@ public class IfThenElseStmntNoShortIf implements StatementNoShortIf {
     private StatementNoShortIf trueStmnt;
     private StatementNoShortIf falseStmnt;
 
-    public void setUp(Expression c, StatementNoShortIf t, StatementNoShortIf f) { cond = c; trueStmnt = t; falseStmnt = f; }
+    public void setUpITENSI(Expression c, StatementNoShortIf t, StatementNoShortIf f) { cond = c; trueStmnt = t; falseStmnt = f; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {

@@ -14,7 +14,7 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
     private Id id;
     private Expression index;
 
-    public void setUp(Id i, Expression e) { id = i; index = e; }
+    public void setUpArrayAccess(Id i, Expression e) { id = i; index = e; }
 
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues r = id.evaluate(c);

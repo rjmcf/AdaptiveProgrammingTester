@@ -23,28 +23,28 @@ public class OrExprTest {
         e = new OrExpr();
         c = new Context();
         t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(UnannType.BOOLEAN, "true");
         f = new Literal();
-        f.setUp(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(UnannType.BOOLEAN, "false");
         i = new Literal();
-        i.setUp(UnannType.INT, "2");
+        i.setUpLiteral(UnannType.INT, "2");
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(t, t);
+        e.setUpOrExpr(t, t);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(t, f);
+        e.setUpOrExpr(t, f);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(f, t);
+        e.setUpOrExpr(f, t);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(f, f);
+        e.setUpOrExpr(f, f);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(i, t);
+        e.setUpOrExpr(i, t);
         try {
             e.evaluate(c);
             fail("Cannot use || on integers (left)");
@@ -52,7 +52,7 @@ public class OrExprTest {
             // pass test
         }
 
-        e.setUp(t, i);
+        e.setUpOrExpr(t, i);
         try {
             e.evaluate(c);
             fail("Cannot use || on integers (right)");

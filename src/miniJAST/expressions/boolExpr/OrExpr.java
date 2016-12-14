@@ -12,7 +12,7 @@ public class OrExpr extends CondExpr {
     private OrExpr leftSide; // Left associative
     private AndExpr rightSide;
 
-    public void setUp(OrExpr l, AndExpr r) { leftSide = l; rightSide = r; }
+    public void setUpOrExpr(OrExpr l, AndExpr r) { leftSide = l; rightSide = r; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

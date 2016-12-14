@@ -25,13 +25,13 @@ public class LiteralTest {
 
     @Test
     public void testBoolean() throws Exception{
-        l.setUp(UnannType.BOOLEAN, "true");
+        l.setUpLiteral(UnannType.BOOLEAN, "true");
         Assert.assertTrue(((ReturnValuesBool)l.evaluate(c)).value);
 
-        l.setUp(UnannType.BOOLEAN, "false");
+        l.setUpLiteral(UnannType.BOOLEAN, "false");
         Assert.assertFalse(((ReturnValuesBool)l.evaluate(c)).value);
 
-        l.setUp(UnannType.BOOLEAN, "failPlease");
+        l.setUpLiteral(UnannType.BOOLEAN, "failPlease");
         try {
             l.evaluate(c);
             fail("'failPlease' not true or false.");
@@ -42,13 +42,13 @@ public class LiteralTest {
 
     @Test
     public void testChar() throws Exception {
-        l.setUp(UnannType.CHAR, "e");
+        l.setUpLiteral(UnannType.CHAR, "e");
         Assert.assertEquals('e', ((ReturnValuesChar)l.evaluate(c)).value);
 
-        l.setUp(UnannType.CHAR, "!");
+        l.setUpLiteral(UnannType.CHAR, "!");
         Assert.assertEquals('!', ((ReturnValuesChar)l.evaluate(c)).value);
 
-        l.setUp(UnannType.CHAR, "no");
+        l.setUpLiteral(UnannType.CHAR, "no");
         try {
             l.evaluate(c);
             fail("'no' has more than one character");
@@ -59,13 +59,13 @@ public class LiteralTest {
 
     @Test
     public void testInt() throws Exception {
-        l.setUp(UnannType.INT, "102");
+        l.setUpLiteral(UnannType.INT, "102");
         Assert.assertEquals(102, ((ReturnValuesInt)l.evaluate(c)).value);
 
-        l.setUp(UnannType.INT, "0102");
+        l.setUpLiteral(UnannType.INT, "0102");
         Assert.assertEquals(102, ((ReturnValuesInt)l.evaluate(c)).value);
 
-        l.setUp(UnannType.INT, "1o2");
+        l.setUpLiteral(UnannType.INT, "1o2");
         try {
             l.evaluate(c);
             fail("String contains letter");
@@ -76,10 +76,10 @@ public class LiteralTest {
 
     @Test
     public void TestDouble() throws Exception {
-        l.setUp(UnannType.DOUBLE, "1.02");
+        l.setUpLiteral(UnannType.DOUBLE, "1.02");
         Assert.assertEquals(1.02, ((ReturnValuesDouble)l.evaluate(c)).value);
 
-        l.setUp(UnannType.DOUBLE, "1.o2");
+        l.setUpLiteral(UnannType.DOUBLE, "1.o2");
         try {
             l.evaluate(c);
             fail("String contains letter");

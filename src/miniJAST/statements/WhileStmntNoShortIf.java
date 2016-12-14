@@ -12,7 +12,7 @@ public class WhileStmntNoShortIf implements StatementNoShortIf {
     private Expression cond;
     private StatementNoShortIf stmnt;
 
-    public void setUp(Expression c, StatementNoShortIf s) { cond = c; stmnt = s; }
+    public void setUpWhileNSI(Expression c, StatementNoShortIf s) { cond = c; stmnt = s; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {

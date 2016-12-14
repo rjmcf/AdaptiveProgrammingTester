@@ -24,22 +24,22 @@ public class UnaryComplementExprTest {
         e = new UnaryComplementExpr();
         c = new Context();
         t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(UnannType.BOOLEAN, "true");
         f = new Literal();
-        f.setUp(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(UnannType.BOOLEAN, "false");
         fail = new Literal();
-        fail.setUp(UnannType.INT, "2");
+        fail.setUpLiteral(UnannType.INT, "2");
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(t);
+        e.setUpCompExpr(t);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(f);
+        e.setUpCompExpr(f);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(fail);
+        e.setUpCompExpr(fail);
         try {
             e.evaluate(c);
             fail("Cannot complement non-boolean value");

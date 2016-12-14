@@ -23,28 +23,28 @@ public class AndExprTest {
         e = new AndExpr();
         c = new Context();
         t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(UnannType.BOOLEAN, "true");
         f = new Literal();
-        f.setUp(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(UnannType.BOOLEAN, "false");
         i = new Literal();
-        i.setUp(UnannType.INT, "2");
+        i.setUpLiteral(UnannType.INT, "2");
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(t, t);
+        e.setUpAndExpr(t, t);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(t, f);
+        e.setUpAndExpr(t, f);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(f, t);
+        e.setUpAndExpr(f, t);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(f, f);
+        e.setUpAndExpr(f, f);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(i, f);
+        e.setUpAndExpr(i, f);
         try {
             e.evaluate(c);
             fail("Cannot use && on integers (left)");
@@ -52,7 +52,7 @@ public class AndExprTest {
             // pass test
         }
 
-        e.setUp(f, i);
+        e.setUpAndExpr(f, i);
         try {
             e.evaluate(c);
             fail("Cannot use && on integers (right)");

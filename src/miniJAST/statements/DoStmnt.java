@@ -12,7 +12,7 @@ public class DoStmnt implements StmntNoTrailSubstmnt{
     private Statement stmnt;
     private Expression cond;
 
-    public void setUp(Statement s, Expression c) { stmnt = s; cond = c; }
+    public void setUpDo(Statement s, Expression c) { stmnt = s; cond = c; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {

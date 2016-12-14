@@ -8,7 +8,7 @@ import miniJAST.expressions.returnValues.*;
 public class PrintStatement implements BlockStatement {
     Expression expr;
 
-    public void setUp(Expression e) { expr = e; }
+    public void setUpPrint(Expression e) { expr = e; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {

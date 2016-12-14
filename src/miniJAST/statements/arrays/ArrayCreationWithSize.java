@@ -8,7 +8,7 @@ public class ArrayCreationWithSize extends ArrayCreation {
 
     public ArrayCreationWithSize() { hasInitList = false;}
 
-    public void setUp(Expression s) { size = s; }
+    public void setUpACWS(String n, Expression s) { name = n; size = s; }
 
     public Expression getSize() { return size; }
 }

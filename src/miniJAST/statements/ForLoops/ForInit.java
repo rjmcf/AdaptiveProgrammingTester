@@ -14,7 +14,7 @@ public class ForInit {
     private LocalVarDec lvd;
 
     public ForInit() { stmnts = new ArrayList<>(); }
-    public void setUp(boolean l, LocalVarDec lv) { isList = l; lvd = lv; }
+    public void setUpForInit(boolean l, LocalVarDec lv) { isList = l; lvd = lv; }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
 
     public void execute(Context c) throws MiniJASTException {

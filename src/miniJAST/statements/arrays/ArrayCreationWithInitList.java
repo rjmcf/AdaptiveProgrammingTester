@@ -10,7 +10,8 @@ public class ArrayCreationWithInitList extends ArrayCreation {
 
     public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>(); }
 
-    public void addExpression(Expression e) { values.add(e); }
+    public void setUPACWIL(String n) { name = n; }
+    public void addExpressionACWIL(Expression e) { values.add(e); }
     public ArrayList<Expression> getValues () { return values; }
 
 }

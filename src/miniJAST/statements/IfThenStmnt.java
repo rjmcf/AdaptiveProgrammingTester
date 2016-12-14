@@ -12,7 +12,7 @@ public class IfThenStmnt implements Statement {
     private Expression cond;
     private Statement stmnt;
 
-    public void setUp(Expression c, Statement t) { cond = c; stmnt = t; }
+    public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {

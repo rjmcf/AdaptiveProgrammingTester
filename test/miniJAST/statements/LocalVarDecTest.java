@@ -33,31 +33,31 @@ public class LocalVarDecTest {
     @Test
     public void testSimpleExecute() throws Exception {
         VarDeclarator boolDec = new VarDeclarator();
-        boolDec.setUp("bDec", null);
+        boolDec.setUpVarDec("bDec", null);
         VarDeclarator boolDef = new VarDeclarator();
         Literal t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
-        boolDef.setUp("bDef", t);
+        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        boolDef.setUpVarDec("bDef", t);
         VarDeclarator intDec1 = new VarDeclarator();
-        intDec1.setUp("iDec1", null);
+        intDec1.setUpVarDec("iDec1", null);
         VarDeclarator intDec2 = new VarDeclarator();
-        intDec2.setUp("iDec2", null);
+        intDec2.setUpVarDec("iDec2", null);
         Literal int2 = new Literal();
-        int2.setUp(UnannType.INT, "2");
+        int2.setUpLiteral(UnannType.INT, "2");
         VarDeclarator intDef1 = new VarDeclarator();
-        intDef1.setUp("iDef1", int2);
+        intDef1.setUpVarDec("iDef1", int2);
         Literal int3 = new Literal();
-        int3.setUp(UnannType.INT, "3");
+        int3.setUpLiteral(UnannType.INT, "3");
         VarDeclarator intDef2 = new VarDeclarator();
-        intDef2.setUp("iDef2", int3);
+        intDef2.setUpVarDec("iDef2", int3);
         Id id = new Id();
         AssignExpr aE = new AssignExpr();
 
         lvd = new LocalVarDec();
-        lvd.setUp(UnannType.BOOLEAN);
+        lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(boolDec);
         lvd.execute(c);
-        id.setUp(new Type(UnannType.BOOLEAN, 1), "bDec");
+        id.setUpId(new Type(UnannType.BOOLEAN, 1), "bDec");
         try {
             id.evaluate(c);
             fail("bDec should not be initialised");
@@ -71,7 +71,7 @@ public class LocalVarDecTest {
                 return new ReturnValuesBool(true);
             }
         };
-        aE.setUp(id, AssignOp.EQ, e);
+        aE.setUpAssignExpr(id, AssignOp.EQ, e);
         aE.evaluate(c);
         Assert.assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -83,36 +83,36 @@ public class LocalVarDecTest {
         }
 
         lvd = new LocalVarDec();
-        lvd.setUp(UnannType.BOOLEAN);
+        lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(boolDef);
         lvd.execute(c);
-        id.setUp(new Type(UnannType.BOOLEAN,1), "bDef");
+        id.setUpId(new Type(UnannType.BOOLEAN,1), "bDef");
         Assert.assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
         lvd = new LocalVarDec();
-        lvd.setUp(UnannType.INT);
+        lvd.setUpLVD(UnannType.INT);
         lvd.addVarDec(intDec1);
         lvd.addVarDec(intDef1);
         lvd.addVarDec(intDec2);
         lvd.addVarDec(intDef2);
         lvd.execute(c);
-        id.setUp(new Type(UnannType.INT, 1), "iDec1");
+        id.setUpId(new Type(UnannType.INT, 1), "iDec1");
         try {
             id.evaluate(c);
             fail("iDec1 should not be initialised");
         } catch (VariableNotInitException vnie) {
             // pass test
         }
-        id.setUp(new Type(UnannType.INT, 1), "iDef1");
+        id.setUpId(new Type(UnannType.INT, 1), "iDef1");
         Assert.assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);
-        id.setUp(new Type(UnannType.INT, 1), "iDec2");
+        id.setUpId(new Type(UnannType.INT, 1), "iDec2");
         try {
             id.evaluate(c);
             fail("iDec2 should not be initialised");
         } catch (VariableNotInitException vnie) {
             // pass test
         }
-        id.setUp(new Type(UnannType.INT, 1), "iDef2");
+        id.setUpId(new Type(UnannType.INT, 1), "iDef2");
         Assert.assertEquals(3, ((ReturnValuesInt)id.evaluate(c)).value);
     }
 
@@ -126,17 +126,15 @@ public class LocalVarDecTest {
         };
 
         ArrayCreationWithSize aCSize = new ArrayCreationWithSize();
-        aCSize.setUp("boolArray2", null);
-        aCSize.setUp(two);
-        // TODO differentiate setUp methods
+        aCSize.setUpACWS("boolArray2", two);
 
         lvd = new LocalVarDec();
-        lvd.setUp(UnannType.BOOLEAN);
+        lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCSize);
         lvd.execute(c);
 
         Id id = new Id();
-        id.setUp(new Type(UnannType.BOOLEAN, 2), "boolArray2");
+        id.setUpId(new Type(UnannType.BOOLEAN, 2), "boolArray2");
         id.evaluate(c);
     }
 

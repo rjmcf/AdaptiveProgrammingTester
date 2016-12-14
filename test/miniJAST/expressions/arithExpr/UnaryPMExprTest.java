@@ -24,28 +24,28 @@ public class UnaryPMExprTest {
         e = new UnaryPMExpr();
         c = new Context();
         intE = new Literal();
-        intE.setUp(UnannType.INT, "2");
+        intE.setUpLiteral(UnannType.INT, "2");
         doubE = new Literal();
-        doubE.setUp(UnannType.DOUBLE, "0.5");
+        doubE.setUpLiteral(UnannType.DOUBLE, "0.5");
         boolE = new Literal();
-        boolE.setUp(UnannType.BOOLEAN, "false");
+        boolE.setUpLiteral(UnannType.BOOLEAN, "false");
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(true, intE);
+        e.setUpPMExpr(true, intE);
         Assert.assertEquals(2, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(false, intE);
+        e.setUpPMExpr(false, intE);
         Assert.assertEquals(-2, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(true, doubE);
+        e.setUpPMExpr(true, doubE);
         Assert.assertEquals(0.5, ((ReturnValuesDouble)e.evaluate(c)).value);
 
-        e.setUp(false, doubE);
+        e.setUpPMExpr(false, doubE);
         Assert.assertEquals(-0.5, ((ReturnValuesDouble)e.evaluate(c)).value);
 
-        e.setUp(true, boolE);
+        e.setUpPMExpr(true, boolE);
         try {
             e.evaluate(c);
             fail("Cannot make a boolean expression positive or negative");

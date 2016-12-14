@@ -26,28 +26,28 @@ public class MultExprTest {
         e = new MultExpr();
         c = new Context();
         intTwo = new Literal();
-        intTwo.setUp(UnannType.INT, "2");
+        intTwo.setUpLiteral(UnannType.INT, "2");
         intThree = new Literal();
-        intThree.setUp(UnannType.INT, "3");
+        intThree.setUpLiteral(UnannType.INT, "3");
         doubHalf = new Literal();
-        doubHalf.setUp(UnannType.DOUBLE, "0.5");
+        doubHalf.setUpLiteral(UnannType.DOUBLE, "0.5");
         boolTrue = new Literal();
-        boolTrue.setUp(UnannType.BOOLEAN, "true");
+        boolTrue.setUpLiteral(UnannType.BOOLEAN, "true");
 
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(true, intTwo, intThree);
+        e.setUpMultExpr(true, intTwo, intThree);
         Assert.assertEquals(6, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(false, intThree, intTwo);
+        e.setUpMultExpr(false, intThree, intTwo);
         Assert.assertEquals(1, ((ReturnValuesInt)e.evaluate(c)).value);
 
-        e.setUp(true, doubHalf, intTwo);
+        e.setUpMultExpr(true, doubHalf, intTwo);
         Assert.assertEquals(1.0, ((ReturnValuesDouble)e.evaluate(c)).value);
 
-        e.setUp(true, boolTrue, intThree);
+        e.setUpMultExpr(true, boolTrue, intThree);
         try {
             e.evaluate(c);
             fail("Should not be able to multiply true by 2");

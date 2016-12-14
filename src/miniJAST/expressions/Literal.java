@@ -9,7 +9,7 @@ public class Literal extends PrimaryExpr{
     private UnannType litType;
     private String value;
 
-    public void setUp(UnannType lT, String v) { litType = lT; value = v; }
+    public void setUpLiteral(UnannType lT, String v) { litType = lT; value = v; }
 
     @Override
     public ReturnValues evaluate(Context c) throws TypeException {

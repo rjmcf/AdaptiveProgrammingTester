@@ -11,7 +11,7 @@ public class AndExpr extends OrExpr {
     private AndExpr leftSide; // Left associative
     private EqExpr rightSide;
 
-    public void setUp(AndExpr l, EqExpr r) { leftSide = l; rightSide = r; }
+    public void setUpAndExpr(AndExpr l, EqExpr r) { leftSide = l; rightSide = r; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

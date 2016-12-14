@@ -25,47 +25,47 @@ public class RelationExprTest {
         e = new RelationExpr();
         c = new Context();
         t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(UnannType.BOOLEAN, "true");
         int2 = new Literal();
-        int2.setUp(UnannType.INT, "2");
+        int2.setUpLiteral(UnannType.INT, "2");
         int3 = new Literal();
-        int3.setUp(UnannType.INT, "3");
+        int3.setUpLiteral(UnannType.INT, "3");
         doubHalf = new Literal();
-        doubHalf.setUp(UnannType.DOUBLE, "0.5");
+        doubHalf.setUpLiteral(UnannType.DOUBLE, "0.5");
         c1 = new Literal();
-        c1.setUp(UnannType.CHAR, "a");
+        c1.setUpLiteral(UnannType.CHAR, "a");
     }
 
     @Test
     public void testEvaluate() throws Exception {
-        e.setUp(RelationOp.LT, int2, int2);
+        e.setUpRelationExpr(RelationOp.LT, int2, int2);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.LTE, int2, int2);
+        e.setUpRelationExpr(RelationOp.LTE, int2, int2);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.GT, int2, int2);
+        e.setUpRelationExpr(RelationOp.GT, int2, int2);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.GTE, int2, int2);
+        e.setUpRelationExpr(RelationOp.GTE, int2, int2);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.LT, int2, int3);
+        e.setUpRelationExpr(RelationOp.LT, int2, int3);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.LT, int3, int2);
+        e.setUpRelationExpr(RelationOp.LT, int3, int2);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.LT, int2, doubHalf);
+        e.setUpRelationExpr(RelationOp.LT, int2, doubHalf);
         Assert.assertFalse(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.LT, doubHalf, int2);
+        e.setUpRelationExpr(RelationOp.LT, doubHalf, int2);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.LT, int2, c1);
+        e.setUpRelationExpr(RelationOp.LT, int2, c1);
         Assert.assertTrue(((ReturnValuesBool)e.evaluate(c)).value);
 
-        e.setUp(RelationOp.GTE, t, int2);
+        e.setUpRelationExpr(RelationOp.GTE, t, int2);
         try {
             e.evaluate(c);
             fail("Cannot relate boolean values to arithmetic ones");

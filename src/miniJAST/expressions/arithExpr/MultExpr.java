@@ -16,7 +16,7 @@ public class MultExpr extends AddExpr {
     private MultExpr leftSide; // Left associative
     private UnaryExpr rightSide;
 
-    public void setUp(boolean t, MultExpr l, UnaryExpr r) { isTimes = t; leftSide = l; rightSide = r; }
+    public void setUpMultExpr(boolean t, MultExpr l, UnaryExpr r) { isTimes = t; leftSide = l; rightSide = r; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

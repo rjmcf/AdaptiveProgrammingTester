@@ -13,7 +13,7 @@ public class UnaryComplementExpr extends UnaryExpr {
     // Only logical complement here
     private UnaryExpr expr;
 
-    public void setUp(UnaryExpr e) { expr = e; }
+    public void setUpCompExpr(UnaryExpr e) { expr = e; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

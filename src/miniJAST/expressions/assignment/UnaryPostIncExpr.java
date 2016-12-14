@@ -16,7 +16,7 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
     private boolean isPlus;
     private AssignLHS expr;
 
-    public void setUp(boolean p, AssignLHS e) { isPlus = p; expr = e; }
+    public void setUpPostIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

@@ -20,7 +20,7 @@ public class ForStmnt implements Statement {
     private Statement stmnt;
 
     public ForStmnt() { updates = new ArrayList<>(); }
-    public void setUp( ForInit i, Expression c, Statement s) { init = i; cond = c; stmnt = s; }
+    public void setUpForStmnt( ForInit i, Expression c, Statement s) { init = i; cond = c; stmnt = s; }
     public void addStmntExpr(StatementExpr se) { updates.add(se); }
 
     @Override
