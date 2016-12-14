@@ -40,13 +40,13 @@ public class Id extends GroundExpr implements AssignLHS{
                 try {
                     switch (varType.uType) {
                         case BOOLEAN:
-                            return new ReturnValuesArray<Boolean>(UnannType.BOOLEAN, (ArrayList<Boolean>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Boolean>(varType, (ArrayList<Boolean>) c.namesToValues.get(name));
                         case CHAR:
-                            return new ReturnValuesArray<Character>(UnannType.BOOLEAN, (ArrayList<Character>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Character>(varType, (ArrayList<Character>) c.namesToValues.get(name));
                         case INT:
-                            return new ReturnValuesArray<Integer>(UnannType.BOOLEAN, (ArrayList<Integer>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Integer>(varType, (ArrayList<Integer>) c.namesToValues.get(name));
                         default: // DOUBLE
-                            return new ReturnValuesArray<Double>(UnannType.BOOLEAN, (ArrayList<Double>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Double>(varType, (ArrayList<Double>) c.namesToValues.get(name));
                     }
                 } catch (Exception e) {
                     throw new TypeException("Array cast failed");

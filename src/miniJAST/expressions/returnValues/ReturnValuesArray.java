@@ -1,5 +1,6 @@
 package miniJAST.expressions.returnValues;
 
+import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
@@ -8,8 +9,8 @@ import java.util.Arrays;
 public class ReturnValuesArray<T> extends ReturnValues{
     protected ArrayList<T> values;
 
-    public ReturnValuesArray(UnannType t, ArrayList<T> vs){
-        super(t, vs.size(), true, false);
+    public ReturnValuesArray(Type t, ArrayList<T> vs){
+        super(t.uType, t.size, true, false);
 
         values = vs;
     }

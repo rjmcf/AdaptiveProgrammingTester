@@ -7,6 +7,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesIntAA;
+import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -45,7 +46,7 @@ public class PrintStatementTest {
                 string.add('i');
                 string.add('n');
                 string.add('t');
-                return new ReturnValuesArray<Character>(UnannType.CHAR, string);
+                return new ReturnValuesArray<Character>(new Type(UnannType.CHAR,5), string);
             }
         };
         c = new Context();
