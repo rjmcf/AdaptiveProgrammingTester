@@ -1,6 +1,8 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.exceptions.TypeException;
+import miniJAST.exceptions.VariableDecException;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
@@ -43,6 +45,22 @@ public class IdTest {
     public void testEvaluate() throws Exception {
         id.setUp(new Type(UnannType.BOOLEAN,1), "t");
         Assert.assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+
+        id.setUp(new Type(UnannType.BOOLEAN, 2), "t");
+        try {
+            id.evaluate(c);
+            fail("t has wrong type (size)");
+        } catch (VariableDecException e) {
+            // pass test
+        }
+
+        id.setUp(new Type(UnannType.INT, 1), "t");
+        try {
+            id.evaluate(c);
+            fail("t has wrong type (type)");
+        } catch (VariableDecException e) {
+            // pass test
+        }
 
         id.setUp(new Type(UnannType.INT, 1), "int2");
         Assert.assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);

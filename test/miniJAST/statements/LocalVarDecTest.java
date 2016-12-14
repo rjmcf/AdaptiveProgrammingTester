@@ -2,6 +2,7 @@ package miniJAST.statements;
 
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.VariableDecException;
 import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
@@ -11,6 +12,7 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
+import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.Assert;
@@ -22,46 +24,35 @@ import static org.testng.Assert.*;
 public class LocalVarDecTest {
     LocalVarDec lvd;
     Context c;
-    VarDeclarator boolDec;
-    Literal t;
-    VarDeclarator boolDef;
-    VarDeclarator intDec1;
-    VarDeclarator intDec2;
-    Literal int2;
-    VarDeclarator intDef1;
-    Literal int3;
-    VarDeclarator intDef2;
-    Id id;
-    AssignExpr aE;
-    Expression e;
 
     @BeforeMethod
     public void setUp() throws Exception {
         c = new Context();
-        boolDec = new VarDeclarator();
-        boolDec.setUp("bDec", null);
-        boolDef = new VarDeclarator();
-        t = new Literal();
-        t.setUp(UnannType.BOOLEAN, "true");
-        boolDef.setUp("bDef", t);
-        intDec1 = new VarDeclarator();
-        intDec1.setUp("iDec1", null);
-        intDec2 = new VarDeclarator();
-        intDec2.setUp("iDec2", null);
-        int2 = new Literal();
-        int2.setUp(UnannType.INT, "2");
-        intDef1 = new VarDeclarator();
-        intDef1.setUp("iDef1", int2);
-        int3 = new Literal();
-        int3.setUp(UnannType.INT, "3");
-        intDef2 = new VarDeclarator();
-        intDef2.setUp("iDef2", int3);
-        id = new Id();
-        aE = new AssignExpr();
     }
 
     @Test
     public void testSimpleExecute() throws Exception {
+        VarDeclarator boolDec = new VarDeclarator();
+        boolDec.setUp("bDec", null);
+        VarDeclarator boolDef = new VarDeclarator();
+        Literal t = new Literal();
+        t.setUp(UnannType.BOOLEAN, "true");
+        boolDef.setUp("bDef", t);
+        VarDeclarator intDec1 = new VarDeclarator();
+        intDec1.setUp("iDec1", null);
+        VarDeclarator intDec2 = new VarDeclarator();
+        intDec2.setUp("iDec2", null);
+        Literal int2 = new Literal();
+        int2.setUp(UnannType.INT, "2");
+        VarDeclarator intDef1 = new VarDeclarator();
+        intDef1.setUp("iDef1", int2);
+        Literal int3 = new Literal();
+        int3.setUp(UnannType.INT, "3");
+        VarDeclarator intDef2 = new VarDeclarator();
+        intDef2.setUp("iDef2", int3);
+        Id id = new Id();
+        AssignExpr aE = new AssignExpr();
+
         lvd = new LocalVarDec();
         lvd.setUp(UnannType.BOOLEAN);
         lvd.addVarDec(boolDec);
@@ -74,7 +65,7 @@ public class LocalVarDecTest {
             // pass test
         }
 
-        e = new Expression() {
+        Expression e = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesBool(true);
@@ -83,6 +74,13 @@ public class LocalVarDecTest {
         aE.setUp(id, AssignOp.EQ, e);
         aE.evaluate(c);
         Assert.assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+
+        try {
+            lvd.execute(c);
+            fail("bDec is already declared");
+        } catch (VariableDecException vde) {
+            // pass test
+        }
 
         lvd = new LocalVarDec();
         lvd.setUp(UnannType.BOOLEAN);
@@ -102,7 +100,7 @@ public class LocalVarDecTest {
         try {
             id.evaluate(c);
             fail("iDec1 should not be initialised");
-        } catch (VariableNotInitException e) {
+        } catch (VariableNotInitException vnie) {
             // pass test
         }
         id.setUp(new Type(UnannType.INT, 1), "iDef1");
@@ -111,11 +109,40 @@ public class LocalVarDecTest {
         try {
             id.evaluate(c);
             fail("iDec2 should not be initialised");
-        } catch (VariableNotInitException e) {
+        } catch (VariableNotInitException vnie) {
             // pass test
         }
         id.setUp(new Type(UnannType.INT, 1), "iDef2");
         Assert.assertEquals(3, ((ReturnValuesInt)id.evaluate(c)).value);
+    }
+
+    @Test
+    public void testArraySizeExecute() throws Exception {
+        Expression two = new Expression() {
+            @Override
+            public ReturnValues evaluate(Context c) throws MiniJASTException {
+                return new ReturnValuesInt(2);
+            }
+        };
+
+        ArrayCreationWithSize aCSize = new ArrayCreationWithSize();
+        aCSize.setUp("boolArray2", null);
+        aCSize.setUp(two);
+        // TODO differentiate setUp methods
+
+        lvd = new LocalVarDec();
+        lvd.setUp(UnannType.BOOLEAN);
+        lvd.addVarDec(aCSize);
+        lvd.execute(c);
+
+        Id id = new Id();
+        id.setUp(new Type(UnannType.BOOLEAN, 2), "boolArray2");
+        id.evaluate(c);
+    }
+
+    @Test
+    public void testArrayInitListExecute() throws Exception {
+
     }
 
     // TODO test ArrayCreation
