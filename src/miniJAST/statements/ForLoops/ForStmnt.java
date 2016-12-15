@@ -20,8 +20,9 @@ public class ForStmnt implements Statement {
     private Statement stmnt;
 
     public ForStmnt() { updates = new ArrayList<>(); }
-    public void setUpForStmnt( ForInit i, Expression c, Statement s) { init = i; cond = c; stmnt = s; }
-    public void addStmntExpr(StatementExpr se) { updates.add(se); }
+    public void setUpForStmnt( ForInit i, Expression c) { init = i; cond = c; }
+    public void addUpdate(StatementExpr se) { updates.add(se); }
+    public void setBody(Statement s) { stmnt = s; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException{
@@ -34,18 +35,22 @@ public class ForStmnt implements Statement {
 
         loop:
         while(((ReturnValuesBool)condR).value) {
-            for (StatementExpr se : updates)
-                se.evaluate(c);
-
             FlowControl fC = stmnt.execute(c);
             switch(fC) {
                 case BREAK:
                     break loop;
                 case CONTINUE:
+                    for (StatementExpr se : updates)
+                        se.evaluate(c);
+
+                    condR = cond.evaluate(c);
                     continue loop;
                 case RETURN:
                     return fC;
             }
+
+            for (StatementExpr se : updates)
+                se.evaluate(c);
 
             condR = cond.evaluate(c);
         }

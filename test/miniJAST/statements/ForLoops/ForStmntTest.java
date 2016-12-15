@@ -79,8 +79,9 @@ public class ForStmntTest {
             sumTimesI.setUpMultExpr(true, sumID, iID);
             sumAss = new AssignExpr();
             sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
-        fS.setUpForStmnt(fI, gT, minus);
-        fS.addStmntExpr(sumAss);
+        fS.setUpForStmnt(fI, gT);
+        fS.addUpdate(minus);
+        fS.setBody(sumAss);
 
         block = new Block();
         block.addBlockStmnt(sumStat);

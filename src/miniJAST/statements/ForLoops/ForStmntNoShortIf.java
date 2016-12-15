@@ -20,8 +20,9 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
     private StatementNoShortIf stmnt;
 
     public ForStmntNoShortIf() { updates = new ArrayList<>(); }
-    public void setUpForStmntNSI(ForInit i, Expression c, StatementNoShortIf s) { init = i; cond = c; stmnt = s; }
-    public void addStmntExpr(StatementExpr se) { updates.add(se); }
+    public void setUpForStmntNSI(ForInit i, Expression c) { init = i; cond = c; }
+    public void addUpdate(StatementExpr se) { updates.add(se); }
+    public void setBody(StatementNoShortIf s) { stmnt = s; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {
@@ -34,9 +35,6 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
 
         loop:
         while(((ReturnValuesBool)condR).value) {
-            for (StatementExpr se : updates)
-                se.evaluate(c);
-
             FlowControl fC = stmnt.execute(c);
             switch(fC) {
                 case BREAK:
@@ -46,6 +44,9 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
                 case RETURN:
                     return fC;
             }
+
+            for (StatementExpr se : updates)
+                se.evaluate(c);
 
             condR = cond.evaluate(c);
         }

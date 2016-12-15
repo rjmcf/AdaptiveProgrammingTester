@@ -77,8 +77,9 @@ public class ForStmntNoShortIfTest {
         sumTimesI.setUpMultExpr(true, sumID, iID);
         sumAss = new AssignExpr();
         sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
-        fS.setUpForStmntNSI(fI, gT, minus);
-        fS.addStmntExpr(sumAss);
+        fS.setUpForStmntNSI(fI, gT);
+        fS.addUpdate(minus);
+        fS.setBody(sumAss);
 
         block = new Block();
         block.addBlockStmnt(sumStat);
