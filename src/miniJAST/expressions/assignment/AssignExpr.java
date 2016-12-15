@@ -581,9 +581,8 @@ public class AssignExpr extends Expression implements StatementExpr {
     }
 
     @Override
-    // This is never called but needs implementing to satisfy compiler
-    // This implements StatementExpression which extends ExpressionStatement which extends BlockStatement
-    public FlowControl execute(Context c) {
-        return null;
+    public FlowControl execute(Context c) throws MiniJASTException{
+        evaluate(c);
+        return FlowControl.NONE;
     }
 }

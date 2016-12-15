@@ -34,6 +34,9 @@ public class ForStmnt implements Statement {
 
         loop:
         while(((ReturnValuesBool)condR).value) {
+            for (StatementExpr se : updates)
+                se.evaluate(c);
+
             FlowControl fC = stmnt.execute(c);
             switch(fC) {
                 case BREAK:
@@ -43,9 +46,6 @@ public class ForStmnt implements Statement {
                 case RETURN:
                     return fC;
             }
-
-            for (StatementExpr se : updates)
-                se.evaluate(c);
 
             condR = cond.evaluate(c);
         }
