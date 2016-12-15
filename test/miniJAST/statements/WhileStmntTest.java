@@ -20,17 +20,18 @@ import static org.testng.Assert.*;
 
 public class WhileStmntTest {
     Context c;
-    Block outer, inner;
-    LocalVarDec ints;
-    VarDeclarator i0, sum0;
+    Block outer, inner, block2;
+    LocalVarDec ints, dec2;
+    VarDeclarator i0, sum0, j0;
     ArrayCreationWithInitList nsInit;
     Literal zero, one, two, three, four, five;
-    Id sumID, iID, nsID;
+    Literal f;
+    Id sumID, iID, nsID, jID;
     RelationExpr lT5;
-    AssignExpr plusEquals;
+    AssignExpr plusEquals, j1;
     ArrayAccess access;
     UnaryPostIncExpr plus;
-    WhileStmnt wS;
+    WhileStmnt wS1, wS2;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -80,12 +81,30 @@ public class WhileStmntTest {
         inner = new Block();
         inner.addBlockStmnt(plusEquals);
         inner.addBlockStmnt(plus);
-        wS = new WhileStmnt();
-        wS.setUpWhile(lT5, inner);
+        wS1 = new WhileStmnt();
+        wS1.setUpWhile(lT5, inner);
 
         outer = new Block();
         outer.addBlockStmnt(ints);
-        outer.addBlockStmnt(wS);
+        outer.addBlockStmnt(wS1);
+
+        j0 = new VarDeclarator();
+        j0.setUpVarDec("j", zero);
+        dec2 = new LocalVarDec();
+        dec2.setUpLVD(UnannType.INT);
+        dec2.addVarDec(j0);
+        f = new Literal();
+        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        jID = new Id();
+        jID.setUpId(new Type(UnannType.INT, 1), "j");
+        j1 = new AssignExpr();
+        j1.setUpAssignExpr(jID, AssignOp.EQ, one);
+        wS2 = new WhileStmnt();
+        wS2.setUpWhile(f, j1);
+
+        block2 = new Block();
+        block2.addBlockStmnt(dec2);
+        block2.addBlockStmnt(wS2);
     }
 
     @Test
@@ -100,5 +119,15 @@ public class WhileStmntTest {
          */
         outer.execute(c);
         assertEquals(6, ((ReturnValuesInt)sumID.evaluate(c)).value);
+
+        /* Code is:
+        int j = 0;
+        while (false) {
+            j = 1;
+        }
+        check j == 0;
+        */
+        block2.execute(c);
+        assertEquals(0, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }
