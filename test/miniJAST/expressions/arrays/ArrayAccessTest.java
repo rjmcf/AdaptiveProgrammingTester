@@ -53,6 +53,8 @@ public class ArrayAccessTest {
         chars.add('A');
         chars.add('!');
         c.namesToValues.put("charArray", chars);
+        c.namesToTypes.put("singleInt", new Type(UnannType.INT, 1));
+        c.namesToValues.put("singleInt", 0);
         zero = new Literal();
         zero.setUpLiteral(UnannType.INT, "0");
         one = new Literal();
@@ -127,6 +129,14 @@ public class ArrayAccessTest {
         aa.setUpArrayAccess(id, one);
         assertEquals(-1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
 
+        aa.setUpArrayAccess(id, id);
+        try {
+            aa.evaluate(c);
+            fail("cannot index using array");
+        } catch (TypeException ex) {
+            // pass test
+        }
+
         id.setUpId(new Type(UnannType.DOUBLE, 2), "dubArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals(0.5, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
@@ -140,5 +150,16 @@ public class ArrayAccessTest {
 
         aa.setUpArrayAccess(id, one);
         assertEquals('!', ((ReturnValuesCharAA)aa.evaluate(c)).value);
+
+        id.setUpId(new Type(UnannType.INT, 1), "singleInt");
+        aa.setUpArrayAccess(id, zero);
+        try {
+            aa.evaluate(c);
+            fail("singleInt is not an array");
+        } catch (TypeException ex) {
+            // pass test
+        }
+
+
     }
 }

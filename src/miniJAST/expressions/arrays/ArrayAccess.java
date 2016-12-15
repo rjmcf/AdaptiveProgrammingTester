@@ -29,6 +29,9 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
         if (i.getType().uType != UnannType.INT)
             throw new TypeException("Can only index with int value");
 
+        if (i.getIsArray())
+            throw new TypeException("Cannot index with array");
+
         int index = ((ReturnValuesInt)i).value;
 
         if (index < 0 || index >= id.getType().size)
