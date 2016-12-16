@@ -49,7 +49,7 @@ public class DoStmntTest {
 
         doS1 = new DoStmnt();
         doS1.setUpDo(contFalse, contID);
-        block1 = new Block();
+        block1 = new Block(true);
         block1.addBlockStmnt(contDec);
         block1.addBlockStmnt(doS1);
 
@@ -78,7 +78,7 @@ public class DoStmntTest {
         lT5.setUpRelationExpr(RelationOp.LT, thingID, five);
         doS2 = new DoStmnt();
         doS2.setUpDo(thingToI, lT5);
-        block2 = new Block();
+        block2 = new Block(true);
         block2.addBlockStmnt(dec2);
         block2.addBlockStmnt(doS2);
     }
@@ -91,7 +91,7 @@ public class DoStmntTest {
             cont = false;
         } while (cont);
          */
-        block1.execute(c, -1);
+        block1.execute(c, 0);
         assertFalse(((ReturnValuesBool)contID.evaluate(c)).value);
 
         /* Code is:
@@ -101,7 +101,7 @@ public class DoStmntTest {
         } while (thing < 5)
         check thing == 5; i == 6;
          */
-        block2.execute(c, -1);
+        block2.execute(c, 0);
         assertEquals(5, ((ReturnValuesInt)thingID.evaluate(c)).value);
         assertEquals(6, ((ReturnValuesInt)iID.evaluate(c)).value);
     }

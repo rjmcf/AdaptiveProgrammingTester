@@ -82,7 +82,7 @@ public class ForStmntTest {
         fS1.addUpdate(minus);
         fS1.setBody(sumAss);
 
-        block1 = new Block();
+        block1 = new Block(true);
         block1.addBlockStmnt(sumStat);
         block1.addBlockStmnt(fS1);
 
@@ -103,7 +103,7 @@ public class ForStmntTest {
         fS2.setUpForStmnt(null, null);
         fS2.addUpdate(plus);
         fS2.setBody(if2);
-        block2 = new Block();
+        block2 = new Block(true);
         block2.addBlockStmnt(jStat);
         block2.addBlockStmnt(fS2);
     }
@@ -117,7 +117,7 @@ public class ForStmntTest {
         }
         Check sum = 5! = 120
          */
-        block1.execute(c, -1);
+        block1.execute(c, 0);
         assertEquals(120, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
         /* Code is:
@@ -128,7 +128,7 @@ public class ForStmntTest {
         }
         Check j == 5
          */
-        block2.execute(c, -1);
+        block2.execute(c, 0);
         assertEquals(5, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

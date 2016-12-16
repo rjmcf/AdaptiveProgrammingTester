@@ -45,7 +45,7 @@ public class IfThenElseStmntTest {
         i2.setUpAssignExpr(iID, AssignOp.EQ, two);
         iTES1 = new IfThenElseStmnt();
         iTES1.setUpITE(t, i1, i2);
-        block1 = new Block();
+        block1 = new Block(true);
         block1.addBlockStmnt(iE);
         block1.addBlockStmnt(iTES1);
 
@@ -64,7 +64,7 @@ public class IfThenElseStmntTest {
         j2.setUpAssignExpr(jID, AssignOp.EQ, two);
         iTES2 = new IfThenElseStmnt();
         iTES2.setUpITE(f, j1, j2);
-        block2 = new Block();
+        block2 = new Block(true);
         block2.addBlockStmnt(jE);
         block2.addBlockStmnt(iTES2);
     }
@@ -79,7 +79,7 @@ public class IfThenElseStmntTest {
             i = 2;
         check i == 1
          */
-        block1.execute(c, -1);
+        block1.execute(c, 0);
         assertEquals(1, ((ReturnValuesInt)iID.evaluate(c)).value);
 
         /* Code is:
@@ -90,7 +90,7 @@ public class IfThenElseStmntTest {
             i = 2;
         check i == 2
          */
-        block2.execute(c, -1);
+        block2.execute(c, 0);
         assertEquals(2, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

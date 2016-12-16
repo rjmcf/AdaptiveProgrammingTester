@@ -78,13 +78,13 @@ public class WhileStmntNoShortIfTest {
         plusEquals.setUpAssignExpr(sumID, AssignOp.PLUSEQ, access);
         plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, iID);
-        inner = new Block();
+        inner = new Block(false);
         inner.addBlockStmnt(plusEquals);
         inner.addBlockStmnt(plus);
         wS1 = new WhileStmntNoShortIf();
         wS1.setUpWhileNSI(lT5, inner);
 
-        outer = new Block();
+        outer = new Block(true);
         outer.addBlockStmnt(ints);
         outer.addBlockStmnt(wS1);
 
@@ -102,7 +102,7 @@ public class WhileStmntNoShortIfTest {
         wS2 = new WhileStmntNoShortIf();
         wS2.setUpWhileNSI(f, j1);
 
-        block2 = new Block();
+        block2 = new Block(true);
         block2.addBlockStmnt(dec2);
         block2.addBlockStmnt(wS2);
     }
@@ -117,7 +117,7 @@ public class WhileStmntNoShortIfTest {
         }
         check sum == 6
          */
-        outer.execute(c, -1);
+        outer.execute(c, 0);
         assertEquals(6, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
         /* Code is:
@@ -127,7 +127,7 @@ public class WhileStmntNoShortIfTest {
         }
         check j == 0;
         */
-        block2.execute(c, -1);
+        block2.execute(c, 0);
         assertEquals(0, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

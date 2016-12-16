@@ -44,7 +44,7 @@ public class IfThenStmntTest {
         i1.setUpAssignExpr(iID, AssignOp.EQ, one);
         iTS1 = new IfThenStmnt();
         iTS1.setUpIfThen(t, i1);
-        block1 = new Block();
+        block1 = new Block(true);
         block1.addBlockStmnt(i0);
         block1.addBlockStmnt(iTS1);
 
@@ -61,7 +61,7 @@ public class IfThenStmntTest {
         j1.setUpAssignExpr(jID, AssignOp.EQ, one);
         iTS2 = new IfThenStmnt();
         iTS2.setUpIfThen(f, j1);
-        block2 = new Block();
+        block2 = new Block(true);
         block2.addBlockStmnt(j0);
         block2.addBlockStmnt(iTS2);
     }
@@ -74,7 +74,7 @@ public class IfThenStmntTest {
             i = 1;
         check i == 1
          */
-        block1.execute(c, -1);
+        block1.execute(c, 0);
         assertEquals(1, ((ReturnValuesInt)iID.evaluate(c)).value);
 
         /* Code is:
@@ -83,7 +83,7 @@ public class IfThenStmntTest {
             j = 1;
         check j == 0
          */
-        block2.execute(c, -1);
+        block2.execute(c, 0);
         assertEquals(0, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

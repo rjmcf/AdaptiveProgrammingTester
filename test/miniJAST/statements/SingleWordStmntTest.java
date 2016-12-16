@@ -123,7 +123,7 @@ public class SingleWordStmntTest {
         lT9.setUpRelationExpr(RelationOp.LT, iID, nine);
         iPlus = new UnaryPostIncExpr();
         iPlus.setUpPostIncExpr(true, iID);
-        inner = new Block();
+        inner = new Block(false);
         inner.addBlockStmnt(contIf);
         inner.addBlockStmnt(breakIf);
         inner.addBlockStmnt(indexAssign);
@@ -139,7 +139,7 @@ public class SingleWordStmntTest {
         r6 = new AssignExpr();
         r6.setUpAssignExpr(fakeAcc, AssignOp.EQ, ques);
 
-        outer = new Block();
+        outer = new Block(true);
         outer.addBlockStmnt(arrays);
         outer.addBlockStmnt(iDec);
         outer.addBlockStmnt(forStmnt1);

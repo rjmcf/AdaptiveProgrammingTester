@@ -61,7 +61,7 @@ public class ContextTest {
         fS = new ForStmnt();
         fS.setUpForStmnt(init, lT2);
         fS.addUpdate(plus);
-        b1 = new Block();
+        b1 = new Block(true);
         b1.addBlockStmnt(jDec);
         fS.setBody(b1);
     }

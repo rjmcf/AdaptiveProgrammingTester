@@ -72,7 +72,7 @@ public class FillArrayToNExercise extends AbstractPExercise {
         fS.setUpForStmnt(init, lTN);
         fS.addUpdate(plus);
         fS.setBody(updateIndex);
-        block = new Block();
+        block = new Block(true);
         block.addBlockStmnt(array);
         block.addBlockStmnt(fS);
     }
