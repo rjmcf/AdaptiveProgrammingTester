@@ -4,6 +4,7 @@ import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.FlowControl;
@@ -26,8 +27,15 @@ public class ForStmnt implements Statement {
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException{
-        init.execute(c);
-        ReturnValues condR = cond.evaluate(c);
+        if (init != null)
+            init.execute(c);
+
+        ReturnValues condR;
+        if (cond != null)
+            condR = cond.evaluate(c);
+        else
+            condR = new ReturnValuesBool(true);
+
         if (condR.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must have boolean type");
         if (condR.getIsArray())
@@ -43,7 +51,8 @@ public class ForStmnt implements Statement {
                     for (StatementExpr se : updates)
                         se.evaluate(c);
 
-                    condR = cond.evaluate(c);
+                    if (cond != null)
+                        condR = cond.evaluate(c);
                     continue loop;
                 case RETURN:
                     return fC;
@@ -52,7 +61,8 @@ public class ForStmnt implements Statement {
             for (StatementExpr se : updates)
                 se.evaluate(c);
 
-            condR = cond.evaluate(c);
+            if (cond != null)
+                condR = cond.evaluate(c);
         }
 
         return FlowControl.NONE;

@@ -30,7 +30,6 @@ public class SingleWordStmntTest {
     ArrayCreationWithInitList orig;
     ArrayCreationWithSize result;
     VarDeclarator i;
-    ForInit init;
     ForStmnt forStmnt;
     LocalVarDec arrays, iDec;
     Id iID, origID, resultID;
@@ -117,7 +116,6 @@ public class SingleWordStmntTest {
         indexAssign = new AssignExpr();
         indexAssign.setUpAssignExpr(resAcc, AssignOp.EQ, origAcc);
 
-        init = new EmptyStmnt();
         nine = new Literal();
         nine.setUpLiteral(UnannType.INT, "9");
         lT9 = new RelationExpr();
@@ -129,7 +127,7 @@ public class SingleWordStmntTest {
         inner.addBlockStmnt(breakIf);
         inner.addBlockStmnt(indexAssign);
         forStmnt = new ForStmnt();
-        forStmnt.setUpForStmnt(init, lT9);
+        forStmnt.setUpForStmnt(null, lT9);
         forStmnt.addUpdate(plus);
         forStmnt.setBody(inner);
 

@@ -26,8 +26,15 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {
-        init.execute(c);
-        ReturnValues condR = cond.evaluate(c);
+        if (init != null)
+            init.execute(c);
+
+        ReturnValues condR;
+        if (cond != null)
+            condR = cond.evaluate(c);
+        else
+            condR = new ReturnValuesBool(true);
+
         if (condR.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must have boolean type");
         if (condR.getIsArray())
@@ -40,6 +47,11 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
                 case BREAK:
                     break loop;
                 case CONTINUE:
+                    for (StatementExpr se : updates)
+                        se.evaluate(c);
+
+                    if (cond != null)
+                        condR = cond.evaluate(c);
                     continue loop;
                 case RETURN:
                     return fC;
@@ -48,7 +60,8 @@ public class ForStmntNoShortIf implements StatementNoShortIf {
             for (StatementExpr se : updates)
                 se.evaluate(c);
 
-            condR = cond.evaluate(c);
+            if (cond != null)
+                condR = cond.evaluate(c);
         }
 
         return FlowControl.NONE;

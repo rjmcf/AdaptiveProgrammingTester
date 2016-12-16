@@ -7,12 +7,11 @@ import miniJAST.expressions.arithExpr.MultExpr;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
+import miniJAST.expressions.boolExpr.EqExpr;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
-import miniJAST.statements.Block;
-import miniJAST.statements.LocalVarDec;
-import miniJAST.statements.VarDeclarator;
+import miniJAST.statements.*;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
@@ -21,17 +20,19 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class ForStmntNoShortIfTest {
-    ForStmntNoShortIf fS;
+    ForStmntNoShortIf fS1, fS2;
     ForInit fI;
-    Block block;
-    LocalVarDec sumStat, iStat;
-    VarDeclarator sum, i;
-    Id iID, sumID;
+    Block block1, block2;
+    LocalVarDec sumStat, iStat, jStat;
+    VarDeclarator sum, i, j;
+    Id iID, sumID, jID;
     AssignExpr sumAss;
     Literal zero, one, five;
-    UnaryPostIncExpr minus;
+    UnaryPostIncExpr minus, plus;
     RelationExpr gT;
     MultExpr sumTimesI;
+    IfThenElseStmntNoShortIf if2;
+    EqExpr check5;
     Context c;
 
     @BeforeMethod
@@ -48,7 +49,7 @@ public class ForStmntNoShortIfTest {
         sumStat.addVarDec(sum);
 
         // set up ForStmnt
-        fS = new ForStmntNoShortIf();
+        fS1 = new ForStmntNoShortIf();
         // set up ForInit
         fI = new ForInit();
         // set up "int i = 5"
@@ -77,13 +78,34 @@ public class ForStmntNoShortIfTest {
         sumTimesI.setUpMultExpr(true, sumID, iID);
         sumAss = new AssignExpr();
         sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
-        fS.setUpForStmntNSI(fI, gT);
-        fS.addUpdate(minus);
-        fS.setBody(sumAss);
+        fS1.setUpForStmntNSI(fI, gT);
+        fS1.addUpdate(minus);
+        fS1.setBody(sumAss);
 
-        block = new Block();
-        block.addBlockStmnt(sumStat);
-        block.addBlockStmnt(fS);
+        block1 = new Block();
+        block1.addBlockStmnt(sumStat);
+        block1.addBlockStmnt(fS1);
+
+        j = new VarDeclarator();
+        j.setUpVarDec("j", zero);
+        jStat = new LocalVarDec();
+        jStat.setUpLVD(UnannType.INT);
+        jStat.addVarDec(j);
+        jID = new Id();
+        jID.setUpId(new Type(UnannType.INT, 1), "j");
+        plus = new UnaryPostIncExpr();
+        plus.setUpPostIncExpr(true, jID);
+        check5 = new EqExpr();
+        check5.setUpEqExpr(true, jID, five);
+        if2 = new IfThenElseStmntNoShortIf();
+        if2.setUpITENSI(check5, SingleWordStmnt.BREAK, SingleWordStmnt.CONTINUE);
+        fS2 = new ForStmntNoShortIf();
+        fS2.setUpForStmntNSI(null, null);
+        fS2.addUpdate(plus);
+        fS2.setBody(if2);
+        block2 = new Block();
+        block2.addBlockStmnt(jStat);
+        block2.addBlockStmnt(fS2);
     }
 
     @Test
@@ -95,7 +117,20 @@ public class ForStmntNoShortIfTest {
         }
         Check sum = 5! = 120
          */
-        block.execute(c);
+        block1.execute(c);
         assertEquals(120, ((ReturnValuesInt)sumID.evaluate(c)).value);
+
+        /* Code is:
+        int j = 0;
+        for (; ; j++) {
+            if (j == 5)
+                break;
+            else
+                continue;
+        }
+        Check j == 5
+         */
+        block2.execute(c);
+        assertEquals(5, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }
