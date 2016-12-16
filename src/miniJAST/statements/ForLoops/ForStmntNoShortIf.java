@@ -70,4 +70,9 @@ public class ForStmntNoShortIf extends StatementBase implements StatementNoShort
 
         return FlowControl.NONE;
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        return execute(c, 0);
+    }
 }

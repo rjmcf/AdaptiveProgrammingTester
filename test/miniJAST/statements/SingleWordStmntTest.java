@@ -180,7 +180,7 @@ public class SingleWordStmntTest {
          return;
          result[6] = '?'
          */
-        outer.execute(c, 0);
+        outer.executeStart(c);
         String proper = "Hello!";
         ReturnValuesArray ar = (ReturnValuesArray)resultID.evaluate(c);
         assertEquals(proper.length(), ar.getSize());
@@ -192,6 +192,6 @@ public class SingleWordStmntTest {
         for (int j = 0; j < 1; j++) ;
         Check it terminates
          */
-        forStmnt2.execute(c, 0);
+        forStmnt2.executeStart(c);
     }
 }

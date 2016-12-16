@@ -39,4 +39,9 @@ public class WhileStmntNoShortIf extends StatementBase implements StatementNoSho
 
         return FlowControl.NONE;
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        return execute(c, 0);
+    }
 }

@@ -117,7 +117,7 @@ public class ForStmntNoShortIfTest {
         }
         Check sum = 5! = 120
          */
-        block1.execute(c, 0);
+        block1.executeStart(c);
         assertEquals(120, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
         /* Code is:
@@ -130,7 +130,7 @@ public class ForStmntNoShortIfTest {
         }
         Check j == 5
          */
-        block2.execute(c, 0);
+        block2.executeStart(c);
         assertEquals(5, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

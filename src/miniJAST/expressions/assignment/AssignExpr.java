@@ -585,4 +585,10 @@ public class AssignExpr extends Expression implements StatementExpr {
         evaluate(c);
         return FlowControl.NONE;
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        evaluate(c);
+        return FlowControl.NONE;
+    }
 }

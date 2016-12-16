@@ -79,7 +79,7 @@ public class IfThenElseStmntTest {
             i = 2;
         check i == 1
          */
-        block1.execute(c, 0);
+        block1.executeStart(c);
         assertEquals(1, ((ReturnValuesInt)iID.evaluate(c)).value);
 
         /* Code is:
@@ -90,7 +90,7 @@ public class IfThenElseStmntTest {
             i = 2;
         check i == 2
          */
-        block2.execute(c, 0);
+        block2.executeStart(c);
         assertEquals(2, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

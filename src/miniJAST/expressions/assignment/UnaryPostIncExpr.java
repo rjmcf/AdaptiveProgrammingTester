@@ -85,4 +85,10 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
         evaluate(c);
         return FlowControl.NONE;
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        evaluate(c);
+        return FlowControl.NONE;
+    }
 }

@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.exceptions.MiniJASTException;
 
 public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     EMPTY {
@@ -8,23 +9,35 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public FlowControl execute(Context c, int d) {
             return FlowControl.NONE;
         }
+
+        @Override
+        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.NONE; }
     },
     BREAK {
         @Override
         public FlowControl execute(Context c, int d) {
             return FlowControl.BREAK;
         }
+
+        @Override
+        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.BREAK; }
     },
     CONTINUE {
         @Override
         public FlowControl execute(Context c, int d) {
             return FlowControl.CONTINUE;
         }
+
+        @Override
+        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.CONTINUE; }
     },
     RETURN {
         @Override
         public FlowControl execute(Context c, int d) {
             return FlowControl.RETURN;
         }
+
+        @Override
+        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.RETURN; }
     }
 }

@@ -81,7 +81,7 @@ public class FillArrayToNExercise extends AbstractPExercise {
     public void runSolution() {
         c = new Context();
         try {
-            block.execute(c, 0);
+            block.executeStart(c);
         } catch (MiniJASTException ex) {
             ex.printStackTrace();
         }

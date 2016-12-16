@@ -89,4 +89,10 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
         evaluate(c);
         return FlowControl.NONE;
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        evaluate(c);
+        return FlowControl.NONE;
+    }
 }

@@ -167,7 +167,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCWIL);
-        lvd.execute(c, 0);
+        lvd.executeStart(c);
 
         id.setUpId(new Type(UnannType.BOOLEAN, 3), "boolArray");
         ReturnValuesArray<Boolean> ar = (ReturnValuesArray)id.evaluate(c);
@@ -193,7 +193,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCWIL);
         try {
-            lvd.execute(c, 0);
+            lvd.executeStart(c);
             fail("Types do not match");
         } catch (TypeException te) {
             // pass test

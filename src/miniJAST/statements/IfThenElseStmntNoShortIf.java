@@ -35,4 +35,9 @@ public class IfThenElseStmntNoShortIf extends StatementBase implements Statement
             return result;
         }
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        return execute(c, 0);
+    }
 }

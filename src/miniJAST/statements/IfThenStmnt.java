@@ -31,4 +31,9 @@ public class IfThenStmnt extends StatementBase implements Statement {
 
         return FlowControl.NONE;
     }
+
+    @Override
+    public FlowControl executeStart(Context c) throws MiniJASTException {
+        return execute(c, 0);
+    }
 }
