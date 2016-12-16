@@ -8,7 +8,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
-public class IfThenStmnt implements Statement {
+public class IfThenStmnt extends StatementBase implements Statement {
     private Expression cond;
     private Statement stmnt;
 

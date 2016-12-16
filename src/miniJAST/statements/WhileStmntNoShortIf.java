@@ -8,7 +8,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
-public class WhileStmntNoShortIf implements StatementNoShortIf {
+public class WhileStmntNoShortIf extends StatementBase implements StatementNoShortIf {
     private Expression cond;
     private StatementNoShortIf stmnt;
 

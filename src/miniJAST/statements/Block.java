@@ -5,7 +5,7 @@ import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
-public class Block implements StmntNoTrailSubstmnt {
+public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     private ArrayList<BlockStatement> stmnts;
 
     public Block() { stmnts = new ArrayList<>(); }

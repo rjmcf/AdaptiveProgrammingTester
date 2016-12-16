@@ -8,7 +8,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
-public class DoStmnt implements StmntNoTrailSubstmnt{
+public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
     private Statement stmnt;
     private Expression cond;
 

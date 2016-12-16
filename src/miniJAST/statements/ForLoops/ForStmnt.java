@@ -10,11 +10,12 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.Statement;
 import miniJAST.expressions.StatementExpr;
+import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
-public class ForStmnt implements Statement {
+public class ForStmnt extends StatementBase implements Statement {
     private ForInit init;
     private Expression cond;
     private ArrayList<StatementExpr> updates;

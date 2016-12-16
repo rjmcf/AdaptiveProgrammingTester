@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 
-public class IfThenElseStmntNoShortIf implements StatementNoShortIf {
+public class IfThenElseStmntNoShortIf extends StatementBase implements StatementNoShortIf {
     private Expression cond;
     private StatementNoShortIf trueStmnt;
     private StatementNoShortIf falseStmnt;

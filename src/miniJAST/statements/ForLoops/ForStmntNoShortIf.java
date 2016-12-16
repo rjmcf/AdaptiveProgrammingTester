@@ -8,12 +8,13 @@ import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.FlowControl;
+import miniJAST.statements.StatementBase;
 import miniJAST.statements.StatementNoShortIf;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
-public class ForStmntNoShortIf implements StatementNoShortIf {
+public class ForStmntNoShortIf extends StatementBase implements StatementNoShortIf {
     private ForInit init;
     private Expression cond;
     private ArrayList<StatementExpr> updates;
