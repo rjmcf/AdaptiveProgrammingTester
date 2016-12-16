@@ -29,13 +29,14 @@ public class SingleWordStmntTest {
     Literal H, e, l, o, exc, ques, six, zero, nine, two, seven, three, one;
     ArrayCreationWithInitList orig;
     ArrayCreationWithSize result;
-    VarDeclarator i;
-    ForStmnt forStmnt;
-    LocalVarDec arrays, iDec;
-    Id iID, origID, resultID;
-    RelationExpr lT9, lT3;
+    VarDeclarator i, j;
+    ForInit init2;
+    ForStmnt forStmnt1, forStmnt2;
+    LocalVarDec arrays, iDec, jDec;
+    Id iID, origID, resultID, jID;
+    RelationExpr lT9, lT3, lT1;
     EqExpr eq2, eq7;
-    UnaryPostIncExpr plus;
+    UnaryPostIncExpr iPlus, jPlus;
     IfThenStmnt contIf, breakIf;
     ArrayAccess resAcc, origAcc, fakeAcc;
     CondExpr which;
@@ -120,16 +121,16 @@ public class SingleWordStmntTest {
         nine.setUpLiteral(UnannType.INT, "9");
         lT9 = new RelationExpr();
         lT9.setUpRelationExpr(RelationOp.LT, iID, nine);
-        plus = new UnaryPostIncExpr();
-        plus.setUpPostIncExpr(true, iID);
+        iPlus = new UnaryPostIncExpr();
+        iPlus.setUpPostIncExpr(true, iID);
         inner = new Block();
         inner.addBlockStmnt(contIf);
         inner.addBlockStmnt(breakIf);
         inner.addBlockStmnt(indexAssign);
-        forStmnt = new ForStmnt();
-        forStmnt.setUpForStmnt(null, lT9);
-        forStmnt.addUpdate(plus);
-        forStmnt.setBody(inner);
+        forStmnt1 = new ForStmnt();
+        forStmnt1.setUpForStmnt(null, lT9);
+        forStmnt1.addUpdate(iPlus);
+        forStmnt1.setBody(inner);
 
         ques = new Literal();
         ques.setUpLiteral(UnannType.CHAR, "?");
@@ -141,9 +142,27 @@ public class SingleWordStmntTest {
         outer = new Block();
         outer.addBlockStmnt(arrays);
         outer.addBlockStmnt(iDec);
-        outer.addBlockStmnt(forStmnt);
+        outer.addBlockStmnt(forStmnt1);
         outer.addBlockStmnt(SingleWordStmnt.RETURN);
         outer.addBlockStmnt(r6);
+
+        j = new VarDeclarator();
+        j.setUpVarDec("j", zero);
+        jDec = new LocalVarDec();
+        jDec.setUpLVD(UnannType.INT);
+        jDec.addVarDec(j);
+        jID = new Id();
+        jID.setUpId(new Type(UnannType.INT, 1), "j");
+        lT1 = new RelationExpr();
+        lT1.setUpRelationExpr(RelationOp.LT, jID, one);
+        jPlus = new UnaryPostIncExpr();
+        jPlus.setUpPostIncExpr(true, jID);
+        init2 = new ForInit();
+        init2.setUpForInit(false, jDec);
+        forStmnt2 = new ForStmnt();
+        forStmnt2.setUpForStmnt(init2, lT1);
+        forStmnt2.addUpdate(jPlus);
+        forStmnt2.setBody(SingleWordStmnt.EMPTY);
     }
 
     @Test
@@ -168,5 +187,11 @@ public class SingleWordStmntTest {
         for (int i = 0; i < proper.length(); i++) {
             assertEquals(proper.charAt(i), ar.get(i));
         }
+
+        /* Code is:
+        for (int j = 0; j < 1; j++) ;
+        Check it terminates
+         */
+        forStmnt2.execute(c);
     }
 }
