@@ -1,7 +1,6 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
-import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arithExpr.MultExpr;
@@ -61,7 +60,7 @@ public class ForStmntTest {
                 i = new VarDeclarator();
                 i.setUpVarDec("i", five);
                 iStat.addVarDec(i);
-            fI.setUpForInit(false, iStat);
+            fI.addLocalVarDec(iStat);
             // set up "i > 0"
             iID = new Id();
             iID.setUpId(new Type(UnannType.INT, 1), "i");

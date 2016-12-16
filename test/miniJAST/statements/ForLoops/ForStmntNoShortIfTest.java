@@ -60,7 +60,7 @@ public class ForStmntNoShortIfTest {
         i = new VarDeclarator();
         i.setUpVarDec("i", five);
         iStat.addVarDec(i);
-        fI.setUpForInit(false, iStat);
+        fI.addLocalVarDec(iStat);
         // set up "i > 0"
         iID = new Id();
         iID.setUpId(new Type(UnannType.INT, 1), "i");

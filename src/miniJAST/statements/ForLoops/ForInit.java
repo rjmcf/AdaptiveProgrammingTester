@@ -10,16 +10,15 @@ import miniJAST.expressions.StatementExpr;
 import java.util.ArrayList;
 
 public class ForInit {
-    private boolean isList;
     private ArrayList<StatementExpr> stmnts;
-    private LocalVarDec lvd;
+    private LocalVarDec lvd = null;
 
     public ForInit() { stmnts = new ArrayList<>(); }
-    public void setUpForInit(boolean l, LocalVarDec lv) { isList = l; lvd = lv; }
+    public void addLocalVarDec(LocalVarDec lv) { lvd = lv; }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
 
     public FlowControl execute(Context c) throws MiniJASTException {
-        if (isList) {
+        if (lvd == null) {
             for (StatementExpr se : stmnts) {
                 se.evaluate(c);
             }
