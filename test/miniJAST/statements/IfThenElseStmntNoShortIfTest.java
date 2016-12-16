@@ -79,7 +79,7 @@ public class IfThenElseStmntNoShortIfTest {
             i = 2;
         check i == 1
          */
-        block1.execute(c);
+        block1.execute(c, -1);
         assertEquals(1, ((ReturnValuesInt)iID.evaluate(c)).value);
 
         /* Code is:
@@ -90,7 +90,7 @@ public class IfThenElseStmntNoShortIfTest {
             i = 2;
         check i == 2
          */
-        block2.execute(c);
+        block2.execute(c, -1);
         assertEquals(2, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

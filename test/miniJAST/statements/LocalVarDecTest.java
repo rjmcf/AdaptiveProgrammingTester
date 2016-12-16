@@ -62,7 +62,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(boolDec);
-        lvd.execute(c);
+        lvd.execute(c, 0);
         id.setUpId(new Type(UnannType.BOOLEAN, 1), "bDec");
         try {
             id.evaluate(c);
@@ -82,7 +82,7 @@ public class LocalVarDecTest {
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
         try {
-            lvd.execute(c);
+            lvd.execute(c, 0);
             fail("bDec is already declared");
         } catch (VariableDecException vde) {
             // pass test
@@ -91,7 +91,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(boolDef);
-        lvd.execute(c);
+        lvd.execute(c, 0);
         id.setUpId(new Type(UnannType.BOOLEAN,1), "bDef");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -101,7 +101,7 @@ public class LocalVarDecTest {
         lvd.addVarDec(intDef1);
         lvd.addVarDec(intDec2);
         lvd.addVarDec(intDef2);
-        lvd.execute(c);
+        lvd.execute(c, 0);
         id.setUpId(new Type(UnannType.INT, 1), "iDec1");
         try {
             id.evaluate(c);
@@ -137,7 +137,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCSize);
-        lvd.execute(c);
+        lvd.execute(c, 0);
 
         id.setUpId(new Type(UnannType.BOOLEAN, 2), "boolArray2");
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
@@ -149,7 +149,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCSize);
         try {
-            lvd.execute(c);
+            lvd.execute(c, 0);
             fail("Size must be integer type");
         } catch (TypeException te) {
             // pass test
@@ -167,7 +167,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCWIL);
-        lvd.execute(c);
+        lvd.execute(c, 0);
 
         id.setUpId(new Type(UnannType.BOOLEAN, 3), "boolArray");
         ReturnValuesArray<Boolean> ar = (ReturnValuesArray)id.evaluate(c);
@@ -193,7 +193,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCWIL);
         try {
-            lvd.execute(c);
+            lvd.execute(c, 0);
             fail("Types do not match");
         } catch (TypeException te) {
             // pass test

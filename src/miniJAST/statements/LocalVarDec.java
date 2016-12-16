@@ -22,7 +22,7 @@ public class LocalVarDec implements BlockStatement {
     public void addVarDec(VarDeclarator v) { vars.add(v); }
 
     @Override
-    public FlowControl execute(Context c) throws MiniJASTException {
+    public FlowControl execute(Context c, int d) throws MiniJASTException {
         for (VarDeclarator v : vars) {
             if (c.namesToTypes.containsKey(v.getName()))
                 throw new VariableDecException(v.getName(), true);
@@ -226,6 +226,7 @@ public class LocalVarDec implements BlockStatement {
                     }
                     break;
             }
+            c.namesToDepths.put(v.getName(), d);
         }
 
         return FlowControl.NONE;

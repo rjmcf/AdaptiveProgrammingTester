@@ -27,9 +27,9 @@ public class ForStmnt extends StatementBase implements Statement {
     public void setBody(Statement s) { stmnt = s; }
 
     @Override
-    public FlowControl execute(Context c) throws MiniJASTException{
+    public FlowControl execute(Context c, int d) throws MiniJASTException{
         if (init != null)
-            init.execute(c);
+            init.execute(c, d+1);
 
         ReturnValues condR;
         if (cond != null)
@@ -44,7 +44,8 @@ public class ForStmnt extends StatementBase implements Statement {
 
         loop:
         while(((ReturnValuesBool)condR).value) {
-            FlowControl fC = stmnt.execute(c);
+            FlowControl fC = stmnt.execute(c, d+2);
+            removeDecsAtDepth(c, d+2);
             switch(fC) {
                 case BREAK:
                     break loop;
@@ -65,6 +66,8 @@ public class ForStmnt extends StatementBase implements Statement {
             if (cond != null)
                 condR = cond.evaluate(c);
         }
+
+        removeDecsAtDepth(c, d+1);
 
         return FlowControl.NONE;
     }

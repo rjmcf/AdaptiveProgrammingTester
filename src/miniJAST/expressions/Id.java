@@ -20,7 +20,7 @@ public class Id extends GroundExpr implements AssignLHS{
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
-        if (c.namesToTypes.get(name).equals(varType)) {
+        if (c.namesToTypes.get(name) != null && c.namesToTypes.get(name).equals(varType)) {
             if (!c.namesToValues.containsKey(name))
                 throw new VariableNotInitException(name);
             if (varType.size == 1) {

@@ -15,7 +15,7 @@ public class WhileStmnt extends StatementBase implements Statement {
     public void setUpWhile(Expression c, Statement s) { cond = c; stmnt = s; }
 
     @Override
-    public FlowControl execute(Context c) throws MiniJASTException {
+    public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues rC = cond.evaluate(c);
         if (rC.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must be boolean type");
@@ -24,7 +24,8 @@ public class WhileStmnt extends StatementBase implements Statement {
 
         loop:
         while (((ReturnValuesBool)rC).value) {
-            FlowControl fC = stmnt.execute(c);
+            FlowControl fC = stmnt.execute(c, d+1);
+            removeDecsAtDepth(c, d+1);
             switch (fC) {
                 case BREAK:
                     break loop;

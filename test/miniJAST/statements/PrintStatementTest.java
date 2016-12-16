@@ -56,13 +56,13 @@ public class PrintStatementTest {
     public void testExecute() {
         try {
             pr.setUpPrint(boolExpr);
-            pr.execute(c);
+            pr.execute(c, 0);
 
             pr.setUpPrint(intAAExpr);
-            pr.execute(c);
+            pr.execute(c, 0);
 
             pr.setUpPrint(arrayExpr);
-            pr.execute(c);
+            pr.execute(c, 0);
         } catch (MiniJASTException e) {
             e.printStackTrace();
             Assert.fail("A MiniJASTException was thrown");

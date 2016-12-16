@@ -2,13 +2,22 @@ package miniJAST.statements;
 
 import miniJAST.Context;
 
-public class StatementBase {
+import java.util.Iterator;
+
+public abstract class StatementBase {
     protected void removeDecsAtDepth(Context c, int d) {
-        for (String n : c.namesToDepths.keySet()) {
-            if (c.namesToDepths.get(n) >= d) {
-                c.namesToDepths.remove(n);
-                c.namesToValues.remove(n);
-                c.namesToTypes.remove(n);
+        if (d == 0)
+            return;
+        Iterator<String> nTDs = c.namesToDepths.keySet().iterator();
+        Iterator<String> nTVs = c.namesToValues.keySet().iterator();
+        Iterator<String> nTTs = c.namesToTypes.keySet().iterator();
+        while (nTDs.hasNext()) {
+            nTVs.next();
+            nTTs.next();
+            if (c.namesToDepths.get(nTDs.next()) >= d) {
+                nTVs.remove();
+                nTTs.remove();
+                nTDs.remove();
             }
         }
     }

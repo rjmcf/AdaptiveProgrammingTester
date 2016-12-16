@@ -17,13 +17,13 @@ public class ForInit {
     public void addLocalVarDec(LocalVarDec lv) { lvd = lv; }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
 
-    public FlowControl execute(Context c) throws MiniJASTException {
+    public FlowControl execute(Context c, int d) throws MiniJASTException {
         if (lvd == null) {
             for (StatementExpr se : stmnts) {
                 se.evaluate(c);
             }
         } else
-            lvd.execute(c);
+            lvd.execute(c, d);
 
         return null;
     }

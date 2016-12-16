@@ -117,7 +117,7 @@ public class WhileStmntNoShortIfTest {
         }
         check sum == 6
          */
-        outer.execute(c);
+        outer.execute(c, -1);
         assertEquals(6, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
         /* Code is:
@@ -127,7 +127,7 @@ public class WhileStmntNoShortIfTest {
         }
         check j == 0;
         */
-        block2.execute(c);
+        block2.execute(c, -1);
         assertEquals(0, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

@@ -74,7 +74,7 @@ public class IfThenStmntTest {
             i = 1;
         check i == 1
          */
-        block1.execute(c);
+        block1.execute(c, -1);
         assertEquals(1, ((ReturnValuesInt)iID.evaluate(c)).value);
 
         /* Code is:
@@ -83,7 +83,7 @@ public class IfThenStmntTest {
             j = 1;
         check j == 0
          */
-        block2.execute(c);
+        block2.execute(c, -1);
         assertEquals(0, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

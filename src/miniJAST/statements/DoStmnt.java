@@ -15,8 +15,9 @@ public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
     public void setUpDo(Statement s, Expression c) { stmnt = s; cond = c; }
 
     @Override
-    public FlowControl execute(Context c) throws MiniJASTException {
-        stmnt.execute(c);
+    public FlowControl execute(Context c, int d) throws MiniJASTException {
+        stmnt.execute(c, d+1);
+        removeDecsAtDepth(c, d+1);
         ReturnValues rCond = cond.evaluate(c);
         if (rCond.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition does not have boolean type");
@@ -25,7 +26,8 @@ public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
 
         loop:
         while(((ReturnValuesBool)rCond).value) {
-            FlowControl fc = stmnt.execute(c);
+            FlowControl fc = stmnt.execute(c, d+1);
+            removeDecsAtDepth(c, d+1);
             switch (fc) {
                 case BREAK:
                     break loop;

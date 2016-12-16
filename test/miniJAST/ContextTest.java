@@ -74,7 +74,7 @@ public class ContextTest {
         }
         Check that i and j are not defined
          */
-        fS.execute(c);
+        fS.execute(c, 0);
         try {
             iID.evaluate(c);
             fail("'i' should not be defined here");

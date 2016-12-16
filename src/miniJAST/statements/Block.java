@@ -12,9 +12,9 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     public void addBlockStmnt(BlockStatement b) { stmnts.add(b); }
 
     @Override
-    public FlowControl execute(Context c) throws MiniJASTException{
+    public FlowControl execute(Context c, int d) throws MiniJASTException{
         for (BlockStatement b : stmnts) {
-            FlowControl fc = b.execute(c);
+            FlowControl fc = b.execute(c, d+1);
             switch (fc) {
                 case NONE:
                     break;
@@ -23,6 +23,7 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
             }
         }
 
+        removeDecsAtDepth(c, d+1);
         return FlowControl.NONE;
     }
 }
