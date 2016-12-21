@@ -27,7 +27,7 @@ public class FillArrayToNExercise extends AbstractPExercise {
     Context c;
 
     public FillArrayToNExercise(int n) {
-        super("Fill the array named 'ns' with numbers from 0 to " + n + ".");
+        super("Fill the array named 'ns' with numbers from 0 to " + n + ".", 2); // initial estimate of difficulty
         max = n;
     }
 
