@@ -1,15 +1,12 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableDecException;
-import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -44,7 +41,7 @@ public class IdTest {
     @Test
     public void testEvaluate() throws Exception {
         id.setUpId(new Type(UnannType.BOOLEAN,1), "t");
-        Assert.assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+        assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
         id.setUpId(new Type(UnannType.BOOLEAN, 2), "t");
         try {
@@ -63,14 +60,14 @@ public class IdTest {
         }
 
         id.setUpId(new Type(UnannType.INT, 1), "int2");
-        Assert.assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);
+        assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);
 
         id.setUpId(new Type(UnannType.CHAR, 6), "message");
         String s = "Id test";
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
-        Assert.assertEquals(s.length(), ar.getSize());
+        assertEquals(s.length(), ar.getSize());
         for (int i = 0; i < s.length(); i++) {
-            Assert.assertEquals(s.charAt(i), ar.get(i));
+            assertEquals(s.charAt(i), ar.get(i));
         }
     }
 }
