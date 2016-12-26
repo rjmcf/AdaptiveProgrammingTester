@@ -1,3 +1,5 @@
 package miniJAST.statements;
 
-public interface Statement extends BlockStatement { }
+public interface Statement extends BlockStatement {
+    int getSubNodes();
+}
