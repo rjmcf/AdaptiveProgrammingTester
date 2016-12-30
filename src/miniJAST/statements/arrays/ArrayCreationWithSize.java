@@ -8,6 +8,12 @@ public class ArrayCreationWithSize extends ArrayCreation {
 
     public ArrayCreationWithSize() { hasInitList = false;}
 
+    @Override
+    public int getSubNodes() {
+        int s = size.getSubNodes();
+        return s + 1;
+    }
+
     public void setUpACWS(String n, Expression s) { name = n; size = s; }
 
     public Expression getSize() { return size; }

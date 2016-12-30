@@ -7,4 +7,5 @@ public abstract class ArrayCreation extends VarDeclarator{
 
     public ArrayCreation() { isArray = true; }
     public boolean getHasInitList() { return hasInitList; }
+    public abstract int getSubNodes();
 }

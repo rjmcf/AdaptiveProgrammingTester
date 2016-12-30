@@ -10,6 +10,15 @@ public class ArrayCreationWithInitList extends ArrayCreation {
 
     public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>(); }
 
+    @Override
+    public int getSubNodes() {
+        int sum = 0;
+        for (Expression e : values)
+            sum += e.getSubNodes();
+
+        return sum + values.size();
+    }
+
     public void setUPACWIL(String n) { name = n; }
     public void addExpressionACWIL(Expression e) { values.add(e); }
     public ArrayList<Expression> getValues () { return values; }

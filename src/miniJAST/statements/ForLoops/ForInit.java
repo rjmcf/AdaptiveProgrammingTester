@@ -17,6 +17,17 @@ public class ForInit {
     public void addLocalVarDec(LocalVarDec lv) { lvd = lv; }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
 
+    public int getSubNodes() {
+        if (lvd == null) {
+            int sum = 0;
+            for (StatementExpr sE : stmnts)
+                sum += sE.getSubNodes();
+            return sum + stmnts.size();
+        } else {
+            return 1;
+        }
+    }
+
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         if (lvd == null) {
             for (StatementExpr se : stmnts) {

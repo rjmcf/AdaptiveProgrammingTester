@@ -27,6 +27,17 @@ public class ForStmnt extends StatementBase implements Statement {
     public void setBody(Statement s) { stmnt = s; }
 
     @Override
+    public int getSubNodes() {
+        int in = init.getSubNodes();
+        int c = cond.getSubNodes();
+        int uSum = 0;
+        for (StatementExpr sE : updates)
+            uSum += sE.getSubNodes();
+        int s = stmnt.getSubNodes();
+        return in + c + uSum + s + 3 + updates.size();
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException{
         if (init != null)
             init.execute(c, d+1);
