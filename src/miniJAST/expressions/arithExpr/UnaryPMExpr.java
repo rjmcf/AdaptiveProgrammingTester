@@ -15,6 +15,12 @@ public class UnaryPMExpr extends UnaryExpr {
     public void setUpPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; }
 
     @Override
+    public int getSubNodes() {
+        int e = expr.getSubNodes();
+        return e + 1;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues e = expr.evaluate(c);
 

@@ -18,6 +18,13 @@ public class AddExpr extends RelationExpr {
     public void setUpAddExpr(boolean p, AddExpr l, MultExpr r) { isPlus = p; leftSide = l; rightSide = r; }
 
     @Override
+    public int getSubNodes() {
+        int l = leftSide.getSubNodes();
+        int r = rightSide.getSubNodes();
+        return l + r + 2;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);

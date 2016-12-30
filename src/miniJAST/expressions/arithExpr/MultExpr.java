@@ -19,6 +19,13 @@ public class MultExpr extends AddExpr {
     public void setUpMultExpr(boolean t, MultExpr l, UnaryExpr r) { isTimes = t; leftSide = l; rightSide = r; }
 
     @Override
+    public int getSubNodes() {
+        int l = leftSide.getSubNodes();
+        int r = rightSide.getSubNodes();
+        return l + r + 2;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);
