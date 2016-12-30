@@ -22,6 +22,14 @@ public class LocalVarDec implements BlockStatement {
     public void addVarDec(VarDeclarator v) { vars.add(v); }
 
     @Override
+    public int getSubNodes() {
+        int sum = 0;
+        for (VarDeclarator vD : vars)
+            sum += vD.getSubNodes();
+        return sum + vars.size();
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         for (VarDeclarator v : vars) {
             if (c.namesToTypes.containsKey(v.getName()))

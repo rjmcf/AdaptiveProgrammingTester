@@ -11,6 +11,11 @@ public class PrintStatement implements BlockStatement {
     public void setUpPrint(Expression e) { expr = e; }
 
     @Override
+    public int getSubNodes() {
+        return expr.getSubNodes() + 1;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues v = expr.evaluate(c);
 

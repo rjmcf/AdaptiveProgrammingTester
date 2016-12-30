@@ -24,7 +24,7 @@ public class ForInit {
                 sum += sE.getSubNodes();
             return sum + stmnts.size();
         } else {
-            return 1;
+            return lvd.getSubNodes() + 1;
         }
     }
 

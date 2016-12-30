@@ -16,6 +16,11 @@ public class IfThenElseStmnt extends StatementBase implements Statement{
     public void setUpITE(Expression c, StatementNoShortIf t, Statement f) { cond = c; trueStmnt = t; falseStmnt = f; }
 
     @Override
+    public int getSubNodes() {
+        return cond.getSubNodes() + trueStmnt.getSubNodes() + falseStmnt.getSubNodes() + 3;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)

@@ -15,6 +15,11 @@ public class WhileStmntNoShortIf extends StatementBase implements StatementNoSho
     public void setUpWhileNSI(Expression c, StatementNoShortIf s) { cond = c; stmnt = s; }
 
     @Override
+    public int getSubNodes() {
+        return cond.getSubNodes() + stmnt.getSubNodes() + 2;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues rC = cond.evaluate(c);
         if (rC.getType().uType != UnannType.BOOLEAN)

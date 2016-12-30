@@ -15,6 +15,11 @@ public class IfThenStmnt extends StatementBase implements Statement {
     public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; }
 
     @Override
+    public int getSubNodes() {
+        return cond.getSubNodes() + stmnt.getSubNodes() + 2;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)

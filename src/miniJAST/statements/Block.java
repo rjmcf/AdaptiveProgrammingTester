@@ -13,6 +13,14 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     public void addBlockStmnt(BlockStatement b) { stmnts.add(b); }
 
     @Override
+    public int getSubNodes() {
+        int sum = 0;
+        for (BlockStatement s : stmnts)
+            sum += s.getSubNodes();
+        return sum + stmnts.size();
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException{
         for (BlockStatement b : stmnts) {
             FlowControl fc = b.execute(c, isOuterMost ? d : d+1);
