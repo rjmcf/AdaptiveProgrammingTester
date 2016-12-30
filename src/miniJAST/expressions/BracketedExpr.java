@@ -10,6 +10,12 @@ public class BracketedExpr extends PrimaryExpr {
     public void setUpBracketExpr(Expression e) { expr = e; }
 
     @Override
+    public int getSubNodes() {
+        int e = expr.getSubNodes();
+        return e + 1;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         return expr.evaluate(c);
     }

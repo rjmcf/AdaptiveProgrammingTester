@@ -19,6 +19,12 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
     public void setUpPostIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; }
 
     @Override
+    public int getSubNodes() {
+        int e = expr.getSubNodes();
+        return e + 1;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;

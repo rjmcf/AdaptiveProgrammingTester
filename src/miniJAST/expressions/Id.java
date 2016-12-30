@@ -19,6 +19,11 @@ public class Id extends GroundExpr implements AssignLHS{
     public void setUpId(Type vT, String n) { varType = vT; name = n; }
 
     @Override
+    public int getSubNodes() {
+        return 0;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
         if (c.namesToTypes.get(name) != null && c.namesToTypes.get(name).equals(varType)) {
             if (!c.namesToValues.containsKey(name))

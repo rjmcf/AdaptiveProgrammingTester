@@ -12,6 +12,11 @@ public class Literal extends PrimaryExpr{
     public void setUpLiteral(UnannType lT, String v) { litType = lT; value = v; }
 
     @Override
+    public int getSubNodes() {
+        return 0;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws TypeException {
         switch(litType) {
             case BOOLEAN:

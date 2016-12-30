@@ -20,6 +20,12 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     public void setUpPreIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; }
 
     @Override
+    public int getSubNodes() {
+        int e = expr.getSubNodes();
+        return e + 1;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;

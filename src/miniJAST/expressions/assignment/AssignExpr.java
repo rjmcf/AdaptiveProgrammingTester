@@ -23,6 +23,13 @@ public class AssignExpr extends Expression implements StatementExpr {
     public void setUpAssignExpr(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e; }
 
     @Override
+    public int getSubNodes() {
+        int l = lhs.getSubNodes();
+        int e = expr.getSubNodes();
+        return l + e + 2;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;
