@@ -16,6 +16,14 @@ public class CondExpr extends Expression {
     public void setUpCondExpr(OrExpr c, Expression t, CondExpr f) { cond = c; trueExpr = t; falseExpr = f; }
 
     @Override
+    public int getSubNodes() {
+        int c = cond.getSubNodes();
+        int t = trueExpr.getSubNodes();
+        int f = falseExpr.getSubNodes();
+        return c + t + f + 3;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues condV = cond.evaluate(c);
         if (condV.getType().uType != UnannType.BOOLEAN)

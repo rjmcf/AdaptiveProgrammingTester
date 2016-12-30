@@ -15,6 +15,13 @@ public class EqExpr extends AndExpr {
 
     public void setUpEqExpr(boolean e, EqExpr l, RelationExpr r) { isEqualityTest = e; leftSide = l; rightSide = r; }
 
+    @Override
+    public int getSubNodes() {
+        int l = leftSide.getSubNodes();
+        int r = rightSide.getSubNodes();
+        return l + r + 2;
+    }
+
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

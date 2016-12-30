@@ -14,6 +14,13 @@ public class AndExpr extends OrExpr {
     public void setUpAndExpr(AndExpr l, EqExpr r) { leftSide = l; rightSide = r; }
 
     @Override
+    public int getSubNodes() {
+        int l = leftSide.getSubNodes();
+        int r = rightSide.getSubNodes();
+        return l + r + 2;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValuesBool result;
 

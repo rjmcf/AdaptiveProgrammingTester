@@ -15,6 +15,13 @@ public class RelationExpr extends EqExpr {
     public void setUpRelationExpr(RelationOp o, RelationExpr l, AddExpr r) { op = o; leftSide = l; rightSide = r; }
 
     @Override
+    public int getSubNodes() {
+        int l = leftSide.getSubNodes();
+        int r = rightSide.getSubNodes();
+        return l + r + 2;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValuesBool result;
 

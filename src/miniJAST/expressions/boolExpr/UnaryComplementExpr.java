@@ -16,6 +16,12 @@ public class UnaryComplementExpr extends UnaryExpr {
     public void setUpCompExpr(UnaryExpr e) { expr = e; }
 
     @Override
+    public int getSubNodes() {
+        int e = expr.getSubNodes();
+        return e + 1;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues e = expr.evaluate(c);
 
