@@ -76,6 +76,11 @@ public class LocalVarDecTest {
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesBool(true);
             }
+
+            @Override
+            public int getSubNodes() {
+                return 0;
+            }
         };
         aE.setUpAssignExpr(id, AssignOp.EQ, e);
         aE.evaluate(c);
@@ -128,6 +133,10 @@ public class LocalVarDecTest {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesInt(2);
+            }
+            @Override
+            public int getSubNodes() {
+                return 0;
             }
         };
 
