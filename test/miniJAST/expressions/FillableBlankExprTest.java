@@ -87,12 +87,7 @@ public class FillableBlankExprTest {
     public void testEmptyEvaluateBool() throws Exception {
         AndExpr aE = new AndExpr();
         aE.setUpAndExpr(litF, fbe);
-        try {
-            aE.evaluate(c);
-            fail("Blank not filled in");
-        } catch (BlankEmptyException bee) {
-            // pass test
-        }
+        // test passes since evaluation order takes precedence over type-safety
         aE.setUpAndExpr(fbe, litT);
         try {
             aE.evaluate(c);

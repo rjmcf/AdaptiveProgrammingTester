@@ -53,11 +53,6 @@ public class OrExprTest {
         }
 
         e.setUpOrExpr(t, i);
-        try {
-            e.evaluate(c);
-            fail("Cannot use || on integers (right)");
-        } catch (TypeException te) {
-            // pass test
-        }
+        // test passes since evaluation order now takes precedence over type-safety.
     }
 }
