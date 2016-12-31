@@ -3,6 +3,7 @@ package miniJAST.statements.arrays;
 import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
 import miniJAST.statements.arrays.ArrayCreation;
+import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,15 @@ public class ArrayCreationWithInitList extends ArrayCreation {
         for (Expression e : values)
             result.add(e.getTreeSize());
         result.filled++;
+        return result;
+    }
+
+    @Override
+    public String stringRepr(UnannType t) {
+        String result = name + "[] = { ";
+        for (Expression v : values)
+            result += v.stringRepr() + ", ";
+        result += " }";
         return result;
     }
 

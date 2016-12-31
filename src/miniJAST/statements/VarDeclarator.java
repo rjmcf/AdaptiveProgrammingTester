@@ -2,6 +2,7 @@ package miniJAST.statements;
 
 import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
+import miniJAST.types.UnannType;
 
 public class VarDeclarator {
     protected String name;
@@ -18,4 +19,5 @@ public class VarDeclarator {
 
     public String getName() { return name; }
     public Expression getExpr() { return expr; }
+    public String stringRepr(UnannType t) { return name + (expr == null ? "" : (" = " + expr.stringRepr())); }
 }

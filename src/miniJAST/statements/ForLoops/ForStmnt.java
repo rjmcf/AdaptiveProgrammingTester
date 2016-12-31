@@ -39,6 +39,16 @@ public class ForStmnt extends StatementBase implements Statement {
     }
 
     @Override
+    public String stringRepr() {
+        String result = "for (" + init.stringRepr() + "; " + cond.stringRepr() + "; ";
+        for (StatementExpr u : updates)
+            result += u.stringRepr() + ", ";
+        String result1 = result.substring(0, result.length() - 2);
+        result1 += ") " + stmnt.stringRepr();
+        return result1;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException{
         if (init != null)
             init.execute(c, d+1);

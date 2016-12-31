@@ -23,6 +23,15 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     }
 
     @Override
+    public String stringRepr() {
+        String result = "{ \n";
+        for (BlockStatement s : stmnts)
+            result += "    " + s.stringRepr() + "\n";
+        result += "}";
+        return result;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException{
         for (BlockStatement b : stmnts) {
             FlowControl fc = b.execute(c, isOuterMost ? d : d+1);

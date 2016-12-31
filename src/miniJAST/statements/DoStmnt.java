@@ -24,6 +24,11 @@ public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
     }
 
     @Override
+    public String stringRepr() {
+        return "do " + stmnt.stringRepr() + " while (" + cond.stringRepr() + ")";
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         stmnt.execute(c, d+1);
         removeDecsAtDepth(c, d+1);

@@ -32,6 +32,16 @@ public class LocalVarDec implements BlockStatement {
     }
 
     @Override
+    public String stringRepr() {
+        String result = type.name + " ";
+        for (VarDeclarator v : vars)
+            result += v.stringRepr(type) + ", ";
+        String result1 = result.substring(0, result.length()-2);
+        result1 += ";";
+        return result1;
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         for (VarDeclarator v : vars) {
             if (c.namesToTypes.containsKey(v.getName()))

@@ -27,6 +27,11 @@ public class IfThenElseStmntNoShortIf extends StatementBase implements Statement
     }
 
     @Override
+    public String stringRepr() {
+        return "if (" + cond.stringRepr() + ") " + trueStmnt.stringRepr() + "\nelse " + falseStmnt.stringRepr();
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)

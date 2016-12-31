@@ -32,6 +32,16 @@ public class ForInit {
         }
     }
 
+    public String stringRepr() {
+        if (lvd == null) {
+            String result = "";
+            for (StatementExpr se : stmnts)
+                result += se.stringRepr() + ", ";
+            return result.substring(0, result.length() - 2);
+        } else
+            return lvd.stringRepr();
+    }
+
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         if (lvd == null) {
             for (StatementExpr se : stmnts) {

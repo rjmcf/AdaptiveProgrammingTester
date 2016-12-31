@@ -24,6 +24,11 @@ public class WhileStmntNoShortIf extends StatementBase implements StatementNoSho
     }
 
     @Override
+    public String stringRepr() {
+        return "while (" + cond.stringRepr() + ") " + stmnt.stringRepr();
+    }
+
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         ReturnValues rC = cond.evaluate(c);
         if (rC.getType().uType != UnannType.BOOLEAN)
