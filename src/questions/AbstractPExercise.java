@@ -4,7 +4,7 @@ import miniJAST.NodeCount;
 import miniJAST.statements.Statement;
 
 public abstract class AbstractPExercise {
-    private String question;
+    public String question;
     protected Statement solution;
     private float baseDifficulty;
     public abstract void setUp();
@@ -17,5 +17,11 @@ public abstract class AbstractPExercise {
         NodeCount count = solution.getTreeSize();
         float percentageEmpty = count.empty / (count.filled + count.empty);
         return baseDifficulty + percentageEmpty;
+    }
+
+    public void deliverQuestion() {
+        System.out.println(question);
+        System.out.println();
+        System.out.println(solution.stringRepr());
     }
 }
