@@ -1,6 +1,7 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.arithExpr.UnaryExpr;
@@ -16,9 +17,10 @@ public class UnaryComplementExpr extends UnaryExpr {
     public void setUpCompExpr(UnaryExpr e) { expr = e; }
 
     @Override
-    public int getSubNodes() {
-        int e = expr.getSubNodes();
-        return e + 1;
+    public NodeCount getTreeSize() {
+        NodeCount result = expr.getTreeSize();
+        result.filled++;
+        return result;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -16,11 +17,11 @@ public class CondExpr extends Expression {
     public void setUpCondExpr(OrExpr c, Expression t, CondExpr f) { cond = c; trueExpr = t; falseExpr = f; }
 
     @Override
-    public int getSubNodes() {
-        int c = cond.getSubNodes();
-        int t = trueExpr.getSubNodes();
-        int f = falseExpr.getSubNodes();
-        return c + t + f + 3;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount(cond.getTreeSize().filled + trueExpr.getTreeSize().filled + falseExpr.getTreeSize().filled,
+                cond.getTreeSize().empty + trueExpr.getTreeSize().empty + falseExpr.getTreeSize().empty);
+        result.filled++;
+        return result;
     }
 
     @Override

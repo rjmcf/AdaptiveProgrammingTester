@@ -1,6 +1,7 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.arithExpr.AddExpr;
@@ -15,10 +16,11 @@ public class RelationExpr extends EqExpr {
     public void setUpRelationExpr(RelationOp o, RelationExpr l, AddExpr r) { op = o; leftSide = l; rightSide = r; }
 
     @Override
-    public int getSubNodes() {
-        int l = leftSide.getSubNodes();
-        int r = rightSide.getSubNodes();
-        return l + r + 2;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount(leftSide.getTreeSize().filled + rightSide.getTreeSize().filled,
+                leftSide.getTreeSize().empty + rightSide.getTreeSize().empty);
+        result.filled++;
+        return result;
     }
 
     @Override
