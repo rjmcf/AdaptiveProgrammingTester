@@ -1,6 +1,7 @@
 package miniJAST.expressions.arrays;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.OutOfBoundsException;
 import miniJAST.exceptions.TypeException;
@@ -18,10 +19,11 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
     public void setUpArrayAccess(Id i, Expression e) { id = i; index = e; }
 
     @Override
-    public int getSubNodes() {
-        int i = id.getSubNodes();
-        int in = index.getSubNodes();
-        return i + in + 2;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount(id.getTreeSize().filled + index.getTreeSize().filled,
+                id.getTreeSize().empty + index.getTreeSize().empty);
+        result.filled++;
+        return result;
     }
 
     public ReturnValues evaluate(Context c) throws MiniJASTException {

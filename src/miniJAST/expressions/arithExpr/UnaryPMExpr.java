@@ -1,6 +1,7 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.ReturnValues;
@@ -15,9 +16,10 @@ public class UnaryPMExpr extends UnaryExpr {
     public void setUpPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; }
 
     @Override
-    public int getSubNodes() {
-        int e = expr.getSubNodes();
-        return e + 1;
+    public NodeCount getTreeSize() {
+        NodeCount result = expr.getTreeSize();
+        result.filled++;
+        return result;
     }
 
     @Override
