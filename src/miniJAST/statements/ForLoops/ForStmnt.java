@@ -1,10 +1,10 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.FlowControl;
@@ -27,14 +27,15 @@ public class ForStmnt extends StatementBase implements Statement {
     public void setBody(Statement s) { stmnt = s; }
 
     @Override
-    public int getSubNodes() {
-        int in = init.getSubNodes();
-        int c = cond.getSubNodes();
-        int uSum = 0;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
+        result.add(init.getTreeSize());
+        result.add(cond.getTreeSize());
+        result.add(stmnt.getTreeSize());
         for (StatementExpr sE : updates)
-            uSum += sE.getSubNodes();
-        int s = stmnt.getSubNodes();
-        return in + c + uSum + s + 3 + updates.size();
+            result.add(sE.getTreeSize());
+        result.filled++;
+        return result;
     }
 
     @Override

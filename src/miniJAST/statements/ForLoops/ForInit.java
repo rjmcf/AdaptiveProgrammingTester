@@ -1,6 +1,7 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.statements.FlowControl;
@@ -17,14 +18,17 @@ public class ForInit {
     public void addLocalVarDec(LocalVarDec lv) { lvd = lv; }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
 
-    public int getSubNodes() {
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
         if (lvd == null) {
-            int sum = 0;
             for (StatementExpr sE : stmnts)
-                sum += sE.getSubNodes();
-            return sum + stmnts.size();
+                result.add(sE.getTreeSize());
+            result.filled++;
+            return result;
         } else {
-            return lvd.getSubNodes() + 1;
+            result.add(lvd.getTreeSize());
+            result.filled++;
+            return result;
         }
     }
 
