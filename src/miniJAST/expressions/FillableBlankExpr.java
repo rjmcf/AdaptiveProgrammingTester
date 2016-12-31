@@ -1,17 +1,18 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
 public class FillableBlankExpr extends PrimaryExpr {
-    int subNodes;
+    int nodesReplaced;
     Expression studentexpr;
 
     @Override
-    public int getSubNodes() {
-        return subNodes;
+    public NodeCount getTreeSize() {
+        return new NodeCount(0, nodesReplaced);
     }
 
     @Override

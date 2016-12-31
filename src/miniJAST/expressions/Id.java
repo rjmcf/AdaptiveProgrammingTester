@@ -1,6 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableDecException;
@@ -19,8 +20,8 @@ public class Id extends GroundExpr implements AssignLHS{
     public void setUpId(Type vT, String n) { varType = vT; name = n; }
 
     @Override
-    public int getSubNodes() {
-        return 0;
+    public NodeCount getTreeSize() {
+        return new NodeCount(1,0);
     }
 
     @Override

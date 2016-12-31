@@ -1,6 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
@@ -12,8 +13,8 @@ public class Literal extends PrimaryExpr{
     public void setUpLiteral(UnannType lT, String v) { litType = lT; value = v; }
 
     @Override
-    public int getSubNodes() {
-        return 0;
+    public NodeCount getTreeSize() {
+        return new NodeCount(1,0);
     }
 
     @Override

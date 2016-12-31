@@ -1,6 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
@@ -10,9 +11,10 @@ public class BracketedExpr extends PrimaryExpr {
     public void setUpBracketExpr(Expression e) { expr = e; }
 
     @Override
-    public int getSubNodes() {
-        int e = expr.getSubNodes();
-        return e + 1;
+    public NodeCount getTreeSize() {
+        NodeCount result = expr.getTreeSize();
+        result.filled++;
+        return result;
     }
 
     @Override
