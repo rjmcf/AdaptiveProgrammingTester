@@ -1,6 +1,7 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableNotInitException;
@@ -19,9 +20,10 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
     public void setUpPostIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; }
 
     @Override
-    public int getSubNodes() {
-        int e = expr.getSubNodes();
-        return e + 1;
+    public NodeCount getTreeSize() {
+        NodeCount result = expr.getTreeSize();
+        result.filled++;
+        return result;
     }
 
     @Override

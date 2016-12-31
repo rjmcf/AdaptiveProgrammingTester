@@ -1,6 +1,7 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
@@ -23,10 +24,11 @@ public class AssignExpr extends Expression implements StatementExpr {
     public void setUpAssignExpr(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e; }
 
     @Override
-    public int getSubNodes() {
-        int l = lhs.getSubNodes();
-        int e = expr.getSubNodes();
-        return l + e + 2;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount(lhs.getTreeSize().filled + expr.getTreeSize().filled,
+                lhs.getTreeSize().empty + expr.getTreeSize().empty);
+        result.filled++;
+        return result;
     }
 
     @Override
