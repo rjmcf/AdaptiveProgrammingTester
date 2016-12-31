@@ -7,5 +7,5 @@ import miniJAST.expressions.returnValues.ReturnValues;
 
 public abstract class Expression {
     public abstract ReturnValues evaluate(Context c) throws MiniJASTException;
-    public abstract NodeCount getTreeSize();
+    public NodeCount getTreeSize() { return new NodeCount(1,0); };
 }
