@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
@@ -11,8 +12,10 @@ public class PrintStatement implements BlockStatement {
     public void setUpPrint(Expression e) { expr = e; }
 
     @Override
-    public int getSubNodes() {
-        return expr.getSubNodes() + 1;
+    public NodeCount getTreeSize() {
+        NodeCount result = expr.getTreeSize();
+        result.filled++;
+        return result;
     }
 
     @Override

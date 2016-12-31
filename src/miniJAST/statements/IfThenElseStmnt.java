@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -16,8 +17,12 @@ public class IfThenElseStmnt extends StatementBase implements Statement{
     public void setUpITE(Expression c, StatementNoShortIf t, Statement f) { cond = c; trueStmnt = t; falseStmnt = f; }
 
     @Override
-    public int getSubNodes() {
-        return cond.getSubNodes() + trueStmnt.getSubNodes() + falseStmnt.getSubNodes() + 3;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount(cond.getTreeSize().filled, cond.getTreeSize().empty);
+        result.add(trueStmnt.getTreeSize());
+        result.add(falseStmnt.getTreeSize());
+        result.filled++;
+        return result;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package miniJAST.statements;
 
+import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
 
 public class VarDeclarator {
@@ -9,8 +10,10 @@ public class VarDeclarator {
 
     public void setUpVarDec(String n, Expression e) { name = n; expr = e; }
 
-    public int getSubNodes() {
-        return expr.getSubNodes() + 1;
+    public NodeCount getTreeSize() {
+        NodeCount result = expr.getTreeSize();
+        result.filled++;
+        return result;
     }
 
     public String getName() { return name; }

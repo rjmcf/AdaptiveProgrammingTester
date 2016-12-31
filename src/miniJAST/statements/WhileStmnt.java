@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -15,8 +16,11 @@ public class WhileStmnt extends StatementBase implements Statement {
     public void setUpWhile(Expression c, Statement s) { cond = c; stmnt = s; }
 
     @Override
-    public int getSubNodes() {
-        return cond.getSubNodes() + stmnt.getSubNodes() + 2;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount(cond.getTreeSize().filled, cond.getTreeSize().empty);
+        result.add(stmnt.getTreeSize());
+        result.filled++;
+        return result;
     }
 
     @Override

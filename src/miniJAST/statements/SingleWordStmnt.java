@@ -1,12 +1,13 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 
 public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     EMPTY {
         @Override
-        public int getSubNodes() { return 0; }
+        public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
         public FlowControl execute(Context c, int d) {
@@ -18,7 +19,7 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     },
     BREAK {
         @Override
-        public int getSubNodes() { return 0; }
+        public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
         public FlowControl execute(Context c, int d) {
@@ -30,7 +31,7 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     },
     CONTINUE {
         @Override
-        public int getSubNodes() { return 0; }
+        public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
         public FlowControl execute(Context c, int d) {
@@ -42,7 +43,7 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     },
     RETURN {
         @Override
-        public int getSubNodes() { return 0; }
+        public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
         public FlowControl execute(Context c, int d) {

@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
@@ -13,11 +14,12 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     public void addBlockStmnt(BlockStatement b) { stmnts.add(b); }
 
     @Override
-    public int getSubNodes() {
-        int sum = 0;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
         for (BlockStatement s : stmnts)
-            sum += s.getSubNodes();
-        return sum + stmnts.size();
+            result.add(s.getTreeSize());
+        result.filled++;
+        return result;
     }
 
     @Override

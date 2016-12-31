@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.*;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
@@ -22,11 +23,12 @@ public class LocalVarDec implements BlockStatement {
     public void addVarDec(VarDeclarator v) { vars.add(v); }
 
     @Override
-    public int getSubNodes() {
-        int sum = 0;
-        for (VarDeclarator vD : vars)
-            sum += vD.getSubNodes();
-        return sum + vars.size();
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
+        for (VarDeclarator v : vars)
+            result.add(v.getTreeSize());
+        result.filled++;
+        return result;
     }
 
     @Override
