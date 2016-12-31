@@ -29,7 +29,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
 
     @Override
     public String stringRepr() {
-        return (isPlus ? " ++" : " --") + expr.stringRepr();
+        return (isPlus ? "++" : "--") + expr.stringRepr();
     }
 
     @Override

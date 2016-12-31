@@ -28,7 +28,7 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
 
     @Override
     public String stringRepr() {
-        return expr.stringRepr() + (isPlus ? "++ " : "-- ");
+        return expr.stringRepr() + (isPlus ? "++" : "--");
     }
 
     @Override

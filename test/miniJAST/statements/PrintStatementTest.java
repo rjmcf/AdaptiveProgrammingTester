@@ -30,11 +30,21 @@ public class PrintStatementTest {
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesBool(true);
             }
+
+            @Override
+            public String stringRepr() {
+                return "true";
+            }
         };
         intAAExpr = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesIntAA("fakeArray", 2, 42);
+            }
+
+            @Override
+            public String stringRepr() {
+                return "fakeArray[2]";
             }
         };
         arrayExpr = new Expression() {
@@ -47,6 +57,11 @@ public class PrintStatementTest {
                 string.add('n');
                 string.add('t');
                 return new ReturnValuesArray<Character>(new Type(UnannType.CHAR,5), string);
+            }
+
+            @Override
+            public String stringRepr() {
+                return "['P', 'r', 'i', 'n', 't']";
             }
         };
         c = new Context();

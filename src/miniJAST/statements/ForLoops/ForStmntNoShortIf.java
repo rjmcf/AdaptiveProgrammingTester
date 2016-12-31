@@ -40,7 +40,8 @@ public class ForStmntNoShortIf extends StatementBase implements StatementNoShort
 
     @Override
     public String stringRepr() {
-        String result = "for (" + init.stringRepr() + "; " + cond.stringRepr() + "; ";
+        String result = "for (" + (init == null ? "" : init.stringRepr()) + "; " +
+                (cond == null ? "" : cond.stringRepr()) + "; ";
         for (StatementExpr u : updates)
             result += u.stringRepr() + ", ";
         String result1 = result.substring(0, result.length() - 2);
