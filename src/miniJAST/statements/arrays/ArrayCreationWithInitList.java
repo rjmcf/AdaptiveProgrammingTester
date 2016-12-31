@@ -1,5 +1,6 @@
 package miniJAST.statements.arrays;
 
+import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
 import miniJAST.statements.arrays.ArrayCreation;
 
@@ -11,12 +12,12 @@ public class ArrayCreationWithInitList extends ArrayCreation {
     public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>(); }
 
     @Override
-    public int getSubNodes() {
-        int sum = 0;
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
         for (Expression e : values)
-            sum += e.getSubNodes();
-
-        return sum + values.size();
+            result.add(e.getTreeSize());
+        result.filled++;
+        return result;
     }
 
     public void setUPACWIL(String n) { name = n; }

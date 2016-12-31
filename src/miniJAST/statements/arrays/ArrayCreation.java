@@ -1,5 +1,6 @@
 package miniJAST.statements.arrays;
 
+import miniJAST.NodeCount;
 import miniJAST.statements.VarDeclarator;
 
 public abstract class ArrayCreation extends VarDeclarator{
@@ -7,5 +8,4 @@ public abstract class ArrayCreation extends VarDeclarator{
 
     public ArrayCreation() { isArray = true; }
     public boolean getHasInitList() { return hasInitList; }
-    public abstract int getSubNodes();
 }
