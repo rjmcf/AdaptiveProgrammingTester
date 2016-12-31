@@ -28,6 +28,11 @@ public class MultExpr extends AddExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return leftSide.stringRepr() + (isTimes ? " * " : " / ") + rightSide.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);

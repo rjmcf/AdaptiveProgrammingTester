@@ -16,6 +16,11 @@ public class FillableBlankExpr extends PrimaryExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return " ... ";
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (studentexpr == null)
             throw new BlankEmptyException();

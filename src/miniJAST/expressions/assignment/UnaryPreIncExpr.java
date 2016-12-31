@@ -28,6 +28,11 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return (isPlus ? " ++" : " --") + expr.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;

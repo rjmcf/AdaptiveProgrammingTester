@@ -23,6 +23,11 @@ public class AndExpr extends OrExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return leftSide.stringRepr() + " && " + rightSide.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues l = leftSide.evaluate(c);
 

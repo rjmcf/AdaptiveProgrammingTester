@@ -27,6 +27,11 @@ public class AddExpr extends RelationExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return leftSide.stringRepr() + (isPlus ? " + " : " - ") + rightSide.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);

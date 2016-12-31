@@ -18,6 +18,11 @@ public class BracketedExpr extends PrimaryExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return " (" + expr.stringRepr() + ") ";
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         return expr.evaluate(c);
     }

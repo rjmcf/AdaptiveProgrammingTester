@@ -32,6 +32,28 @@ public class AssignExpr extends Expression implements StatementExpr {
     }
 
     @Override
+    public String stringRepr() {
+        String opS;
+        switch (op) {
+            case EQ:
+                opS = " = ";
+                break;
+            case PLUSEQ:
+                opS = " += ";
+                break;
+            case SUBEQ:
+                opS = " -= ";
+                break;
+            case TIMESEQ:
+                opS = " *= ";
+                break;
+            default: // DivEq
+                opS = " /= ";
+        }
+        return lhs.stringRepr() + opS + expr.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;

@@ -18,6 +18,11 @@ public class Literal extends PrimaryExpr{
     }
 
     @Override
+    public String stringRepr() {
+        return value;
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws TypeException {
         switch(litType) {
             case BOOLEAN:

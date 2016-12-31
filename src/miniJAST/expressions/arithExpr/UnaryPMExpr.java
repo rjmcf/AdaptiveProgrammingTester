@@ -23,6 +23,11 @@ public class UnaryPMExpr extends UnaryExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return (isPlus ? " +" : " -") + expr.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues e = expr.evaluate(c);
 

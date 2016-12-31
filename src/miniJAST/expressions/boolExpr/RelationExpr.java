@@ -24,6 +24,25 @@ public class RelationExpr extends EqExpr {
     }
 
     @Override
+    public String stringRepr() {
+        String opS;
+        switch (op) {
+            case GT:
+                opS = " > ";
+                break;
+            case LT:
+                opS = " < ";
+                break;
+            case GTE:
+                opS = " >= ";
+                break;
+            default: // LTE
+                opS = " <= ";
+        }
+        return leftSide.stringRepr() + opS + rightSide.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValuesBool result;
 

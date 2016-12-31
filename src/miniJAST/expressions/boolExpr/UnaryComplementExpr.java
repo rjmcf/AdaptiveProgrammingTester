@@ -24,6 +24,11 @@ public class UnaryComplementExpr extends UnaryExpr {
     }
 
     @Override
+    public String stringRepr() {
+        return " !" + expr.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues e = expr.evaluate(c);
 

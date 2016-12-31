@@ -26,6 +26,11 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
         return result;
     }
 
+    @Override
+    public String stringRepr() {
+        return id.getName() + "[" + index.stringRepr() + "]";
+    }
+
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues r = id.evaluate(c);
 

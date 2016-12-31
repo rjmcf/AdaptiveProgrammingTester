@@ -24,6 +24,11 @@ public class EqExpr extends AndExpr {
         return result;
     }
 
+    @Override
+    public String stringRepr() {
+        return leftSide.stringRepr() + (isEqualityTest ? " == " : " != ") + rightSide.stringRepr();
+    }
+
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {

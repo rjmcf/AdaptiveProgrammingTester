@@ -25,6 +25,11 @@ public class CondExpr extends Expression {
     }
 
     @Override
+    public String stringRepr() {
+        return cond.stringRepr() + " ? " + trueExpr.stringRepr() + " : " + falseExpr.stringRepr();
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         ReturnValues condV = cond.evaluate(c);
         if (condV.getType().uType != UnannType.BOOLEAN)

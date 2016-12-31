@@ -27,6 +27,11 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
     }
 
     @Override
+    public String stringRepr() {
+        return expr.stringRepr() + (isPlus ? "++ " : "-- ");
+    }
+
+    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;

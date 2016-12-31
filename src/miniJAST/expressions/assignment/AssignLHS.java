@@ -4,4 +4,5 @@ import miniJAST.NodeCount;
 
 public interface AssignLHS {
     NodeCount getTreeSize();
+    String stringRepr();
 }
