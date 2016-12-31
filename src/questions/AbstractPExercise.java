@@ -1,5 +1,6 @@
 package questions;
 
+import miniJAST.NodeCount;
 import miniJAST.statements.Statement;
 
 public abstract class AbstractPExercise {
@@ -11,4 +12,10 @@ public abstract class AbstractPExercise {
     public abstract boolean checkSolved();
 
     public AbstractPExercise(String q, float diff) { question = q; baseDifficulty = diff; }
+
+    public float getQuestionDifficulty() {
+        NodeCount count = solution.getTreeSize();
+        float percentageEmpty = count.empty / (count.filled + count.empty);
+        return baseDifficulty + percentageEmpty;
+    }
 }
