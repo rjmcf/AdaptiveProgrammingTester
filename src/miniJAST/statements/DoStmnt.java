@@ -16,14 +16,6 @@ public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
     public void setUpDo(Statement s, Expression c) { stmnt = s; cond = c; subNodes.add(s); subNodes.add(c); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(stmnt.getTreeSize().filled, stmnt.getTreeSize().empty);
-        result.add(cond.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "do \n" + stmnt.stringRepr(blocksDeep+1) + " while (" + cond.stringRepr() + ")";
     }

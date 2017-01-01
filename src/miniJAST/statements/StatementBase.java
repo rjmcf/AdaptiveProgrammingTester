@@ -2,6 +2,8 @@ package miniJAST.statements;
 
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
+import miniJAST.NodeCount;
+import miniJAST.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +25,16 @@ public abstract class StatementBase {
                 nTDs.remove();
             }
         }
+    }
+
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
+        for (MiniJASTNode e : subNodes) {
+            result.filled += e.getTreeSize().filled;
+            result.empty += e.getTreeSize().empty;
+        }
+        result.filled++;
+        return result;
     }
 
     protected String pad(int count) {

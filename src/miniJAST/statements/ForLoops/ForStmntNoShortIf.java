@@ -27,18 +27,6 @@ public class ForStmntNoShortIf extends StatementBase implements StatementNoShort
     public void setBody(StatementNoShortIf s) { stmnt = s; subNodes.add(s); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount();
-        result.add(init.getTreeSize());
-        result.add(cond.getTreeSize());
-        result.add(stmnt.getTreeSize());
-        for (StatementExpr sE : updates)
-            result.add(sE.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) + "for (" + (init == null ? "" : init.stringRepr()) + "; " +
                 (cond == null ? "" : cond.stringRepr()) + "; ";

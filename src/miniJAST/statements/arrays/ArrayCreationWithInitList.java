@@ -13,15 +13,6 @@ public class ArrayCreationWithInitList extends ArrayCreation {
     public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>();}
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount();
-        for (Expression e : values)
-            result.add(e.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(UnannType t) {
         String result = name + "[] = { ";
         for (Expression v : values)

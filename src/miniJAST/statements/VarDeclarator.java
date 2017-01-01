@@ -12,12 +12,6 @@ public class VarDeclarator extends StatementBase implements MiniJASTNode{
 
     public void setUpVarDec(String n, Expression e) { name = n; expr = e; subNodes.add(e); }
 
-    public NodeCount getTreeSize() {
-        NodeCount result = expr.getTreeSize();
-        result.filled++;
-        return result;
-    }
-
     public String getName() { return name; }
     public Expression getExpr() { return expr; }
     public String stringRepr(UnannType t) { return name + (expr == null ? "" : (" = " + expr.stringRepr())); }

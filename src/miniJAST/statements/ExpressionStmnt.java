@@ -24,13 +24,6 @@ public class ExpressionStmnt extends StatementBase implements StmntNoTrailSubstm
     }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount count = expr.getTreeSize();
-        count.filled++;
-        return count;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) +  expr.stringRepr() + ";";
         return result;

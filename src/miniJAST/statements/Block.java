@@ -14,15 +14,6 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     public void addBlockStmnt(BlockStatement b) { stmnts.add(b); subNodes.add(b); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount();
-        for (BlockStatement s : stmnts)
-            result.add(s.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep-1) + "{ \n";
         for (BlockStatement s : stmnts)

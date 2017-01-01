@@ -19,15 +19,6 @@ public class IfThenElseStmnt extends StatementBase implements Statement{
     }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(cond.getTreeSize().filled, cond.getTreeSize().empty);
-        result.add(trueStmnt.getTreeSize());
-        result.add(falseStmnt.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + trueStmnt.stringRepr(blocksDeep+1) + "\n" + pad(blocksDeep) + "else\n" + falseStmnt.stringRepr(blocksDeep+1);
     }

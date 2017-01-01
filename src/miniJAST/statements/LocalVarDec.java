@@ -23,15 +23,6 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
     public void addVarDec(VarDeclarator v) { vars.add(v); subNodes.add(v); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount();
-        for (VarDeclarator v : vars)
-            result.add(v.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) +  type.name + " ";
         for (VarDeclarator v : vars)

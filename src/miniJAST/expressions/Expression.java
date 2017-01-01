@@ -8,6 +8,5 @@ import miniJAST.expressions.returnValues.ReturnValues;
 
 public interface Expression extends MiniJASTNode {
     ReturnValues evaluate(Context c) throws MiniJASTException;
-    NodeCount getTreeSize();
     String stringRepr();
 }

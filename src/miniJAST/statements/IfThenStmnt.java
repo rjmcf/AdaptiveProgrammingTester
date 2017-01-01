@@ -16,14 +16,6 @@ public class IfThenStmnt extends StatementBase implements Statement {
     public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; subNodes.add(c); subNodes.add(t); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(cond.getTreeSize().filled, cond.getTreeSize().empty);
-        result.add(stmnt.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep+1);
     }

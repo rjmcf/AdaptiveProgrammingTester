@@ -20,20 +20,6 @@ public class ForInit extends StatementBase implements MiniJASTNode{
     public void addLocalVarDec(LocalVarDec lv) { lvd = lv; subNodes.add(lv); }
     public void addStmntExpr(StatementExpr se) { stmnts.add(se); subNodes.add(se); }
 
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount();
-        if (lvd == null) {
-            for (StatementExpr sE : stmnts)
-                result.add(sE.getTreeSize());
-            result.filled++;
-            return result;
-        } else {
-            result.add(lvd.getTreeSize());
-            result.filled++;
-            return result;
-        }
-    }
-
     public String stringRepr() {
         if (lvd == null) {
             String result = "";

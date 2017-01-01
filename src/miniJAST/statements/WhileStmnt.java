@@ -16,14 +16,6 @@ public class WhileStmnt extends StatementBase implements Statement {
     public void setUpWhile(Expression c, Statement s) { cond = c; stmnt = s; subNodes.add(c); subNodes.add(s); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(cond.getTreeSize().filled, cond.getTreeSize().empty);
-        result.add(stmnt.getTreeSize());
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "while (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep + 1);
     }

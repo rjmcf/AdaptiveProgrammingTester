@@ -12,13 +12,6 @@ public class PrintStatement extends StatementBase implements BlockStatement {
     public void setUpPrint(Expression e) { expr = e; subNodes.add(e); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = expr.getTreeSize();
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "System.out.printLn(" + expr.stringRepr() + ");";
     }
