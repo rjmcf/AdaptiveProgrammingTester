@@ -20,11 +20,6 @@ public class Id extends GroundExpr implements AssignLHS{
     public void setUpId(Type vT, String n) { varType = vT; name = n; }
 
     @Override
-    public NodeCount getTreeSize() {
-        return new NodeCount(1,0);
-    }
-
-    @Override
     public String stringRepr() {
         return name;
     }

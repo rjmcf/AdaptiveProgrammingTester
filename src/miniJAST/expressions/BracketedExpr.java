@@ -11,13 +11,6 @@ public class BracketedExpr extends PrimaryExpr {
     public void setUpBracketExpr(Expression e) { expr = e; subNodes.add(expr); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = expr.getTreeSize();
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return " (" + expr.stringRepr() + ") ";
     }

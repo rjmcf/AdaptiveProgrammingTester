@@ -21,13 +21,6 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     public void setUpPreIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = expr.getTreeSize();
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return (isPlus ? "++" : "--") + expr.stringRepr();
     }

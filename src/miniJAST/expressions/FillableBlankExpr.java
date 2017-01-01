@@ -12,7 +12,11 @@ public class FillableBlankExpr extends PrimaryExpr {
 
     @Override
     public NodeCount getTreeSize() {
-        return new NodeCount(0, nodesReplaced);
+
+        if (studentexpr == null)
+            return new NodeCount(0, nodesReplaced);
+        else
+            return studentexpr.getTreeSize();
     }
 
     @Override

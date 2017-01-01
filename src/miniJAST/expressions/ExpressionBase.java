@@ -13,7 +13,15 @@ public abstract class ExpressionBase implements Expression {
     @Override
     public abstract ReturnValues evaluate(Context c) throws MiniJASTException;
     @Override
-    public NodeCount getTreeSize() { return new NodeCount(1,0); }
+    public NodeCount getTreeSize() {
+        NodeCount result = new NodeCount();
+        for (Expression e : subNodes) {
+            result.filled += e.getTreeSize().filled;
+            result.empty += e.getTreeSize().empty;
+        }
+        result.filled++;
+        return result;
+    }
     @Override
     public abstract String stringRepr();
 }

@@ -26,14 +26,6 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
         subNodes.add(lhs); subNodes.add(expr);}
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(lhs.getTreeSize().filled + expr.getTreeSize().filled,
-                lhs.getTreeSize().empty + expr.getTreeSize().empty);
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         String opS;
         switch (op) {

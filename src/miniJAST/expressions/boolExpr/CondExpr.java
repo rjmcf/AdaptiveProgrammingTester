@@ -19,14 +19,6 @@ public class CondExpr extends ExpressionBase {
         subNodes.add(cond); subNodes.add(trueExpr); subNodes.add(falseExpr); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(cond.getTreeSize().filled + trueExpr.getTreeSize().filled + falseExpr.getTreeSize().filled,
-                cond.getTreeSize().empty + trueExpr.getTreeSize().empty + falseExpr.getTreeSize().empty);
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return cond.stringRepr() + " ? " + trueExpr.stringRepr() + " : " + falseExpr.stringRepr();
     }

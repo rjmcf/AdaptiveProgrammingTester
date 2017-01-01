@@ -16,13 +16,6 @@ public class UnaryPMExpr extends UnaryExpr {
     public void setUpPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = expr.getTreeSize();
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return (isPlus ? " +" : " -") + expr.stringRepr();
     }

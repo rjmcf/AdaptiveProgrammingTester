@@ -21,14 +21,6 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
         subNodes.add(id); subNodes.add(index); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(id.getTreeSize().filled + index.getTreeSize().filled,
-                id.getTreeSize().empty + index.getTreeSize().empty);
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return id.getName() + "[" + index.stringRepr() + "]";
     }

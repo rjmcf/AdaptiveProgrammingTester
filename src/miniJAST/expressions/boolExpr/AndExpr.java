@@ -16,14 +16,6 @@ public class AndExpr extends OrExpr {
         subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount(leftSide.getTreeSize().filled + rightSide.getTreeSize().filled,
-                leftSide.getTreeSize().empty + rightSide.getTreeSize().empty);
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return leftSide.stringRepr() + " && " + rightSide.stringRepr();
     }

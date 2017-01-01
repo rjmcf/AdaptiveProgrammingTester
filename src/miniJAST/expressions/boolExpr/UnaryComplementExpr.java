@@ -17,13 +17,6 @@ public class UnaryComplementExpr extends UnaryExpr {
     public void setUpCompExpr(UnaryExpr e) { expr = e; subNodes.add(expr); }
 
     @Override
-    public NodeCount getTreeSize() {
-        NodeCount result = expr.getTreeSize();
-        result.filled++;
-        return result;
-    }
-
-    @Override
     public String stringRepr() {
         return " !" + expr.stringRepr();
     }

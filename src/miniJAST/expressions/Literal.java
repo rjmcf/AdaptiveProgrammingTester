@@ -13,11 +13,6 @@ public class Literal extends PrimaryExpr{
     public void setUpLiteral(UnannType lT, String v) { litType = lT; value = v; }
 
     @Override
-    public NodeCount getTreeSize() {
-        return new NodeCount(1,0);
-    }
-
-    @Override
     public String stringRepr() {
         return value;
     }
