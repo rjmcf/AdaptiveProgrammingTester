@@ -121,7 +121,6 @@ public class ForStmntTest {
         block1.executeStart(c);
         assertEquals(120, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
-
         /* Code is:
         int j = 0;
         for (; ; j++) {

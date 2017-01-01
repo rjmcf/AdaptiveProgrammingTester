@@ -13,7 +13,7 @@ import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
-public class LocalVarDec implements BlockStatement {
+public class LocalVarDec extends StatementBase implements BlockStatement {
     protected UnannType type;
     private ArrayList<VarDeclarator> vars;
 
@@ -32,8 +32,8 @@ public class LocalVarDec implements BlockStatement {
     }
 
     @Override
-    public String stringRepr() {
-        String result = type.name + " ";
+    public String stringRepr(int blocksDeep) {
+        String result = pad(blocksDeep) +  type.name + " ";
         for (VarDeclarator v : vars)
             result += v.stringRepr(type) + ", ";
         String result1 = result.substring(0, result.length()-2);

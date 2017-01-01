@@ -24,8 +24,8 @@ public class IfThenStmnt extends StatementBase implements Statement {
     }
 
     @Override
-    public String stringRepr() {
-        return "if (" + cond.stringRepr() + ") " + stmnt.stringRepr();
+    public String stringRepr(int blocksDeep) {
+        return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep+1);
     }
 
     @Override

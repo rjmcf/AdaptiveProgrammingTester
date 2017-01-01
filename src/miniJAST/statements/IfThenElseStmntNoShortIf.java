@@ -27,8 +27,8 @@ public class IfThenElseStmntNoShortIf extends StatementBase implements Statement
     }
 
     @Override
-    public String stringRepr() {
-        return "if (" + cond.stringRepr() + ") " + trueStmnt.stringRepr() + "\nelse " + falseStmnt.stringRepr();
+    public String stringRepr(int blocksDeep) {
+        return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + trueStmnt.stringRepr(blocksDeep+1) + "\n" + pad(blocksDeep) + "else\n" + falseStmnt.stringRepr(blocksDeep+1);
     }
 
     @Override

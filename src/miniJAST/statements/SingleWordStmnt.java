@@ -10,7 +10,11 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
-        public String stringRepr() { return ";"; }
+        public String stringRepr(int blocksDeep) { return pad(blocksDeep) + ";"; }
+
+        protected String pad(int count) {
+            return new String(new char[count]).replace("\0", "    ");
+        }
 
         @Override
         public FlowControl execute(Context c, int d) {
@@ -25,7 +29,11 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
-        public String stringRepr() { return "break;"; }
+        public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "break;"; }
+
+        protected String pad(int count) {
+            return new String(new char[count]).replace("\0", "    ");
+        }
 
         @Override
         public FlowControl execute(Context c, int d) {
@@ -40,7 +48,11 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
-        public String stringRepr() { return "continue;"; }
+        public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "continue;"; }
+
+        protected String pad(int count) {
+            return new String(new char[count]).replace("\0", "    ");
+        }
 
         @Override
         public FlowControl execute(Context c, int d) {
@@ -55,7 +67,11 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
-        public String stringRepr() { return "return;"; }
+        public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "return;"; }
+
+        protected String pad(int count) {
+            return new String(new char[count]).replace("\0", "    ");
+        }
 
         @Override
         public FlowControl execute(Context c, int d) {

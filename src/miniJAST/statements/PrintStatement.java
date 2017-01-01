@@ -6,7 +6,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 
-public class PrintStatement implements BlockStatement {
+public class PrintStatement extends StatementBase implements BlockStatement {
     Expression expr;
 
     public void setUpPrint(Expression e) { expr = e; }
@@ -19,8 +19,8 @@ public class PrintStatement implements BlockStatement {
     }
 
     @Override
-    public String stringRepr() {
-        return "System.out.printLn(" + expr.stringRepr() + ");";
+    public String stringRepr(int blocksDeep) {
+        return pad(blocksDeep) + "System.out.printLn(" + expr.stringRepr() + ");";
     }
 
     @Override

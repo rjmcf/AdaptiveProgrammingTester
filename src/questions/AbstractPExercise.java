@@ -22,6 +22,6 @@ public abstract class AbstractPExercise {
     public void deliverQuestion() {
         System.out.println(question);
         System.out.println();
-        System.out.println(solution.stringRepr());
+        System.out.println(solution.stringRepr(0));
     }
 }

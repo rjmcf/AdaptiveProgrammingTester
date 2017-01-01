@@ -24,8 +24,8 @@ public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
     }
 
     @Override
-    public String stringRepr() {
-        return "do " + stmnt.stringRepr() + " while (" + cond.stringRepr() + ")";
+    public String stringRepr(int blocksDeep) {
+        return pad(blocksDeep) + "do \n" + stmnt.stringRepr(blocksDeep+1) + " while (" + cond.stringRepr() + ")";
     }
 
     @Override

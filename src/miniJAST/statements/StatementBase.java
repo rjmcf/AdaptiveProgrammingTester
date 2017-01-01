@@ -21,4 +21,8 @@ public abstract class StatementBase {
             }
         }
     }
+
+    protected String pad(int count) {
+        return new String(new char[count]).replace("\0", "    ");
+    }
 }

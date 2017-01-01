@@ -24,8 +24,8 @@ public class WhileStmnt extends StatementBase implements Statement {
     }
 
     @Override
-    public String stringRepr() {
-        return "while (" + cond.stringRepr() + ") " + stmnt.stringRepr();
+    public String stringRepr(int blocksDeep) {
+        return pad(blocksDeep) + "while (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep + 1);
     }
 
     @Override

@@ -40,13 +40,13 @@ public class ForStmnt extends StatementBase implements Statement {
     }
 
     @Override
-    public String stringRepr() {
-        String result = "for (" + (init == null ? "" : init.stringRepr()) + "; " +
+    public String stringRepr(int blocksDeep) {
+        String result = pad(blocksDeep) + "for (" + (init == null ? "" : init.stringRepr()) + "; " +
                 (cond == null ? "" : cond.stringRepr()) + "; ";
         for (StatementExpr u : updates)
             result += u.stringRepr() + ", ";
         String result1 = result.substring(0, result.length() - 2);
-        result1 += ") " + stmnt.stringRepr();
+        result1 += ") \n" + stmnt.stringRepr(blocksDeep + 1);
         return result1;
     }
 

@@ -26,8 +26,9 @@ public class ArrayCreationWithInitList extends ArrayCreation {
         String result = name + "[] = { ";
         for (Expression v : values)
             result += v.stringRepr() + ", ";
-        result += " }";
-        return result;
+        String result1 = result.substring(0, result.length()-2);
+        result1 += " }";
+        return result1;
     }
 
     public void setUPACWIL(String n) { name = n; }

@@ -6,7 +6,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 
-public class ExpressionStmnt implements StmntNoTrailSubstmnt {
+public class ExpressionStmnt extends StatementBase implements StmntNoTrailSubstmnt {
     private StatementExpr expr;
 
     public ExpressionStmnt(StatementExpr sE) { expr = sE; }
@@ -31,7 +31,8 @@ public class ExpressionStmnt implements StmntNoTrailSubstmnt {
     }
 
     @Override
-    public String stringRepr() {
-        return expr.stringRepr() + ";";
+    public String stringRepr(int blocksDeep) {
+        String result = pad(blocksDeep) +  expr.stringRepr() + ";";
+        return result;
     }
 }

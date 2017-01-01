@@ -23,11 +23,11 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     }
 
     @Override
-    public String stringRepr() {
-        String result = "{ \n";
+    public String stringRepr(int blocksDeep) {
+        String result = pad(blocksDeep-1) + "{ \n";
         for (BlockStatement s : stmnts)
-            result += "    " + s.stringRepr() + "\n";
-        result += "}";
+            result += s.stringRepr(blocksDeep) + "\n";
+        result += pad(blocksDeep-1) + "}";
         return result;
     }
 
