@@ -8,7 +8,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 public class BracketedExpr extends PrimaryExpr {
     private Expression expr;
 
-    public void setUpBracketExpr(Expression e) { expr = e; }
+    public void setUpBracketExpr(Expression e) { expr = e; subNodes.add(expr); }
 
     @Override
     public NodeCount getTreeSize() {

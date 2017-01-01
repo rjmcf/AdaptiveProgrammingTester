@@ -12,7 +12,8 @@ public class AndExpr extends OrExpr {
     private AndExpr leftSide; // Left associative
     private EqExpr rightSide;
 
-    public void setUpAndExpr(AndExpr l, EqExpr r) { leftSide = l; rightSide = r; }
+    public void setUpAndExpr(AndExpr l, EqExpr r) { leftSide = l; rightSide = r;
+        subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
     public NodeCount getTreeSize() {

@@ -13,7 +13,7 @@ public class IfThenStmnt extends StatementBase implements Statement {
     private Expression cond;
     private Statement stmnt;
 
-    public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; }
+    public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; subNodes.add(c); subNodes.add(t); }
 
     @Override
     public NodeCount getTreeSize() {

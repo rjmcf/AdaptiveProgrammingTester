@@ -22,9 +22,9 @@ public class ForStmntNoShortIf extends StatementBase implements StatementNoShort
     private StatementNoShortIf stmnt;
 
     public ForStmntNoShortIf() { updates = new ArrayList<>(); }
-    public void setUpForStmntNSI(ForInit i, Expression c) { init = i; cond = c; }
-    public void addUpdate(StatementExpr se) { updates.add(se); }
-    public void setBody(StatementNoShortIf s) { stmnt = s; }
+    public void setUpForStmntNSI(ForInit i, Expression c) { init = i; cond = c; subNodes.add(i); subNodes.add(c); }
+    public void addUpdate(StatementExpr se) { updates.add(se); subNodes.add(se); }
+    public void setBody(StatementNoShortIf s) { stmnt = s; subNodes.add(s); }
 
     @Override
     public NodeCount getTreeSize() {

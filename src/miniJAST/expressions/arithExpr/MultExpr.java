@@ -17,7 +17,10 @@ public class MultExpr extends AddExpr {
     private MultExpr leftSide; // Left associative
     private UnaryExpr rightSide;
 
-    public void setUpMultExpr(boolean t, MultExpr l, UnaryExpr r) { isTimes = t; leftSide = l; rightSide = r; }
+    public void setUpMultExpr(boolean t, MultExpr l, UnaryExpr r) {
+        isTimes = t; leftSide = l; rightSide = r;
+        subNodes.add(leftSide); subNodes.add(rightSide);
+    }
 
     @Override
     public NodeCount getTreeSize() {

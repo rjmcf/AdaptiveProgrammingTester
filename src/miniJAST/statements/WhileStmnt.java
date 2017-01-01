@@ -13,7 +13,7 @@ public class WhileStmnt extends StatementBase implements Statement {
     private Expression cond;
     private Statement stmnt;
 
-    public void setUpWhile(Expression c, Statement s) { cond = c; stmnt = s; }
+    public void setUpWhile(Expression c, Statement s) { cond = c; stmnt = s; subNodes.add(c); subNodes.add(s); }
 
     @Override
     public NodeCount getTreeSize() {

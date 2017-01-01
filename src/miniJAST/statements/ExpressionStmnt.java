@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 public class ExpressionStmnt extends StatementBase implements StmntNoTrailSubstmnt {
     private StatementExpr expr;
 
-    public ExpressionStmnt(StatementExpr sE) { expr = sE; }
+    public ExpressionStmnt(StatementExpr sE) { expr = sE; subNodes.add(sE); }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {

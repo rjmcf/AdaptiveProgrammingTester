@@ -15,7 +15,9 @@ public class IfThenElseStmntNoShortIf extends StatementBase implements Statement
     private StatementNoShortIf trueStmnt;
     private StatementNoShortIf falseStmnt;
 
-    public void setUpITENSI(Expression c, StatementNoShortIf t, StatementNoShortIf f) { cond = c; trueStmnt = t; falseStmnt = f; }
+    public void setUpITENSI(Expression c, StatementNoShortIf t, StatementNoShortIf f) { cond = c; trueStmnt = t; falseStmnt = f;
+        subNodes.add(c); subNodes.add(t); subNodes.add(f);
+    }
 
     @Override
     public NodeCount getTreeSize() {

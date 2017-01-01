@@ -6,6 +6,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.OutOfBoundsException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.PrimaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
@@ -16,7 +17,8 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
     private Id id;
     private Expression index;
 
-    public void setUpArrayAccess(Id i, Expression e) { id = i; index = e; }
+    public void setUpArrayAccess(Id i, Expression e) { id = i; index = e;
+        subNodes.add(id); subNodes.add(index); }
 
     @Override
     public NodeCount getTreeSize() {

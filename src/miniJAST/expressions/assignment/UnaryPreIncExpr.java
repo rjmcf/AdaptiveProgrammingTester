@@ -18,7 +18,7 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     private boolean isPlus;
     private AssignLHS expr;
 
-    public void setUpPreIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; }
+    public void setUpPreIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
     public NodeCount getTreeSize() {

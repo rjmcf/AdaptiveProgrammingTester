@@ -7,6 +7,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
@@ -16,12 +17,13 @@ import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
-public class AssignExpr implements StatementExpr {
+public class AssignExpr extends ExpressionBase implements StatementExpr {
     private AssignLHS lhs;
     private AssignOp op;
     private Expression expr;
 
-    public void setUpAssignExpr(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e; }
+    public void setUpAssignExpr(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e;
+        subNodes.add(lhs); subNodes.add(expr);}
 
     @Override
     public NodeCount getTreeSize() {

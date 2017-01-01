@@ -13,7 +13,8 @@ public class OrExpr extends CondExpr {
     private OrExpr leftSide; // Left associative
     private AndExpr rightSide;
 
-    public void setUpOrExpr(OrExpr l, AndExpr r) { leftSide = l; rightSide = r; }
+    public void setUpOrExpr(OrExpr l, AndExpr r) { leftSide = l; rightSide = r;
+        subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
     public NodeCount getTreeSize() {

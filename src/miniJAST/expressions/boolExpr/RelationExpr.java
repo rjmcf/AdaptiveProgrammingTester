@@ -13,7 +13,8 @@ public class RelationExpr extends EqExpr {
     private RelationExpr leftSide; // Left associative
     private AddExpr rightSide;
 
-    public void setUpRelationExpr(RelationOp o, RelationExpr l, AddExpr r) { op = o; leftSide = l; rightSide = r; }
+    public void setUpRelationExpr(RelationOp o, RelationExpr l, AddExpr r) { op = o; leftSide = l; rightSide = r;
+        subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
     public NodeCount getTreeSize() {

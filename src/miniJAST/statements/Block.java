@@ -11,7 +11,7 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     boolean isOuterMost;
 
     public Block(boolean isOuter) { stmnts = new ArrayList<>(); isOuterMost = isOuter; }
-    public void addBlockStmnt(BlockStatement b) { stmnts.add(b); }
+    public void addBlockStmnt(BlockStatement b) { stmnts.add(b); subNodes.add(b); }
 
     @Override
     public NodeCount getTreeSize() {

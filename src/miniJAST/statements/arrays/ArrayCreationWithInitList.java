@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ArrayCreationWithInitList extends ArrayCreation {
     private ArrayList<Expression> values;
 
-    public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>(); }
+    public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>();}
 
     @Override
     public NodeCount getTreeSize() {
@@ -32,7 +32,7 @@ public class ArrayCreationWithInitList extends ArrayCreation {
     }
 
     public void setUPACWIL(String n) { name = n; }
-    public void addExpressionACWIL(Expression e) { values.add(e); }
+    public void addExpressionACWIL(Expression e) { values.add(e); subNodes.add(e); }
     public ArrayList<Expression> getValues () { return values; }
 
 }

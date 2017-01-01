@@ -8,16 +8,17 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.LocalVarDec;
 import miniJAST.expressions.StatementExpr;
+import miniJAST.statements.StatementBase;
 
 import java.util.ArrayList;
 
-public class ForInit implements MiniJASTNode{
+public class ForInit extends StatementBase implements MiniJASTNode{
     private ArrayList<StatementExpr> stmnts;
     private LocalVarDec lvd = null;
 
     public ForInit() { stmnts = new ArrayList<>(); }
-    public void addLocalVarDec(LocalVarDec lv) { lvd = lv; }
-    public void addStmntExpr(StatementExpr se) { stmnts.add(se); }
+    public void addLocalVarDec(LocalVarDec lv) { lvd = lv; subNodes.add(lv); }
+    public void addStmntExpr(StatementExpr se) { stmnts.add(se); subNodes.add(se); }
 
     public NodeCount getTreeSize() {
         NodeCount result = new NodeCount();

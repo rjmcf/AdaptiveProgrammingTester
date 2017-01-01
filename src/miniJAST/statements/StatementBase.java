@@ -1,10 +1,13 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.MiniJASTNode;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public abstract class StatementBase {
+    protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
     protected void removeDecsAtDepth(Context c, int d) {
         if (d == 0)
             return;

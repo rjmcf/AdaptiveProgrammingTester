@@ -23,7 +23,7 @@ public class ArrayCreationWithSize extends ArrayCreation {
         return result;
     }
 
-    public void setUpACWS(String n, Expression s) { name = n; size = s; }
+    public void setUpACWS(String n, Expression s) { name = n; size = s; subNodes.add(s); }
 
     public Expression getSize() { return size; }
 }

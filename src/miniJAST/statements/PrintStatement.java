@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.*;
 public class PrintStatement extends StatementBase implements BlockStatement {
     Expression expr;
 
-    public void setUpPrint(Expression e) { expr = e; }
+    public void setUpPrint(Expression e) { expr = e; subNodes.add(e); }
 
     @Override
     public NodeCount getTreeSize() {

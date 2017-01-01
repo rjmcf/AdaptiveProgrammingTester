@@ -13,7 +13,7 @@ public class WhileStmntNoShortIf extends StatementBase implements StatementNoSho
     private Expression cond;
     private StatementNoShortIf stmnt;
 
-    public void setUpWhileNSI(Expression c, StatementNoShortIf s) { cond = c; stmnt = s; }
+    public void setUpWhileNSI(Expression c, StatementNoShortIf s) { cond = c; stmnt = s; subNodes.add(c); subNodes.add(s); }
 
     @Override
     public NodeCount getTreeSize() {

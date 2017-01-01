@@ -5,16 +5,18 @@ import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
-public class CondExpr implements Expression {
+public class CondExpr extends ExpressionBase {
     private OrExpr cond;
     private Expression trueExpr;
     private CondExpr falseExpr; // Right associative
 
-    public void setUpCondExpr(OrExpr c, Expression t, CondExpr f) { cond = c; trueExpr = t; falseExpr = f; }
+    public void setUpCondExpr(OrExpr c, Expression t, CondExpr f) { cond = c; trueExpr = t; falseExpr = f;
+        subNodes.add(cond); subNodes.add(trueExpr); subNodes.add(falseExpr); }
 
     @Override
     public NodeCount getTreeSize() {

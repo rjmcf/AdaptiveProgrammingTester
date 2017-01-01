@@ -16,7 +16,10 @@ public class AddExpr extends RelationExpr {
     private AddExpr leftSide; // Left associative
     private MultExpr rightSide;
 
-    public void setUpAddExpr(boolean p, AddExpr l, MultExpr r) { isPlus = p; leftSide = l; rightSide = r; }
+    public void setUpAddExpr(boolean p, AddExpr l, MultExpr r) {
+        isPlus = p; leftSide = l; rightSide = r;
+        subNodes.add(leftSide); subNodes.add(rightSide);
+    }
 
     @Override
     public NodeCount getTreeSize() {

@@ -20,7 +20,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
     public LocalVarDec() { vars = new ArrayList<>(); }
 
     public void setUpLVD(UnannType t) { type = t; }
-    public void addVarDec(VarDeclarator v) { vars.add(v); }
+    public void addVarDec(VarDeclarator v) { vars.add(v); subNodes.add(v); }
 
     @Override
     public NodeCount getTreeSize() {

@@ -1,8 +1,5 @@
 package miniJAST.expressions.assignment;
 
-import miniJAST.NodeCount;
+import miniJAST.expressions.Expression;
 
-public interface AssignLHS {
-    NodeCount getTreeSize();
-    String stringRepr();
-}
+public interface AssignLHS extends Expression { }

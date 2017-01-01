@@ -13,7 +13,7 @@ public class UnaryPMExpr extends UnaryExpr {
     private boolean isPlus;
     private UnaryExpr expr;
 
-    public void setUpPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; }
+    public void setUpPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
     public NodeCount getTreeSize() {

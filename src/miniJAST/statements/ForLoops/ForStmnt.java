@@ -23,9 +23,9 @@ public class ForStmnt extends StatementBase implements Statement {
     private Statement stmnt;
 
     public ForStmnt() { updates = new ArrayList<>(); }
-    public void setUpForStmnt( ForInit i, Expression c) { init = i; cond = c; }
-    public void addUpdate(StatementExpr se) { updates.add(se); }
-    public void setBody(Statement s) { stmnt = s; }
+    public void setUpForStmnt( ForInit i, Expression c) { init = i; cond = c; subNodes.add(i); subNodes.add(c); }
+    public void addUpdate(StatementExpr se) { updates.add(se); subNodes.add(se); }
+    public void setBody(Statement s) { stmnt = s; subNodes.add(s); }
 
     @Override
     public NodeCount getTreeSize() {

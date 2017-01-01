@@ -17,7 +17,7 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
     private boolean isPlus;
     private AssignLHS expr;
 
-    public void setUpPostIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; }
+    public void setUpPostIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
     public NodeCount getTreeSize() {

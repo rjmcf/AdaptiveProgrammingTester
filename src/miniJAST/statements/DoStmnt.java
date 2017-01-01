@@ -13,7 +13,7 @@ public class DoStmnt extends StatementBase implements StmntNoTrailSubstmnt{
     private Statement stmnt;
     private Expression cond;
 
-    public void setUpDo(Statement s, Expression c) { stmnt = s; cond = c; }
+    public void setUpDo(Statement s, Expression c) { stmnt = s; cond = c; subNodes.add(s); subNodes.add(c); }
 
     @Override
     public NodeCount getTreeSize() {

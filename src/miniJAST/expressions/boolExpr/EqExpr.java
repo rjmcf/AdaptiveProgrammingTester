@@ -14,7 +14,8 @@ public class EqExpr extends AndExpr {
     private EqExpr leftSide; // Left associative (allows arith eq test on left side)
     private RelationExpr rightSide;
 
-    public void setUpEqExpr(boolean e, EqExpr l, RelationExpr r) { isEqualityTest = e; leftSide = l; rightSide = r; }
+    public void setUpEqExpr(boolean e, EqExpr l, RelationExpr r) { isEqualityTest = e; leftSide = l; rightSide = r;
+        subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
     public NodeCount getTreeSize() {

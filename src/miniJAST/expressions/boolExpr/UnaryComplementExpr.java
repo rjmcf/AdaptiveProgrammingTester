@@ -14,7 +14,7 @@ public class UnaryComplementExpr extends UnaryExpr {
     // Only logical complement here
     private UnaryExpr expr;
 
-    public void setUpCompExpr(UnaryExpr e) { expr = e; }
+    public void setUpCompExpr(UnaryExpr e) { expr = e; subNodes.add(expr); }
 
     @Override
     public NodeCount getTreeSize() {
