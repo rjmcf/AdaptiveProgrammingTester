@@ -1,6 +1,7 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
@@ -10,7 +11,7 @@ import miniJAST.expressions.StatementExpr;
 
 import java.util.ArrayList;
 
-public class ForInit {
+public class ForInit implements MiniJASTNode{
     private ArrayList<StatementExpr> stmnts;
     private LocalVarDec lvd = null;
 

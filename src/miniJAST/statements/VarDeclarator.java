@@ -1,10 +1,11 @@
 package miniJAST.statements;
 
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
 import miniJAST.types.UnannType;
 
-public class VarDeclarator {
+public class VarDeclarator implements MiniJASTNode{
     protected String name;
     private Expression expr;
     protected boolean isArray = false;
