@@ -12,6 +12,9 @@ import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.*;
+import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
+import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
@@ -79,9 +82,9 @@ public class ForStmntNoShortIfTest {
         sumAss = new AssignExpr();
         sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
         ExpressionStmnt eS1 = new ExpressionStmnt(sumAss);
-        fS1.setUpForStmntNSI(fI, gT);
+        fS1.setUpForStmnt(fI, gT);
         fS1.addUpdate(minus);
-        fS1.setBody(eS1);
+        fS1.setBodyNSI(eS1);
 
         block1 = new Block(true);
         block1.addBlockStmnt(sumStat);
@@ -101,9 +104,9 @@ public class ForStmntNoShortIfTest {
         if2 = new IfThenElseStmntNoShortIf();
         if2.setUpITENSI(check5, SingleWordStmnt.BREAK, SingleWordStmnt.CONTINUE);
         fS2 = new ForStmntNoShortIf();
-        fS2.setUpForStmntNSI(null, null);
+        fS2.setUpForStmnt(null, null);
         fS2.addUpdate(plus);
-        fS2.setBody(if2);
+        fS2.setBodyNSI(if2);
         block2 = new Block(true);
         block2.addBlockStmnt(jStat);
         block2.addBlockStmnt(fS2);

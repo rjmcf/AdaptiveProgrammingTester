@@ -1,10 +1,12 @@
-package miniJAST.statements;
+package miniJAST.statements.LVD;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.*;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
+import miniJAST.statements.BlockStatement;
+import miniJAST.statements.FlowControl;
+import miniJAST.statements.StatementBase;
 import miniJAST.statements.arrays.ArrayCreation;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;

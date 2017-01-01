@@ -15,6 +15,8 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
+import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;

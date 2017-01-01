@@ -1,4 +1,4 @@
-package miniJAST.statements;
+package miniJAST.statements.IfThenEtc;
 
 import miniJAST.Context;
 import miniJAST.NodeCount;
@@ -7,21 +7,20 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.Type;
+import miniJAST.statements.FlowControl;
+import miniJAST.statements.Statement;
+import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
-public class IfThenElseStmntNoShortIf extends StatementBase implements StatementNoShortIf {
+public class IfThenStmnt extends StatementBase implements Statement {
     private Expression cond;
-    private StatementNoShortIf trueStmnt;
-    private StatementNoShortIf falseStmnt;
+    private Statement stmnt;
 
-    public void setUpITENSI(Expression c, StatementNoShortIf t, StatementNoShortIf f) { cond = c; trueStmnt = t; falseStmnt = f;
-        subNodes.add(c); subNodes.add(t); subNodes.add(f);
-    }
+    public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; subNodes.add(c); subNodes.add(t); }
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + trueStmnt.stringRepr(blocksDeep+1) + "\n" + pad(blocksDeep) + "else\n" + falseStmnt.stringRepr(blocksDeep+1);
+        return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep+1);
     }
 
     @Override
@@ -33,15 +32,13 @@ public class IfThenElseStmntNoShortIf extends StatementBase implements Statement
             throw new TypeException("Can not operate on arrays!");
 
         if (((ReturnValuesBool)r).value) {
-            FlowControl result = trueStmnt.execute(c, d+1);
+            FlowControl result = stmnt.execute(c, d+1);
             removeDecsAtDepth(c, d+1);
             return result;
         }
-        else {
-            FlowControl result = falseStmnt.execute(c, d+1);
-            removeDecsAtDepth(c, d+1);
-            return result;
-        }
+
+
+        return FlowControl.NONE;
     }
 
     @Override

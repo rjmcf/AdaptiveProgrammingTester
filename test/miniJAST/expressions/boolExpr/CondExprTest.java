@@ -1,7 +1,6 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.BracketedExpr;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
@@ -11,13 +10,12 @@ import miniJAST.expressions.returnValues.ReturnValuesDouble;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.Block;
 import miniJAST.statements.ExpressionStmnt;
-import miniJAST.statements.LocalVarDec;
-import miniJAST.statements.VarDeclarator;
+import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.IAnnotation;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;

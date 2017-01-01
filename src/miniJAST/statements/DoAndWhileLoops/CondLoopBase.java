@@ -1,27 +1,23 @@
-package miniJAST.statements;
+package miniJAST.statements.DoAndWhileLoops;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
+import miniJAST.statements.BlockStatement;
+import miniJAST.statements.FlowControl;
+import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
-public class WhileStmntNoShortIf extends StatementBase implements StatementNoShortIf {
-    private Expression cond;
-    private StatementNoShortIf stmnt;
+public abstract class CondLoopBase extends StatementBase implements BlockStatement{
+    protected Expression cond;
+    protected BlockStatement stmnt;
 
-    public void setUpWhileNSI(Expression c, StatementNoShortIf s) { cond = c; stmnt = s; subNodes.add(c); subNodes.add(s); }
+    protected void baseSetUpCondLoop(Expression c, BlockStatement s) { cond = c; stmnt = s; subNodes.add(c); subNodes.add(s); }
 
-    @Override
-    public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "while (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep + 1);
-    }
-
-    @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
+    protected FlowControl condAndLoop(Context c, int d) throws MiniJASTException {
         ReturnValues rC = cond.evaluate(c);
         if (rC.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must be boolean type");

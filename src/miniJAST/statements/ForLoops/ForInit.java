@@ -2,11 +2,9 @@ package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
-import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.statements.FlowControl;
-import miniJAST.statements.LocalVarDec;
+import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.statements.StatementBase;
 

@@ -1,8 +1,9 @@
-package miniJAST.statements;
+package miniJAST.statements.LVD;
 
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
+import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
 public class VarDeclarator extends StatementBase implements MiniJASTNode{

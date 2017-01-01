@@ -1,20 +1,23 @@
-package miniJAST.statements;
+package miniJAST.statements.IfThenEtc;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
+import miniJAST.statements.BlockStatement;
+import miniJAST.statements.FlowControl;
+import miniJAST.statements.StatementBase;
+import miniJAST.statements.StatementNoShortIf;
 import miniJAST.types.UnannType;
 
-public class IfThenElseStmnt extends StatementBase implements Statement{
-    private Expression cond;
-    private StatementNoShortIf trueStmnt;
-    private Statement falseStmnt;
+public abstract class IfThenElseBase extends StatementBase implements BlockStatement {
+    protected Expression cond;
+    protected StatementNoShortIf trueStmnt;
+    protected BlockStatement falseStmnt;
 
-    public void setUpITE(Expression c, StatementNoShortIf t, Statement f) { cond = c; trueStmnt = t; falseStmnt = f;
+    protected void baseSetUpITE(Expression c, StatementNoShortIf t, BlockStatement f) { cond = c; trueStmnt = t; falseStmnt = f;
         subNodes.add(c); subNodes.add(t); subNodes.add(f);
     }
 

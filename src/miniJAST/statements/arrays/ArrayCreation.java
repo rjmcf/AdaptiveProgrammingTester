@@ -1,7 +1,6 @@
 package miniJAST.statements.arrays;
 
-import miniJAST.NodeCount;
-import miniJAST.statements.VarDeclarator;
+import miniJAST.statements.LVD.VarDeclarator;
 
 public abstract class ArrayCreation extends VarDeclarator{
     protected boolean hasInitList;
