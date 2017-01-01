@@ -16,7 +16,7 @@ import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
-public class AssignExpr extends Expression implements StatementExpr {
+public class AssignExpr implements StatementExpr {
     private AssignLHS lhs;
     private AssignOp op;
     private Expression expr;
@@ -609,17 +609,5 @@ public class AssignExpr extends Expression implements StatementExpr {
                     }
             }
         }
-    }
-
-    @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException{
-        evaluate(c);
-        return FlowControl.NONE;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        evaluate(c);
-        return FlowControl.NONE;
     }
 }

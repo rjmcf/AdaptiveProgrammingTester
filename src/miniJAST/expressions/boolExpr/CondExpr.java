@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
-public class CondExpr extends Expression {
+public class CondExpr implements Expression {
     private OrExpr cond;
     private Expression trueExpr;
     private CondExpr falseExpr; // Right associative

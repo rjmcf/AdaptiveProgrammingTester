@@ -12,6 +12,7 @@ import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.statements.Block;
+import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.LocalVarDec;
@@ -71,7 +72,8 @@ public class FillArrayToNExercise extends AbstractPExercise {
         ForStmnt fS = new ForStmnt();
         fS.setUpForStmnt(init, lTN);
         fS.addUpdate(plus);
-        fS.setBody(updateIndex);
+        ExpressionStmnt body = new ExpressionStmnt(updateIndex);
+        fS.setBody(body);
         block = new Block(true);
         block.addBlockStmnt(array);
         block.addBlockStmnt(fS);

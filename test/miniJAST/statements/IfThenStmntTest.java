@@ -42,8 +42,9 @@ public class IfThenStmntTest {
         one.setUpLiteral(UnannType.INT, "1");
         i1 = new AssignExpr();
         i1.setUpAssignExpr(iID, AssignOp.EQ, one);
+        ExpressionStmnt eS1 = new ExpressionStmnt(i1);
         iTS1 = new IfThenStmnt();
-        iTS1.setUpIfThen(t, i1);
+        iTS1.setUpIfThen(t, eS1);
         block1 = new Block(true);
         block1.addBlockStmnt(i0);
         block1.addBlockStmnt(iTS1);
@@ -59,8 +60,9 @@ public class IfThenStmntTest {
         jID.setUpId(new Type(UnannType.INT, 1), "j");
         j1 = new AssignExpr();
         j1.setUpAssignExpr(jID, AssignOp.EQ, one);
+        ExpressionStmnt eS2 = new ExpressionStmnt(j1);
         iTS2 = new IfThenStmnt();
-        iTS2.setUpIfThen(f, j1);
+        iTS2.setUpIfThen(f, eS2);
         block2 = new Block(true);
         block2.addBlockStmnt(j0);
         block2.addBlockStmnt(iTS2);

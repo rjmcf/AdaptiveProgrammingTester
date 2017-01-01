@@ -123,10 +123,11 @@ public class SingleWordStmntTest {
         lT9.setUpRelationExpr(RelationOp.LT, iID, nine);
         iPlus = new UnaryPostIncExpr();
         iPlus.setUpPostIncExpr(true, iID);
+        ExpressionStmnt eS1 = new ExpressionStmnt(indexAssign);
         inner = new Block(false);
         inner.addBlockStmnt(contIf);
         inner.addBlockStmnt(breakIf);
-        inner.addBlockStmnt(indexAssign);
+        inner.addBlockStmnt(eS1);
         forStmnt1 = new ForStmnt();
         forStmnt1.setUpForStmnt(null, lT9);
         forStmnt1.addUpdate(iPlus);
@@ -138,13 +139,14 @@ public class SingleWordStmntTest {
         fakeAcc.setUpArrayAccess(resultID, six);
         r6 = new AssignExpr();
         r6.setUpAssignExpr(fakeAcc, AssignOp.EQ, ques);
+        ExpressionStmnt eS2 = new ExpressionStmnt(r6);
 
         outer = new Block(true);
         outer.addBlockStmnt(arrays);
         outer.addBlockStmnt(iDec);
         outer.addBlockStmnt(forStmnt1);
         outer.addBlockStmnt(SingleWordStmnt.RETURN);
-        outer.addBlockStmnt(r6);
+        outer.addBlockStmnt(eS2);
 
         j = new VarDeclarator();
         j.setUpVarDec("j", zero);

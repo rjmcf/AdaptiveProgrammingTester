@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableDecException;
@@ -78,6 +79,11 @@ public class LocalVarDecTest {
             }
 
             @Override
+            public NodeCount getTreeSize() {
+                return new NodeCount(1,0);
+            }
+
+            @Override
             public String stringRepr() {
                 return "true";
             }
@@ -133,6 +139,11 @@ public class LocalVarDecTest {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesInt(2);
+            }
+
+            @Override
+            public NodeCount getTreeSize() {
+                return new NodeCount(1,0);
             }
 
             @Override

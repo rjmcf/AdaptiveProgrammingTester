@@ -76,11 +76,13 @@ public class WhileStmntTest {
         access.setUpArrayAccess(nsID, iID);
         plusEquals = new AssignExpr();
         plusEquals.setUpAssignExpr(sumID, AssignOp.PLUSEQ, access);
+        ExpressionStmnt eS1 = new ExpressionStmnt(plusEquals);
         plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, iID);
+        ExpressionStmnt eS2 = new ExpressionStmnt(plus);
         inner = new Block(false);
-        inner.addBlockStmnt(plusEquals);
-        inner.addBlockStmnt(plus);
+        inner.addBlockStmnt(eS1);
+        inner.addBlockStmnt(eS2);
         wS1 = new WhileStmnt();
         wS1.setUpWhile(lT5, inner);
 
@@ -99,8 +101,9 @@ public class WhileStmntTest {
         jID.setUpId(new Type(UnannType.INT, 1), "j");
         j1 = new AssignExpr();
         j1.setUpAssignExpr(jID, AssignOp.EQ, one);
+        ExpressionStmnt eS3 = new ExpressionStmnt(j1);
         wS2 = new WhileStmnt();
-        wS2.setUpWhile(f, j1);
+        wS2.setUpWhile(f, eS3);
 
         block2 = new Block(true);
         block2.addBlockStmnt(dec2);

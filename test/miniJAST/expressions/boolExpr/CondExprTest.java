@@ -10,6 +10,7 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.Block;
+import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.LocalVarDec;
 import miniJAST.statements.VarDeclarator;
 import miniJAST.types.Type;
@@ -76,7 +77,8 @@ public class CondExprTest {
         outer.setUpAssignExpr(j, AssignOp.EQ, e);
         b = new Block(true);
         b.addBlockStmnt(lvd);
-        b.addBlockStmnt(outer);
+        ExpressionStmnt eS = new ExpressionStmnt(outer);
+        b.addBlockStmnt(eS);
     }
 
     @Test

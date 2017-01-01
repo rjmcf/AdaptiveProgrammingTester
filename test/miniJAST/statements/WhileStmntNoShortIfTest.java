@@ -76,11 +76,13 @@ public class WhileStmntNoShortIfTest {
         access.setUpArrayAccess(nsID, iID);
         plusEquals = new AssignExpr();
         plusEquals.setUpAssignExpr(sumID, AssignOp.PLUSEQ, access);
+        ExpressionStmnt eS1 = new ExpressionStmnt(plusEquals);
         plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, iID);
+        ExpressionStmnt eS2 = new ExpressionStmnt(plus);
         inner = new Block(false);
-        inner.addBlockStmnt(plusEquals);
-        inner.addBlockStmnt(plus);
+        inner.addBlockStmnt(eS1);
+        inner.addBlockStmnt(eS2);
         wS1 = new WhileStmntNoShortIf();
         wS1.setUpWhileNSI(lT5, inner);
 
@@ -99,8 +101,9 @@ public class WhileStmntNoShortIfTest {
         jID.setUpId(new Type(UnannType.INT, 1), "j");
         j1 = new AssignExpr();
         j1.setUpAssignExpr(jID, AssignOp.EQ, one);
+        ExpressionStmnt eS3 = new ExpressionStmnt(j1);
         wS2 = new WhileStmntNoShortIf();
-        wS2.setUpWhileNSI(f, j1);
+        wS2.setUpWhileNSI(f, eS3);
 
         block2 = new Block(true);
         block2.addBlockStmnt(dec2);

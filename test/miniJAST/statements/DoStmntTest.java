@@ -46,9 +46,10 @@ public class DoStmntTest {
         contID.setUpId(new Type(UnannType.BOOLEAN, 1), "cont");
         contFalse = new AssignExpr();
         contFalse.setUpAssignExpr(contID, AssignOp.EQ, f);
+        ExpressionStmnt eS1 = new ExpressionStmnt(contFalse);
 
         doS1 = new DoStmnt();
-        doS1.setUpDo(contFalse, contID);
+        doS1.setUpDo(eS1, contID);
         block1 = new Block(true);
         block1.addBlockStmnt(contDec);
         block1.addBlockStmnt(doS1);
@@ -76,8 +77,9 @@ public class DoStmntTest {
         five.setUpLiteral(UnannType.INT, "5");
         lT5 = new RelationExpr();
         lT5.setUpRelationExpr(RelationOp.LT, thingID, five);
+        ExpressionStmnt eS2 = new ExpressionStmnt(thingToI);
         doS2 = new DoStmnt();
-        doS2.setUpDo(thingToI, lT5);
+        doS2.setUpDo(eS2, lT5);
         block2 = new Block(true);
         block2.addBlockStmnt(dec2);
         block2.addBlockStmnt(doS2);

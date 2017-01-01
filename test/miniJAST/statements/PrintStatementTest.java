@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
@@ -32,6 +33,11 @@ public class PrintStatementTest {
             }
 
             @Override
+            public NodeCount getTreeSize() {
+                return new NodeCount(1,0);
+            }
+
+            @Override
             public String stringRepr() {
                 return "true";
             }
@@ -40,6 +46,11 @@ public class PrintStatementTest {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesIntAA("fakeArray", 2, 42);
+            }
+
+            @Override
+            public NodeCount getTreeSize() {
+                return new NodeCount(1,0);
             }
 
             @Override
@@ -57,6 +68,11 @@ public class PrintStatementTest {
                 string.add('n');
                 string.add('t');
                 return new ReturnValuesArray<Character>(new Type(UnannType.CHAR,5), string);
+            }
+
+            @Override
+            public NodeCount getTreeSize() {
+                return new NodeCount(1,0);
             }
 
             @Override
