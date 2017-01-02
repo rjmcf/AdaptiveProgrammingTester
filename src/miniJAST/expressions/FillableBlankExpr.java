@@ -14,7 +14,6 @@ public class FillableBlankExpr extends Id {
 
     @Override
     public NodeCount getTreeSize() {
-
         if (studentexpr == null)
             return new NodeCount(0, nodesReplaced);
         else
@@ -23,7 +22,7 @@ public class FillableBlankExpr extends Id {
 
     @Override
     public String stringRepr() {
-        return " ... ";
+        return "...";
     }
 
     @Override

@@ -8,7 +8,7 @@ import miniJAST.expressions.Expression;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public abstract class StatementBase {
+public abstract class StatementBase implements MiniJASTNode {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
     protected void removeDecsAtDepth(Context c, int d) {
         if (d == 0)
@@ -27,6 +27,7 @@ public abstract class StatementBase {
         }
     }
 
+    @Override
     public NodeCount getTreeSize() {
         NodeCount result = new NodeCount();
         for (MiniJASTNode e : subNodes) {

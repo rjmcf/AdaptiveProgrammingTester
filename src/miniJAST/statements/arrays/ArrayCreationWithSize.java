@@ -1,8 +1,6 @@
 package miniJAST.statements.arrays;
 
-import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
-import miniJAST.statements.arrays.ArrayCreation;
 import miniJAST.types.UnannType;
 
 public class ArrayCreationWithSize extends ArrayCreation {
