@@ -4,9 +4,11 @@ import miniJAST.Context;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.expressions.assignment.AssignExpr;
+import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.returnValues.ReturnValues;
 
-public class FillableBlankExpr extends PrimaryExpr {
+public class FillableBlankExpr extends Id {
     int nodesReplaced;
     Expression studentexpr;
 

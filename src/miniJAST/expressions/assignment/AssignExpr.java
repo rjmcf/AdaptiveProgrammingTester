@@ -6,11 +6,8 @@ import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableNotInitException;
-import miniJAST.expressions.Expression;
-import miniJAST.expressions.ExpressionBase;
-import miniJAST.expressions.Id;
+import miniJAST.expressions.*;
 import miniJAST.expressions.returnValues.*;
-import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.statements.FlowControl;
 import miniJAST.types.UnannType;
@@ -364,6 +361,8 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
             }
         } else {
             Id id = (Id) lhs;
+            if (id instanceof FillableBlankExpr)
+                id.evaluate(c);
             ReturnValues ex = expr.evaluate(c);
 
             switch (op) {
