@@ -6,7 +6,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 
-public class PrintStatement extends StatementBase implements BlockStatement {
+public class PrintStatement extends StatementBase implements StmntNoTrailSubstmnt {
     Expression expr;
 
     public void setUpPrint(Expression e) { expr = e; subNodes.add(e); }

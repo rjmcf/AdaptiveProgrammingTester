@@ -11,6 +11,11 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
 import miniJAST.expressions.assignment.UnaryPreIncExpr;
 import miniJAST.expressions.boolExpr.*;
+import miniJAST.statements.DoAndWhileLoops.DoStmnt;
+import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.statements.PrintStatement;
+import miniJAST.statements.arrays.ArrayCreationWithInitList;
+import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
@@ -23,10 +28,9 @@ import static org.testng.Assert.*;
 public class FillableBlankExprTest {
     Context c;
     FillableBlankExpr fbe;
-    Literal lit0;
-    Literal litF;
-    Literal litT;
+    Literal lit0, litF, litT;
     Id id;
+    LocalVarDec lvd;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -40,6 +44,7 @@ public class FillableBlankExprTest {
         litT.setUpLiteral(UnannType.BOOLEAN, "true");
         id = new Id();
         id.setUpId(new Type(UnannType.INT, 2), "fakeArray");
+        lvd = new LocalVarDec();
     }
 
     @Test
@@ -278,5 +283,49 @@ public class FillableBlankExprTest {
         }
     }
 
+    @Test
+    public void testEmptyEvaluateArrayCreationList() throws Exception {
+        ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
+        acwil.setUPACWIL("fakeArray");
+        acwil.addExpressionACWIL(lit0);
+        acwil.addExpressionACWIL(fbe);
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(acwil);
+        try {
+            lvd.executeStart(c);
+            fail("Blank not filled.");
+        } catch (BlankEmptyException bee) {
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateArrayCreationSize() throws Exception {
+        ArrayCreationWithSize acws = new ArrayCreationWithSize();
+        acws.setUpACWS("fakeArray", fbe);
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(acws);
+        try {
+            lvd.executeStart(c);
+            fail("Blank not filled.");
+        } catch (BlankEmptyException bee) {
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateDo() throws Exception {
+        DoStmnt dS = new DoStmnt();
+        PrintStatement testS = new PrintStatement();
+        testS.setUpPrint(lit0);
+        dS.setUpDo(testS, fbe);
+        try {
+            dS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+    // TODO test statements that use Expressions
     // TODO test when blank filled
 }

@@ -4,20 +4,18 @@ import miniJAST.Context;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
-import miniJAST.expressions.assignment.AssignExpr;
-import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.returnValues.ReturnValues;
 
 public class FillableBlankExpr extends Id {
     int nodesReplaced;
-    Expression studentexpr;
+    Expression studentExpr;
 
     @Override
     public NodeCount getTreeSize() {
-        if (studentexpr == null)
+        if (studentExpr == null)
             return new NodeCount(0, nodesReplaced);
         else
-            return studentexpr.getTreeSize();
+            return studentExpr.getTreeSize();
     }
 
     @Override
@@ -27,9 +25,9 @@ public class FillableBlankExpr extends Id {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        if (studentexpr == null)
+        if (studentExpr == null)
             throw new BlankEmptyException();
         else
-            return studentexpr.evaluate(c);
+            return studentExpr.evaluate(c);
     }
 }
