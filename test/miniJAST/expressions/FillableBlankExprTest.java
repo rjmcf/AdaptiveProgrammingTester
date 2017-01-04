@@ -12,8 +12,19 @@ import miniJAST.expressions.assignment.UnaryPostIncExpr;
 import miniJAST.expressions.assignment.UnaryPreIncExpr;
 import miniJAST.expressions.boolExpr.*;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
+import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
+import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
+import miniJAST.statements.ExpressionStmnt;
+import miniJAST.statements.ForLoops.ForInit;
+import miniJAST.statements.ForLoops.ForStmnt;
+import miniJAST.statements.ForLoops.ForStmntNoShortIf;
+import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
+import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
+import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.PrintStatement;
+import miniJAST.statements.SingleWordStmnt;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;
@@ -31,6 +42,7 @@ public class FillableBlankExprTest {
     Literal lit0, litF, litT;
     Id id;
     LocalVarDec lvd;
+    PrintStatement testS;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -45,6 +57,8 @@ public class FillableBlankExprTest {
         id = new Id();
         id.setUpId(new Type(UnannType.INT, 2), "fakeArray");
         lvd = new LocalVarDec();
+        testS = new PrintStatement();
+        testS.setUpPrint(lit0);
     }
 
     @Test
@@ -316,8 +330,6 @@ public class FillableBlankExprTest {
     @Test
     public void testEmptyEvaluateDo() throws Exception {
         DoStmnt dS = new DoStmnt();
-        PrintStatement testS = new PrintStatement();
-        testS.setUpPrint(lit0);
         dS.setUpDo(testS, fbe);
         try {
             dS.executeStart(c);
@@ -326,6 +338,131 @@ public class FillableBlankExprTest {
             // pass test
         }
     }
+
+    @Test
+    public void testEmptyEvaluateWhile() throws Exception {
+        WhileStmnt wS = new WhileStmnt();
+        wS.setUpWhile(fbe, testS);
+        try {
+            wS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateWhileNSI() throws Exception {
+        WhileStmntNoShortIf wS = new WhileStmntNoShortIf();
+        wS.setUpWhileNSI(fbe, testS);
+        try {
+            wS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateFor() throws Exception {
+        ForStmnt fS = new ForStmnt();
+        fS.setUpForStmnt(null, fbe);
+        fS.setBody(testS);
+        try {
+            fS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateForNSI() throws Exception {
+        ForStmntNoShortIf fS = new ForStmntNoShortIf();
+        fS.setUpForStmnt(null, fbe);
+        fS.setBodyNSI(testS);
+        try {
+            fS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateITE() throws Exception {
+        IfThenElseStmnt iteS = new IfThenElseStmnt();
+        iteS.setUpITE(fbe, testS, testS);
+        try {
+            iteS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateITENSI() throws Exception {
+        IfThenElseStmntNoShortIf itensiS = new IfThenElseStmntNoShortIf();
+        itensiS.setUpITENSI(fbe, testS, testS);
+        try {
+            itensiS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateIT() throws Exception {
+        IfThenStmnt itS = new IfThenStmnt();
+        itS.setUpIfThen(fbe, testS);
+        try {
+            itS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateLVD() throws Exception {
+        VarDeclarator fakeId = new VarDeclarator();
+        fakeId.setUpVarDec("fake", fbe);
+        LocalVarDec lvd = new LocalVarDec();
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(fakeId);
+        try {
+            lvd.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluateExprStmnt() throws Exception {
+        ExpressionStmnt eS = new ExpressionStmnt(fbe);
+        try {
+            eS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
+    @Test
+    public void testEmptyEvaluatePrStmnt() throws Exception {
+        PrintStatement pS = new PrintStatement();
+        pS.setUpPrint(fbe);
+        try {
+            pS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+    }
+
     // TODO test statements that use Expressions
     // TODO test when blank filled
 }

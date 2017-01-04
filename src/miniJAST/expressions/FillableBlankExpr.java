@@ -6,7 +6,7 @@ import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
-public class FillableBlankExpr extends Id {
+public class FillableBlankExpr extends Id implements StatementExpr {
     int nodesReplaced;
     Expression studentExpr;
 
