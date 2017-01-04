@@ -374,6 +374,25 @@ public class FillableBlankExprTest {
         } catch (BlankEmptyException bee){
             // pass test
         }
+
+        ForInit fI = new ForInit();
+        fI.addStmntExpr(fbe);
+        fS.setUpForStmnt(fI, null);
+        try {
+            fS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+
+        fS.setUpForStmnt(null, null);
+        fS.addUpdate(fbe);
+        try {
+            fS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
     }
 
     @Test
@@ -381,6 +400,25 @@ public class FillableBlankExprTest {
         ForStmntNoShortIf fS = new ForStmntNoShortIf();
         fS.setUpForStmnt(null, fbe);
         fS.setBodyNSI(testS);
+        try {
+            fS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+
+        ForInit fI = new ForInit();
+        fI.addStmntExpr(fbe);
+        fS.setUpForStmnt(fI, null);
+        try {
+            fS.executeStart(c);
+            fail("Blank not filled");
+        } catch (BlankEmptyException bee){
+            // pass test
+        }
+
+        fS.setUpForStmnt(null, null);
+        fS.addUpdate(fbe);
         try {
             fS.executeStart(c);
             fail("Blank not filled");
