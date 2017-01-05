@@ -1,7 +1,6 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -11,11 +10,11 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
 public class CondExpr extends ExpressionBase {
-    private OrExpr cond;
+    private Expression cond;
     private Expression trueExpr;
-    private CondExpr falseExpr; // Right associative
+    private Expression falseExpr; // Right associative
 
-    public void setUpCondExpr(OrExpr c, Expression t, CondExpr f) { cond = c; trueExpr = t; falseExpr = f;
+    public void setUpCondExpr(Expression c, Expression t, Expression f) { cond = c; trueExpr = t; falseExpr = f;
         subNodes.add(cond); subNodes.add(trueExpr); subNodes.add(falseExpr); }
 
     @Override
@@ -25,6 +24,10 @@ public class CondExpr extends ExpressionBase {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(cond, OrExpr.class);
+        checkType(trueExpr, Expression.class);
+        checkType(falseExpr, CondExpr.class);
+
         ReturnValues condV = cond.evaluate(c);
         if (condV.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Conditional expression must have type Boolean");

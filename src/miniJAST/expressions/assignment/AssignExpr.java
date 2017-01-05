@@ -1,7 +1,6 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
@@ -9,17 +8,16 @@ import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.*;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.arrays.ArrayAccess;
-import miniJAST.statements.FlowControl;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
 public class AssignExpr extends ExpressionBase implements StatementExpr {
-    private AssignLHS lhs;
+    private Expression lhs;
     private AssignOp op;
     private Expression expr;
 
-    public void setUpAssignExpr(AssignLHS l, AssignOp o, Expression e) { lhs = l; op = o; expr = e;
+    public void setUpAssignExpr(Expression l, AssignOp o, Expression e) { lhs = l; op = o; expr = e;
         subNodes.add(lhs); subNodes.add(expr);}
 
     @Override
@@ -46,6 +44,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
+        checkType(lhs, AssignLHS.class);
+        checkType(expr, Expression.class);
+
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;
             ReturnValues access = arac.evaluate(c);
@@ -361,8 +362,6 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
             }
         } else {
             Id id = (Id) lhs;
-            if (id instanceof FillableBlankExpr)
-                id.evaluate(c);
             ReturnValues ex = expr.evaluate(c);
 
             switch (op) {

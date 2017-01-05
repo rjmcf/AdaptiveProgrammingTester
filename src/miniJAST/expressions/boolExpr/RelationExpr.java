@@ -1,19 +1,19 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
 public class RelationExpr extends EqExpr {
     private RelationOp op;
-    private RelationExpr leftSide; // Left associative
-    private AddExpr rightSide;
+    private Expression leftSide; // Left associative
+    private Expression rightSide;
 
-    public void setUpRelationExpr(RelationOp o, RelationExpr l, AddExpr r) { op = o; leftSide = l; rightSide = r;
+    public void setUpRelationExpr(RelationOp o, Expression l, Expression r) { op = o; leftSide = l; rightSide = r;
         subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
@@ -37,7 +37,8 @@ public class RelationExpr extends EqExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        ReturnValuesBool result;
+        checkType(leftSide, RelationExpr.class);
+        checkType(rightSide, AddExpr.class);
 
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);

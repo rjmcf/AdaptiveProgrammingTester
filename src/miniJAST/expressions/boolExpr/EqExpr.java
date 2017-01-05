@@ -1,20 +1,18 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
-
-import java.util.IllegalFormatCodePointException;
 
 public class EqExpr extends AndExpr {
     private boolean isEqualityTest;
-    private EqExpr leftSide; // Left associative (allows arith eq test on left side)
-    private RelationExpr rightSide;
+    private Expression leftSide; // Left associative (allows arith eq test on left side)
+    private Expression rightSide;
 
-    public void setUpEqExpr(boolean e, EqExpr l, RelationExpr r) { isEqualityTest = e; leftSide = l; rightSide = r;
+    public void setUpEqExpr(boolean e, Expression l, Expression r) { isEqualityTest = e; leftSide = l; rightSide = r;
         subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
@@ -22,10 +20,10 @@ public class EqExpr extends AndExpr {
         return leftSide.stringRepr() + (isEqualityTest ? " == " : " != ") + rightSide.stringRepr();
     }
 
-
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        ReturnValuesBool result;
+        checkType(leftSide, EqExpr.class);
+        checkType(rightSide, RelationExpr.class);
 
         ReturnValues l = leftSide.evaluate(c);
         ReturnValues r = rightSide.evaluate(c);

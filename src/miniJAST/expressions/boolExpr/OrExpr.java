@@ -1,19 +1,18 @@
 package miniJAST.expressions.boolExpr;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 
 public class OrExpr extends CondExpr {
-    private OrExpr leftSide; // Left associative
-    private AndExpr rightSide;
+    private Expression leftSide; // Left associative
+    private Expression rightSide;
 
-    public void setUpOrExpr(OrExpr l, AndExpr r) { leftSide = l; rightSide = r;
+    public void setUpOrExpr(Expression l, Expression r) { leftSide = l; rightSide = r;
         subNodes.add(leftSide); subNodes.add(rightSide);}
 
     @Override
@@ -23,6 +22,9 @@ public class OrExpr extends CondExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(leftSide, OrExpr.class);
+        checkType(rightSide, AndExpr.class);
+
         ReturnValues l = leftSide.evaluate(c);
 
         if (l.getType().uType != UnannType.BOOLEAN)

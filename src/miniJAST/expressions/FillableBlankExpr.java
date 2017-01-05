@@ -5,8 +5,9 @@ import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
+import miniJAST.statements.StatementBase;
 
-public class FillableBlankExpr extends Id implements StatementExpr {
+public class FillableBlankExpr extends StatementBase implements Expression{
     int nodesReplaced;
     Expression studentExpr;
 

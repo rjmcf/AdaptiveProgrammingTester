@@ -1,24 +1,23 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableNotInitException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.StatementExpr;
-import miniJAST.statements.FlowControl;
 
 import java.util.ArrayList;
 
 public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
     private boolean isPlus;
-    private AssignLHS expr;
+    private Expression expr;
 
-    public void setUpPreIncExpr(boolean p, AssignLHS e) { isPlus = p; expr = e; subNodes.add(expr); }
+    public void setUpPreIncExpr(boolean p, Expression e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
     public String stringRepr() {
@@ -27,6 +26,8 @@ public class UnaryPreIncExpr extends UnaryExpr implements StatementExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(expr, AssignLHS.class);
+
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;
             ReturnValues raa = aa.evaluate(c);

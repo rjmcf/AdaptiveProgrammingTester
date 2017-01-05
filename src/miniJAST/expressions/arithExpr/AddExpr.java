@@ -1,9 +1,9 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
@@ -13,10 +13,10 @@ import miniJAST.types.UnannType;
 
 public class AddExpr extends RelationExpr {
     private boolean isPlus;
-    private AddExpr leftSide; // Left associative
-    private MultExpr rightSide;
+    private Expression leftSide; // Left associative
+    private Expression rightSide;
 
-    public void setUpAddExpr(boolean p, AddExpr l, MultExpr r) {
+    public void setUpAddExpr(boolean p, Expression l, Expression r) {
         isPlus = p; leftSide = l; rightSide = r;
         subNodes.add(leftSide); subNodes.add(rightSide);
     }
@@ -28,6 +28,9 @@ public class AddExpr extends RelationExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(leftSide, AddExpr.class);
+        checkType(rightSide, MultExpr.class);
+
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);
 

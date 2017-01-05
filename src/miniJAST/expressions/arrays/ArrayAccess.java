@@ -1,12 +1,10 @@
 package miniJAST.expressions.arrays;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.OutOfBoundsException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.PrimaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
@@ -14,18 +12,23 @@ import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
 public class ArrayAccess extends PrimaryExpr implements AssignLHS {
-    private Id id;
+    private Expression idE;
     private Expression index;
 
-    public void setUpArrayAccess(Id i, Expression e) { id = i; index = e;
-        subNodes.add(id); subNodes.add(index); }
+    public void setUpArrayAccess(Expression i, Expression e) { idE = i; index = e;
+        subNodes.add(idE); subNodes.add(index); }
 
     @Override
     public String stringRepr() {
-        return id.getName() + "[" + index.stringRepr() + "]";
+        return ((Id)idE).getName() + "[" + index.stringRepr() + "]";
     }
 
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(idE, Id.class);
+        checkType(index, Expression.class);
+
+        Id id = (Id)idE;
+
         ReturnValues r = id.evaluate(c);
 
         if (!(r.getIsArray()))

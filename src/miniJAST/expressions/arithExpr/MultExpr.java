@@ -1,11 +1,9 @@
 package miniJAST.expressions.arithExpr;
 
-import com.sun.org.apache.bcel.internal.generic.Type;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
@@ -14,10 +12,10 @@ import miniJAST.types.UnannType;
 
 public class MultExpr extends AddExpr {
     private boolean isTimes;
-    private MultExpr leftSide; // Left associative
-    private UnaryExpr rightSide;
+    private Expression leftSide; // Left associative
+    private Expression rightSide;
 
-    public void setUpMultExpr(boolean t, MultExpr l, UnaryExpr r) {
+    public void setUpMultExpr(boolean t, Expression l, Expression r) {
         isTimes = t; leftSide = l; rightSide = r;
         subNodes.add(leftSide); subNodes.add(rightSide);
     }
@@ -29,6 +27,9 @@ public class MultExpr extends AddExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(leftSide, MultExpr.class);
+        checkType(rightSide, UnaryExpr.class);
+
         ReturnValues left = leftSide.evaluate(c);
         ReturnValues right = rightSide.evaluate(c);
 

@@ -1,7 +1,6 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
@@ -17,6 +16,8 @@ public class BracketedExpr extends PrimaryExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(expr, Expression.class);
+
         return expr.evaluate(c);
     }
 }

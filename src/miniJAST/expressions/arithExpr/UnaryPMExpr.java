@@ -1,9 +1,9 @@
 package miniJAST.expressions.arithExpr;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
@@ -11,9 +11,9 @@ import miniJAST.expressions.returnValues.ReturnValuesInt;
 
 public class UnaryPMExpr extends UnaryExpr {
     private boolean isPlus;
-    private UnaryExpr expr;
+    private Expression expr;
 
-    public void setUpPMExpr(boolean p, UnaryExpr e) { isPlus = p; expr = e; subNodes.add(expr); }
+    public void setUpPMExpr(boolean p, Expression e) { isPlus = p; expr = e; subNodes.add(expr); }
 
     @Override
     public String stringRepr() {
@@ -22,6 +22,8 @@ public class UnaryPMExpr extends UnaryExpr {
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
+        checkType(expr, UnaryExpr.class);
+
         ReturnValues e = expr.evaluate(c);
 
         if (e.getIsArray())

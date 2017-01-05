@@ -3,6 +3,7 @@ package miniJAST.expressions;
 import miniJAST.Context;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
 import java.util.ArrayList;
@@ -24,4 +25,12 @@ public abstract class ExpressionBase implements Expression {
     }
     @Override
     public abstract String stringRepr();
+
+    protected void checkType(Expression e, Class<? extends Expression> c) throws MiniJASTException {
+        if (e instanceof FillableBlankExpr)
+            e.evaluate(new Context());
+
+        if (!(c.isInstance(e)))
+            throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
+    }
 }
