@@ -9,23 +9,26 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
 public class AndExpr extends OrExpr {
-    private Expression leftSide; // Left associative
-    private Expression rightSide;
+    private int leftSide; // Left associative
+    private int rightSide;
 
-    public void setUpAndExpr(Expression l, Expression r) { leftSide = l; rightSide = r;
-        subNodes.add(leftSide); subNodes.add(rightSide);}
+    public void setUpAndExpr(Expression l, Expression r) {
+        subNodes.clear();
+        leftSide = 0; rightSide = 1;
+        subNodes.add(l); subNodes.add(r);
+    }
 
     @Override
     public String stringRepr() {
-        return leftSide.stringRepr() + " && " + rightSide.stringRepr();
+        return subNodes.get(leftSide).stringRepr() + " && " + subNodes.get(rightSide).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(leftSide, AndExpr.class);
-        checkType(rightSide, EqExpr.class);
+        checkType(subNodes.get(leftSide), AndExpr.class);
+        checkType(subNodes.get(rightSide), EqExpr.class);
 
-        ReturnValues l = leftSide.evaluate(c);
+        ReturnValues l = subNodes.get(leftSide).evaluate(c);
 
         if (l.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("&& operator not applicable to operands that aren't of type boolean");
@@ -37,7 +40,7 @@ public class AndExpr extends OrExpr {
             return new ReturnValuesBool(false);
         }
 
-        ReturnValues r = rightSide.evaluate(c);
+        ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
         if (r.getType().uType != UnannType.BOOLEAN)
         throw new TypeException("&& operator not applicable to operands that aren't of type boolean");

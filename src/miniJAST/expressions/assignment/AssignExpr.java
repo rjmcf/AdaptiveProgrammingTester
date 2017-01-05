@@ -13,12 +13,15 @@ import miniJAST.types.UnannType;
 import java.util.ArrayList;
 
 public class AssignExpr extends ExpressionBase implements StatementExpr {
-    private Expression lhs;
+    private int lhsI;
     private AssignOp op;
-    private Expression expr;
+    private int expr;
 
-    public void setUpAssignExpr(Expression l, AssignOp o, Expression e) { lhs = l; op = o; expr = e;
-        subNodes.add(lhs); subNodes.add(expr);}
+    public void setUpAssignExpr(Expression l, AssignOp o, Expression e) {
+        subNodes.clear();
+        op = o; subNodes.add(l); subNodes.add(e);
+        lhsI = 0; expr = 1;
+    }
 
     @Override
     public String stringRepr() {
@@ -39,18 +42,20 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
             default: // DivEq
                 opS = " /= ";
         }
-        return lhs.stringRepr() + opS + expr.stringRepr();
+        return subNodes.get(lhsI).stringRepr() + opS + subNodes.get(expr).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
-        checkType(lhs, AssignLHS.class);
-        checkType(expr, Expression.class);
+        checkType(subNodes.get(lhsI), AssignLHS.class);
+        checkType(subNodes.get(expr), Expression.class);
+
+        AssignLHS lhs = (AssignLHS)subNodes.get(lhsI);
 
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;
             ReturnValues access = arac.evaluate(c);
-            ReturnValues ex = expr.evaluate(c);
+            ReturnValues ex = subNodes.get(expr).evaluate(c);
 
             switch (op) {
                 case EQ:
@@ -362,7 +367,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
             }
         } else {
             Id id = (Id) lhs;
-            ReturnValues ex = expr.evaluate(c);
+            ReturnValues ex = subNodes.get(expr).evaluate(c);
 
             switch (op) {
                 case EQ:

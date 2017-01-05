@@ -12,26 +12,27 @@ import miniJAST.types.UnannType;
 
 public class MultExpr extends AddExpr {
     private boolean isTimes;
-    private Expression leftSide; // Left associative
-    private Expression rightSide;
+    private int leftSide; // Left associative
+    private int rightSide;
 
     public void setUpMultExpr(boolean t, Expression l, Expression r) {
-        isTimes = t; leftSide = l; rightSide = r;
-        subNodes.add(leftSide); subNodes.add(rightSide);
+        subNodes.clear();
+        isTimes = t; subNodes.add(l); subNodes.add(r);
+        leftSide = 0; rightSide = 1;
     }
 
     @Override
     public String stringRepr() {
-        return leftSide.stringRepr() + (isTimes ? " * " : " / ") + rightSide.stringRepr();
+        return subNodes.get(leftSide).stringRepr() + (isTimes ? " * " : " / ") + subNodes.get(rightSide).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(leftSide, MultExpr.class);
-        checkType(rightSide, UnaryExpr.class);
+        checkType(subNodes.get(leftSide), MultExpr.class);
+        checkType(subNodes.get(rightSide), UnaryExpr.class);
 
-        ReturnValues left = leftSide.evaluate(c);
-        ReturnValues right = rightSide.evaluate(c);
+        ReturnValues left = subNodes.get(leftSide).evaluate(c);
+        ReturnValues right = subNodes.get(rightSide).evaluate(c);
 
         if (left.getType().uType == UnannType.BOOLEAN || right.getType().uType == UnannType.BOOLEAN)
             throw new TypeException("Cannot use * or / on operands of type Boolean");

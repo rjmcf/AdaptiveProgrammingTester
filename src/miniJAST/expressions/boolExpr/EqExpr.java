@@ -9,24 +9,27 @@ import miniJAST.expressions.returnValues.*;
 
 public class EqExpr extends AndExpr {
     private boolean isEqualityTest;
-    private Expression leftSide; // Left associative (allows arith eq test on left side)
-    private Expression rightSide;
+    private int leftSide; // Left associative (allows arith eq test on left side)
+    private int rightSide;
 
-    public void setUpEqExpr(boolean e, Expression l, Expression r) { isEqualityTest = e; leftSide = l; rightSide = r;
-        subNodes.add(leftSide); subNodes.add(rightSide);}
+    public void setUpEqExpr(boolean e, Expression l, Expression r) {
+        subNodes.clear();
+        isEqualityTest = e; leftSide = 0; rightSide = 1;
+        subNodes.add(l); subNodes.add(r);
+    }
 
     @Override
     public String stringRepr() {
-        return leftSide.stringRepr() + (isEqualityTest ? " == " : " != ") + rightSide.stringRepr();
+        return subNodes.get(leftSide).stringRepr() + (isEqualityTest ? " == " : " != ") + subNodes.get(rightSide).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(leftSide, EqExpr.class);
-        checkType(rightSide, RelationExpr.class);
+        checkType(subNodes.get(leftSide), EqExpr.class);
+        checkType(subNodes.get(rightSide), RelationExpr.class);
 
-        ReturnValues l = leftSide.evaluate(c);
-        ReturnValues r = rightSide.evaluate(c);
+        ReturnValues l = subNodes.get(leftSide).evaluate(c);
+        ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
         if (l.getType().uType != r.getType().uType)
             throw new TypeException("Type mismatch between arguments of ==");

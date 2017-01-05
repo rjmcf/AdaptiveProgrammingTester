@@ -10,11 +10,14 @@ import miniJAST.types.UnannType;
 
 public class RelationExpr extends EqExpr {
     private RelationOp op;
-    private Expression leftSide; // Left associative
-    private Expression rightSide;
+    private int leftSide; // Left associative
+    private int rightSide;
 
-    public void setUpRelationExpr(RelationOp o, Expression l, Expression r) { op = o; leftSide = l; rightSide = r;
-        subNodes.add(leftSide); subNodes.add(rightSide);}
+    public void setUpRelationExpr(RelationOp o, Expression l, Expression r) {
+        subNodes.clear();
+        op = o; leftSide = 0; rightSide = 1;
+        subNodes.add(l); subNodes.add(r);
+    }
 
     @Override
     public String stringRepr() {
@@ -32,16 +35,16 @@ public class RelationExpr extends EqExpr {
             default: // LTE
                 opS = " <= ";
         }
-        return leftSide.stringRepr() + opS + rightSide.stringRepr();
+        return subNodes.get(leftSide).stringRepr() + opS + subNodes.get(rightSide).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(leftSide, RelationExpr.class);
-        checkType(rightSide, AddExpr.class);
+        checkType(subNodes.get(leftSide), RelationExpr.class);
+        checkType(subNodes.get(rightSide), AddExpr.class);
 
-        ReturnValues l = leftSide.evaluate(c);
-        ReturnValues r = rightSide.evaluate(c);
+        ReturnValues l = subNodes.get(leftSide).evaluate(c);
+        ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
         if (l.getType().uType == UnannType.BOOLEAN || r.getType().uType == UnannType.BOOLEAN)
             throw new TypeException("Cannot relate boolean values");

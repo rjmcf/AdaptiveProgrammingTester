@@ -10,25 +10,28 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.types.UnannType;
 
 public class CondExpr extends ExpressionBase {
-    private Expression cond;
-    private Expression trueExpr;
-    private Expression falseExpr; // Right associative
+    private int cond;
+    private int trueExpr;
+    private int falseExpr; // Right associative
 
-    public void setUpCondExpr(Expression c, Expression t, Expression f) { cond = c; trueExpr = t; falseExpr = f;
-        subNodes.add(cond); subNodes.add(trueExpr); subNodes.add(falseExpr); }
+    public void setUpCondExpr(Expression c, Expression t, Expression f) {
+        subNodes.clear();
+        cond = 0; trueExpr = 1; falseExpr = 2;
+        subNodes.add(c); subNodes.add(t); subNodes.add(f);
+    }
 
     @Override
     public String stringRepr() {
-        return cond.stringRepr() + " ? " + trueExpr.stringRepr() + " : " + falseExpr.stringRepr();
+        return subNodes.get(cond).stringRepr() + " ? " + subNodes.get(trueExpr).stringRepr() + " : " + subNodes.get(falseExpr).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(cond, OrExpr.class);
-        checkType(trueExpr, Expression.class);
-        checkType(falseExpr, CondExpr.class);
+        checkType(subNodes.get(cond), OrExpr.class);
+        checkType(subNodes.get(trueExpr), Expression.class);
+        checkType(subNodes.get(falseExpr), CondExpr.class);
 
-        ReturnValues condV = cond.evaluate(c);
+        ReturnValues condV = subNodes.get(cond).evaluate(c);
         if (condV.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Conditional expression must have type Boolean");
 
@@ -36,8 +39,8 @@ public class CondExpr extends ExpressionBase {
             throw new TypeException("Cannot operate on whole arrays");
 
         if (((ReturnValuesBool)condV).value)
-            return trueExpr.evaluate(c);
+            return subNodes.get(trueExpr).evaluate(c);
         else
-            return falseExpr.evaluate(c);
+            return subNodes.get(falseExpr).evaluate(c);
     }
 }

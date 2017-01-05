@@ -11,20 +11,20 @@ import miniJAST.types.UnannType;
 
 public class UnaryComplementExpr extends UnaryExpr {
     // Only logical complement here
-    private Expression expr;
+    private int expr;
 
-    public void setUpCompExpr(Expression e) { expr = e; subNodes.add(expr); }
+    public void setUpCompExpr(Expression e) { expr = 0; subNodes.add(e); }
 
     @Override
     public String stringRepr() {
-        return " !" + expr.stringRepr();
+        return " !" + subNodes.get(expr).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(expr, UnaryExpr.class);
+        checkType(subNodes.get(expr), UnaryExpr.class);
 
-        ReturnValues e = expr.evaluate(c);
+        ReturnValues e = subNodes.get(expr).evaluate(c);
 
         if (e.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Cannot apply ! to non-boolean type.");

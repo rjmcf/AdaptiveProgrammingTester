@@ -5,19 +5,19 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
 public class BracketedExpr extends PrimaryExpr {
-    private Expression expr;
+    private int expr;
 
-    public void setUpBracketExpr(Expression e) { expr = e; subNodes.add(expr); }
+    public void setUpBracketExpr(Expression e) { expr = 0; subNodes.add(e); }
 
     @Override
     public String stringRepr() {
-        return " (" + expr.stringRepr() + ") ";
+        return " (" + subNodes.get(expr).stringRepr() + ") ";
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(expr, Expression.class);
+        checkType(subNodes.get(expr), Expression.class);
 
-        return expr.evaluate(c);
+        return subNodes.get(expr).evaluate(c);
     }
 }

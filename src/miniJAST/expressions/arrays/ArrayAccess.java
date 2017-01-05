@@ -12,22 +12,26 @@ import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
 public class ArrayAccess extends PrimaryExpr implements AssignLHS {
-    private Expression idE;
-    private Expression index;
+    private int idE;
+    private int index;
 
-    public void setUpArrayAccess(Expression i, Expression e) { idE = i; index = e;
-        subNodes.add(idE); subNodes.add(index); }
+    public void setUpArrayAccess(Expression i, Expression e) {
+        subNodes.clear();
+        subNodes.add(i); subNodes.add(e);
+        idE = 0; index = 1;
+
+    }
 
     @Override
     public String stringRepr() {
-        return ((Id)idE).getName() + "[" + index.stringRepr() + "]";
+        return ((Id)subNodes.get(idE)).getName() + "[" + subNodes.get(index).stringRepr() + "]";
     }
 
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(idE, Id.class);
-        checkType(index, Expression.class);
+        checkType(subNodes.get(idE), Id.class);
+        checkType(subNodes.get(index), Expression.class);
 
-        Id id = (Id)idE;
+        Id id = (Id)subNodes.get(idE);
 
         ReturnValues r = id.evaluate(c);
 
@@ -36,7 +40,7 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
 
         ReturnValuesArray ar = (ReturnValuesArray)r;
 
-        ReturnValues i = index.evaluate(c);
+        ReturnValues i = subNodes.get(index).evaluate(c);
         if (i.getType().uType != UnannType.INT)
             throw new TypeException("Can only index with int value");
 

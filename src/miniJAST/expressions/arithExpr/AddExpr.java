@@ -13,26 +13,27 @@ import miniJAST.types.UnannType;
 
 public class AddExpr extends RelationExpr {
     private boolean isPlus;
-    private Expression leftSide; // Left associative
-    private Expression rightSide;
+    private int leftSide;
+    private int rightSide;
 
     public void setUpAddExpr(boolean p, Expression l, Expression r) {
-        isPlus = p; leftSide = l; rightSide = r;
-        subNodes.add(leftSide); subNodes.add(rightSide);
+        subNodes.clear();
+        isPlus = p; subNodes.add(l); subNodes.add(r);
+        leftSide = 0; rightSide = 1;
     }
 
     @Override
     public String stringRepr() {
-        return leftSide.stringRepr() + (isPlus ? " + " : " - ") + rightSide.stringRepr();
+    return subNodes.get(leftSide).stringRepr() + (isPlus ? " + " : " - ") + subNodes.get(rightSide).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(leftSide, AddExpr.class);
-        checkType(rightSide, MultExpr.class);
+        checkType(subNodes.get(leftSide), AddExpr.class);
+        checkType(subNodes.get(rightSide), MultExpr.class);
 
-        ReturnValues left = leftSide.evaluate(c);
-        ReturnValues right = rightSide.evaluate(c);
+        ReturnValues left = subNodes.get(leftSide).evaluate(c);
+        ReturnValues right = subNodes.get(rightSide).evaluate(c);
 
         if (left.getType().uType == UnannType.BOOLEAN || right.getType().uType == UnannType.BOOLEAN)
             throw new TypeException("Cannot use + or - on operands of type Boolean");

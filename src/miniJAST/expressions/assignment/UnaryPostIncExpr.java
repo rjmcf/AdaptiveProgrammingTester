@@ -14,18 +14,23 @@ import java.util.ArrayList;
 
 public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr {
     private boolean isPlus;
-    private Expression expr;
+    private int exprI;
 
-    public void setUpPostIncExpr(boolean p, Expression e) { isPlus = p; expr = e; subNodes.add(expr); }
+    public void setUpPostIncExpr(boolean p, Expression e) {
+        subNodes.clear();
+        isPlus = p; exprI = 0; subNodes.add(e);
+    }
 
     @Override
     public String stringRepr() {
-        return expr.stringRepr() + (isPlus ? "++" : "--");
+        return subNodes.get(exprI).stringRepr() + (isPlus ? "++" : "--");
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(expr, AssignLHS.class);
+        checkType(subNodes.get(exprI), AssignLHS.class);
+
+        AssignLHS expr = (AssignLHS)subNodes.get(exprI);
 
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;

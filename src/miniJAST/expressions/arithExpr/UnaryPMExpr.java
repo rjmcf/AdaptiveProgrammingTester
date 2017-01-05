@@ -11,20 +11,23 @@ import miniJAST.expressions.returnValues.ReturnValuesInt;
 
 public class UnaryPMExpr extends UnaryExpr {
     private boolean isPlus;
-    private Expression expr;
+    private int expr;
 
-    public void setUpPMExpr(boolean p, Expression e) { isPlus = p; expr = e; subNodes.add(expr); }
+    public void setUpPMExpr(boolean p, Expression e) {
+        subNodes.clear();
+        isPlus = p; expr = 0; subNodes.add(e);
+    }
 
     @Override
     public String stringRepr() {
-        return (isPlus ? " +" : " -") + expr.stringRepr();
+        return (isPlus ? " +" : " -") + subNodes.get(expr).stringRepr();
     }
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
-        checkType(expr, UnaryExpr.class);
+        checkType(subNodes.get(expr), UnaryExpr.class);
 
-        ReturnValues e = expr.evaluate(c);
+        ReturnValues e = subNodes.get(expr).evaluate(c);
 
         if (e.getIsArray())
             throw new TypeException("Cannot operate on whole arrays");
