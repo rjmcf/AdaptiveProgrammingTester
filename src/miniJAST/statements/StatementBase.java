@@ -47,8 +47,12 @@ public abstract class StatementBase implements MiniJASTNode {
         if (e == null)
             return;
 
-        if (e instanceof FillableBlankExpr)
-            e.evaluate(new Context());
+        if (e instanceof FillableBlankExpr) {
+            if (!((FillableBlankExpr) e).isFilled())
+                e.evaluate(new Context());
+            else
+                return;
+        }
 
         if (!(c.isInstance(e)))
             throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
@@ -58,8 +62,12 @@ public abstract class StatementBase implements MiniJASTNode {
         if (e == null)
             return;
 
-        if (e instanceof FillableBlankStmnt)
-            e.executeStart(new Context());
+        if (e instanceof FillableBlankExpr) {
+            if (!((FillableBlankExpr) e).isFilled())
+                e.executeStart(new Context());
+            else
+                return;
+        }
 
         if (!(c.isInstance(e)))
             throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
@@ -67,12 +75,15 @@ public abstract class StatementBase implements MiniJASTNode {
 
     @Override
     public boolean fillBlank(int blankId, MiniJASTNode replacement) {
-        ListIterator<MiniJASTNode> it = subNodes.listIterator();
-        while (it.hasNext()){
-            MiniJASTNode sNode = it.next();
-            if (sNode instanceof FillableBlank) {
-                if (((FillableBlank)sNode).getId() == blankId) {
-                    it.set(replacement);
+        for (MiniJASTNode sNode : subNodes) {
+            if (sNode instanceof FillableBlankExpr) {
+                if (((FillableBlankExpr) sNode).getId() == blankId) {
+                    ((FillableBlankExpr) sNode).setStudentExpr((Expression) replacement);
+                    return true;
+                }
+            } else if (sNode instanceof FillableBlankStmnt) {
+                if (((FillableBlankStmnt) sNode).getId() == blankId) {
+                    ((FillableBlankStmnt) sNode).setStudentStmnt((BlockStatement) replacement);
                     return true;
                 }
             } else {

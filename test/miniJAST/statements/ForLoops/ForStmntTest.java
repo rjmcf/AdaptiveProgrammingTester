@@ -53,35 +53,40 @@ public class ForStmntTest {
 
         // set up ForStmnt
         fS1 = new ForStmnt();
-            // set up ForInit
-            fI = new ForInit();
-                // set up "int i = 5"
-                iStat = new LocalVarDec();
-                iStat.setUpLVD(UnannType.INT);
-                five = new Literal();
-                five.setUpLiteral(UnannType.INT, "5");
-                i = new VarDeclarator();
-                i.setUpVarDec("i", five);
-                iStat.addVarDec(i);
-            fI.setLocalVarDec(iStat);
-            // set up "i > 0"
-            iID = new Id();
-            iID.setUpId(new Type(UnannType.INT, 1), "i");
-            zero = new Literal();
-            zero.setUpLiteral(UnannType.INT, "0");
-            gT = new RelationExpr();
-            gT.setUpRelationExpr(RelationOp.GT, iID, zero);
-            // set up "i--"
-            minus = new UnaryPostIncExpr();
-            minus.setUpPostIncExpr(false, iID);
-            // set up "sum = sum * i"
-            sumID = new Id();
-            sumID.setUpId(new Type(UnannType.INT, 1), "sum");
-            sumTimesI = new MultExpr();
-            sumTimesI.setUpMultExpr(true, sumID, iID);
-            sumAss = new AssignExpr();
-            sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
-            ExpressionStmnt eS1 = new ExpressionStmnt(sumAss);
+        // set up ForInit
+        fI = new ForInit();
+
+        // set up "int i = 5"
+        iStat = new LocalVarDec();
+        iStat.setUpLVD(UnannType.INT);
+        five = new Literal();
+        five.setUpLiteral(UnannType.INT, "5");
+        i = new VarDeclarator();
+        i.setUpVarDec("i", five);
+        iStat.addVarDec(i);
+        fI.setLocalVarDec(iStat);
+
+        // set up "i > 0"
+        iID = new Id();
+        iID.setUpId(new Type(UnannType.INT, 1), "i");
+        zero = new Literal();
+        zero.setUpLiteral(UnannType.INT, "0");
+        gT = new RelationExpr();
+        gT.setUpRelationExpr(RelationOp.GT, iID, zero);
+
+        // set up "i--"
+        minus = new UnaryPostIncExpr();
+        minus.setUpPostIncExpr(false, iID);
+
+        // set up "sum = sum * i"
+        sumID = new Id();
+        sumID.setUpId(new Type(UnannType.INT, 1), "sum");
+        sumTimesI = new MultExpr();
+        sumTimesI.setUpMultExpr(true, sumID, iID);
+        sumAss = new AssignExpr();
+        sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
+        ExpressionStmnt eS1 = new ExpressionStmnt(sumAss);
+
         fS1.setUpForStmnt(fI, gT);
         fS1.addUpdate(minus);
         fS1.setBody(eS1);
@@ -89,6 +94,7 @@ public class ForStmntTest {
         block1 = new Block(true);
         block1.addBlockStmnt(sumStat);
         block1.addBlockStmnt(fS1);
+
 
         j = new VarDeclarator();
         j.setUpVarDec("j", zero);

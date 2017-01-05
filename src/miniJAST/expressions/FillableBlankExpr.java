@@ -9,8 +9,11 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.statements.StatementBase;
 
 public class FillableBlankExpr extends FillableBlank implements Expression{
-    int nodesReplaced;
-    Expression studentExpr;
+    private int nodesReplaced;
+    private Expression studentExpr;
+
+    public void setStudentExpr(Expression sE) { studentExpr = sE; }
+    public boolean isFilled() { return studentExpr != null; }
 
     @Override
     public NodeCount getTreeSize() {
@@ -30,6 +33,9 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
 
     @Override
     public String stringRepr() {
-        return "...(" + getId() + ")";
+        if (studentExpr == null)
+            return "..(" + getId() + ")..";
+        else
+            return studentExpr.stringRepr();
     }
 }

@@ -10,6 +10,9 @@ public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSub
     int nodesReplaced;
     BlockStatement studentStmnt;
 
+    public void setStudentStmnt(BlockStatement sS) { studentStmnt = sS; }
+    public boolean isFilled() { return studentStmnt != null; }
+
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
         if (studentStmnt == null)
@@ -36,6 +39,13 @@ public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSub
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return "...(" + getId() + ")";
+        if (studentStmnt == null)
+            return pad(blocksDeep) + "..(" + getId() + ")..";
+        else
+            return studentStmnt.stringRepr(blocksDeep);
+    }
+
+    private String pad(int count) {
+        return new String(new char[count]).replace("\0", "    ");
     }
 }
