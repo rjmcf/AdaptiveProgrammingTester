@@ -2,7 +2,7 @@ package miniJAST;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FillableBlank {
+public abstract class FillableBlank {
     private static AtomicInteger nextId = new AtomicInteger(0);
     private int id;
 

@@ -21,15 +21,15 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
     }
 
     @Override
-    public String stringRepr() {
-        return "...";
-    }
-
-    @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         if (studentExpr == null)
             throw new BlankEmptyException();
         else
             return studentExpr.evaluate(c);
+    }
+
+    @Override
+    public String stringRepr() {
+        return "...(" + getId() + ")";
     }
 }
