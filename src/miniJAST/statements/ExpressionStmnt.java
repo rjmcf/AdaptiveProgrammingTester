@@ -6,14 +6,14 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.StatementExpr;
 
 public class ExpressionStmnt extends StatementBase implements StmntNoTrailSubstmnt {
-    private Expression expr;
+    private int expr;
 
-    public ExpressionStmnt(Expression sE) { expr = sE; subNodes.add(sE); }
+    public ExpressionStmnt(Expression sE) { subNodes.clear(); expr = 0; subNodes.add(sE); }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
-        checkType(expr, StatementExpr.class);
-        expr.evaluate(c);
+        checkType((Expression)subNodes.get(expr), StatementExpr.class);
+        ((Expression)subNodes.get(expr)).evaluate(c);
         return FlowControl.NONE;
     }
 
@@ -24,6 +24,6 @@ public class ExpressionStmnt extends StatementBase implements StmntNoTrailSubstm
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) +  expr.stringRepr() + ";";
+        return pad(blocksDeep) +  ((Expression)subNodes.get(expr)).stringRepr() + ";";
     }
 }

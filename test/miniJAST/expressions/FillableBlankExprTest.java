@@ -389,6 +389,7 @@ public class FillableBlankExprTest {
 
         ForInit fI = new ForInit();
         fI.addStmntExpr(fbe);
+        fS = new ForStmnt();
         fS.setUpForStmnt(fI, null);
         try {
             fS.executeStart(c);
@@ -397,8 +398,10 @@ public class FillableBlankExprTest {
             // pass test
         }
 
+        fS = new ForStmnt();
         fS.setUpForStmnt(null, null);
         fS.addUpdate(fbe);
+        fS.setBody(testS);
         try {
             fS.executeStart(c);
             fail("Blank not filled");
@@ -421,6 +424,7 @@ public class FillableBlankExprTest {
 
         ForInit fI = new ForInit();
         fI.addStmntExpr(fbe);
+        fS = new ForStmntNoShortIf();
         fS.setUpForStmnt(fI, null);
         try {
             fS.executeStart(c);
@@ -429,8 +433,10 @@ public class FillableBlankExprTest {
             // pass test
         }
 
+        fS = new ForStmntNoShortIf();
         fS.setUpForStmnt(null, null);
         fS.addUpdate(fbe);
+        fS.setBodyNSI(testS);
         try {
             fS.executeStart(c);
             fail("Blank not filled");

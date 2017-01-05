@@ -6,20 +6,20 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 
 public class PrintStatement extends StatementBase implements StmntNoTrailSubstmnt {
-    Expression expr;
+    private int expr;
 
-    public void setUpPrint(Expression e) { expr = e; subNodes.add(e); }
+    public void setUpPrint(Expression e) { subNodes.clear(); expr = 0; subNodes.add(e); }
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "System.out.printLn(" + expr.stringRepr() + ");";
+        return pad(blocksDeep) + "System.out.printLn(" + ((Expression)subNodes.get(expr)).stringRepr() + ");";
     }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
-        checkType(expr, Expression.class);
+        checkType((Expression)subNodes.get(expr), Expression.class);
 
-        ReturnValues v = expr.evaluate(c);
+        ReturnValues v = ((Expression)subNodes.get(expr)).evaluate(c);
 
         if (v.getIsArray()) {
             ReturnValuesArray var = (ReturnValuesArray) v;

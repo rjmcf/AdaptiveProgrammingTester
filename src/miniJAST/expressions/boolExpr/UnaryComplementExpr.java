@@ -13,7 +13,7 @@ public class UnaryComplementExpr extends UnaryExpr {
     // Only logical complement here
     private int expr;
 
-    public void setUpCompExpr(Expression e) { expr = 0; subNodes.add(e); }
+    public void setUpCompExpr(Expression e) { subNodes.clear(); expr = 0; subNodes.add(e); }
 
     @Override
     public String stringRepr() {

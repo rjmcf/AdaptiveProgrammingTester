@@ -7,10 +7,7 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.statements.FlowControl;
-import miniJAST.statements.Statement;
-import miniJAST.statements.StatementBase;
-import miniJAST.statements.StmntNoTrailSubstmnt;
+import miniJAST.statements.*;
 import miniJAST.types.UnannType;
 
 public class DoStmnt extends CondLoopBase implements StmntNoTrailSubstmnt {
@@ -18,12 +15,13 @@ public class DoStmnt extends CondLoopBase implements StmntNoTrailSubstmnt {
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "do \n" + stmnt.stringRepr(blocksDeep+1) + " while (" + cond.stringRepr() + ")";
+        return pad(blocksDeep) + "do \n" + ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep+1) +
+                " while (" + ((Expression)subNodes.get(cond)).stringRepr() + ")";
     }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
-        stmnt.execute(c, d+1);
+        ((BlockStatement)subNodes.get(stmnt)).execute(c, d+1);
         removeDecsAtDepth(c, d+1);
         return condAndLoop(c, d);
     }

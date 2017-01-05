@@ -2,6 +2,7 @@ package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
+import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.statements.BlockStatement;
@@ -13,32 +14,30 @@ import miniJAST.statements.StatementBase;
 import java.util.ArrayList;
 
 public class ForInit extends StatementBase implements BlockStatement{
-    private ArrayList<Expression> stmnts;
-    private BlockStatement lvd = null;
+    private boolean hasLVD = false;
 
-    public ForInit() { stmnts = new ArrayList<>(); }
-    public void addLocalVarDec(BlockStatement lv) { lvd = lv; subNodes.add(lv); }
-    public void addStmntExpr(Expression se) { stmnts.add(se); subNodes.add(se); }
+    public void setLocalVarDec(BlockStatement lv) { subNodes.clear(); hasLVD = true; subNodes.add(lv); }
+    public void addStmntExpr(Expression se) { hasLVD = false; subNodes.add(se); }
 
     public String stringRepr() {
-        if (lvd == null) {
+        if (!hasLVD) {
             String result = "";
-            for (Expression se : stmnts)
-                result += se.stringRepr() + ", ";
+            for (MiniJASTNode se : subNodes)
+                result += ((Expression)se).stringRepr() + ", ";
             return result.substring(0, result.length() - 2);
         } else
-            return lvd.stringRepr(0).substring(0, lvd.stringRepr(0).length() - 1);
+            return ((LocalVarDec)subNodes.get(0)).stringRepr(0).substring(0, ((LocalVarDec)subNodes.get(0)).stringRepr(0).length() - 1);
     }
 
     public FlowControl execute(Context c, int d) throws MiniJASTException {
-        if (lvd == null) {
-            for (Expression se : stmnts) {
-                checkType(se, StatementExpr.class);
-                se.evaluate(c);
+        if (!hasLVD) {
+            for (MiniJASTNode se : subNodes) {
+                checkType((Expression)se, StatementExpr.class);
+                ((Expression)se).evaluate(c);
             }
         } else {
-            checkType(lvd, LocalVarDec.class);
-            lvd.execute(c, d);
+            checkType((BlockStatement)subNodes.get(0), LocalVarDec.class);
+            ((BlockStatement)subNodes.get(0)).execute(c, d);
         }
 
         return null;
@@ -46,7 +45,7 @@ public class ForInit extends StatementBase implements BlockStatement{
 
     @Override
     public FlowControl executeStart(Context c) throws MiniJASTException {
-        return null;
+        throw new IncorrectEvaluationException("Should not be starting execution on ForInit");
     }
 
     @Override

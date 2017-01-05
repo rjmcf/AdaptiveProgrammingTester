@@ -14,7 +14,8 @@ import miniJAST.types.UnannType;
 public abstract class WhileStmntBase extends CondLoopBase implements BlockStatement {
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "while (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep + 1);
+        return pad(blocksDeep) + "while (" + ((Expression)subNodes.get(cond)).stringRepr() + ") \n" +
+                ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
     }
 
     @Override

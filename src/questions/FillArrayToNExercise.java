@@ -68,7 +68,7 @@ public class FillArrayToNExercise extends AbstractPExercise {
         AssignExpr updateIndex = new AssignExpr();
         updateIndex.setUpAssignExpr(nsAcc, AssignOp.EQ, iID);
         ForInit init = new ForInit();
-        init.addLocalVarDec(iDec);
+        init.setLocalVarDec(iDec);
         ForStmnt fS = new ForStmnt();
         fS.setUpForStmnt(init, lTN);
         fS.addUpdate(plus);

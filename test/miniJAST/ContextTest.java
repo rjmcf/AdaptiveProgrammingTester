@@ -57,7 +57,7 @@ public class ContextTest {
         jID = new Id();
         jID.setUpId(new Type(UnannType.INT, 1), "j");
         init = new ForInit();
-        init.addLocalVarDec(iDec);
+        init.setLocalVarDec(iDec);
         fS = new ForStmnt();
         fS.setUpForStmnt(init, lT2);
         fS.addUpdate(plus);

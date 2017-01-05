@@ -1,6 +1,7 @@
 package miniJAST.statements.LVD;
 
 import miniJAST.Context;
+import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.statements.BlockStatement;
@@ -10,23 +11,24 @@ import miniJAST.types.UnannType;
 
 public class VarDeclarator extends StatementBase implements BlockStatement{
     protected String name;
-    private Expression expr;
+    private int expr;
     protected boolean isArray = false;
 
-    public void setUpVarDec(String n, Expression e) { name = n; expr = e; subNodes.add(e); }
+    public void setUpVarDec(String n, Expression e) { subNodes.clear(); name = n; expr = 0; subNodes.add(e); }
 
     public String getName() { return name; }
-    public Expression getExpr() { return expr; }
-    public String stringRepr(UnannType t) { return name + (expr == null ? "" : (" = " + expr.stringRepr())); }
+    public Expression getExpr() { return (Expression)subNodes.get(expr); }
+    public String stringRepr(UnannType t) { return name + (subNodes.get(expr) ==
+            null ? "" : (" = " + ((Expression)subNodes.get(expr)).stringRepr())); }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
-        return null;
+        throw new IncorrectEvaluationException("Should not be executing a VarDeclarator");
     }
 
     @Override
     public FlowControl executeStart(Context c) throws MiniJASTException {
-        return null;
+        throw new IncorrectEvaluationException("Should not be executing a VarDeclarator");
     }
 
     @Override

@@ -1,29 +1,26 @@
 package miniJAST.statements.arrays;
 
-import miniJAST.NodeCount;
+import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Expression;
-import miniJAST.statements.arrays.ArrayCreation;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 
 public class ArrayCreationWithInitList extends ArrayCreation {
-    private ArrayList<Expression> values;
-
-    public ArrayCreationWithInitList() { hasInitList = true; values = new ArrayList<>();}
+    public ArrayCreationWithInitList() { hasInitList = true; }
 
     @Override
     public String stringRepr(UnannType t) {
         String result = name + "[] = { ";
-        for (Expression v : values)
-            result += v.stringRepr() + ", ";
+        for (MiniJASTNode v : subNodes)
+            result += ((Expression)v).stringRepr() + ", ";
         String result1 = result.substring(0, result.length()-2);
         result1 += " }";
         return result1;
     }
 
-    public void setUPACWIL(String n) { name = n; }
-    public void addExpressionACWIL(Expression e) { values.add(e); subNodes.add(e); }
-    public ArrayList<Expression> getValues () { return values; }
+    public void setUPACWIL(String n) { subNodes.clear(); name = n; }
+    public void addExpressionACWIL(Expression e) { subNodes.add(e); }
+    public ArrayList<MiniJASTNode> getValues () { return subNodes; }
 
 }

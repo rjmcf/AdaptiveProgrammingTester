@@ -7,35 +7,37 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
+import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.Statement;
 import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
 public class IfThenStmnt extends StatementBase implements Statement {
-    private Expression cond;
-    private Statement stmnt;
+    private int cond;
+    private int stmnt;
 
-    public void setUpIfThen(Expression c, Statement t) { cond = c; stmnt = t; subNodes.add(c); subNodes.add(t); }
+    public void setUpIfThen(Expression c, Statement t) { subNodes.clear(); cond = 0; stmnt = 1; subNodes.add(c); subNodes.add(t); }
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "if (" + cond.stringRepr() + ") \n" + stmnt.stringRepr(blocksDeep+1);
+        return pad(blocksDeep) + "if (" + ((Expression)subNodes.get(cond)).stringRepr() + ") \n" +
+                ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep+1);
     }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
-        checkType(cond, Expression.class);
-        checkType(stmnt, Statement.class);
+        checkType((Expression) subNodes.get(cond), Expression.class);
+        checkType((BlockStatement)subNodes.get(stmnt), Statement.class);
 
-        ReturnValues r = cond.evaluate(c);
+        ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must be Boolean type");
         if (r.getIsArray())
             throw new TypeException("Can not operate on arrays!");
 
         if (((ReturnValuesBool)r).value) {
-            FlowControl result = stmnt.execute(c, d+1);
+            FlowControl result = ((BlockStatement)subNodes.get(stmnt)).execute(c, d+1);
             removeDecsAtDepth(c, d+1);
             return result;
         }

@@ -63,7 +63,7 @@ public class ForStmntTest {
                 i = new VarDeclarator();
                 i.setUpVarDec("i", five);
                 iStat.addVarDec(i);
-            fI.addLocalVarDec(iStat);
+            fI.setLocalVarDec(iStat);
             // set up "i > 0"
             iID = new Id();
             iID.setUpId(new Type(UnannType.INT, 1), "i");

@@ -1,33 +1,33 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
 public class Block extends StatementBase implements StmntNoTrailSubstmnt {
-    private ArrayList<BlockStatement> stmnts;
     boolean isOuterMost;
 
-    public Block(boolean isOuter) { stmnts = new ArrayList<>(); isOuterMost = isOuter; }
-    public void addBlockStmnt(BlockStatement b) { stmnts.add(b); subNodes.add(b); }
+    public Block(boolean isOuter) { isOuterMost = isOuter; }
+    public void addBlockStmnt(BlockStatement b) { subNodes.add(b); }
 
     @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep-1) + "{ \n";
-        for (BlockStatement s : stmnts)
-            result += s.stringRepr(blocksDeep) + "\n";
+        for (MiniJASTNode s : subNodes)
+            result += ((BlockStatement)s).stringRepr(blocksDeep) + "\n";
         result += pad(blocksDeep-1) + "}";
         return result;
     }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException{
-        for (BlockStatement b : stmnts) {
-            checkType(b, BlockStatement.class);
+        for (MiniJASTNode b : subNodes) {
+            checkType((BlockStatement)b, BlockStatement.class);
 
-            FlowControl fc = b.execute(c, isOuterMost ? d : d+1);
+            FlowControl fc = ((BlockStatement)b).execute(c, isOuterMost ? d : d+1);
             switch (fc) {
                 case NONE:
                     break;

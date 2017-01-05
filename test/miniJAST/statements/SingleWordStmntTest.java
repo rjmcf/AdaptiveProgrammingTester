@@ -163,7 +163,7 @@ public class SingleWordStmntTest {
         jPlus = new UnaryPostIncExpr();
         jPlus.setUpPostIncExpr(true, jID);
         init2 = new ForInit();
-        init2.addLocalVarDec(jDec);
+        init2.setLocalVarDec(jDec);
         forStmnt2 = new ForStmnt();
         forStmnt2.setUpForStmnt(init2, lT1);
         forStmnt2.addUpdate(jPlus);

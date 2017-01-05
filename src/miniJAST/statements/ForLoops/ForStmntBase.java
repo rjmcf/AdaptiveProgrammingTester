@@ -1,6 +1,7 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -9,6 +10,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
+import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.Statement;
 import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
@@ -16,35 +18,41 @@ import miniJAST.types.UnannType;
 import java.util.ArrayList;
 
 public abstract class ForStmntBase extends StatementBase implements BlockStatement {
-    protected BlockStatement init;
-    protected Expression cond;
-    protected ArrayList<Expression> updates = new ArrayList<>();
-    protected BlockStatement stmnt;
+    protected int init;
+    protected int condI;
+    protected ArrayList<Integer> updates = new ArrayList<>();
+    protected int stmnt;
 
-    public void setUpForStmnt( BlockStatement i, Expression c) { init = i; cond = c; subNodes.add(i); subNodes.add(c); }
-    public void addUpdate(Expression se) { updates.add(se); subNodes.add(se); }
-    protected void baseSetBody(BlockStatement s) { stmnt = s; subNodes.add(s); }
+    public void setUpForStmnt( BlockStatement i, Expression c) {
+        subNodes.clear();
+        subNodes.add(i); init = 0;
+        subNodes.add(c); condI = 1;
+    }
+    public void addUpdate(Expression se) { subNodes.add(se); updates.add(subNodes.size()-1); }
+    protected void baseSetBody(BlockStatement s) { subNodes.add(s); stmnt = subNodes.size() - 1; }
 
     @Override
     public String stringRepr(int blocksDeep) {
-        String result = pad(blocksDeep) + "for (" + (init == null ? "" : ((ForInit)init).stringRepr()) + "; " +
-                (cond == null ? "" : cond.stringRepr()) + "; ";
-        for (Expression u : updates)
-            result += u.stringRepr() + ", ";
+        String result = pad(blocksDeep) + "for (" + (subNodes.get(init) == null ? "" :
+                ((ForInit)subNodes.get(init)).stringRepr()) + "; " +
+                (subNodes.get(condI) == null ? "" : ((Expression)subNodes.get(condI)).stringRepr()) + "; ";
+        for (int u : updates)
+            result += ((Expression)subNodes.get(u)).stringRepr() + ", ";
         String result1 = result.substring(0, result.length() - 2);
-        result1 += ") \n" + stmnt.stringRepr(blocksDeep + 1);
+        result1 += ") \n" + ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
         return result1;
     }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
-        checkType(init, ForInit.class);
-        checkType(cond, Expression.class);
-        checkType(stmnt, BlockStatement.class);
+        checkType((BlockStatement)subNodes.get(init), ForInit.class);
+        checkType((Expression)subNodes.get(condI), Expression.class);
+        checkType((BlockStatement)subNodes.get(stmnt), BlockStatement.class);
 
-        if (init != null)
-            init.execute(c, d+1);
+        if (subNodes.get(init) != null)
+            ((ForInit)subNodes.get(init)).execute(c, d+1);
 
+        Expression cond = (Expression)subNodes.get(condI);
         ReturnValues condR;
         if (cond != null)
             condR = cond.evaluate(c);
@@ -58,15 +66,15 @@ public abstract class ForStmntBase extends StatementBase implements BlockStateme
 
         loop:
         while(((ReturnValuesBool)condR).value) {
-            FlowControl fC = stmnt.execute(c, d+2);
+            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c, d+2);
             removeDecsAtDepth(c, d+2);
             switch(fC) {
                 case BREAK:
                     break loop;
                 case CONTINUE:
-                    for (Expression se : updates) {
-                        checkType(se, StatementExpr.class);
-                        se.evaluate(c);
+                    for (int se : updates) {
+                        checkType((Expression)subNodes.get(se), StatementExpr.class);
+                        ((Expression)subNodes.get(se)).evaluate(c);
                     }
 
                     if (cond != null)
@@ -76,9 +84,9 @@ public abstract class ForStmntBase extends StatementBase implements BlockStateme
                     return fC;
             }
 
-            for (Expression se : updates) {
-                checkType(se, StatementExpr.class);
-                se.evaluate(c);
+            for (int se : updates) {
+                checkType((Expression)subNodes.get(se), StatementExpr.class);
+                ((Expression)subNodes.get(se)).evaluate(c);
             }
 
             if (cond != null)
