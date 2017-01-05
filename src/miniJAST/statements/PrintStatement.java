@@ -1,7 +1,6 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
@@ -18,6 +17,8 @@ public class PrintStatement extends StatementBase implements StmntNoTrailSubstmn
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
+        checkType(expr, Expression.class);
+
         ReturnValues v = expr.evaluate(c);
 
         if (v.getIsArray()) {

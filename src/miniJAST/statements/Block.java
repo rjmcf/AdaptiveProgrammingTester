@@ -25,6 +25,8 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException{
         for (BlockStatement b : stmnts) {
+            checkType(b, BlockStatement.class);
+
             FlowControl fc = b.execute(c, isOuterMost ? d : d+1);
             switch (fc) {
                 case NONE:

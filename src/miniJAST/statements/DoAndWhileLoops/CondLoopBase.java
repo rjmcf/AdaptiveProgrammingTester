@@ -18,6 +18,9 @@ public abstract class CondLoopBase extends StatementBase implements BlockStateme
     protected void baseSetUpCondLoop(Expression c, BlockStatement s) { cond = c; stmnt = s; subNodes.add(c); subNodes.add(s); }
 
     protected FlowControl condAndLoop(Context c, int d) throws MiniJASTException {
+        checkType(cond, Expression.class);
+        checkType(stmnt, BlockStatement.class);
+
         ReturnValues rC = cond.evaluate(c);
         if (rC.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must be boolean type");

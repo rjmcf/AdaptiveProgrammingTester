@@ -6,10 +6,7 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.statements.BlockStatement;
-import miniJAST.statements.FlowControl;
-import miniJAST.statements.StatementBase;
-import miniJAST.statements.StatementNoShortIf;
+import miniJAST.statements.*;
 import miniJAST.types.UnannType;
 
 public abstract class IfThenElseBase extends StatementBase implements BlockStatement {
@@ -28,6 +25,10 @@ public abstract class IfThenElseBase extends StatementBase implements BlockState
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
+        checkType(cond, Expression.class);
+        checkType(trueStmnt, StatementNoShortIf.class);
+        checkType(falseStmnt, BlockStatement.class);
+
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must be Boolean type");

@@ -1,31 +1,29 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.StatementExpr;
-import miniJAST.expressions.returnValues.ReturnValues;
 
 public class ExpressionStmnt extends StatementBase implements StmntNoTrailSubstmnt {
-    private StatementExpr expr;
+    private Expression expr;
 
-    public ExpressionStmnt(StatementExpr sE) { expr = sE; subNodes.add(sE); }
+    public ExpressionStmnt(Expression sE) { expr = sE; subNodes.add(sE); }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
+        checkType(expr, StatementExpr.class);
         expr.evaluate(c);
         return FlowControl.NONE;
     }
 
     @Override
     public FlowControl executeStart(Context c) throws MiniJASTException {
-        expr.evaluate(c);
-        return FlowControl.NONE;
+        return execute(c, 0);
     }
 
     @Override
     public String stringRepr(int blocksDeep) {
-        String result = pad(blocksDeep) +  expr.stringRepr() + ";";
-        return result;
+        return pad(blocksDeep) +  expr.stringRepr() + ";";
     }
 }

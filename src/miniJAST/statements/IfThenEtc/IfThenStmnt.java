@@ -25,6 +25,9 @@ public class IfThenStmnt extends StatementBase implements Statement {
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
+        checkType(cond, Expression.class);
+        checkType(stmnt, Statement.class);
+
         ReturnValues r = cond.evaluate(c);
         if (r.getType().uType != UnannType.BOOLEAN)
             throw new TypeException("Condition must be Boolean type");

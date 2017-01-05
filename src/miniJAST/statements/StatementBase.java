@@ -3,7 +3,10 @@ package miniJAST.statements;
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
+import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.FillableBlankExpr;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,6 +39,28 @@ public abstract class StatementBase implements MiniJASTNode {
         }
         result.filled++;
         return result;
+    }
+
+    protected void checkType(Expression e, Class<? extends Expression> c) throws MiniJASTException {
+        if (e == null)
+            return;
+
+        if (e instanceof FillableBlankExpr)
+            e.evaluate(new Context());
+
+        if (!(c.isInstance(e)))
+            throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
+    }
+
+    protected void checkType(BlockStatement e, Class<? extends BlockStatement> c) throws MiniJASTException {
+        if (e == null)
+            return;
+
+        if (e instanceof FillableBlankStmnt)
+            e.executeStart(new Context());
+
+        if (!(c.isInstance(e)))
+            throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
     }
 
     protected String pad(int count) {

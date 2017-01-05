@@ -17,18 +17,18 @@ import java.util.ArrayList;
 
 public class LocalVarDec extends StatementBase implements BlockStatement {
     protected UnannType type;
-    private ArrayList<VarDeclarator> vars;
+    private ArrayList<BlockStatement> vars;
 
     public LocalVarDec() { vars = new ArrayList<>(); }
 
     public void setUpLVD(UnannType t) { type = t; }
-    public void addVarDec(VarDeclarator v) { vars.add(v); subNodes.add(v); }
+    public void addVarDec(BlockStatement v) { vars.add(v); subNodes.add(v); }
 
     @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) +  type.name + " ";
-        for (VarDeclarator v : vars)
-            result += v.stringRepr(type) + ", ";
+        for (BlockStatement v : vars)
+            result += ((VarDeclarator)v).stringRepr(type) + ", ";
         String result1 = result.substring(0, result.length()-2);
         result1 += ";";
         return result1;
@@ -36,7 +36,9 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
-        for (VarDeclarator v : vars) {
+        for (BlockStatement vB : vars) {
+            checkType(vB, VarDeclarator.class);
+            VarDeclarator v = (VarDeclarator)vB;
             if (c.namesToTypes.containsKey(v.getName()))
                 throw new VariableDecException(v.getName(), true);
 
