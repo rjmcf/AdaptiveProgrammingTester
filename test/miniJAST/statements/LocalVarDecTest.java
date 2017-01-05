@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
@@ -81,6 +82,9 @@ public class LocalVarDecTest {
             }
 
             @Override
+            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
+
+            @Override
             public NodeCount getTreeSize() {
                 return new NodeCount(1,0);
             }
@@ -142,6 +146,9 @@ public class LocalVarDecTest {
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesInt(2);
             }
+
+            @Override
+            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
             public NodeCount getTreeSize() {

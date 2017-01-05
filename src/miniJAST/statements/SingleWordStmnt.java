@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 
@@ -8,6 +9,9 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     EMPTY {
         @Override
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
+
+        @Override
+        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + ";"; }
@@ -29,6 +33,9 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
+        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
+
+        @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "break;"; }
 
         protected String pad(int count) {
@@ -48,6 +55,9 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
+        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
+
+        @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "continue;"; }
 
         protected String pad(int count) {
@@ -65,6 +75,9 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     RETURN {
         @Override
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
+
+        @Override
+        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "return;"; }

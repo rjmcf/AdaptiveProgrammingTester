@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
@@ -10,6 +11,7 @@ import miniJAST.expressions.FillableBlankExpr;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public abstract class StatementBase implements MiniJASTNode {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
@@ -61,6 +63,24 @@ public abstract class StatementBase implements MiniJASTNode {
 
         if (!(c.isInstance(e)))
             throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
+    }
+
+    @Override
+    public boolean fillBlank(int blankId, MiniJASTNode replacement) {
+        ListIterator<MiniJASTNode> it = subNodes.listIterator();
+        while (it.hasNext()){
+            MiniJASTNode sNode = it.next();
+            if (sNode instanceof FillableBlank) {
+                if (((FillableBlank)sNode).getId() == blankId) {
+                    it.set(replacement);
+                    return true;
+                }
+            } else {
+                if (sNode.fillBlank(blankId, replacement))
+                    return true;
+            }
+        }
+        return false;
     }
 
     protected String pad(int count) {

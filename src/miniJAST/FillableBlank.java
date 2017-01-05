@@ -8,4 +8,7 @@ public abstract class FillableBlank {
 
     public int getId() { return id; }
     public FillableBlank() { id = nextId.incrementAndGet(); }
+    public boolean fillBlank(int blankId, MiniJASTNode replacement) {
+        return false;
+    }
 }
