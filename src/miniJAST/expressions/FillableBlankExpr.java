@@ -1,13 +1,14 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.statements.StatementBase;
 
-public class FillableBlankExpr extends StatementBase implements Expression{
+public class FillableBlankExpr extends FillableBlank implements Expression{
     int nodesReplaced;
     Expression studentExpr;
 

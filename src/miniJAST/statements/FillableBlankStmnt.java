@@ -1,11 +1,12 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
 
-public class FillableBlankStmnt extends StatementBase implements StmntNoTrailSubstmnt {
+public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSubstmnt {
     int nodesReplaced;
     BlockStatement studentStmnt;
 
@@ -35,6 +36,6 @@ public class FillableBlankStmnt extends StatementBase implements StmntNoTrailSub
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return "...";
+        return "...(" + getId() + ")";
     }
 }
