@@ -12,6 +12,12 @@ public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSub
 
     public void setStudentStmnt(BlockStatement sS) { studentStmnt = sS; }
     public boolean isFilled() { return studentStmnt != null; }
+    @Override
+    public boolean getIsLeaf() { return false; }
+    @Override
+    public boolean getIsMarked() { return false; }
+    @Override
+    public void setMarked(boolean b) { }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {

@@ -15,6 +15,13 @@ import java.util.ListIterator;
 
 public abstract class StatementBase implements MiniJASTNode {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
+    @Override
+    public boolean getIsLeaf() { return subNodes.size() == 0; }
+    private boolean isMarked = false;
+    @Override
+    public boolean getIsMarked() { return isMarked; }
+    @Override
+    public void setMarked(boolean b) { isMarked = b; }
     protected void removeDecsAtDepth(Context c, int d) {
         if (d == 0)
             return;

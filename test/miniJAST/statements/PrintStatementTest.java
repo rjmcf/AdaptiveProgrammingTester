@@ -34,6 +34,15 @@ public class PrintStatementTest {
             }
 
             @Override
+            public boolean getIsLeaf() { return false; }
+
+            @Override
+            public boolean getIsMarked() { return false; }
+
+            @Override
+            public void setMarked(boolean b) { }
+
+            @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
@@ -51,6 +60,15 @@ public class PrintStatementTest {
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesIntAA("fakeArray", 2, 42);
             }
+
+            @Override
+            public boolean getIsLeaf() { return false; }
+
+            @Override
+            public boolean getIsMarked() { return false; }
+
+            @Override
+            public void setMarked(boolean b) { }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
@@ -76,6 +94,15 @@ public class PrintStatementTest {
                 string.add('t');
                 return new ReturnValuesArray<Character>(new Type(UnannType.CHAR,5), string);
             }
+
+            @Override
+            public boolean getIsLeaf() { return false; }
+
+            @Override
+            public boolean getIsMarked() { return false; }
+
+            @Override
+            public void setMarked(boolean b) { }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }

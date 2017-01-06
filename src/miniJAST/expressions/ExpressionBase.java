@@ -13,7 +13,13 @@ import java.util.ListIterator;
 
 public abstract class ExpressionBase implements Expression {
     protected ArrayList<Expression> subNodes = new ArrayList<>();
+    @Override
     public boolean getIsLeaf() { return subNodes.size() == 0; }
+    private boolean isMarked = false;
+    @Override
+    public boolean getIsMarked() { return isMarked; }
+    @Override
+    public void setMarked(boolean b) { isMarked = b; }
     @Override
     public abstract ReturnValues evaluate(Context c) throws MiniJASTException;
     @Override

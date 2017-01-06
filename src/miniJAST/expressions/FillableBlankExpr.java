@@ -14,6 +14,12 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
 
     public void setStudentExpr(Expression sE) { studentExpr = sE; }
     public boolean isFilled() { return studentExpr != null; }
+    @Override
+    public boolean getIsLeaf() { return false; }
+    @Override
+    public boolean getIsMarked() { return false; }
+    @Override
+    public void setMarked(boolean b) { }
 
     @Override
     public NodeCount getTreeSize() {

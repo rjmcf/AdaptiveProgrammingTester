@@ -14,6 +14,15 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
         @Override
+        public boolean getIsLeaf() { return true; }
+
+        @Override
+        public boolean getIsMarked() { return false; }
+
+        @Override
+        public void setMarked(boolean b) { }
+
+        @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + ";"; }
 
         protected String pad(int count) {
@@ -34,6 +43,15 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
 
         @Override
         public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
+
+        @Override
+        public boolean getIsLeaf() { return true; }
+
+        @Override
+        public boolean getIsMarked() { return false; }
+
+        @Override
+        public void setMarked(boolean b) { }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "break;"; }
@@ -58,6 +76,15 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
         @Override
+        public boolean getIsLeaf() { return true; }
+
+        @Override
+        public boolean getIsMarked() { return false; }
+
+        @Override
+        public void setMarked(boolean b) { }
+
+        @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "continue;"; }
 
         protected String pad(int count) {
@@ -78,6 +105,15 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
 
         @Override
         public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
+
+        @Override
+        public boolean getIsLeaf() { return true; }
+
+        @Override
+        public boolean getIsMarked() { return false; }
+
+        @Override
+        public void setMarked(boolean b) { }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "return;"; }

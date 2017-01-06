@@ -82,6 +82,15 @@ public class LocalVarDecTest {
             }
 
             @Override
+            public boolean getIsLeaf() { return false; }
+
+            @Override
+            public boolean getIsMarked() { return false; }
+
+            @Override
+            public void setMarked(boolean b) { }
+
+            @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
@@ -146,6 +155,15 @@ public class LocalVarDecTest {
             public ReturnValues evaluate(Context c) throws MiniJASTException {
                 return new ReturnValuesInt(2);
             }
+
+            @Override
+            public boolean getIsLeaf() { return false; }
+
+            @Override
+            public boolean getIsMarked() { return false; }
+
+            @Override
+            public void setMarked(boolean b) { }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
