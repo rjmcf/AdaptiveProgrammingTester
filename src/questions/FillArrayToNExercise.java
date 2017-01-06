@@ -77,6 +77,8 @@ public class FillArrayToNExercise extends AbstractPExercise {
         block = new Block(true);
         block.addBlockStmnt(array);
         block.addBlockStmnt(fS);
+
+        solution = block;
     }
 
     @Override

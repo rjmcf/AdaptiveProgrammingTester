@@ -24,7 +24,10 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
 
     @Override
     public String stringRepr() {
-        return ((Id)subNodes.get(idE)).getName() + "[" + subNodes.get(index).stringRepr() + "]";
+        if (subNodes.get(idE) instanceof Id)
+            return ((Id)subNodes.get(idE)).getName() + "[" + subNodes.get(index).stringRepr() + "]";
+        else
+            return (subNodes.get(idE)).stringRepr() + "[" + subNodes.get(index).stringRepr() + "]";
     }
 
     public ReturnValues evaluate(Context c) throws MiniJASTException {

@@ -2,9 +2,12 @@ package miniJAST.statements;
 
 import miniJAST.Context;
 import miniJAST.FillableBlank;
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
+
+import java.util.ArrayList;
 
 public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSubstmnt {
     int nodesReplaced;
@@ -18,6 +21,10 @@ public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSub
     public boolean getIsMarked() { return false; }
     @Override
     public void setMarked(boolean b) { }
+    @Override
+    public void setIsLeaf(boolean b) { }
+    @Override
+    public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {

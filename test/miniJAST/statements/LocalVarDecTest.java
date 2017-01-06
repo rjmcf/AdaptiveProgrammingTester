@@ -25,6 +25,8 @@ import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+
 import static org.testng.Assert.*;
 
 public class LocalVarDecTest {
@@ -89,6 +91,12 @@ public class LocalVarDecTest {
 
             @Override
             public void setMarked(boolean b) { }
+
+            @Override
+            public void setIsLeaf(boolean b) { }
+
+            @Override
+            public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
@@ -164,6 +172,12 @@ public class LocalVarDecTest {
 
             @Override
             public void setMarked(boolean b) { }
+
+            @Override
+            public void setIsLeaf(boolean b) { }
+
+            @Override
+            public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }

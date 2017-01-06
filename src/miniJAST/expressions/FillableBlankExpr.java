@@ -2,11 +2,13 @@ package miniJAST.expressions;
 
 import miniJAST.Context;
 import miniJAST.FillableBlank;
+import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.statements.StatementBase;
+
+import java.util.ArrayList;
 
 public class FillableBlankExpr extends FillableBlank implements Expression{
     private int nodesReplaced;
@@ -20,6 +22,10 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
     public boolean getIsMarked() { return false; }
     @Override
     public void setMarked(boolean b) { }
+    @Override
+    public void setIsLeaf(boolean b) { }
+    @Override
+    public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
     @Override
     public NodeCount getTreeSize() {

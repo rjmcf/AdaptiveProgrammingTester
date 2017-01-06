@@ -14,7 +14,16 @@ import java.util.ListIterator;
 public abstract class ExpressionBase implements Expression {
     protected ArrayList<Expression> subNodes = new ArrayList<>();
     @Override
-    public boolean getIsLeaf() { return subNodes.size() == 0; }
+    public ArrayList<Expression> getSubNodes() { return subNodes; }
+    private boolean isLeaf;
+    @Override
+    public boolean getIsLeaf() {
+        if (!isLeaf)
+            isLeaf = subNodes.size() == 0;
+        return isLeaf;
+    }
+    @Override
+    public void setIsLeaf(boolean b) { isLeaf = b; }
     private boolean isMarked = false;
     @Override
     public boolean getIsMarked() { return isMarked; }

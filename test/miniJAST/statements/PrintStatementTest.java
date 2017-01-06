@@ -43,6 +43,12 @@ public class PrintStatementTest {
             public void setMarked(boolean b) { }
 
             @Override
+            public void setIsLeaf(boolean b) { }
+
+            @Override
+            public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
+
+            @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
@@ -69,6 +75,12 @@ public class PrintStatementTest {
 
             @Override
             public void setMarked(boolean b) { }
+
+            @Override
+            public void setIsLeaf(boolean b) { }
+
+            @Override
+            public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
@@ -103,6 +115,12 @@ public class PrintStatementTest {
 
             @Override
             public void setMarked(boolean b) { }
+
+            @Override
+            public void setIsLeaf(boolean b) { }
+
+            @Override
+            public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
             public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }

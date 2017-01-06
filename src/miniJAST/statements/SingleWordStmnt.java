@@ -5,6 +5,8 @@ import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 
+import java.util.ArrayList;
+
 public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     EMPTY {
         @Override
@@ -20,7 +22,13 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public boolean getIsMarked() { return false; }
 
         @Override
+        public void setIsLeaf(boolean b) { }
+
+        @Override
         public void setMarked(boolean b) { }
+
+        @Override
+        public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + ";"; }
@@ -51,7 +59,13 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public boolean getIsMarked() { return false; }
 
         @Override
+        public void setIsLeaf(boolean b) { }
+
+        @Override
         public void setMarked(boolean b) { }
+
+        @Override
+        public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "break;"; }
@@ -82,7 +96,13 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public boolean getIsMarked() { return false; }
 
         @Override
+        public void setIsLeaf(boolean b) { }
+
+        @Override
         public void setMarked(boolean b) { }
+
+        @Override
+        public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "continue;"; }
@@ -113,7 +133,13 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public boolean getIsMarked() { return false; }
 
         @Override
+        public void setIsLeaf(boolean b) { }
+
+        @Override
         public void setMarked(boolean b) { }
+
+        @Override
+        public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
         @Override
         public String stringRepr(int blocksDeep) { return pad(blocksDeep) + "return;"; }
