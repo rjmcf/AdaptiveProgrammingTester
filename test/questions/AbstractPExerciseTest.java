@@ -16,6 +16,7 @@ public class AbstractPExerciseTest {
 
     @Test
     public void testAddBlank() throws Exception {
+        test.deliverQuestion();
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
@@ -28,6 +29,7 @@ public class AbstractPExerciseTest {
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
+        test.printSolution();
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());

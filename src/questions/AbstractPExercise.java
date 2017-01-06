@@ -33,6 +33,7 @@ public abstract class AbstractPExercise {
     }
 
     public void deliverQuestion() {
+        System.out.println();
         System.out.println(question);
         System.out.println();
         printSolution();
@@ -72,6 +73,7 @@ public abstract class AbstractPExercise {
                             return true;
                         }
                         // replace parent.peek().getSubNodes.get(index.peek())
+                        // TODO count nodes being replaced!
                         if (nodes.peek() instanceof StatementBase) {
                             ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(), new FillableBlankStmnt());
                         } else if (nodes.peek() instanceof ExpressionBase) {
