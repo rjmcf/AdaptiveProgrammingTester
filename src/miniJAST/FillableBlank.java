@@ -5,9 +5,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class FillableBlank {
     private static AtomicInteger nextId = new AtomicInteger(0);
     private int id;
+    protected int nodesReplaced;
 
     public int getId() { return id; }
-    public FillableBlank() { id = nextId.incrementAndGet(); }
+    public FillableBlank(int nReplaced) { id = nextId.incrementAndGet(); nodesReplaced = nReplaced; }
     public boolean fillBlank(int blankId, MiniJASTNode replacement) {
         return false;
     }

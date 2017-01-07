@@ -50,10 +50,12 @@ public abstract class StatementBase implements MiniJASTNode {
 
     @Override
     public NodeCount getTreeSize() {
-        NodeCount result = new NodeCount();
+        NodeCount current, result = new NodeCount();
+
         for (MiniJASTNode e : subNodes) {
-            result.filled += e.getTreeSize().filled;
-            result.empty += e.getTreeSize().empty;
+            current = e.getTreeSize();
+            result.filled += current.filled;
+            result.empty += current.empty;
         }
         result.filled++;
         return result;

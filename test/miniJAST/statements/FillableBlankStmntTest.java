@@ -27,7 +27,7 @@ public class FillableBlankStmntTest {
     @BeforeMethod
     public void setUp() throws Exception {
         c = new Context();
-        fbs = new FillableBlankStmnt();
+        fbs = new FillableBlankStmnt(0);
         lit0 = new Literal();
         lit0.setUpLiteral(UnannType.INT, "0");
         litT = new Literal();

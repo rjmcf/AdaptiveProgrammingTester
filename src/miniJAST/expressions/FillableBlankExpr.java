@@ -11,7 +11,6 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import java.util.ArrayList;
 
 public class FillableBlankExpr extends FillableBlank implements Expression{
-    private int nodesReplaced;
     private Expression studentExpr;
 
     public void setStudentExpr(Expression sE) { studentExpr = sE; }
@@ -26,6 +25,8 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
     public void setIsLeaf(boolean b) { }
     @Override
     public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
+
+    public FillableBlankExpr(int nReplaced) { super(nReplaced); }
 
     @Override
     public NodeCount getTreeSize() {

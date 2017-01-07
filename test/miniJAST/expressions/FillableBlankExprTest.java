@@ -47,7 +47,7 @@ public class FillableBlankExprTest {
     @BeforeMethod
     public void setUp() throws Exception {
         c = new Context();
-        fbe = new FillableBlankExpr();
+        fbe = new FillableBlankExpr(0);
         lit0 = new Literal();
         lit0.setUpLiteral(UnannType.INT, "0");
         litF = new Literal();

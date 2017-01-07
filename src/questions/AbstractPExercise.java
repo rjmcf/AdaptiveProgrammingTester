@@ -32,6 +32,11 @@ public abstract class AbstractPExercise {
         return baseDifficulty + percentageEmpty;
     }
 
+    public float getQuestionDiffModifier() {
+        NodeCount count = solution.getTreeSize();
+        return ((float)count.empty) / (count.filled + count.empty);
+    }
+
     public void deliverQuestion() {
         System.out.println();
         System.out.println(question);
@@ -43,50 +48,71 @@ public abstract class AbstractPExercise {
         System.out.println(solution.stringRepr(1));
     }
 
+    public boolean makeHarder(int numberOfTimes) {
+        if (numberOfTimes < 1)
+            return false;
+        for (int i = 0; i < numberOfTimes; i++)
+            if (!addBlank())
+                return false;
+
+        return true;
+    }
+
     public boolean addBlank() {
         Stack<MiniJASTNode> nodes = new Stack<>();
         Stack<MiniJASTNode> parents = new Stack<>();
         Stack<Integer> index = new Stack<>();
-        Stack<Boolean> childrenLeaves = new Stack<>();
+        Stack<Boolean> childrenBlank = new Stack<>();
         nodes.add(solution);
 
         while (true) {
             while (!nodes.empty()) {
                 if (!parents.empty() && nodes.peek() == parents.peek()) {
                     // mark if children leaves
-                    if (childrenLeaves.peek()) {
+                    if (childrenBlank.peek()) {
                         nodes.peek().setMarked(!replaceMarked);
                         nodes.peek().setIsLeaf(true);
                     }
-                    // pop otherwise
+                    // pop node increase index
                     nodes.pop();
                     parents.pop();
                     index.pop();
-                    childrenLeaves.pop();
+                    if (!index.empty()) {
+                        int i = index.pop();
+                        index.push(i+1);
+                    }
+                    childrenBlank.pop();
                     continue;
                 }
                 if (nodes.peek().getIsLeaf()) {
                     if (nodes.peek().getIsMarked() == replaceMarked) {
+                        NodeCount replaced;
                         // if parents is empty, replace solution
                         if (parents.empty()) {
-                            solution = new FillableBlankStmnt();
+                            replaced = solution.getTreeSize();
+                            solution = new FillableBlankStmnt(replaced.empty + replaced.filled);
                             return true;
                         }
                         // replace parent.peek().getSubNodes.get(index.peek())
                         // TODO count nodes being replaced!
+                        replaced = nodes.peek().getTreeSize();
                         if (nodes.peek() instanceof StatementBase) {
-                            ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(), new FillableBlankStmnt());
+                            ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
+                                    new FillableBlankStmnt(replaced.empty + replaced.filled));
                         } else if (nodes.peek() instanceof ExpressionBase) {
-                            ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(), new FillableBlankExpr());
+                            ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
+                                    new FillableBlankExpr(replaced.empty + replaced.filled));
                         } else {
                             System.err.println("node was neither StatementBase nor ExpressionBase!");
                         }
                         return true;
                     } else {
-                        // pop node, increase index
+                        // pop node, increase index, record that a child is not blank
                         nodes.pop();
                         int i = index.pop();
                         index.push(i + 1);
+                        childrenBlank.pop();
+                        childrenBlank.push(false);
                         continue;
                     }
                 }
@@ -104,13 +130,13 @@ public abstract class AbstractPExercise {
                 parents.push(nodes.peek());
                 // push 0 onto indices
                 index.push(0);
-                // update current childrenLeaves to false if exists
-                if (!childrenLeaves.empty()) {
-                    childrenLeaves.pop();
-                    childrenLeaves.push(false);
+                // update current childrenBlank to false if exists
+                if (!childrenBlank.empty()) {
+                    childrenBlank.pop();
+                    childrenBlank.push(false);
                 }
                 // push true onto childrenLeaves
-                childrenLeaves.push(true);
+                childrenBlank.push(true);
                 // push children onto nodes
                 ArrayList<? extends MiniJASTNode> children = nodes.peek().getSubNodes();
                 ListIterator<? extends MiniJASTNode> it = children.listIterator(children.size());

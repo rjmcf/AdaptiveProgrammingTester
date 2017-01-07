@@ -21,18 +21,55 @@ public class AbstractPExerciseTest {
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
+
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
+
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
+
         assertTrue(test.addBlank());
         assertTrue(test.addBlank());
+        assertTrue(test.addBlank());
+        assertTrue(test.addBlank());
+        assertTrue(test.addBlank());
+
+        assertFalse(test.addBlank());
+    }
+
+    @Test
+    public void testMakeHarder() throws Exception {
+        assertFalse(test.makeHarder(0));
+        assertFalse(test.makeHarder(-1));
+
+        assertTrue(test.makeHarder(1));
+        assertTrue(test.makeHarder(3));
+        assertTrue(test.makeHarder(15));
+        assertFalse(test.makeHarder(2));
+
+        test.setUp();
+        assertTrue(test.makeHarder(20));
+        assertFalse(test.makeHarder(1));
+    }
+
+    @Test
+    public void testGetQuestionDifficulty() throws Exception {
+        float newDifficulty, currentDifficulty = test.getQuestionDiffModifier();
+        assertEquals(currentDifficulty, 0.0f);
+        for (int i = 0; i < 20; i++) {
+            test.addBlank();
+            newDifficulty = test.getQuestionDiffModifier();
+            assertTrue(newDifficulty >= currentDifficulty, "Test failed on iteration " + i);
+            currentDifficulty = newDifficulty;
+        }
+        assertEquals(currentDifficulty, 1.0f);
+
         assertFalse(test.addBlank());
     }
 }

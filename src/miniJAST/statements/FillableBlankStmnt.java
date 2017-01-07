@@ -10,7 +10,6 @@ import miniJAST.exceptions.MiniJASTException;
 import java.util.ArrayList;
 
 public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSubstmnt {
-    int nodesReplaced;
     BlockStatement studentStmnt;
 
     public void setStudentStmnt(BlockStatement sS) { studentStmnt = sS; }
@@ -25,6 +24,8 @@ public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSub
     public void setIsLeaf(boolean b) { }
     @Override
     public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
+
+    public FillableBlankStmnt(int nReplaced) { super(nReplaced); }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {

@@ -54,7 +54,7 @@ public class MiniJASTNodeTest {
         // set up "int sum = ..."
         sumStat = new LocalVarDec();
         sumStat.setUpLVD(UnannType.INT);
-        fbe1 = new FillableBlankExpr();
+        fbe1 = new FillableBlankExpr(0);
         blankIds.add(fbe1.getId());
         sum = new VarDeclarator();
         sum.setUpVarDec("sum", fbe1);
@@ -75,7 +75,7 @@ public class MiniJASTNodeTest {
         iStat.addVarDec(i);
         fI.setLocalVarDec(iStat);
 
-        fbe2 = new FillableBlankExpr();
+        fbe2 = new FillableBlankExpr(0);
         blankIds.add(fbe2.getId());
 
         // set up "i--"
@@ -84,7 +84,7 @@ public class MiniJASTNodeTest {
         minus = new UnaryPostIncExpr();
         minus.setUpPostIncExpr(false, iID);
 
-        fbs1 = new FillableBlankStmnt();
+        fbs1 = new FillableBlankStmnt(0);
         blankIds.add(fbs1.getId());
         blankIds.add(fbs1.getId() + 1);
 
