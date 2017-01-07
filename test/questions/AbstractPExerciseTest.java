@@ -72,4 +72,56 @@ public class AbstractPExerciseTest {
 
         assertFalse(test.addBlank());
     }
+
+    @Test
+    public void testRemoveBlank() throws Exception {
+        assertFalse(test.removeBlank());
+
+        test.addBlank();
+        assertTrue(test.removeBlank());
+
+        test.makeHarder(20);
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+
+        assertFalse(test.removeBlank());
+    }
+
+    @Test
+    public void testMakeEasier() throws Exception {
+        assertFalse(test.makeEasier(0));
+        assertFalse(test.makeEasier(-1));
+        assertFalse(test.makeEasier(1));
+
+        test.addBlank();
+        assertTrue(test.makeEasier(1));
+
+        test.makeHarder(20);
+        assertTrue(test.makeEasier(20));
+        assertFalse(test.makeEasier(1));
+
+        test.makeHarder(10);
+        assertFalse(test.makeEasier(11));
+    }
 }

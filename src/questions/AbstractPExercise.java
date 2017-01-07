@@ -16,7 +16,7 @@ import java.util.ListIterator;
 import java.util.Stack;
 
 public abstract class AbstractPExercise {
-    public String question;
+    protected String question;
     protected Statement solution;
     private float baseDifficulty;
     private boolean replaceMarked = false;
@@ -30,6 +30,11 @@ public abstract class AbstractPExercise {
         NodeCount count = solution.getTreeSize();
         float percentageEmpty = count.empty / (count.filled + count.empty);
         return baseDifficulty + percentageEmpty;
+    }
+
+    public int numNodes() {
+        NodeCount size = solution.getTreeSize();
+        return size.filled + size.empty;
     }
 
     public float getQuestionDiffModifier() {
@@ -48,14 +53,8 @@ public abstract class AbstractPExercise {
         System.out.println(solution.stringRepr(1));
     }
 
-    public boolean makeHarder(int numberOfTimes) {
-        if (numberOfTimes < 1)
-            return false;
-        for (int i = 0; i < numberOfTimes; i++)
-            if (!addBlank())
-                return false;
-
-        return true;
+    public boolean fillBlank(int bId, MiniJASTNode replacement) {
+        return solution.fillBlank(bId, replacement);
     }
 
     public boolean addBlank() {
@@ -147,5 +146,30 @@ public abstract class AbstractPExercise {
             replaceMarked ^= true;
             nodes.add(solution);
         }
+    }
+
+    public boolean makeHarder(int numberOfTimes) {
+        if (numberOfTimes < 1)
+            return false;
+        for (int i = 0; i < numberOfTimes; i++)
+            if (!addBlank())
+                return false;
+
+        return true;
+    }
+
+    public boolean removeBlank() {
+        return false;
+        //TODO finish impl
+        /*
+           It might work to keep a copy of the node that was replaced and the indices of the tree to find the blank.
+           Then we walk down the tree following the indices, making sure that every node is not a leaf and unmarked.
+           If the indices are the largest they could be each time then we need to switch node searching.
+         */
+    }
+
+    public boolean makeEasier(int numberOfTimes) {
+        return false;
+        //TODO finish impl
     }
 }
