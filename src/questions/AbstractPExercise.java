@@ -1,8 +1,10 @@
 package questions;
 
+import miniJAST.Context;
 import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
+import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.FillableBlankExpr;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Stack;
 
-public abstract class AbstractPExercise {
+public abstract class AbstractPExercise implements Comparable<AbstractPExercise> {
     protected String question;
     protected BlockStatement solution;
     private float baseDifficulty;
@@ -24,8 +26,22 @@ public abstract class AbstractPExercise {
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
     public abstract void setUp();
-    public abstract void runSolution();
     public abstract boolean checkSolved();
+    protected Context c;
+
+    public void runSolution() {
+        c = new Context();
+        try {
+            solution.executeStart(c);
+        } catch (MiniJASTException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public int compareTo(AbstractPExercise o) {
+        return (int)(baseDifficulty - o.baseDifficulty);
+    }
 
     public AbstractPExercise(String q, float diff) { question = q; baseDifficulty = diff; }
 
@@ -161,14 +177,16 @@ public abstract class AbstractPExercise {
     }
     // TODO fix how ForInits are handled
 
-    public boolean makeHarder(int numberOfTimes) {
+    public int makeHarder(int numberOfTimes) {
         if (numberOfTimes < 1)
-            return false;
-        for (int i = 0; i < numberOfTimes; i++)
+            throw new ArithmeticException("The number supplied must be greater than 0");
+        while (numberOfTimes > 0) {
             if (!addBlank())
-                return false;
+                break;
+            numberOfTimes--;
+        }
 
-        return true;
+        return numberOfTimes;
     }
 
     public boolean removeBlank() {
@@ -208,13 +226,15 @@ public abstract class AbstractPExercise {
         return true;
     }
 
-    public boolean makeEasier(int numberOfTimes) {
+    public int makeEasier(int numberOfTimes) {
         if (numberOfTimes < 1)
-            return false;
-        for (int i = 0; i < numberOfTimes; i++)
+            throw new ArithmeticException("The number supplied must be greater than 0");
+        while (numberOfTimes > 0) {
             if (!removeBlank())
-                return false;
+                break;
+            numberOfTimes--;
+        }
 
-        return true;
+        return numberOfTimes;
     }
 }

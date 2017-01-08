@@ -45,17 +45,27 @@ public class AbstractPExerciseTest {
 
     @Test
     public void testMakeHarder() throws Exception {
-        assertFalse(test.makeHarder(0));
-        assertFalse(test.makeHarder(-1));
+        try {
+            test.makeHarder(0);
+            fail("Incorrect number");
+        } catch (ArithmeticException ae) {
+            // pass test
+        }
+        try {
+            test.makeHarder(-1);
+            fail("Incorrect number");
+        } catch (ArithmeticException ae) {
+            // pass test
+        }
 
-        assertTrue(test.makeHarder(1));
-        assertTrue(test.makeHarder(3));
-        assertTrue(test.makeHarder(15));
-        assertFalse(test.makeHarder(2));
+        assertEquals(test.makeHarder(1), 0);
+        assertEquals(test.makeHarder(3), 0);
+        assertEquals(test.makeHarder(15), 0);
+        assertTrue(test.makeHarder(2) > 0);
 
         test.setUp();
-        assertTrue(test.makeHarder(20));
-        assertFalse(test.makeHarder(1));
+        assertEquals(test.makeHarder(20), 0);
+        assertTrue(test.makeHarder(1) > 0);
     }
 
     @Test
@@ -110,25 +120,36 @@ public class AbstractPExerciseTest {
 
     @Test
     public void testMakeEasier() throws Exception {
-        assertFalse(test.makeEasier(0));
-        assertFalse(test.makeEasier(-1));
-        assertFalse(test.makeEasier(1));
+        try {
+            test.makeEasier(0);
+            fail("Incorrect number");
+        } catch (ArithmeticException ae) {
+            // pass test
+        }
+        try {
+            test.makeEasier(-1);
+            fail("Incorrect number");
+        } catch (ArithmeticException ae) {
+            // pass test
+        }
+
+        assertTrue(test.makeEasier(1) > 0);
 
         test.addBlank();
-        assertTrue(test.makeEasier(1));
+        assertEquals(test.makeEasier(1), 0);
 
         test.makeHarder(20);
-        assertTrue(test.makeEasier(20));
-        assertFalse(test.makeEasier(1));
+        assertEquals(test.makeEasier(20), 0);
+        assertTrue(test.makeEasier(1) > 0);
 
         test.makeHarder(10);
-        assertFalse(test.makeEasier(11));
+        assertTrue(test.makeEasier(11) > 0);
 
         assertEquals(test.getQuestionDiffModifier(), 0f);
 
         for (int i = 0; i < 20; i++) {
             test.makeHarder(i + 1);
-            assertTrue(test.makeEasier(i + 1));
+            assertEquals(test.makeEasier(i + 1), 0);
             assertEquals(test.getQuestionDiffModifier(), 0f);
         }
     }

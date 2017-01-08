@@ -24,11 +24,9 @@ import miniJAST.types.UnannType;
 public class FillArrayToNExercise extends AbstractPExercise {
     int max;
     Id nsID;
-    Block block;
-    Context c;
 
     public FillArrayToNExercise(int n) {
-        super("Fill the array named 'ns' with numbers from 0 to " + (n - 1) + ".", 2); // initial estimate of difficulty
+        super("Fill the array named 'ns' with numbers from 0 to " + (n - 1) + ".", 3); // initial estimate of difficulty
         max = n;
     }
 
@@ -74,21 +72,11 @@ public class FillArrayToNExercise extends AbstractPExercise {
         fS.addUpdate(plus);
         ExpressionStmnt body = new ExpressionStmnt(updateIndex);
         fS.setBody(body);
-        block = new Block(true);
+        Block block = new Block(true);
         block.addBlockStmnt(array);
         block.addBlockStmnt(fS);
 
         solution = block;
-    }
-
-    @Override
-    public void runSolution() {
-        c = new Context();
-        try {
-            block.executeStart(c);
-        } catch (MiniJASTException ex) {
-            ex.printStackTrace();
-        }
     }
 
     @Override
