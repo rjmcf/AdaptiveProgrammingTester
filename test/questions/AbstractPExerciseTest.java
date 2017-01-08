@@ -123,5 +123,13 @@ public class AbstractPExerciseTest {
 
         test.makeHarder(10);
         assertFalse(test.makeEasier(11));
+
+        assertEquals(test.getQuestionDiffModifier(), 0f);
+
+        for (int i = 0; i < 20; i++) {
+            test.makeHarder(i + 1);
+            assertTrue(test.makeEasier(i + 1));
+            assertEquals(test.getQuestionDiffModifier(), 0f);
+        }
     }
 }

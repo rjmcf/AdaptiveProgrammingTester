@@ -189,8 +189,7 @@ public abstract class AbstractPExercise {
         while (!indicesRev.empty()) {
             indices.push(indicesRev.pop());
         }
-        int size = indices.size();
-        for (int i = 0; i < size - 1; i++) {
+        while (indices.size() > 1) {
             // check if it was the last index in the parent's subnodes.
             if (indices.peek() < parent.getSubNodes().size() - 1)
                 alwaysLast = false;
@@ -199,6 +198,8 @@ public abstract class AbstractPExercise {
             parent = parent.getSubNodes().get(indices.pop());
         }
 
+        // Make sure parent is not a leaf
+        parent.setIsLeaf(false);
         ((ArrayList<MiniJASTNode>)parent.getSubNodes()).set(indices.pop(), toReplace);
         if (alwaysLast) {
             // invert since it was just inverted by last addBlank
