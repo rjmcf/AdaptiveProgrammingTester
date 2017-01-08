@@ -6,6 +6,7 @@ import miniJAST.NodeCount;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.FillableBlankExpr;
+import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.Statement;
 import miniJAST.statements.StatementBase;
@@ -17,9 +18,11 @@ import java.util.Stack;
 
 public abstract class AbstractPExercise {
     protected String question;
-    protected Statement solution;
+    protected BlockStatement solution;
     private float baseDifficulty;
     private boolean replaceMarked = false;
+    private Stack<MiniJASTNode> replacedNodes = new Stack<>();
+    private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
     public abstract void setUp();
     public abstract void runSolution();
     public abstract boolean checkSolved();
@@ -85,22 +88,31 @@ public abstract class AbstractPExercise {
                 }
                 if (nodes.peek().getIsLeaf()) {
                     if (nodes.peek().getIsMarked() == replaceMarked) {
-                        NodeCount replaced;
+                        NodeCount replacedNodes;
                         // if parents is empty, replace solution
                         if (parents.empty()) {
-                            replaced = solution.getTreeSize();
-                            solution = new FillableBlankStmnt(replaced.empty + replaced.filled);
+                            // Store the replaced node and its location so it can be reinserted
+                            this.replacedNodes.push(solution);
+                            replacedNodeTreeIndices.push(index);
+
+                            replacedNodes = solution.getTreeSize();
+                            solution = new FillableBlankStmnt(replacedNodes.empty + replacedNodes.filled);
                             return true;
                         }
                         // replace parent.peek().getSubNodes.get(index.peek())
-                        // TODO count nodes being replaced!
-                        replaced = nodes.peek().getTreeSize();
+
+                        // Store the replaced node and its location so it can be reinserted
+                        this.replacedNodes.push(nodes.peek());
+                        replacedNodeTreeIndices.push(index);
+
+                        // Get number of nodes being replaced
+                        replacedNodes = nodes.peek().getTreeSize();
                         if (nodes.peek() instanceof StatementBase) {
                             ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
-                                    new FillableBlankStmnt(replaced.empty + replaced.filled));
+                                    new FillableBlankStmnt(replacedNodes.empty + replacedNodes.filled));
                         } else if (nodes.peek() instanceof ExpressionBase) {
                             ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
-                                    new FillableBlankExpr(replaced.empty + replaced.filled));
+                                    new FillableBlankExpr(replacedNodes.empty + replacedNodes.filled));
                         } else {
                             System.err.println("node was neither StatementBase nor ExpressionBase!");
                         }
@@ -147,6 +159,7 @@ public abstract class AbstractPExercise {
             nodes.add(solution);
         }
     }
+    // TODO fix how ForInits are handled
 
     public boolean makeHarder(int numberOfTimes) {
         if (numberOfTimes < 1)
@@ -159,17 +172,48 @@ public abstract class AbstractPExercise {
     }
 
     public boolean removeBlank() {
-        return false;
-        //TODO finish impl
-        /*
-           It might work to keep a copy of the node that was replaced and the indices of the tree to find the blank.
-           Then we walk down the tree following the indices, making sure that every node is not a leaf and unmarked.
-           If the indices are the largest they could be each time then we need to switch node searching.
-         */
+        if (replacedNodes.empty())
+            return false;
+
+        if (replacedNodeTreeIndices.peek().empty()) {
+            solution = (BlockStatement)replacedNodes.pop();
+            replacedNodeTreeIndices.pop();
+            return true;
+        }
+
+        MiniJASTNode toReplace = replacedNodes.pop();
+        MiniJASTNode parent = solution;
+        boolean alwaysLast = true;
+        Stack<Integer> indicesRev = replacedNodeTreeIndices.pop();
+        Stack<Integer> indices = new Stack<>();
+        while (!indicesRev.empty()) {
+            indices.push(indicesRev.pop());
+        }
+        int size = indices.size();
+        for (int i = 0; i < size - 1; i++) {
+            // check if it was the last index in the parent's subnodes.
+            if (indices.peek() < parent.getSubNodes().size() - 1)
+                alwaysLast = false;
+            // Make sure the parent is not a leaf
+            parent.setIsLeaf(false);
+            parent = parent.getSubNodes().get(indices.pop());
+        }
+
+        ((ArrayList<MiniJASTNode>)parent.getSubNodes()).set(indices.pop(), toReplace);
+        if (alwaysLast) {
+            // invert since it was just inverted by last addBlank
+            replaceMarked ^= true;
+        }
+        return true;
     }
 
     public boolean makeEasier(int numberOfTimes) {
-        return false;
-        //TODO finish impl
+        if (numberOfTimes < 1)
+            return false;
+        for (int i = 0; i < numberOfTimes; i++)
+            if (!removeBlank())
+                return false;
+
+        return true;
     }
 }

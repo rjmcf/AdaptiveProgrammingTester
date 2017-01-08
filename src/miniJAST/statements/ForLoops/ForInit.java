@@ -26,7 +26,9 @@ public class ForInit extends StatementBase implements BlockStatement{
                 result += ((Expression)se).stringRepr() + ", ";
             return result.substring(0, result.length() - 2);
         } else
-            return ((LocalVarDec)subNodes.get(0)).stringRepr(0).substring(0, ((LocalVarDec)subNodes.get(0)).stringRepr(0).length() - 1);
+            return  subNodes.get(0) instanceof LocalVarDec ?
+                    ((LocalVarDec)subNodes.get(0)).stringRepr(0).substring(0, ((LocalVarDec)subNodes.get(0)).stringRepr(0).length() - 1) :
+                    ((BlockStatement)subNodes.get(0)).stringRepr(0);
     }
 
     public FlowControl execute(Context c, int d) throws MiniJASTException {

@@ -25,11 +25,16 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
     @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) +  type.name + " ";
-        for (MiniJASTNode v : subNodes)
-            result += ((VarDeclarator)v).stringRepr(type) + ", ";
-        String result1 = result.substring(0, result.length()-2);
-        result1 += ";";
-        return result1;
+        boolean oneTime = true;
+        for (MiniJASTNode v : subNodes) {
+            if (oneTime)
+                oneTime = false;
+            else
+                result += ", ";
+            result += (v instanceof VarDeclarator) ? ((VarDeclarator) v).stringRepr(type) : ((BlockStatement) v).stringRepr(0);
+        }
+        result += ";";
+        return result;
     }
 
     @Override
