@@ -69,7 +69,7 @@ public class SingleWordStmntTest {
         for (Literal l : letters)
             orig.addExpressionACWIL(l);
         result = new ArrayCreationWithSize();
-        result.setUpACWS("result", six);
+        result.setUpACWS("result", UnannType.CHAR,  six);
         arrays = new LocalVarDec();
         arrays.setUpLVD(UnannType.CHAR);
         arrays.addVarDec(orig);

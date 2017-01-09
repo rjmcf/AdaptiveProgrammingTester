@@ -18,8 +18,6 @@ public class VarDeclarator extends StatementBase implements BlockStatement{
 
     public String getName() { return name; }
     public Expression getExpr() { return (Expression)subNodes.get(expr); }
-    public String stringRepr(UnannType t) { return name + (subNodes.get(expr) ==
-            null ? "" : (" = " + ((Expression)subNodes.get(expr)).stringRepr())); }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
@@ -33,6 +31,7 @@ public class VarDeclarator extends StatementBase implements BlockStatement{
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return null;
+        return name + (subNodes.get(expr) ==
+                null ? "" : (" = " + ((Expression)subNodes.get(expr)).stringRepr()));
     }
 }

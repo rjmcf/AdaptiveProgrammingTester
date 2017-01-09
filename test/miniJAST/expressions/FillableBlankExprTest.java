@@ -11,7 +11,7 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
 import miniJAST.expressions.assignment.UnaryPreIncExpr;
 import miniJAST.expressions.boolExpr.*;
-import miniJAST.expressions.returnValues.ReturnValuesInt;
+import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
@@ -331,7 +331,7 @@ public class FillableBlankExprTest {
     @Test
     public void testEmptyEvaluateArrayCreationSize() throws Exception {
         ArrayCreationWithSize acws = new ArrayCreationWithSize();
-        acws.setUpACWS("fakeArray", fbe);
+        acws.setUpACWS("fakeArray", UnannType.INT, fbe);
         lvd.setUpLVD(UnannType.INT);
         lvd.addVarDec(acws);
         try {
@@ -575,6 +575,187 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledEvaluateAssignment() throws Exception {
-        
+        c.namesToTypes.put("fakeInt", new Type(UnannType.INT, 1));
+
+        Id fId = new Id();
+        fId.setUpId(new Type(UnannType.INT, 1), "fakeInt");
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(fId, AssignOp.EQ, lit1);
+        fbe.setStudentExpr(aE);
+        fbe.evaluate(c);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 1);
+        assertEquals(fbe.stringRepr(), "fakeInt = 1");
+
+        aE.setUpAssignExpr(fId, AssignOp.PLUSEQ, lit1);
+        fbe.evaluate(c);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 2);
+        assertEquals(fbe.stringRepr(), "fakeInt += 1");
+
+        UnaryPostIncExpr upostE = new UnaryPostIncExpr();
+        upostE.setUpPostIncExpr(true, fId);
+        fbe.setStudentExpr(upostE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 2);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 3);
+        assertEquals(fbe.stringRepr(), "fakeInt++");
+
+        UnaryPreIncExpr upreE = new UnaryPreIncExpr();
+        upreE.setUpPreIncExpr(true, fId);
+        fbe.setStudentExpr(upreE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 4);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 4);
+        assertEquals(fbe.stringRepr(), "++fakeInt");
+    }
+
+    @Test
+    public void testFilledEvaluateBool() throws Exception {
+        AndExpr aE = new AndExpr();
+        aE.setUpAndExpr(litT, litF);
+        fbe.setStudentExpr(aE);
+        assertFalse(((ReturnValuesBool)fbe.evaluate(c)).value);
+        assertEquals(fbe.stringRepr(), "true && false");
+
+        EqExpr eE = new EqExpr();
+        eE.setUpEqExpr(true, lit1, lit1);
+        fbe.setStudentExpr(eE);
+        assertTrue(((ReturnValuesBool)fbe.evaluate(c)).value);
+        assertEquals(fbe.stringRepr(), "1 == 1");
+
+        OrExpr oE = new OrExpr();
+        oE.setUpOrExpr(litF, litF);
+        fbe.setStudentExpr(oE);
+        assertFalse(((ReturnValuesBool)fbe.evaluate(c)).value);
+        assertEquals(fbe.stringRepr(), "false || false");
+
+        RelationExpr rE = new RelationExpr();
+        rE.setUpRelationExpr(RelationOp.GT, lit3, lit1);
+        fbe.setStudentExpr(rE);
+        assertTrue(((ReturnValuesBool)fbe.evaluate(c)).value);
+        assertEquals(fbe.stringRepr(), "3 > 1");
+
+        UnaryComplementExpr ucE = new UnaryComplementExpr();
+        ucE.setUpCompExpr(litT);
+        fbe.setStudentExpr(ucE);
+        assertFalse(((ReturnValuesBool)fbe.evaluate(c)).value);
+        assertEquals(fbe.stringRepr(), "!true");
+
+        CondExpr cE = new CondExpr();
+        cE.setUpCondExpr(litT, lit2, lit3);
+        fbe.setStudentExpr(cE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 2);
+        assertEquals(fbe.stringRepr(), "true ? 2 : 3");
+    }
+
+    @Test
+    public void testFilledEvaluateBracketed() throws Exception {
+        BracketedExpr bE = new BracketedExpr();
+        bE.setUpBracketExpr(lit2);
+        fbe.setStudentExpr(bE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 2);
+        assertEquals(fbe.stringRepr(), "(2)");
+    }
+
+    @Test
+    public void testFilledEvaluateId() throws Exception {
+        c.namesToTypes.put("fakeId", new Type(UnannType.INT, 1));
+        c.namesToValues.put("fakeId", 2);
+        Id fakeId = new Id();
+        fakeId.setUpId(new Type(UnannType.INT, 1), "fakeId");
+        fbe.setStudentExpr(fakeId);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 2);
+        assertEquals(fbe.stringRepr(), "fakeId");
+    }
+
+    @Test
+    public void testFilledEvaluateLiteral() throws Exception {
+        fbe.setStudentExpr(litT);
+        assertTrue(((ReturnValuesBool)fbe.evaluate(c)).value);
+        assertEquals(fbe.stringRepr(), "true");
+
+        fbe.setStudentExpr(lit3);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 3);
+        assertEquals(fbe.stringRepr(), "3");
+
+        Literal half = new Literal();
+        half.setUpLiteral(UnannType.DOUBLE, "0.5");
+        fbe.setStudentExpr(half);
+        assertEquals(((ReturnValuesDouble)fbe.evaluate(c)).value, 0.5);
+        assertEquals(fbe.stringRepr(), "0.5");
+
+        Literal a = new Literal();
+        a.setUpLiteral(UnannType.CHAR, "a");
+        fbe.setStudentExpr(a);
+        assertEquals(((ReturnValuesChar)fbe.evaluate(c)).value, 'a');
+        assertEquals(fbe.stringRepr(), "a");
+    }
+
+    @Test
+    public void testFilledEvaluateArrayCreationList() throws Exception {
+        FillableBlankExpr fbe1 = new FillableBlankExpr(1);
+        ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
+        acwil.setUPACWIL("fakeAr");
+        fbe.setStudentExpr(lit1);
+        fbe1.setStudentExpr(lit0);
+        acwil.addExpressionACWIL(fbe);
+        acwil.addExpressionACWIL(fbe1);
+
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(acwil);
+
+        assertEquals(lvd.stringRepr(0), "int fakeAr[] = { 1, 0 };");
+        lvd.executeStart(c);
+        Id fakeAr = new Id();
+        fakeAr.setUpId(new Type(UnannType.INT, 2), "fakeAr");
+        ArrayAccess aa = new ArrayAccess();
+        aa.setUpArrayAccess(fakeAr, lit1);
+        assertEquals(((ReturnValuesIntAA)aa.evaluate(c)).value, 0);
+    }
+
+    @Test
+    public void testFilledEvaluateArrayCreationSize() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateDo() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateWhile() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateWhileNSI() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateFor() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateForNSI() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateITE() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateITENSI() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateIT() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateLVD() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluateExprStmnt() throws Exception {
+    }
+
+    @Test
+    public void testFilledEvaluatePrStmnt() throws Exception {
+
     }
 }

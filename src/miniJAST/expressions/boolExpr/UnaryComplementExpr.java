@@ -17,7 +17,7 @@ public class UnaryComplementExpr extends UnaryExpr {
 
     @Override
     public String stringRepr() {
-        return " !" + subNodes.get(expr).stringRepr();
+        return "!" + subNodes.get(expr).stringRepr();
     }
 
     @Override

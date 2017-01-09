@@ -42,7 +42,7 @@ public class FillArrayToNExercise extends AbstractPExercise {
         Literal n = new Literal();
         n.setUpLiteral(UnannType.INT, String.valueOf(max));
         ArrayCreationWithSize ns = new ArrayCreationWithSize();
-        ns.setUpACWS("ns", n);
+        ns.setUpACWS("ns", UnannType.INT, n);
         LocalVarDec array = new LocalVarDec();
         array.setUpLVD(UnannType.INT);
         array.addVarDec(ns);

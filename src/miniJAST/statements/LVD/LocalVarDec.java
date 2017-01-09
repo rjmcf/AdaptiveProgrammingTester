@@ -31,7 +31,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                 oneTime = false;
             else
                 result += ", ";
-            result += (v instanceof VarDeclarator) ? ((VarDeclarator) v).stringRepr(type) : ((BlockStatement) v).stringRepr(0);
+            result += ((BlockStatement) v).stringRepr(0);
         }
         result += ";";
         return result;

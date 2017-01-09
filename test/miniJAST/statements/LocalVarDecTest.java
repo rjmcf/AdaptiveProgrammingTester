@@ -194,7 +194,7 @@ public class LocalVarDecTest {
         };
 
         ArrayCreationWithSize aCSize = new ArrayCreationWithSize();
-        aCSize.setUpACWS("boolArray2", two);
+        aCSize.setUpACWS("boolArray2", UnannType.BOOLEAN, two);
 
         lvd = new LocalVarDec();
         lvd.setUpLVD(UnannType.BOOLEAN);
@@ -206,7 +206,7 @@ public class LocalVarDecTest {
 
         assertEquals(2, ar.getType().size);
 
-        aCSize.setUpACWS("boolArrayT", t);
+        aCSize.setUpACWS("boolArrayT", UnannType.BOOLEAN, t);
 
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(aCSize);

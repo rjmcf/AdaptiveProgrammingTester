@@ -10,7 +10,7 @@ public class ArrayCreationWithInitList extends ArrayCreation {
     public ArrayCreationWithInitList() { hasInitList = true; }
 
     @Override
-    public String stringRepr(UnannType t) {
+    public String stringRepr(int blocksDeep) {
         String result = name + "[] = { ";
         for (MiniJASTNode v : subNodes)
             result += ((Expression)v).stringRepr() + ", ";
