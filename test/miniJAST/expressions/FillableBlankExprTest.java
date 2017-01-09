@@ -11,6 +11,7 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
 import miniJAST.expressions.assignment.UnaryPreIncExpr;
 import miniJAST.expressions.boolExpr.*;
+import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
@@ -39,7 +40,7 @@ import static org.testng.Assert.*;
 public class FillableBlankExprTest {
     Context c;
     FillableBlankExpr fbe;
-    Literal lit0, litF, litT;
+    Literal lit0, lit1, lit2, lit3, litT, litF;
     Id id;
     LocalVarDec lvd;
     PrintStatement testS;
@@ -48,8 +49,10 @@ public class FillableBlankExprTest {
     public void setUp() throws Exception {
         c = new Context();
         fbe = new FillableBlankExpr(0);
-        lit0 = new Literal();
-        lit0.setUpLiteral(UnannType.INT, "0");
+        lit0 = new Literal(); lit1 = new Literal();
+        lit0.setUpLiteral(UnannType.INT, "0"); lit1.setUpLiteral(UnannType.INT, "1");
+        lit2 = new Literal(); lit3 = new Literal();
+        lit2.setUpLiteral(UnannType.INT, "2"); lit3.setUpLiteral(UnannType.INT, "3");
         litF = new Literal();
         litF.setUpLiteral(UnannType.BOOLEAN, "false");
         litT = new Literal();
@@ -519,5 +522,59 @@ public class FillableBlankExprTest {
         }
     }
 
-    // TODO test when blank filled
+    @Test
+    public void testFilledEvaluateArith() throws Exception {
+        AddExpr aE = new AddExpr();
+        aE.setUpAddExpr(true, lit2, lit3);
+        fbe.setStudentExpr(aE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 5);
+        assertEquals(fbe.stringRepr(), "2 + 3");
+
+        aE.setUpAddExpr(false, lit3, lit2);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 1);
+        assertEquals(fbe.stringRepr(), "3 - 2");
+
+        MultExpr mE = new MultExpr();
+        mE.setUpMultExpr(true, lit2, lit3);
+        fbe.setStudentExpr(mE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 6);
+        assertEquals(fbe.stringRepr(), "2 * 3");
+
+        mE.setUpMultExpr(false, lit3, lit2);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 1);
+        assertEquals(fbe.stringRepr(), "3 / 2");
+
+        UnaryPMExpr uE = new UnaryPMExpr();
+        uE.setUpPMExpr(true, lit2);
+        fbe.setStudentExpr(uE);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 2);
+        assertEquals(fbe.stringRepr(), "+ 2");
+
+        uE.setUpPMExpr(false, lit3);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, -3);
+        assertEquals(fbe.stringRepr(), "- 3");
+    }
+
+    @Test
+    public void testFilledEvaluateArrayAccess() throws Exception {
+        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        ArrayList<Integer> vals = new ArrayList<>(2);
+        vals.add(2);
+        vals.add(3);
+        c.namesToValues.put("ar", vals);
+
+        Id ar = new Id();
+        ar.setUpId(new Type(UnannType.INT, 2), "ar");
+        ArrayAccess aa = new ArrayAccess();
+        aa.setUpArrayAccess(ar, lit1);
+
+        fbe.setStudentExpr(aa);
+        assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 3);
+        assertEquals(fbe.stringRepr(), "ar[1]");
+    }
+
+    @Test
+    public void testFilledEvaluateAssignment() throws Exception {
+        
+    }
 }
