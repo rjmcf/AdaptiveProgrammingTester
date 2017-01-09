@@ -680,7 +680,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateBool() throws Exception {
+    public void testEvaluateAsBool() throws Exception {
         AndExpr aE = new AndExpr();
         aE.setUpAndExpr(litT, litF);
         fbe.setStudentExpr(aE);
@@ -719,7 +719,12 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateBracketed() throws Exception {
+    public void testFilledBool() throws Exception {
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testEvaluateAsBracketed() throws Exception {
         BracketedExpr bE = new BracketedExpr();
         bE.setUpBracketExpr(lit2);
         fbe.setStudentExpr(bE);
@@ -728,7 +733,12 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateId() throws Exception {
+    public void testFilledBracketed() throws Exception {
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testEvaluateAsId() throws Exception {
         c.namesToTypes.put("fakeId", new Type(UnannType.INT, 1));
         c.namesToValues.put("fakeId", 2);
         Id fakeId = new Id();
@@ -739,7 +749,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateLiteral() throws Exception {
+    public void testEvaluateAsLiteral() throws Exception {
         fbe.setStudentExpr(litT);
         assertTrue(((ReturnValuesBool)fbe.evaluate(c)).value);
         assertEquals(fbe.stringRepr(), "true");
@@ -762,7 +772,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateArrayCreationList() throws Exception {
+    public void testFilledArrayCreationList() throws Exception {
         FillableBlankExpr fbe1 = new FillableBlankExpr(1);
         ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
         acwil.setUPACWIL("fakeAr");
@@ -785,7 +795,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateArrayCreationSize() throws Exception {
+    public void testFilledArrayCreationSize() throws Exception {
         ArrayCreationWithSize acws = new ArrayCreationWithSize();
         fbe.setStudentExpr(lit2);
         acws.setUpACWS("fakeAr", UnannType.INT, fbe);
@@ -806,7 +816,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateDo() throws Exception {
+    public void testFilledDo() throws Exception {
         c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
         c.namesToValues.put("cond", false);
         c.namesToTypes.put("i", new Type(UnannType.INT, 1));
@@ -829,7 +839,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateWhile() throws Exception {
+    public void testFilledWhile() throws Exception {
         c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
         c.namesToValues.put("cond", true);
         Id condId = new Id();
@@ -847,7 +857,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateWhileNSI() throws Exception {
+    public void testFilledWhileNSI() throws Exception {
         c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
         c.namesToValues.put("cond", true);
         Id condId = new Id();
@@ -865,7 +875,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateFor() throws Exception {
+    public void testFilledFor() throws Exception {
         c.namesToTypes.put("i", new Type(UnannType.INT, 1));
         c.namesToTypes.put("res", new Type(UnannType.INT, 1));
         c.namesToValues.put("res", 0);
@@ -905,7 +915,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateForNSI() throws Exception {
+    public void testFilledForNSI() throws Exception {
         c.namesToTypes.put("i", new Type(UnannType.INT, 1));
         c.namesToTypes.put("res", new Type(UnannType.INT, 1));
         c.namesToValues.put("res", 0);
@@ -945,7 +955,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateITE() throws Exception {
+    public void testFilledITE() throws Exception {
         c.namesToTypes.put("res", new Type(UnannType.INT, 1));
 
         fbe.setStudentExpr(litT);
@@ -967,7 +977,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateITENSI() throws Exception {
+    public void testFilledITENSI() throws Exception {
         c.namesToTypes.put("res", new Type(UnannType.INT, 1));
 
         fbe.setStudentExpr(litF);
@@ -989,7 +999,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateIT() throws Exception {
+    public void testFilledIT() throws Exception {
         c.namesToTypes.put("res", new Type(UnannType.INT, 1));
 
         fbe.setStudentExpr(litT);
@@ -1008,7 +1018,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateLVD() throws Exception {
+    public void testFilledLVD() throws Exception {
         fbe.setStudentExpr(lit2);
         VarDeclarator i = new VarDeclarator();
         i.setUpVarDec("i", fbe);
@@ -1026,7 +1036,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateExprStmnt() throws Exception {
+    public void testFilledExprStmnt() throws Exception {
         c.namesToTypes.put("i", new Type(UnannType.INT, 1));
 
         Id iId = new Id();
@@ -1042,7 +1052,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluatePrStmnt() throws Exception {
+    public void testFilledPrStmnt() throws Exception {
         fbe.setStudentExpr(lit2);
         PrintStatement pS = new PrintStatement();
         pS.setUpPrint(fbe);

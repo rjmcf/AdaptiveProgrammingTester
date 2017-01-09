@@ -164,5 +164,8 @@ public class FillableBlankStmntTest {
         }
     }
 
-    // TODO test when statment filled
+    @Test
+    public void testFilledDo() throws Exception {
+        fail("Need to test all the filled statements!");
+    }
 }
