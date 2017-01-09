@@ -35,6 +35,10 @@ public class ExerciseSetter {
         exercise.deliverQuestion();
     }
 
+    public ArrayList<Integer> getBlankIds() {
+        return exercise.getBlankIds();
+    }
+
     public boolean fillBlank(int bId, MiniJASTNode replacement) {
         if (!exercise.fillBlank(bId, replacement)) {
             // Report that the blank could not be filled

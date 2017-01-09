@@ -8,6 +8,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.FillableBlankExpr;
+import miniJAST.expressions.Id;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.Statement;
@@ -72,6 +73,22 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         return solution.fillBlank(bId, replacement);
     }
 
+    public ArrayList<Integer> getBlankIds() {
+        ArrayList<Integer> blankIds = new ArrayList<>();
+        Stack<MiniJASTNode> nodes = new Stack<>();
+        nodes.push(solution);
+        while (!nodes.empty()) {
+            if (nodes.peek() instanceof FillableBlank) {
+                blankIds.add(((FillableBlank)nodes.pop()).getId());
+                continue;
+            }
+            for (MiniJASTNode n : nodes.pop().getSubNodes()) {
+                nodes.push(n);
+            }
+        }
+        return blankIds;
+    }
+
     public boolean addBlank() {
         Stack<MiniJASTNode> nodes = new Stack<>();
         Stack<MiniJASTNode> parents = new Stack<>();
@@ -126,7 +143,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
                             ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
                                     new FillableBlankExpr(replacedNodes.empty + replacedNodes.filled));
                         } else {
-                            System.err.println("node was neither StatementBase nor ExpressionBase!");
+                            throw new ClassCastException("Node was neither Expression nor Statement!");
                         }
                         return true;
                     } else {
@@ -171,7 +188,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
             nodes.add(solution);
         }
     }
-    // TODO fix how ForInits are handled
+    // TODO fix how ForInits and ExprStmnts are handled
 
     public int makeHarder(int numberOfTimes) {
         if (numberOfTimes < 1)

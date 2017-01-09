@@ -49,6 +49,7 @@ public class ExerciseSetterTest {
 
     @Test
     public void testSubmitAttempt() throws Exception {
+        fail("Test not finished yet");
         assertFalse(setter.submitAttempt());
         setter.presentQuestion();
 
@@ -70,6 +71,7 @@ public class ExerciseSetterTest {
 
         assertFalse(setter.submitAttempt());
         setter.fillBlank(6, nId);
+        setter.presentQuestion();
 
         assertTrue(setter.submitAttempt());
         assertEquals(setter.attempts, 3);

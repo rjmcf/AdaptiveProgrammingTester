@@ -160,4 +160,9 @@ public class AbstractPExerciseTest {
         test.makeHarder(20);
         assertTrue(orig + 1 == test.getQuestionDifficulty());
     }
+
+    @Test
+    public void testGetBlankIds() throws Exception {
+        fail("Test not implemented");
+    }
 }
