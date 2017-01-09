@@ -24,7 +24,7 @@ public abstract class IfThenElseBase extends StatementBase implements BlockState
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "if (" + ((Expression)subNodes.get(cond)).stringRepr() + ") \n" +
                 ((BlockStatement)subNodes.get(trueStmnt)).stringRepr(blocksDeep+1) + "\n" + pad(blocksDeep) +
-                "else\n" + ((BlockStatement)subNodes.get(falseStmnt)).stringRepr(blocksDeep+1);
+                "else \n" + ((BlockStatement)subNodes.get(falseStmnt)).stringRepr(blocksDeep+1);
     }
 
     @Override

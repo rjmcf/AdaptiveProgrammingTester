@@ -34,8 +34,7 @@ public abstract class ForStmntBase extends StatementBase implements BlockStateme
     @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) + "for (" + (subNodes.get(init) == null ? "" :
-                (subNodes.get(init) instanceof ForInit ? ((ForInit)subNodes.get(init)).stringRepr() :
-                ((BlockStatement)subNodes.get(init)).stringRepr(0))) + "; " +
+                ((BlockStatement)subNodes.get(init)).stringRepr(0)) + "; " +
                 (subNodes.get(condI) == null ? "" : ((Expression)subNodes.get(condI)).stringRepr()) + "; ";
         for (int u : updates)
             result += ((Expression)subNodes.get(u)).stringRepr() + ", ";

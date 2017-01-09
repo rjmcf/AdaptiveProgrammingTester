@@ -11,26 +11,13 @@ import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.statements.StatementBase;
 
-import java.util.ArrayList;
-
 public class ForInit extends StatementBase implements BlockStatement{
     private boolean hasLVD = false;
 
     public void setLocalVarDec(BlockStatement lv) { subNodes.clear(); hasLVD = true; subNodes.add(lv); }
     public void addStmntExpr(Expression se) { hasLVD = false; subNodes.add(se); }
 
-    public String stringRepr() {
-        if (!hasLVD) {
-            String result = "";
-            for (MiniJASTNode se : subNodes)
-                result += ((Expression)se).stringRepr() + ", ";
-            return result.substring(0, result.length() - 2);
-        } else
-            return  subNodes.get(0) instanceof LocalVarDec ?
-                    ((LocalVarDec)subNodes.get(0)).stringRepr(0).substring(0, ((LocalVarDec)subNodes.get(0)).stringRepr(0).length() - 1) :
-                    ((BlockStatement)subNodes.get(0)).stringRepr(0);
-    }
-
+    @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         if (!hasLVD) {
             for (MiniJASTNode se : subNodes) {
@@ -52,6 +39,14 @@ public class ForInit extends StatementBase implements BlockStatement{
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return null;
+        if (!hasLVD) {
+            String result = "";
+            for (MiniJASTNode se : subNodes)
+                result += ((Expression)se).stringRepr() + ", ";
+            return result.substring(0, result.length() - 2);
+        } else
+            return  subNodes.get(0) instanceof LocalVarDec ?
+                    ((LocalVarDec)subNodes.get(0)).stringRepr(0).substring(0, ((LocalVarDec)subNodes.get(0)).stringRepr(0).length() - 1) :
+                    ((BlockStatement)subNodes.get(0)).stringRepr(0);
     }
 }

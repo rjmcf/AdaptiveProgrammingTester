@@ -697,6 +697,7 @@ public class FillableBlankExprTest {
         fbe1.setStudentExpr(lit0);
         acwil.addExpressionACWIL(fbe);
         acwil.addExpressionACWIL(fbe1);
+        assertEquals(acwil.stringRepr(0), "fakeAr[] = { 1, 0 }");
 
         lvd.setUpLVD(UnannType.INT);
         lvd.addVarDec(acwil);
@@ -712,50 +713,267 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledEvaluateArrayCreationSize() throws Exception {
+        ArrayCreationWithSize acws = new ArrayCreationWithSize();
+        fbe.setStudentExpr(lit2);
+        acws.setUpACWS("fakeAr", UnannType.INT, fbe);
+        assertEquals(acws.stringRepr(0), "fakeAr[] = new int[2]");
+
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(acws);
+        lvd.executeStart(c);
+
+        Id fakeAr = new Id();
+        fakeAr.setUpId(new Type(UnannType.INT, 2), "fakeAr");
+        ArrayAccess aa = new ArrayAccess();
+        aa.setUpArrayAccess(fakeAr, lit1);
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(aa, AssignOp.EQ, lit2);
+        aE.evaluate(c);
+        assertEquals(((ReturnValuesInt)aa.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledEvaluateDo() throws Exception {
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToValues.put("cond", false);
+        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToValues.put("i", 1);
+        Id condId = new Id(), i = new Id();
+        condId.setUpId(new Type(UnannType.BOOLEAN, 1), "cond");
+        i.setUpId(new Type(UnannType.INT, 1), "i");
+        UnaryPostIncExpr upiE = new UnaryPostIncExpr();
+        upiE.setUpPostIncExpr(true, i);
+        ExpressionStmnt eS = new ExpressionStmnt(upiE);
+        fbe.setStudentExpr(condId);
+
+        DoStmnt dS = new DoStmnt();
+        dS.setUpDo(eS, fbe);
+        assertEquals(dS.stringRepr(0), "do \n    i++; while (cond)");
+
+        dS.executeStart(c);
+        assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 2);
+
     }
 
     @Test
     public void testFilledEvaluateWhile() throws Exception {
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToValues.put("cond", true);
+        Id condId = new Id();
+        condId.setUpId(new Type(UnannType.BOOLEAN, 1), "cond");
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(condId, AssignOp.EQ, litF);
+        ExpressionStmnt eS = new ExpressionStmnt(aE);
+        fbe.setStudentExpr(condId);
+
+        WhileStmnt wS = new WhileStmnt();
+        wS.setUpWhile(fbe, eS);
+        assertEquals(wS.stringRepr(0), "while (cond) \n    cond = false;");
+        wS.executeStart(c);
+        assertFalse(((ReturnValuesBool)condId.evaluate(c)).value);
     }
 
     @Test
     public void testFilledEvaluateWhileNSI() throws Exception {
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToValues.put("cond", true);
+        Id condId = new Id();
+        condId.setUpId(new Type(UnannType.BOOLEAN, 1), "cond");
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(condId, AssignOp.EQ, litF);
+        ExpressionStmnt eS = new ExpressionStmnt(aE);
+        fbe.setStudentExpr(condId);
+
+        WhileStmntNoShortIf wSNSI = new WhileStmntNoShortIf();
+        wSNSI.setUpWhileNSI(fbe, eS);
+        assertEquals(wSNSI.stringRepr(0), "while (cond) \n    cond = false;");
+        wSNSI.executeStart(c);
+        assertFalse(((ReturnValuesBool)condId.evaluate(c)).value);
     }
 
     @Test
     public void testFilledEvaluateFor() throws Exception {
+        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToValues.put("res", 0);
+        Id i = new Id();
+        i.setUpId(new Type(UnannType.INT, 1), "i");
+        AssignExpr init = new AssignExpr();
+        init.setUpAssignExpr(i, AssignOp.EQ, lit0);
+        fbe.setStudentExpr(init);
+        ForInit fI = new ForInit();
+        fI.addStmntExpr(fbe);
+
+        RelationExpr rE = new RelationExpr();
+        rE.setUpRelationExpr(RelationOp.LT, i, lit1);
+        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
+        fbe1.setStudentExpr(rE);
+
+        UnaryPostIncExpr upiE = new UnaryPostIncExpr();
+        upiE.setUpPostIncExpr(true, i);
+        FillableBlankExpr fbe2 = new FillableBlankExpr(0);
+        fbe2.setStudentExpr(upiE);
+
+        Id res = new Id();
+        res.setUpId(new Type(UnannType.INT, 1), "res");
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(res, AssignOp.PLUSEQ, lit3);
+        ExpressionStmnt eS = new ExpressionStmnt(aE);
+
+        ForStmnt fS = new ForStmnt();
+        fS.setUpForStmnt(fI, fbe1);
+        fS.addUpdate(fbe2);
+        fS.setBody(eS);
+
+        assertEquals(fS.stringRepr(0), "for (i = 0; i < 1; i++) \n    res += 3;");
+
+        fS.executeStart(c);
+        assertEquals(((ReturnValuesInt)res.evaluate(c)).value, 3);
     }
 
     @Test
     public void testFilledEvaluateForNSI() throws Exception {
+        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToValues.put("res", 0);
+        Id i = new Id();
+        i.setUpId(new Type(UnannType.INT, 1), "i");
+        AssignExpr init = new AssignExpr();
+        init.setUpAssignExpr(i, AssignOp.EQ, lit0);
+        fbe.setStudentExpr(init);
+        ForInit fI = new ForInit();
+        fI.addStmntExpr(fbe);
+
+        RelationExpr rE = new RelationExpr();
+        rE.setUpRelationExpr(RelationOp.LT, i, lit1);
+        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
+        fbe1.setStudentExpr(rE);
+
+        UnaryPostIncExpr upiE = new UnaryPostIncExpr();
+        upiE.setUpPostIncExpr(true, i);
+        FillableBlankExpr fbe2 = new FillableBlankExpr(0);
+        fbe2.setStudentExpr(upiE);
+
+        Id res = new Id();
+        res.setUpId(new Type(UnannType.INT, 1), "res");
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(res, AssignOp.PLUSEQ, lit3);
+        ExpressionStmnt eS = new ExpressionStmnt(aE);
+
+        ForStmntNoShortIf fS = new ForStmntNoShortIf();
+        fS.setUpForStmnt(fI, fbe1);
+        fS.addUpdate(fbe2);
+        fS.setBodyNSI(eS);
+
+        assertEquals(fS.stringRepr(0), "for (i = 0; i < 1; i++) \n    res += 3;");
+
+        fS.executeStart(c);
+        assertEquals(((ReturnValuesInt)res.evaluate(c)).value, 3);
     }
 
     @Test
     public void testFilledEvaluateITE() throws Exception {
+        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+
+        fbe.setStudentExpr(litT);
+        Id resId = new Id();
+        resId.setUpId(new Type(UnannType.INT, 1), "res");
+        AssignExpr ae1 = new AssignExpr();
+        ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
+        ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
+        AssignExpr ae2 = new AssignExpr();
+        ae2.setUpAssignExpr(resId, AssignOp.EQ, lit3);
+        ExpressionStmnt eS2 = new ExpressionStmnt(ae2);
+
+        IfThenElseStmnt ite = new IfThenElseStmnt();
+        ite.setUpITE(fbe, eS1, eS2);
+        assertEquals(ite.stringRepr(0), "if (true) \n    res = 2;\nelse \n    res = 3;");
+
+        ite.executeStart(c);
+        assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledEvaluateITENSI() throws Exception {
+        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+
+        fbe.setStudentExpr(litF);
+        Id resId = new Id();
+        resId.setUpId(new Type(UnannType.INT, 1), "res");
+        AssignExpr ae1 = new AssignExpr();
+        ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
+        ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
+        AssignExpr ae2 = new AssignExpr();
+        ae2.setUpAssignExpr(resId, AssignOp.EQ, lit3);
+        ExpressionStmnt eS2 = new ExpressionStmnt(ae2);
+
+        IfThenElseStmntNoShortIf ite = new IfThenElseStmntNoShortIf();
+        ite.setUpITENSI(fbe, eS1, eS2);
+        assertEquals(ite.stringRepr(0), "if (false) \n    res = 2;\nelse \n    res = 3;");
+
+        ite.executeStart(c);
+        assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 3);
     }
 
     @Test
     public void testFilledEvaluateIT() throws Exception {
+        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+
+        fbe.setStudentExpr(litT);
+        Id resId = new Id();
+        resId.setUpId(new Type(UnannType.INT, 1), "res");
+        AssignExpr ae1 = new AssignExpr();
+        ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
+        ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
+
+        IfThenStmnt ite = new IfThenStmnt();
+        ite.setUpIfThen(fbe, eS1);
+        assertEquals(ite.stringRepr(0), "if (true) \n    res = 2;");
+
+        ite.executeStart(c);
+        assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledEvaluateLVD() throws Exception {
+        fbe.setStudentExpr(lit2);
+        VarDeclarator i = new VarDeclarator();
+        i.setUpVarDec("i", fbe);
+
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(i);
+
+        assertEquals(lvd.stringRepr(0), "int i = 2;");
+
+        lvd.executeStart(c);
+
+        Id iId = new Id();
+        iId.setUpId(new Type(UnannType.INT, 1), "i");
+        assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledEvaluateExprStmnt() throws Exception {
+        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+
+        Id iId = new Id();
+        iId.setUpId(new Type(UnannType.INT, 1), "i");
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(iId, AssignOp.EQ, lit3);
+        fbe.setStudentExpr(aE);
+        ExpressionStmnt eS = new ExpressionStmnt(fbe);
+
+        assertEquals(eS.stringRepr(0), "i = 3;");
+        eS.executeStart(c);
+        assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 3);
     }
 
     @Test
     public void testFilledEvaluatePrStmnt() throws Exception {
-
+        fbe.setStudentExpr(lit2);
+        PrintStatement pS = new PrintStatement();
+        pS.setUpPrint(fbe);
+        assertEquals(pS.stringRepr(0), "System.out.println(2);");
+        pS.executeStart(c);
     }
 }

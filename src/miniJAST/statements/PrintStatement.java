@@ -12,7 +12,7 @@ public class PrintStatement extends StatementBase implements StmntNoTrailSubstmn
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return pad(blocksDeep) + "System.out.printLn(" + ((Expression)subNodes.get(expr)).stringRepr() + ");";
+        return pad(blocksDeep) + "System.out.println(" + ((Expression)subNodes.get(expr)).stringRepr() + ");";
     }
 
     @Override
