@@ -20,7 +20,7 @@ public class UnaryPMExpr extends UnaryExpr {
 
     @Override
     public String stringRepr() {
-        return (isPlus ? " +" : " -") + subNodes.get(expr).stringRepr();
+        return (isPlus ? "+ " : "- ") + subNodes.get(expr).stringRepr();
     }
 
     @Override
