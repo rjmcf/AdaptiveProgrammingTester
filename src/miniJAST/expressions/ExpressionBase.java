@@ -42,8 +42,6 @@ public abstract class ExpressionBase implements Expression {
         result.filled++;
         return result;
     }
-    @Override
-    public abstract String stringRepr();
 
     protected void checkType(Expression e, Class<? extends Expression> c) throws MiniJASTException {
         if (e instanceof FillableBlankExpr) {
@@ -55,23 +53,5 @@ public abstract class ExpressionBase implements Expression {
 
         if (!(c.isInstance(e)))
             throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
-    }
-
-    @Override
-    public boolean fillBlank(int blankId, MiniJASTNode replacement) {
-        if (!(replacement instanceof Expression))
-            return false;
-        for (Expression sNode : subNodes) {
-            if (sNode instanceof FillableBlankExpr) {
-                if (((FillableBlankExpr) sNode).getId() == blankId) {
-                    ((FillableBlankExpr) sNode).setStudentExpr((Expression) replacement);
-                    return true;
-                }
-            } else {
-                if (sNode.fillBlank(blankId, replacement))
-                    return true;
-            }
-        }
-        return false;
     }
 }

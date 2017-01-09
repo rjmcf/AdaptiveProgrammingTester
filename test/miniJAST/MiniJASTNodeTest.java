@@ -117,44 +117,4 @@ public class MiniJASTNodeTest {
         sumAss.setUpAssignExpr(sumID, AssignOp.EQ, sumTimesI);
         eS1 = new ExpressionStmnt(sumAss);
     }
-
-    @Test
-    public void testFillBlank() throws Exception {
-        try {
-            block1.executeStart(c);
-            fail("Three blanks left to fill");
-        } catch (BlankEmptyException bee) {
-            // pass test
-        }
-
-        assertTrue(block1.fillBlank(blankIds.get(0), one));
-        c = new Context();
-        try {
-            block1.executeStart(c);
-            fail("Two blanks left to fill");
-        } catch (BlankEmptyException bee) {
-            // pass test
-        }
-
-        assertTrue(block1.fillBlank(blankIds.get(1), gT));
-        c = new Context();
-        try {
-            block1.executeStart(c);
-            fail("One blank left to fill");
-        } catch (BlankEmptyException bee) {
-            // pass test
-        }
-
-        assertTrue(block1.fillBlank(blankIds.get(2), eS1));
-        c = new Context();
-        block1.executeStart(c);
-        assertEquals(((ReturnValuesInt)sumID.evaluate(c)).value, 120);
-
-        assertTrue(block1.fillBlank(blankIds.get(0), zero));
-        c = new Context();
-        block1.executeStart(c);
-        assertEquals(((ReturnValuesInt)sumID.evaluate(c)).value, 0);
-
-        assertFalse(block1.fillBlank(blankIds.get(3), zero));
-    }
 }

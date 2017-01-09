@@ -13,9 +13,6 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
-        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
-
-        @Override
         public boolean getIsLeaf() { return true; }
 
         @Override
@@ -48,9 +45,6 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     BREAK {
         @Override
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
-
-        @Override
-        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
         @Override
         public boolean getIsLeaf() { return true; }
@@ -87,9 +81,6 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
 
         @Override
-        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
-
-        @Override
         public boolean getIsLeaf() { return true; }
 
         @Override
@@ -122,9 +113,6 @@ public enum SingleWordStmnt implements StmntNoTrailSubstmnt{
     RETURN {
         @Override
         public NodeCount getTreeSize() { return new NodeCount(1,0); }
-
-        @Override
-        public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
         @Override
         public boolean getIsLeaf() { return true; }

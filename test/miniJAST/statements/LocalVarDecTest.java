@@ -99,9 +99,6 @@ public class LocalVarDecTest {
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
-            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
-
-            @Override
             public NodeCount getTreeSize() {
                 return new NodeCount(1,0);
             }
@@ -178,9 +175,6 @@ public class LocalVarDecTest {
 
             @Override
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
-
-            @Override
-            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
             public NodeCount getTreeSize() {

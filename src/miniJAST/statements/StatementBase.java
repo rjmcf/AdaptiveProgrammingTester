@@ -91,27 +91,6 @@ public abstract class StatementBase implements MiniJASTNode {
             throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
     }
 
-    @Override
-    public boolean fillBlank(int blankId, MiniJASTNode replacement) {
-        for (MiniJASTNode sNode : subNodes) {
-            if (sNode instanceof FillableBlankExpr) {
-                if (((FillableBlankExpr) sNode).getId() == blankId) {
-                    ((FillableBlankExpr) sNode).setStudentExpr((Expression) replacement);
-                    return true;
-                }
-            } else if (sNode instanceof FillableBlankStmnt) {
-                if (((FillableBlankStmnt) sNode).getId() == blankId) {
-                    ((FillableBlankStmnt) sNode).setStudentStmnt((BlockStatement) replacement);
-                    return true;
-                }
-            } else {
-                if (sNode.fillBlank(blankId, replacement))
-                    return true;
-            }
-        }
-        return false;
-    }
-
     protected String pad(int count) {
         return new String(new char[count]).replace("\0", "    ");
     }

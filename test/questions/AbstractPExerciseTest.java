@@ -1,7 +1,13 @@
 package questions;
 
+import miniJAST.expressions.Id;
+import miniJAST.expressions.Literal;
+import miniJAST.types.Type;
+import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
 
 import static org.testng.Assert.*;
 
@@ -172,5 +178,37 @@ public class AbstractPExerciseTest {
 
 
         fail("Test not completed");
+    }
+
+    @Test
+    public void testFillBlank() throws Exception {
+        for (int i = 0; i < 5; i++) {
+            test.addBlank();
+        }
+        test.printSolution();
+
+        ArrayList<Integer> ids = test.getBlankIds();
+        System.out.println(ids);
+
+        Literal five = new Literal();
+        five.setUpLiteral(UnannType.INT, "5");
+        assertTrue(test.fillBlank(ids.get(0), five));
+
+        Literal zero = new Literal();
+        zero.setUpLiteral(UnannType.INT, "0");
+        assertTrue(test.fillBlank(ids.get(1), zero));
+
+        Id i = new Id();
+        i.setUpId(new Type(UnannType.INT, 1), "i");
+        assertTrue(test.fillBlank(ids.get(2), i));
+        assertTrue(test.fillBlank(ids.get(3), five));
+        assertTrue(test.fillBlank(ids.get(4), i));
+
+        assertFalse(test.fillBlank(ids.get(4) + 10, zero));
+
+        test.printSolution();
+
+        test.runSolution();
+        assertTrue(test.checkSolved());
     }
 }

@@ -49,9 +49,6 @@ public class PrintStatementTest {
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
-            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
-
-            @Override
             public NodeCount getTreeSize() {
                 return new NodeCount(1,0);
             }
@@ -81,9 +78,6 @@ public class PrintStatementTest {
 
             @Override
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
-
-            @Override
-            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
             public NodeCount getTreeSize() {
@@ -121,9 +115,6 @@ public class PrintStatementTest {
 
             @Override
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
-
-            @Override
-            public boolean fillBlank(int blankId, MiniJASTNode replacement) { return false; }
 
             @Override
             public NodeCount getTreeSize() {

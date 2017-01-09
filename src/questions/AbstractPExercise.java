@@ -16,6 +16,7 @@ import miniJAST.statements.StatementBase;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ListIterator;
 import java.util.Stack;
 
@@ -70,7 +71,29 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) {
-        return solution.fillBlank(bId, replacement);
+        Stack<MiniJASTNode> nodes = new Stack<>();
+        nodes.push(solution);
+        while (!nodes.empty()) {
+            if (nodes.peek() instanceof FillableBlank) {
+                if (((FillableBlank) nodes.peek()).getId() == bId) {
+                    if (nodes.peek() instanceof FillableBlankExpr) {
+                        ((FillableBlankExpr) nodes.peek()).setStudentExpr((Expression) replacement);
+                    } else if (nodes.peek() instanceof FillableBlankStmnt) {
+                        ((FillableBlankStmnt) nodes.peek()).setStudentStmnt((BlockStatement) replacement);
+                    } else {
+                        throw new ClassCastException("node is neither Expression not Statement!");
+                    }
+                    return true;
+                } else {
+                    nodes.pop();
+                }
+            } else {
+                for (MiniJASTNode n : nodes.pop().getSubNodes()) {
+                    nodes.push(n);
+                }
+            }
+        }
+        return false;
     }
 
     public ArrayList<Integer> getBlankIds() {
@@ -86,6 +109,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
                 nodes.push(n);
             }
         }
+        Collections.reverse(blankIds);
         return blankIds;
     }
 
