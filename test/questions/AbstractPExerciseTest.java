@@ -163,6 +163,14 @@ public class AbstractPExerciseTest {
 
     @Test
     public void testGetBlankIds() throws Exception {
-        fail("Test not implemented");
+        assertEquals(test.getBlankIds().size(), 0);
+
+        test.addBlank();
+        assertEquals(test.getBlankIds().size(), 1);
+        test.removeBlank();
+        assertEquals(test.getBlankIds().size(), 0);
+
+
+        fail("Test not completed");
     }
 }

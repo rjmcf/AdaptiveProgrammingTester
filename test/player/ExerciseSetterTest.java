@@ -79,11 +79,11 @@ public class ExerciseSetterTest {
 
     @Test
     public void testAdjustQuestion() throws Exception {
-
+        fail("Not implemented yet");
     }
 
     @Test
     public void testReportPerformance() throws Exception {
-
+        fail("Not implemented yet");
     }
 }
