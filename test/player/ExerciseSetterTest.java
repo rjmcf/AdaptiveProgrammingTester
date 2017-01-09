@@ -11,6 +11,8 @@ import questions.FactorialExercise;
 import questions.FillArrayToNExercise;
 import questions.SquareExercise;
 
+import java.util.ArrayList;
+
 import static org.testng.Assert.*;
 
 public class ExerciseSetterTest {
@@ -49,28 +51,29 @@ public class ExerciseSetterTest {
 
     @Test
     public void testSubmitAttempt() throws Exception {
-        fail("Test not finished yet");
         assertFalse(setter.submitAttempt());
         setter.presentQuestion();
 
-        VarDeclarator total = new VarDeclarator();
-        total.setUpVarDec("total", null);
-        setter.fillBlank(7, total);
-        Literal six = new Literal();
-        six.setUpLiteral(UnannType.INT, "6");
-        setter.fillBlank(2, six);
+        ArrayList<Integer> blankIds = setter.getBlankIds();
+
         Literal one = new Literal();
         one.setUpLiteral(UnannType.INT, "1");
-        setter.fillBlank(4, one);
+        VarDeclarator total = new VarDeclarator();
+        total.setUpVarDec("total", one);
+        setter.fillBlank(blankIds.get(0), total);
+        Literal six = new Literal();
+        six.setUpLiteral(UnannType.INT, "6");
+        setter.fillBlank(blankIds.get(1), six);
+        setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
         nId.setUpId(new Type(UnannType.INT, 1), "n");
-        setter.fillBlank(3, nId);
+        setter.fillBlank(blankIds.get(2), nId);
         Id totId = new Id();
         totId.setUpId(new Type(UnannType.INT, 1), "total");
-        setter.fillBlank(5, totId);
+        setter.fillBlank(blankIds.get(4), totId);
 
         assertFalse(setter.submitAttempt());
-        setter.fillBlank(6, nId);
+        setter.fillBlank(blankIds.get(5), nId);
         setter.presentQuestion();
 
         assertTrue(setter.submitAttempt());

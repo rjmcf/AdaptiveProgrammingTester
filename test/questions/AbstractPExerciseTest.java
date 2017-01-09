@@ -175,9 +175,6 @@ public class AbstractPExerciseTest {
         assertEquals(test.getBlankIds().size(), 1);
         test.removeBlank();
         assertEquals(test.getBlankIds().size(), 0);
-
-
-        fail("Test not completed");
     }
 
     @Test
@@ -185,7 +182,6 @@ public class AbstractPExerciseTest {
         for (int i = 0; i < 5; i++) {
             test.addBlank();
         }
-        test.printSolution();
 
         ArrayList<Integer> ids = test.getBlankIds();
         System.out.println(ids);
@@ -205,8 +201,6 @@ public class AbstractPExerciseTest {
         assertTrue(test.fillBlank(ids.get(4), i));
 
         assertFalse(test.fillBlank(ids.get(4) + 10, zero));
-
-        test.printSolution();
 
         test.runSolution();
         assertTrue(test.checkSolved());
