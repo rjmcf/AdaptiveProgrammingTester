@@ -1,10 +1,12 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
@@ -30,7 +32,16 @@ public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr 
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         checkType(subNodes.get(exprI), AssignLHS.class);
 
-        AssignLHS expr = (AssignLHS)subNodes.get(exprI);
+        AssignLHS expr;
+        try {
+            if (subNodes.get(exprI) instanceof FillableBlank) {
+                expr = (AssignLHS)((FillableBlankExpr)subNodes.get(exprI)).getStudentExpr();
+            } else {
+                expr = (AssignLHS)subNodes.get(exprI);
+            }
+        } catch (ClassCastException e) {
+            throw new TypeException("Left hand side of assignment must be of type AssignLHS!");
+        }
 
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;

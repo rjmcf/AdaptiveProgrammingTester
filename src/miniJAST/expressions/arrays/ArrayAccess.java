@@ -5,6 +5,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.OutOfBoundsException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.PrimaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
@@ -34,7 +35,15 @@ public class ArrayAccess extends PrimaryExpr implements AssignLHS {
         checkType(subNodes.get(idE), Id.class);
         checkType(subNodes.get(index), Expression.class);
 
-        Id id = (Id)subNodes.get(idE);
+        Id id;
+        try {
+            if (subNodes.get(idE) instanceof FillableBlankExpr)
+                id = (Id) ((FillableBlankExpr) subNodes.get(idE)).getStudentExpr();
+            else
+                id = (Id) subNodes.get(idE);
+        } catch (ClassCastException e) {
+            throw new TypeException("ID must have type Id!");
+        }
 
         ReturnValues r = id.evaluate(c);
 

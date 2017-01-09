@@ -27,6 +27,7 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
     public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
     public FillableBlankExpr(int nReplaced) { super(nReplaced); }
+    public Expression getStudentExpr() { return studentExpr; }
 
     @Override
     public NodeCount getTreeSize() {

@@ -1,6 +1,7 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
@@ -50,7 +51,16 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
         checkType(subNodes.get(lhsI), AssignLHS.class);
         checkType(subNodes.get(expr), Expression.class);
 
-        AssignLHS lhs = (AssignLHS)subNodes.get(lhsI);
+        AssignLHS lhs;
+        try {
+            if (subNodes.get(lhsI) instanceof FillableBlank) {
+                lhs = (AssignLHS)((FillableBlankExpr)subNodes.get(lhsI)).getStudentExpr();
+            } else {
+                lhs = (AssignLHS)subNodes.get(lhsI);
+            }
+        } catch (ClassCastException e) {
+            throw new TypeException("Left hand side of assignment must be of type AssignLHS!");
+        }
 
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;

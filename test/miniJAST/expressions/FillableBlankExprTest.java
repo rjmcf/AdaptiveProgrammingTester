@@ -523,7 +523,7 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateArith() throws Exception {
+    public void testEvaluateAsArith() throws Exception {
         AddExpr aE = new AddExpr();
         aE.setUpAddExpr(true, lit2, lit3);
         fbe.setStudentExpr(aE);
@@ -556,7 +556,29 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateArrayAccess() throws Exception {
+    public void testFilledArith() throws Exception {
+        fbe.setStudentExpr(lit2);
+        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
+        fbe1.setStudentExpr(lit3);
+
+        AddExpr aE = new AddExpr();
+        aE.setUpAddExpr(true, fbe, fbe1);
+        assertEquals(((ReturnValuesInt)aE.evaluate(c)).value, 5);
+        assertEquals(aE.stringRepr(), "2 + 3");
+
+        MultExpr mE = new MultExpr();
+        mE.setUpMultExpr(true, fbe, fbe1);
+        assertEquals(((ReturnValuesInt)mE.evaluate(c)).value, 6);
+        assertEquals(mE.stringRepr(), "2 * 3");
+
+        UnaryPMExpr uE = new UnaryPMExpr();
+        uE.setUpPMExpr(false, fbe);
+        assertEquals(((ReturnValuesInt)uE.evaluate(c)).value, -2);
+        assertEquals(uE.stringRepr(), "- 2");
+    }
+
+    @Test
+    public void testEvaluateAsArrayAccess() throws Exception {
         c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
         ArrayList<Integer> vals = new ArrayList<>(2);
         vals.add(2);
@@ -574,7 +596,25 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledEvaluateAssignment() throws Exception {
+    public void testFilledArrayAcces() throws Exception {
+        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        ArrayList<Integer> array = new ArrayList<>();
+        array.add(2); array.add(3);
+        c.namesToValues.put("ar", array);
+
+        ArrayAccess aa = new ArrayAccess();
+        Id ar = new Id();
+        ar.setUpId(new Type(UnannType.INT, 2), "ar");
+        fbe.setStudentExpr(ar);
+        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
+        fbe1.setStudentExpr(lit1);
+        aa.setUpArrayAccess(fbe, fbe1);
+        assertEquals(((ReturnValuesInt)aa.evaluate(c)).value, 3);
+        assertEquals(aa.stringRepr(), "ar[1]");
+    }
+
+    @Test
+    public void testEvaluateAsAssignment() throws Exception {
         c.namesToTypes.put("fakeInt", new Type(UnannType.INT, 1));
 
         Id fId = new Id();
@@ -604,6 +644,39 @@ public class FillableBlankExprTest {
         assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 4);
         assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 4);
         assertEquals(fbe.stringRepr(), "++fakeInt");
+    }
+
+    @Test
+    public void testFilledAssignment() throws Exception {
+        c.namesToTypes.put("fakeInt", new Type(UnannType.INT, 1));
+        Id fId = new Id();
+        fId.setUpId(new Type(UnannType.INT, 1), "fakeInt");
+        fbe.setStudentExpr(fId);
+        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
+        fbe1.setStudentExpr(lit3);
+
+        AssignExpr aE = new AssignExpr();
+        aE.setUpAssignExpr(fbe, AssignOp.EQ, fbe1);
+        aE.evaluate(c);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 3);
+        assertEquals(aE.stringRepr(), "fakeInt = 3");
+
+        aE.setUpAssignExpr(fbe, AssignOp.PLUSEQ, fbe1);
+        aE.evaluate(c);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 6);
+        assertEquals(aE.stringRepr(), "fakeInt += 3");
+
+        UnaryPostIncExpr uPostE = new UnaryPostIncExpr();
+        uPostE.setUpPostIncExpr(true, fbe);
+        assertEquals(((ReturnValuesInt)uPostE.evaluate(c)).value, 6);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 7);
+        assertEquals(uPostE.stringRepr(), "fakeInt++");
+
+        UnaryPreIncExpr uPreE = new UnaryPreIncExpr();
+        uPreE.setUpPreIncExpr(false, fbe);
+        assertEquals(((ReturnValuesInt)uPreE.evaluate(c)).value, 6);
+        assertEquals(((ReturnValuesInt)fId.evaluate(c)).value, 6);
+        assertEquals(uPreE.stringRepr(), "--fakeInt");
     }
 
     @Test
