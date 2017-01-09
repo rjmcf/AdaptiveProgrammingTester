@@ -69,21 +69,6 @@ public class AbstractPExerciseTest {
     }
 
     @Test
-    public void testGetQuestionDifficulty() throws Exception {
-        float newDifficulty, currentDifficulty = test.getQuestionDiffModifier();
-        assertEquals(currentDifficulty, 0.0f);
-        for (int i = 0; i < 20; i++) {
-            test.addBlank();
-            newDifficulty = test.getQuestionDiffModifier();
-            assertTrue(newDifficulty >= currentDifficulty, "Test failed on iteration " + i);
-            currentDifficulty = newDifficulty;
-        }
-        assertEquals(currentDifficulty, 1.0f);
-
-        assertFalse(test.addBlank());
-    }
-
-    @Test
     public void testRemoveBlank() throws Exception {
         assertFalse(test.removeBlank());
 
@@ -152,5 +137,27 @@ public class AbstractPExerciseTest {
             assertEquals(test.makeEasier(i + 1), 0);
             assertEquals(test.getQuestionDiffModifier(), 0f);
         }
+    }
+
+    @Test
+    public void testGetQuestionDifficultyModifier() throws Exception {
+        float newDifficulty, currentDifficulty = test.getQuestionDiffModifier();
+        assertEquals(currentDifficulty, 0.0f);
+        for (int i = 0; i < 20; i++) {
+            test.addBlank();
+            newDifficulty = test.getQuestionDiffModifier();
+            assertTrue(newDifficulty >= currentDifficulty, "Test failed on iteration " + i);
+            currentDifficulty = newDifficulty;
+        }
+        assertEquals(currentDifficulty, 1.0f);
+
+        assertFalse(test.addBlank());
+    }
+
+    @Test
+    public void testGetQuestionDifficulty() throws Exception {
+        float orig = test.getQuestionDifficulty();
+        test.makeHarder(20);
+        assertTrue(orig + 1 == test.getQuestionDifficulty());
     }
 }

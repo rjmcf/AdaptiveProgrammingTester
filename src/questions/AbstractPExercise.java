@@ -29,13 +29,9 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     public abstract boolean checkSolved();
     protected Context c;
 
-    public void runSolution() {
+    public void runSolution() throws MiniJASTException {
         c = new Context();
-        try {
-            solution.executeStart(c);
-        } catch (MiniJASTException ex) {
-            ex.printStackTrace();
-        }
+        solution.executeStart(c);
     }
 
     @Override
