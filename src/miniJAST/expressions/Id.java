@@ -16,8 +16,10 @@ import java.util.ArrayList;
 public class Id extends GroundExpr implements AssignLHS{
     private Type varType;
     private String name;
+    private boolean isArray;
 
-    public void setUpId(Type vT, String n) { varType = vT; name = n; }
+    public void setUpIdSimple(UnannType t, String n) { varType = new Type(t, 1); name = n; isArray = false; }
+    public void setUpIdArray(UnannType t, int size, String n) { varType = new Type(t, size); name = n; isArray = true; }
 
     @Override
     public String stringRepr() {
@@ -29,7 +31,7 @@ public class Id extends GroundExpr implements AssignLHS{
         if (c.namesToTypes.get(name) != null && c.namesToTypes.get(name).equals(varType)) {
             if (!c.namesToValues.containsKey(name))
                 throw new VariableNotInitException(name);
-            if (varType.size == 1) {
+            if (!isArray) {
                 switch (varType.uType) {
                     case BOOLEAN:
                         return new ReturnValuesBool((boolean) c.namesToValues.get(name));
@@ -64,4 +66,5 @@ public class Id extends GroundExpr implements AssignLHS{
 
     public String getName() { return name; }
     public Type getType() { return varType; }
+    public boolean getIsArray() { return isArray; }
 }

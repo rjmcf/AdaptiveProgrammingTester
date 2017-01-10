@@ -54,13 +54,13 @@ public class FillArrayToNExercise extends AbstractPExercise {
         iDec.setUpLVD(UnannType.INT);
         iDec.addVarDec(i);
         Id iID = new Id();
-        iID.setUpId(new Type(UnannType.INT, 1), "i");
+        iID.setUpIdSimple(UnannType.INT, "i");
         RelationExpr lTN = new RelationExpr();
         lTN.setUpRelationExpr(RelationOp.LT, iID, n);
         UnaryPostIncExpr plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, iID);
         nsID = new Id();
-        nsID.setUpId(new Type(UnannType.INT, max), "ns");
+        nsID.setUpIdArray(UnannType.INT, max, "ns");
         ArrayAccess nsAcc = new ArrayAccess();
         nsAcc.setUpArrayAccess(nsID, iID);
         AssignExpr updateIndex = new AssignExpr();

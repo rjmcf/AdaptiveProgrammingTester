@@ -40,10 +40,10 @@ public class IdTest {
 
     @Test
     public void testEvaluate() throws Exception {
-        id.setUpId(new Type(UnannType.BOOLEAN,1), "t");
+        id.setUpIdSimple(UnannType.BOOLEAN, "t");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
-        id.setUpId(new Type(UnannType.BOOLEAN, 2), "t");
+        id.setUpIdArray(UnannType.BOOLEAN, 2, "t");
         try {
             id.evaluate(c);
             fail("t has wrong type (size)");
@@ -51,7 +51,7 @@ public class IdTest {
             // pass test
         }
 
-        id.setUpId(new Type(UnannType.INT, 1), "t");
+        id.setUpIdSimple(UnannType.INT, "t");
         try {
             id.evaluate(c);
             fail("t has wrong type (type)");
@@ -59,10 +59,10 @@ public class IdTest {
             // pass test
         }
 
-        id.setUpId(new Type(UnannType.INT, 1), "int2");
+        id.setUpIdSimple(UnannType.INT, "int2");
         assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);
 
-        id.setUpId(new Type(UnannType.CHAR, 6), "message");
+        id.setUpIdArray(UnannType.CHAR, 6, "message");
         String s = "Id test";
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
         assertEquals(s.length(), ar.getSize());

@@ -68,13 +68,13 @@ public class WhileStmntNoShortIfTest {
         five = new Literal();
         five.setUpLiteral(UnannType.INT, "5");
         sumID = new Id();
-        sumID.setUpId(new Type(UnannType.INT, 1), "sum");
+        sumID.setUpIdSimple(UnannType.INT, "sum");
         lT5 = new RelationExpr();
         lT5.setUpRelationExpr(RelationOp.LT, sumID, five);
         nsID = new Id();
-        nsID.setUpId(new Type(UnannType.INT, 4), "ns");
+        nsID.setUpIdArray(UnannType.INT, 4, "ns");
         iID = new Id();
-        iID.setUpId(new Type(UnannType.INT, 1), "i");
+        iID.setUpIdSimple(UnannType.INT, "i");
         access = new ArrayAccess();
         access.setUpArrayAccess(nsID, iID);
         plusEquals = new AssignExpr();
@@ -101,7 +101,7 @@ public class WhileStmntNoShortIfTest {
         f = new Literal();
         f.setUpLiteral(UnannType.BOOLEAN, "false");
         jID = new Id();
-        jID.setUpId(new Type(UnannType.INT, 1), "j");
+        jID.setUpIdSimple(UnannType.INT, "j");
         j1 = new AssignExpr();
         j1.setUpAssignExpr(jID, AssignOp.EQ, one);
         ExpressionStmnt eS3 = new ExpressionStmnt(j1);

@@ -39,7 +39,7 @@ public class AddExprTest {
         ints.add(2);
         c.namesToValues.put("array", ints);
         id = new Id();
-        id.setUpId(new Type(UnannType.INT, 2), "array");
+        id.setUpIdArray(UnannType.INT, 2, "array");
         int2 = new Literal();
         int2.setUpLiteral(UnannType.INT, "2");
         int3 = new Literal();

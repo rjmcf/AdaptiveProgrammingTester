@@ -30,7 +30,7 @@ public class UnaryPreIncExprTest {
 
     @Test
     public void testIds() throws Exception {
-        id.setUpId(new Type(UnannType.BOOLEAN,1), "t");
+        id.setUpIdSimple(UnannType.BOOLEAN, "t");
         e.setUpPreIncExpr(true, id);
         try {
             e.evaluate(c);
@@ -39,7 +39,7 @@ public class UnaryPreIncExprTest {
             // pass test
         }
 
-        id.setUpId(new Type(UnannType.INT, 1), "i");
+        id.setUpIdSimple(UnannType.INT, "i");
         e.setUpPreIncExpr(true, id);
         Assert.assertEquals(1, ((ReturnValuesInt)e.evaluate(c)).value);
         Assert.assertEquals(1, ((ReturnValuesInt)id.evaluate(c)).value);

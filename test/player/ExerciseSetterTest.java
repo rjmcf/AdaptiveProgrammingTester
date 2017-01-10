@@ -65,10 +65,10 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
-        nId.setUpId(new Type(UnannType.INT, 1), "n");
+        nId.setUpIdSimple(UnannType.INT, "n");
         setter.fillBlank(blankIds.get(2), nId);
         Id totId = new Id();
-        totId.setUpId(new Type(UnannType.INT, 1), "total");
+        totId.setUpIdSimple(UnannType.INT, "total");
         setter.fillBlank(blankIds.get(4), totId);
 
         assertFalse(setter.submitAttempt());

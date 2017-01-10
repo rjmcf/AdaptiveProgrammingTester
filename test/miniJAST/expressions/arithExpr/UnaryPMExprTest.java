@@ -35,7 +35,7 @@ public class UnaryPMExprTest {
         ints.add(2);
         c.namesToValues.put("array", ints);
         id = new Id();
-        id.setUpId(new Type(UnannType.INT, 2), "array");
+        id.setUpIdArray(UnannType.INT, 2, "array");
         intE = new Literal();
         intE.setUpLiteral(UnannType.INT, "2");
         doubE = new Literal();

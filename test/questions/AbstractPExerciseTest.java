@@ -195,7 +195,7 @@ public class AbstractPExerciseTest {
         assertTrue(test.fillBlank(ids.get(1), zero));
 
         Id i = new Id();
-        i.setUpId(new Type(UnannType.INT, 1), "i");
+        i.setUpIdSimple(UnannType.INT, "i");
         assertTrue(test.fillBlank(ids.get(2), i));
         assertTrue(test.fillBlank(ids.get(3), five));
         assertTrue(test.fillBlank(ids.get(4), i));

@@ -7,6 +7,7 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.*;
+import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
@@ -54,7 +55,9 @@ public class ArrayAccessTest {
         chars.add('!');
         c.namesToValues.put("charArray", chars);
         c.namesToTypes.put("singleInt", new Type(UnannType.INT, 1));
-        c.namesToValues.put("singleInt", 0);
+        ArrayList<Integer> oneInt = new ArrayList<>(1);
+        oneInt.add(3);
+        c.namesToValues.put("singleInt", oneInt);
         zero = new Literal();
         zero.setUpLiteral(UnannType.INT, "0");
         one = new Literal();
@@ -73,7 +76,7 @@ public class ArrayAccessTest {
 
     @Test
     public void testEvaluate() throws Exception {
-        id.setUpId(new Type(UnannType.BOOLEAN, 2), "boolArray");
+        id.setUpIdArray(UnannType.BOOLEAN, 2, "boolArray");
         aa.setUpArrayAccess(id, zero);
         assertTrue(((ReturnValuesBoolAA)aa.evaluate(c)).value);
         assertEquals("boolArray", ((ReturnValuesBoolAA)aa.evaluate(c)).getName());
@@ -122,7 +125,7 @@ public class ArrayAccessTest {
             // pass test
         }
 
-        id.setUpId(new Type(UnannType.INT, 2), "intArray");
+        id.setUpIdArray(UnannType.INT, 2, "intArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals(1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
 
@@ -137,29 +140,23 @@ public class ArrayAccessTest {
             // pass test
         }
 
-        id.setUpId(new Type(UnannType.DOUBLE, 2), "dubArray");
+        id.setUpIdArray(UnannType.DOUBLE, 2, "dubArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals(0.5, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
         assertEquals(0.25, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
 
-        id.setUpId(new Type(UnannType.CHAR, 2), "charArray");
+        id.setUpIdArray(UnannType.CHAR, 2, "charArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals('A', ((ReturnValuesCharAA)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
         assertEquals('!', ((ReturnValuesCharAA)aa.evaluate(c)).value);
 
-        id.setUpId(new Type(UnannType.INT, 1), "singleInt");
+        id.setUpIdArray(UnannType.INT, 1, "singleInt");
         aa.setUpArrayAccess(id, zero);
-        try {
-            aa.evaluate(c);
-            fail("singleInt is not an array");
-        } catch (TypeException ex) {
-            // pass test
-        }
-
-
+        aa.evaluate(c);
+        assertEquals(((ReturnValuesInt)aa.evaluate(c)).value, 3);
     }
 }

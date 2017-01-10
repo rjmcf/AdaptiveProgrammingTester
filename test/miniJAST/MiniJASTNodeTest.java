@@ -80,7 +80,7 @@ public class MiniJASTNodeTest {
 
         // set up "i--"
         iID = new Id();
-        iID.setUpId(new Type(UnannType.INT, 1), "i");
+        iID.setUpIdSimple(UnannType.INT, "i");
         minus = new UnaryPostIncExpr();
         minus.setUpPostIncExpr(false, iID);
 
@@ -110,7 +110,7 @@ public class MiniJASTNodeTest {
 
         // set up "sum = sum * i"
         sumID = new Id();
-        sumID.setUpId(new Type(UnannType.INT, 1), "sum");
+        sumID.setUpIdSimple(UnannType.INT, "sum");
         sumTimesI = new MultExpr();
         sumTimesI.setUpMultExpr(true, sumID, iID);
         sumAss = new AssignExpr();

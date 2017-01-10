@@ -44,7 +44,7 @@ public class ContextTest {
         two = new Literal();
         two.setUpLiteral(UnannType.INT, "2");
         iID = new Id();
-        iID.setUpId(new Type(UnannType.INT, 1), "i");
+        iID.setUpIdSimple(UnannType.INT, "i");
         lT2 = new RelationExpr();
         lT2.setUpRelationExpr(RelationOp.LT, iID, two);
         plus = new UnaryPostIncExpr();
@@ -55,7 +55,7 @@ public class ContextTest {
         jDec.setUpLVD(UnannType.INT);
         jDec.addVarDec(j);
         jID = new Id();
-        jID.setUpId(new Type(UnannType.INT, 1), "j");
+        jID.setUpIdSimple(UnannType.INT, "j");
         init = new ForInit();
         init.setLocalVarDec(iDec);
         fS = new ForStmnt();

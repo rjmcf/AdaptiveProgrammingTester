@@ -41,9 +41,9 @@ public class SquareExercise extends AbstractPExercise {
         lvd.addVarDec(nSqDec);
 
         nSqId = new Id();
-        nSqId.setUpId(new Type(UnannType.INT, 1), "nSq");
+        nSqId.setUpIdSimple(UnannType.INT, "nSq");
         Id nId = new Id();
-        nId.setUpId(new Type(UnannType.INT, 1), "n");
+        nId.setUpIdSimple(UnannType.INT, "n");
         MultExpr times = new MultExpr();
         times.setUpMultExpr(true, nId, nId);
         AssignExpr eq = new AssignExpr();
