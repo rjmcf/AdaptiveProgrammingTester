@@ -1,11 +1,13 @@
 package miniJAST.statements.LVD;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.*;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.BlockStatement;
+import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 import miniJAST.statements.arrays.ArrayCreation;
@@ -41,7 +43,17 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         for (MiniJASTNode vB : subNodes) {
             checkType((BlockStatement)vB, VarDeclarator.class);
-            VarDeclarator v = (VarDeclarator)vB;
+            VarDeclarator v;
+            try {
+                if (vB instanceof FillableBlankStmnt) {
+                    v = (VarDeclarator)((FillableBlankStmnt)vB).getStudentStmnt();
+                } else {
+                    v = (VarDeclarator)vB;
+                }
+            } catch (ClassCastException e) {
+                throw new TypeException("VarDeclarator submitted to LVD must be of type VarDeclarator");
+            }
+
             if (c.namesToTypes.containsKey(v.getName()))
                 throw new VariableDecException(v.getName(), true);
 

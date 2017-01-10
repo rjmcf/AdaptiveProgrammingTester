@@ -398,4 +398,20 @@ public class FillableBlankStmntTest {
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);
         assertEquals(b.stringRepr(1), "{\n    int i = 0;\n    i += 2;\n}");
     }
+
+    @Test
+    public void testFilledLVD() throws Exception {
+        VarDeclarator v = new VarDeclarator();
+        v.setUpVarDec("i", lit1);
+        fbs.setStudentStmnt(v);
+        LocalVarDec lvd = new LocalVarDec();
+        lvd.setUpLVD(UnannType.INT);
+        lvd.addVarDec(fbs);
+
+        lvd.executeStart(c);
+        Id iId = new Id();
+        iId.setUpId(new Type(UnannType.INT, 1), "i");
+        assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 1);
+        assertEquals(lvd.stringRepr(0), "int i = 1;");
+    }
 }

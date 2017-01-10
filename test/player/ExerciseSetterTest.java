@@ -52,7 +52,6 @@ public class ExerciseSetterTest {
     @Test
     public void testSubmitAttempt() throws Exception {
         assertFalse(setter.submitAttempt());
-        setter.presentQuestion();
 
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
@@ -74,7 +73,6 @@ public class ExerciseSetterTest {
 
         assertFalse(setter.submitAttempt());
         setter.fillBlank(blankIds.get(5), nId);
-        setter.presentQuestion();
 
         assertTrue(setter.submitAttempt());
         assertEquals(setter.attempts, 3);
