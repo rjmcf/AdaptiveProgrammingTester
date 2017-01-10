@@ -210,6 +210,22 @@ public class LocalVarDecTest {
         } catch (TypeException te) {
             // pass test
         }
+
+        Literal one = new Literal();
+        one.setUpLiteral(UnannType.INT, "1");
+        ArrayCreationWithSize aCSize1 = new ArrayCreationWithSize();
+        aCSize1.setUpACWS("boolArray3", UnannType.BOOLEAN, one);
+
+        lvd = new LocalVarDec();
+        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.addVarDec(aCSize1);
+        lvd.execute(c, 0);
+
+        Id id1 = new Id();
+        id1.setUpId(new Type(UnannType.BOOLEAN, 1), "boolArray3");
+        ReturnValuesArray ar1 = (ReturnValuesArray)id1.evaluate(c);
+
+        assertEquals(ar1.getType().size, 1);
     }
 
     @Test
@@ -254,5 +270,21 @@ public class LocalVarDecTest {
         } catch (TypeException te) {
             // pass test
         }
+
+        ArrayCreationWithInitList aCWIL1 = new ArrayCreationWithInitList();
+        aCWIL1.setUPACWIL("boolArray1");
+        aCWIL1.addExpressionACWIL(t);
+
+        lvd = new LocalVarDec();
+        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.addVarDec(aCWIL1);
+        lvd.executeStart(c);
+
+        id.setUpId(new Type(UnannType.BOOLEAN, 1), "boolArray1");
+        ReturnValuesArray<Boolean> ar1 = (ReturnValuesArray)id.evaluate(c);
+
+        assertEquals(1, ar.getType().size);
+        assertTrue(ar.get(0));
+
     }
 }
