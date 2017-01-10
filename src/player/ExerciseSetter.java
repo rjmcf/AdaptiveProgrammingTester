@@ -13,20 +13,28 @@ public class ExerciseSetter {
     AbstractPExercise exercise;
     public int attempts = 0;
     int numNodes;
+    int nodesToRemove;
 
     public void addExercise(AbstractPExercise e) { possibleExs.add(e); Collections.sort(possibleExs);}
 
     public AbstractPExercise getPossExercise(int i) { return possibleExs.get(i); }
 
+    public float getCurrentDifficulty() { return exercise.getQuestionDifficulty(); }
+
     public void setInitialIndex(int i) {
         currentIndex = i;
         exercise = possibleExs.get(i);
+        exercise.setUp();
+        numNodes = exercise.numNodes();
+        nodesToRemove = numNodes/2;
         setUp();
-        exercise.makeHarder(numNodes/2);
     }
 
     public void setUp() {
         exercise.setUp();
+        if (nodesToRemove == 0)
+            nodesToRemove = 2;
+        exercise.makeHarder(nodesToRemove);
         attempts = 0;
         numNodes = exercise.numNodes();
     }
@@ -40,12 +48,17 @@ public class ExerciseSetter {
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) {
-        if (!exercise.fillBlank(bId, replacement)) {
-            // Report that the blank could not be filled
-            System.err.println("There was no blank with that id!");
+        try {
+            if (!exercise.fillBlank(bId, replacement)) {
+                // Report that the blank could not be filled
+                System.err.println("There was no blank with that id!");
+                return false;
+            }
+            return true;
+        } catch (MiniJASTException e) {
+            System.err.println("Blank with id " + bId + " cannot be filled with object of type " + replacement.getClass() + ".");
             return false;
         }
-        return true;
     }
 
     public boolean runSolution() {
@@ -74,6 +87,9 @@ public class ExerciseSetter {
     public void adjustQuestion() {
         float performance = reportPerformance();
         int determiner = (int)(performance * 5f);
+        exercise.setUp();
+        exercise.makeHarder(nodesToRemove);
+        nodesToRemove += determiner;
         if (determiner > 0) {
             determiner = exercise.makeHarder(determiner);
             if (determiner > 0) {
@@ -81,7 +97,7 @@ public class ExerciseSetter {
                 if (currentIndex >= possibleExs.size())
                     throw new ArrayIndexOutOfBoundsException("No more harder exercises!");
                 exercise = possibleExs.get(currentIndex);
-                setUp();
+                nodesToRemove = determiner;
                 exercise.makeHarder(determiner);
             }
         } else if (determiner < 0) {
@@ -92,21 +108,22 @@ public class ExerciseSetter {
                 if (currentIndex < 0)
                     throw new ArrayIndexOutOfBoundsException("No more easier exercises!");
                 exercise = possibleExs.get(currentIndex);
-                setUp();
+                nodesToRemove = exercise.numNodes() - determiner;
                 boolean cont = true;
                 while (cont)
                     cont = exercise.addBlank();
                 exercise.makeEasier(determiner);
             }
         }
-
         setUp();
     }
 
     public float reportPerformance() {
         // TODO improve
         // Negative means bad, positive means good
-        float result = 2 - attempts;
+        float result = (2.5f - attempts) * 2;
+        if (result < -10)
+            result = -10;
         int difference = numNodes - exercise.numNodes();
         int multipler = difference < 0 ? -1 : 1;
         result += (difference * difference * multipler) / 10f;

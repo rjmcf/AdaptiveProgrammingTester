@@ -5,6 +5,7 @@ import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.FillableBlankExpr;
@@ -45,7 +46,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
 
     public float getQuestionDifficulty() {
         NodeCount count = solution.getTreeSize();
-        float percentageEmpty = count.empty / (count.filled + count.empty);
+        float percentageEmpty = (float)count.empty / (count.filled + count.empty);
         return baseDifficulty + percentageEmpty;
     }
 
@@ -70,20 +71,24 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         System.out.println(solution.stringRepr(1));
     }
 
-    public boolean fillBlank(int bId, MiniJASTNode replacement) {
+    public boolean fillBlank(int bId, MiniJASTNode replacement) throws MiniJASTException{
         Stack<MiniJASTNode> nodes = new Stack<>();
         nodes.push(solution);
         while (!nodes.empty()) {
             if (nodes.peek() instanceof FillableBlank) {
                 if (((FillableBlank) nodes.peek()).getId() == bId) {
-                    if (nodes.peek() instanceof FillableBlankExpr) {
-                        ((FillableBlankExpr) nodes.peek()).setStudentExpr((Expression) replacement);
-                    } else if (nodes.peek() instanceof FillableBlankStmnt) {
-                        ((FillableBlankStmnt) nodes.peek()).setStudentStmnt((BlockStatement) replacement);
-                    } else {
-                        throw new ClassCastException("node is neither Expression not Statement!");
+                    try {
+                        if (nodes.peek() instanceof FillableBlankExpr) {
+                            ((FillableBlankExpr) nodes.peek()).setStudentExpr((Expression) replacement);
+                        } else if (nodes.peek() instanceof FillableBlankStmnt) {
+                            ((FillableBlankStmnt) nodes.peek()).setStudentStmnt((BlockStatement) replacement);
+                        } else {
+                            throw new ClassCastException("node is neither Expression not Statement!");
+                        }
+                        return true;
+                    } catch (ClassCastException e) {
+                        throw new TypeException("Incorrect type submitted for blank");
                     }
-                    return true;
                 } else {
                     nodes.pop();
                 }
@@ -216,7 +221,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
 
     public int makeHarder(int numberOfTimes) {
         if (numberOfTimes < 1)
-            throw new ArithmeticException("The number supplied must be greater than 0");
+            throw new ArithmeticException("The number supplied (" + numberOfTimes + ") must be greater than 0");
         while (numberOfTimes > 0) {
             if (!addBlank())
                 break;
