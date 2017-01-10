@@ -15,7 +15,7 @@ public class Block extends StatementBase implements StmntNoTrailSubstmnt {
 
     @Override
     public String stringRepr(int blocksDeep) {
-        String result = pad(blocksDeep-1) + "{ \n";
+        String result = pad(blocksDeep-1) + "{\n";
         for (MiniJASTNode s : subNodes)
             result += ((BlockStatement)s).stringRepr(blocksDeep) + "\n";
         result += pad(blocksDeep-1) + "}";

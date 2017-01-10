@@ -45,6 +45,10 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
             if (c.namesToTypes.containsKey(v.getName()))
                 throw new VariableDecException(v.getName(), true);
 
+            if (type == null) {
+                throw new TypeException("You didn't specify a type for the LVD!");
+            }
+
             switch (type) {
                 case BOOLEAN:
                     if (!v.isArray) {

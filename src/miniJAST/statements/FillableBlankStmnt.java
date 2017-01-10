@@ -26,6 +26,7 @@ public class FillableBlankStmnt extends FillableBlank implements StmntNoTrailSub
     public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
     public FillableBlankStmnt(int nReplaced) { super(nReplaced); }
+    public BlockStatement getStudentStmnt() { return studentStmnt; }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {

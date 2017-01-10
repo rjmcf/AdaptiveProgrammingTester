@@ -1,6 +1,7 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
@@ -8,11 +9,8 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.statements.BlockStatement;
-import miniJAST.statements.FlowControl;
+import miniJAST.statements.*;
 import miniJAST.statements.LVD.LocalVarDec;
-import miniJAST.statements.Statement;
-import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
@@ -36,11 +34,17 @@ public abstract class ForStmntBase extends StatementBase implements BlockStateme
         String result = pad(blocksDeep) + "for (" + (subNodes.get(init) == null ? "" :
                 ((BlockStatement)subNodes.get(init)).stringRepr(0)) + "; " +
                 (subNodes.get(condI) == null ? "" : ((Expression)subNodes.get(condI)).stringRepr()) + "; ";
-        for (int u : updates)
-            result += ((Expression)subNodes.get(u)).stringRepr() + ", ";
-        String result1 = result.substring(0, result.length() - 2);
-        result1 += ") \n" + ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
-        return result1;
+        boolean once = true;
+        for (int u : updates) {
+            if (once) {
+                once = false;
+            } else {
+                result += ", ";
+            }
+            result += ((Expression)subNodes.get(u)).stringRepr();
+        }
+        result += ") \n" + ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
+        return result;
     }
 
     @Override
@@ -49,8 +53,18 @@ public abstract class ForStmntBase extends StatementBase implements BlockStateme
         checkType((Expression)subNodes.get(condI), Expression.class);
         checkType((BlockStatement)subNodes.get(stmnt), BlockStatement.class);
 
-        if (subNodes.get(init) != null)
-            ((ForInit)subNodes.get(init)).execute(c, d+1);
+        if (subNodes.get(init) != null) {
+            try {
+                if (subNodes.get(init) instanceof FillableBlankStmnt) {
+                    ((FillableBlankStmnt)subNodes.get(init)).getStudentStmnt().execute(c, d+1);
+                } else {
+                    ((ForInit)subNodes.get(init)).execute(c, d+1);
+                }
+            } catch (ClassCastException e) {
+                throw new TypeException("Init for For must have type ForInit!");
+            }
+        }
+
 
         Expression cond = (Expression)subNodes.get(condI);
         ReturnValues condR;

@@ -80,8 +80,8 @@ public abstract class StatementBase implements MiniJASTNode {
         if (e == null)
             return;
 
-        if (e instanceof FillableBlankExpr) {
-            if (!((FillableBlankExpr) e).isFilled())
+        if (e instanceof FillableBlankStmnt) {
+            if (!((FillableBlankStmnt) e).isFilled())
                 e.executeStart(new Context());
             else
                 return;
