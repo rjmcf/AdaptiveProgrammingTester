@@ -720,7 +720,45 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledBool() throws Exception {
-        fail("Not implemented");
+        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
+
+        fbe.setStudentExpr(litT);
+        fbe1.setStudentExpr(litF);
+
+        AndExpr aE = new AndExpr();
+        aE.setUpAndExpr(fbe, fbe1);
+        assertFalse(((ReturnValuesBool)aE.evaluate(c)).value);
+        assertEquals(aE.stringRepr(), "true && false");
+
+        EqExpr eE = new EqExpr();
+        fbe.setStudentExpr(lit1);
+        eE.setUpEqExpr(true, fbe, fbe);
+        assertTrue(((ReturnValuesBool)eE.evaluate(c)).value);
+        assertEquals(eE.stringRepr(), "1 == 1");
+
+        OrExpr oE = new OrExpr();
+        oE.setUpOrExpr(fbe1, fbe1);
+        assertFalse(((ReturnValuesBool)oE.evaluate(c)).value);
+        assertEquals(oE.stringRepr(), "false || false");
+
+        RelationExpr rE = new RelationExpr();
+        fbe1.setStudentExpr(lit3);
+        rE.setUpRelationExpr(RelationOp.GT, fbe1, fbe);
+        assertTrue(((ReturnValuesBool)rE.evaluate(c)).value);
+        assertEquals(rE.stringRepr(), "3 > 1");
+
+        UnaryComplementExpr uCE = new UnaryComplementExpr();
+        fbe.setStudentExpr(litT);
+        uCE.setUpCompExpr(fbe);
+        assertFalse(((ReturnValuesBool)uCE.evaluate(c)).value);
+        assertEquals(uCE.stringRepr(), "!true");
+
+        CondExpr cE = new CondExpr();
+        FillableBlankExpr fbe2 = new FillableBlankExpr(0);
+        fbe2.setStudentExpr(lit2);
+        cE.setUpCondExpr(fbe, fbe2, fbe1);
+        assertEquals(((ReturnValuesInt)cE.evaluate(c)).value, 2);
+        assertEquals(cE.stringRepr(), "true ? 2 : 3");
     }
 
     @Test
@@ -734,7 +772,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledBracketed() throws Exception {
-        fail("Not implemented");
+        BracketedExpr bE = new BracketedExpr();
+        fbe.setStudentExpr(lit2);
+        bE.setUpBracketExpr(fbe);
+        assertEquals(((ReturnValuesInt)bE.evaluate(c)).value, 2);
+        assertEquals(bE.stringRepr(), "(2)");
     }
 
     @Test
