@@ -13,11 +13,22 @@ public class VarDeclarator extends StatementBase implements BlockStatement{
     protected String name;
     private int expr;
     protected boolean isArray = false;
+    private boolean hasExpr;
 
-    public void setUpVarDec(String n, Expression e) { subNodes.clear(); name = n; expr = 0; subNodes.add(e); }
+    public void setUpVarDec(String n, Expression e) {
+        subNodes.clear();
+        name = n;
+        expr = 0;
+        if (e == null) {
+            hasExpr = false;
+        } else {
+            hasExpr = true;
+            subNodes.add(e);
+        }
+    }
 
     public String getName() { return name; }
-    public Expression getExpr() { return (Expression)subNodes.get(expr); }
+    public Expression getExpr() { return hasExpr ? (Expression)subNodes.get(expr) : null; }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
@@ -31,7 +42,6 @@ public class VarDeclarator extends StatementBase implements BlockStatement{
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return name + (subNodes.get(expr) ==
-                null ? "" : (" = " + ((Expression)subNodes.get(expr)).stringRepr()));
+        return name + (hasExpr ? (" = " + ((Expression)subNodes.get(expr)).stringRepr()) : "");
     }
 }

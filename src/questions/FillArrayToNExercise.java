@@ -39,6 +39,8 @@ public class FillArrayToNExercise extends AbstractPExercise {
         }
          */
 
+        baseSetUp();
+
         Literal n = new Literal();
         n.setUpLiteral(UnannType.INT, String.valueOf(max));
         ArrayCreationWithSize ns = new ArrayCreationWithSize();

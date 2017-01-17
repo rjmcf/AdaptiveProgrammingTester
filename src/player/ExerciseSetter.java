@@ -92,27 +92,29 @@ public class ExerciseSetter {
         nodesToRemove += determiner;
         if (determiner > 0) {
             determiner = exercise.makeHarder(determiner);
-            if (determiner > 0) {
+            while (determiner > 0) {
                 currentIndex++;
                 if (currentIndex >= possibleExs.size())
                     throw new ArrayIndexOutOfBoundsException("No more harder exercises!");
                 exercise = possibleExs.get(currentIndex);
+                exercise.setUp();
                 nodesToRemove = determiner;
-                exercise.makeHarder(determiner);
+                determiner = exercise.makeHarder(determiner);
             }
         } else if (determiner < 0) {
             determiner *= -1;
             determiner = exercise.makeEasier(determiner);
-            if (determiner > 0) {
+            while (determiner > 0) {
                 currentIndex--;
                 if (currentIndex < 0)
                     throw new ArrayIndexOutOfBoundsException("No more easier exercises!");
                 exercise = possibleExs.get(currentIndex);
+                exercise.setUp();
                 nodesToRemove = exercise.numNodes() - determiner;
                 boolean cont = true;
                 while (cont)
                     cont = exercise.addBlank();
-                exercise.makeEasier(determiner);
+                determiner = exercise.makeEasier(determiner);
             }
         }
         setUp();

@@ -29,6 +29,9 @@ public class SquareExercise extends AbstractPExercise {
         int n = n, nSq;
         nSq = n * n;
          */
+
+        baseSetUp();
+
         Literal nLit = new Literal();
         nLit.setUpLiteral(UnannType.INT, String.valueOf(n));
         VarDeclarator nDec = new VarDeclarator();

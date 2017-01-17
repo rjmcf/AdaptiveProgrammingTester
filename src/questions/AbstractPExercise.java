@@ -32,6 +32,12 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     public abstract boolean checkSolved();
     protected Context c;
 
+    protected void baseSetUp() {
+        replaceMarked = false;
+        replacedNodes = new Stack<>();
+        replacedNodeTreeIndices = new Stack<>();
+    }
+
     public void runSolution() throws MiniJASTException {
         c = new Context();
         solution.executeStart(c);
@@ -93,9 +99,10 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
                     nodes.pop();
                 }
             } else {
-                for (MiniJASTNode n : nodes.pop().getSubNodes()) {
-                    nodes.push(n);
-                }
+                ArrayList<? extends MiniJASTNode> children = nodes.pop().getSubNodes();
+                ListIterator<? extends MiniJASTNode> it = children.listIterator(children.size());
+                while (it.hasPrevious())
+                    nodes.push(it.previous());
             }
         }
         return false;

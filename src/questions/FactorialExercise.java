@@ -40,6 +40,8 @@ public class FactorialExercise extends AbstractPExercise {
         }
          */
 
+        baseSetUp();
+
         Literal one = new Literal();
         one.setUpLiteral(UnannType.INT, "1");
         VarDeclarator totalDec = new VarDeclarator();

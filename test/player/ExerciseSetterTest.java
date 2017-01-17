@@ -197,7 +197,7 @@ public class ExerciseSetterTest {
 
         setter.presentQuestion();
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 3; i++)
             setter.submitAttempt();
 
         VarDeclarator n = new VarDeclarator();
@@ -223,7 +223,6 @@ public class ExerciseSetterTest {
         assertTrue(setter.submitAttempt());
 
         assertTrue(setter.reportPerformance() < 0);
-        System.out.println(setter.reportPerformance());
 
         setter.adjustQuestion();
 
