@@ -277,7 +277,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
 
     public int makeEasier(int numberOfTimes) {
         if (numberOfTimes < 1)
-            throw new ArithmeticException("The number supplied must be greater than 0");
+            throw new ArithmeticException("The number supplied (" + numberOfTimes + ") must be greater than 0");
         while (numberOfTimes > 0) {
             if (!removeBlank())
                 break;
