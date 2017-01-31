@@ -2,3 +2,9 @@
 .idea/
 *.iml
 out/
+
+# LaTeX #
+*.aux*
+*.log*
+*.out*
+*.synctex.gz*
