@@ -1,0 +1,212 @@
+% Note: this file can be compiled on its own, but is also included by
+% diss.tex (using the docmute.sty package to ignore the preamble)
+\documentclass[12pt,a4paper,twoside]{article}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage[margin=25mm]{geometry}
+\usepackage{graphicx}
+\usepackage{parskip}
+\begin{document}
+
+\begin{center}
+\Large
+Computer Science Tripos -- Part II -- Project Proposal\\[4mm]
+\LARGE
+A System for Giving Programming Exercises \\Adaptive Difficulty\\[4mm]
+
+\large
+R.~J.~McFarland, Homerton College
+
+Originator: M.~B.~Gale
+
+20 October 2016
+\end{center}
+
+\vspace{5mm}
+
+\textbf{Project Supervisor:} M.~B.~Gale
+
+\textbf{Director of Studies:} Dr J.~Fawcett
+
+\textbf{Project Overseers:} Dr D.~J.~Greaves  \& Prof J.~G.~Daugman
+
+% Main document
+
+\section*{Introduction}
+
+Different people learn at different speeds, and learn some things more quickly than others. When a group of students are given a set of programming exercises, this typically isn't taken account of. The aim of this project is to design a system that varies the difficulty of a programming exercise depending on how the individual has performed completing previous exercises. 
+
+The difficulty of an exercise can be measured using two metrics: how complex the problem being solved is and how much code the student is expected to write. The system will vary both of these to adapt the difficulty of proposed exercises automatically (i.e. the system will not look for preprogrammed mistakes, but rather interpret the mistakes made and react accordingly). When an exercise is completed to a sufficient standard, a similar exercise will be given, but expecting more code to be written. When the system has determined that the problem has been mastered, a more difficult problem will be presented, requiring less code to be written again.
+
+\section*{Resources required}
+
+I shall use my own Macintosh laptop for the majority of this project. Backup will be to GitHub and to a 5TB hard drive I keep in my room. I shall make use of the Java standard library, as well as the JavaFX library for the graphical user interface element. I require no special resources.
+
+\section*{Starting point}
+
+I am able to program in Java, and have used JavaFX before for the Part IB group project. During my A-Levels I wrote a program to test the maths abilities of Year 4 students, which involved the programmatic generation of various kinds of maths questions.
+
+\section*{Work to be done}
+
+The work for this project can be split up into the following sub-projects:
+\begin{enumerate}
+\item{A representation of a programming exercise must be coded up to allow the final product to manipulate them.}
+\item{A heuristic that measures the difficulty of a given exercise must be chosen and implemented.}
+\item{A heuristic that assesses how well a ``student'' has completed an exercise must be chosen and implemented.}
+\item{I must devise a system, using the previous three items, that determines which exercise should be given to the student next, as well as how much of the required code is already filled in, based on the student's performance completing previous exercises.}
+\item{A Graphical User Interface should be designed to enable a user to manually adjust the content of a given programming exercise.}
+\item{In order to test the program, a student will be simulated by creating a system that tells the program what errors were made where and how long the exercise took to be solved, so that the program's response to various stimuli can be measured.}
+\end{enumerate}
+
+\section*{Success Criteria}
+
+The project will be considered completed when:
+\begin{enumerate}
+\item{I have a system that presents the same initial problem to all students.}
+\item{The system can determine that code written by the student solves the given problem.}
+\item{On registering completion of the exercise, the system will then present a new problem to the student.}
+\item{If the student solved this problem with sufficient ease as measured by my performance heuristic, then this new problem will be more difficult, as measured by my difficulty heuristic.}
+\item{If the student failed to solve the problem, or took too much time or made too many errors, then the next problem will be easier.}
+\item{The system will adjust the difficulty of a given problem in line with the difficulty heuristic by changing the amount of code required to solve the problem, and also the underlying problem being solved.}
+\end{enumerate}
+
+\section*{Possible extensions}
+
+\begin{itemize}
+\item{This system could be improved such that it identifies which concepts a student is struggling with and adjusts the content of future exercises to encourage learning of these concepts.}
+\item{The program could produce a graph of progress against time to motivate learners.}
+\item{A simple game that utilises this system could be made, to showcase how the system might be used to teach programming.}
+\end{itemize}
+
+\section*{Timetable}
+
+\textbf{24th Oct - 6th Nov:} 
+\begin{itemize}
+\item{Research adaptive difficulty and see how it has been done before.}
+\item{Research how errors in code have been quantified in the past.}
+\item{Research where and how simulated users have been designed to test systems.}
+\end{itemize}
+
+\textbf{7th Nov - 20th Nov:}
+\begin{itemize}
+\item{Describe how code that solves an exercise could be split up into discrete sections, and a way to store how well each of those sections was completed.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have a representation of a programming puzzle in Java code.}
+\end{itemize}
+
+\textbf{21st Nov - 4th Dec:}
+\begin{itemize}
+\item{Prototype and compare heuristics to measure the ``difficulty'' of a given programming exercise, based on the difficulty of the goal to be achieved, and how much of the code is presented initially.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Select and implement a difficulty heuristic.}
+\end{itemize}
+
+\textbf{5th Dec - 18th Dec:}
+\begin{itemize}
+\item{Prototype and compare heuristics to measure performance, based perhaps on how much time was taken, the number of errors made and the time the solution takes to run.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Select and implement a performance heuristic.}
+\end{itemize}
+
+\textbf{19th Dec - 1st Jan:}
+\begin{itemize}
+\item{Slack time over Christmas to catch up if I need to.}
+\end{itemize}
+
+\textbf{2nd Jan - 15th Jan:}
+\begin{itemize}
+\item{Implement a system to adapt the difficulty of the programming exercises by presenting a new, more difficult problem each time an exercise is completed satisfactorily, and presenting an easier one if the student is struggling too much.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have a system that will present a problem to a student, determine that the student has solved the problem with the code they have written, determine if the student found it too easy or too hard, and present the student with a new problem that is either easier or harder respectively.}
+\end{itemize}
+
+\textbf{16th Jan - 29th Jan:}
+\begin{itemize}
+\item{Write Progress Report.}
+\item{Improve the system by implementing the concept of changing the amount of code that needs to be written to solve a given problem as another way of affecting its difficulty.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have the system extended such that it may require the student to write more or less code to make more fine grained adjustments to the difficulty of a programming problem.}
+\end{itemize}
+
+\textbf{30th Jan - 19th Feb:}
+\begin{itemize}
+\item{\textbf{3rd Feb:} Submit the Progress Report}
+\item{Design a user interface to change the content of the programming exercise to be solved.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have a user interface with controls to determine the exact difficulty of the problem about to be presented.}
+\end{itemize}
+
+\textbf{20th Feb - 5th Mar:}
+\begin{itemize}
+\item{Write unit tests for all units.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have unit tests written for every unit of the code.}
+\end{itemize}
+
+\textbf{6th Mar - 19th Mar:}
+\begin{itemize}
+\item{Test the implementation by simulating a student ``using'' the system by ``solving'' problems with varying success.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have a simulated student that will tell the system what mistakes were made in the code and where, as well as how long it took to solve the problem (along with any other parameters deemed important to measuring the performance of the student), such that the response of my system can be measured against the performance of a student using it.}
+\end{itemize}
+
+\textbf{20th Mar - 2nd Apr:}
+\begin{itemize}
+\item{Slack time for catching up and doing extensions.}
+\end{itemize}
+
+\textbf{3rd Apr - 16th Apr:}
+\begin{itemize}
+\item{Write Introduction and Conclusion (about 2,500 words).}
+\item{Write up Proforma (excluding word count), Declaration of Originality, Project Proposal and Cover Sheet.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have the above sections of the dissertation written in draft form.}
+\end{itemize}
+
+
+\textbf{17th Apr - 30th Apr}
+\begin{itemize}
+\item{Write Preparation and Implementation (about 5000 words).}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have the above sections of the dissertation written in draft form.}
+\end{itemize}
+
+\textbf{1st May - 14th May}
+\begin{itemize}
+\item{Write Evaluation (about 2500 words).}
+\item{Write Contents Page, finish Bibliography, Appendices and Index as required.}
+\item{Fill in word count of Proforma.}
+\item{Submit draft to DoS and Supervisor.}
+\end{itemize}
+\underline{Milestones:}
+\begin{itemize}
+\item{Have the above sections of the dissertation written in draft form.}
+\end{itemize}
+
+\textbf{15th May - 19th May}
+\begin{itemize}
+\item{Incorporate feedback into dissertation.}
+\item{\textbf{19th May:} Submit dissertation.}
+\end{itemize}
+
+
+\end{document}
