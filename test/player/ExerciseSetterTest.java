@@ -15,6 +15,7 @@ import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import questions.Difficulty;
 import questions.FactorialExercise;
 import questions.FillArrayToNExercise;
 import questions.SquareExercise;
@@ -31,30 +32,7 @@ public class ExerciseSetterTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        setter = new ExerciseSetter();
-        sE = new SquareExercise(5);
-        fE = new FactorialExercise(6);
-        aE = new FillArrayToNExercise(10);
-        setter.addExercise(sE);
-        setter.addExercise(fE);
-        setter.addExercise(aE);
-        setter.setInitialIndex(1);
-    }
-
-    @Test
-    public void testAddExercise() throws Exception {
-        setter = new ExerciseSetter();
-        setter.addExercise(fE);
-        assertTrue(setter.getPossExercise(0) instanceof FactorialExercise);
-
-        setter.addExercise(aE);
-        assertTrue(setter.getPossExercise(0) instanceof FactorialExercise);
-        assertTrue(setter.getPossExercise(1) instanceof FillArrayToNExercise);
-
-        setter.addExercise(sE);
-        assertTrue(setter.getPossExercise(0) instanceof SquareExercise);
-        assertTrue(setter.getPossExercise(1) instanceof FactorialExercise);
-        assertTrue(setter.getPossExercise(2) instanceof FillArrayToNExercise);
+        setter = new ExerciseSetter(System.out);
     }
 
     @Test
@@ -83,7 +61,7 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
-        assertEquals(setter.attempts, 3);
+        assertEquals(setter.getAttempts(), 3);
     }
 
     @Test
@@ -111,7 +89,7 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
-        assertEquals(setter.attempts, 2);
+        assertEquals(setter.getAttempts(), 2);
 
         assertTrue(setter.reportPerformance() > 0 && setter.reportPerformance() < 5);
 
@@ -128,7 +106,7 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
-        assertEquals(setter.attempts, 3);
+        assertEquals(setter.getAttempts(), 3);
 
         assertTrue(setter.reportPerformance() < 0 && setter.reportPerformance() > -5);
 
@@ -156,14 +134,14 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
-        assertEquals(setter.attempts, 2);
+        assertEquals(setter.getAttempts(), 2);
         System.out.println(setter.reportPerformance());
         assertTrue(setter.reportPerformance() < 0 && setter.reportPerformance() > -5);
     }
 
     @Test
     public void testAdjustQuestion() throws Exception {
-        float difficulty = setter.getCurrentDifficulty();
+        Difficulty diff = setter.getCurrentDifficulty();
 
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
@@ -187,13 +165,13 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
-        assertEquals(setter.attempts, 2);
+        assertEquals(setter.getAttempts(), 2);
 
         assertTrue(setter.reportPerformance() > 0 && setter.reportPerformance() < 5);
 
         setter.adjustQuestion();
-        assertTrue(setter.getCurrentDifficulty() > difficulty);
-        difficulty = setter.getCurrentDifficulty();
+        assertTrue(setter.getCurrentDifficulty().nodesBlank > diff.nodesBlank);
+        diff = setter.getCurrentDifficulty();
 
         setter.presentQuestion();
 
@@ -228,7 +206,8 @@ public class ExerciseSetterTest {
 
         setter.presentQuestion();
 
-        assertTrue(setter.getCurrentDifficulty() < difficulty);
+        assertTrue(setter.getCurrentDifficulty().nodesBlank < diff.nodesBlank ||
+                setter.getCurrentDifficulty().base < diff.base);
 
     }
 }

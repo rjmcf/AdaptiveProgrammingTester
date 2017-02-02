@@ -24,7 +24,7 @@ import java.util.Stack;
 public abstract class AbstractPExercise implements Comparable<AbstractPExercise> {
     protected String question;
     protected BlockStatement solution;
-    private float baseDifficulty;
+    private int baseDifficulty;
     private boolean replaceMarked = false;
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
@@ -48,7 +48,13 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         return (int)(baseDifficulty - o.baseDifficulty);
     }
 
-    public AbstractPExercise(String q, float diff) { question = q; baseDifficulty = diff; }
+    public AbstractPExercise(String q, int diff) { question = q; baseDifficulty = diff; }
+
+    public int getBaseDifficulty() { return baseDifficulty; }
+    public int getNodesBlank() {
+        NodeCount count = solution.getTreeSize();
+        return count.empty;
+    }
 
     public float getQuestionDifficulty() {
         NodeCount count = solution.getTreeSize();
@@ -66,15 +72,16 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         return ((float)count.empty) / (count.filled + count.empty);
     }
 
-    public void deliverQuestion() {
-        System.out.println();
-        System.out.println(question);
-        System.out.println();
-        printSolution();
+    public String deliverQuestion() {
+        String result = "\n";
+        result += question;
+        result += "\n";
+        result += printSolution();
+        return result;
     }
 
-    public void printSolution() {
-        System.out.println(solution.stringRepr(1));
+    public String printSolution() {
+        return solution.stringRepr(1);
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) throws MiniJASTException{

@@ -2,26 +2,51 @@ package player;
 
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
-import questions.AbstractPExercise;
+import questions.*;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ExerciseSetter {
     ArrayList<AbstractPExercise> possibleExs = new ArrayList<>();
-    int currentIndex = 0;
+    private int currentIndex = 0;
     AbstractPExercise exercise;
-    public int attempts = 0;
+    private int attempts = 0;
     int numNodes;
     int nodesToRemove;
+    OutputStream output;
 
-    public void addExercise(AbstractPExercise e) { possibleExs.add(e); Collections.sort(possibleExs);}
+    public ExerciseSetter(OutputStream o) {
+        output = o;
+        possibleExs.add(new SquareExercise(5));
+        possibleExs.add(new FactorialExercise(6));
+        possibleExs.add(new FillArrayToNExercise(10));
+        setIndex(1);
+    }
 
-    public AbstractPExercise getPossExercise(int i) { return possibleExs.get(i); }
+    // TODO need way to distinguish hardest of one from easiest of another
+    public Difficulty getCurrentDifficulty() { return new Difficulty(exercise.getBaseDifficulty(), exercise.getNodesBlank()); }
 
-    public float getCurrentDifficulty() { return exercise.getQuestionDifficulty(); }
+    public void setOutput(OutputStream o) { output = o; }
 
-    public void setInitialIndex(int i) {
+    public void setCurrentDifficulty(Difficulty d) {
+        if (d.base != currentIndex) {
+            currentIndex = d.base;
+            exercise = possibleExs.get(currentIndex);
+        }
+        exercise.setUp();
+        numNodes = exercise.numNodes();
+        for (int i = 0; i < d.nodesBlank; i++) {
+            if (!exercise.addBlank()) {
+                break;
+            }
+        }
+    }
+
+    public void setIndex(int i) {
         currentIndex = i;
         exercise = possibleExs.get(i);
         exercise.setUp();
@@ -30,17 +55,34 @@ public class ExerciseSetter {
         setUp();
     }
 
+    public int getIndex() { return currentIndex; }
+
+    public int getAttempts() { return attempts; }
+
+    public int getMinBaseDifficulty() { return 0; }
+    public int getMaxBaseDifficulty() { return possibleExs.size() - 1; }
+    public int getNumNodes() { return numNodes; }
+
     public void setUp() {
+        // TODO remove repeated exercise.setUp()
         exercise.setUp();
+        // TODO make sure this is ok
         if (nodesToRemove == 0)
             nodesToRemove = 2;
         exercise.makeHarder(nodesToRemove);
         attempts = 0;
+        // TODO maybe remove repetition
         numNodes = exercise.numNodes();
     }
 
     public void presentQuestion() {
-        exercise.deliverQuestion();
+        OutputStreamWriter writer = new OutputStreamWriter(output);
+        try {
+            writer.write(exercise.deliverQuestion());
+            writer.flush();
+        } catch (IOException e) {
+            System.err.println("stream error");
+        }
     }
 
     public ArrayList<Integer> getBlankIds() {
@@ -62,19 +104,31 @@ public class ExerciseSetter {
     }
 
     public boolean runSolution() {
+        OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
             exercise.runSolution();
             if (exercise.checkSolved()) {
                 // report succesful submission
-                System.out.println("Correct submission in " + attempts + " attempts.");
+                writer.write("Correct submission in " + attempts + " attempts.\n");
+                writer.flush();
                 return true;
             }
             // report failed submission
-            System.out.println("Incorrect submission.");
+            writer.write("Incorrect submission.\n");
+            writer.flush();
             return false;
         } catch (MiniJASTException mE) {
             // report failed submission
-            System.out.println("Incorrect submission.");
+            try {
+                writer.write("Incorrect submission.\n");
+                writer.flush();
+                return false;
+            } catch (IOException e) {
+                System.out.println("Stream error");
+                return false;
+            }
+        } catch (IOException e) {
+            System.out.println("Stream error");
             return false;
         }
     }

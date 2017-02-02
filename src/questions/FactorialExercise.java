@@ -23,7 +23,7 @@ public class FactorialExercise extends AbstractPExercise {
     Id totalId;
 
     public FactorialExercise(int N) {
-        super("Calculate the factorial of '" + N + "' and store it in 'total'.", 2);
+        super("Calculate the factorial of '" + N + "' and store it in 'total'.", 1);
         n = N;
         nFact = 1;
         while (N > 1) {

@@ -19,7 +19,7 @@ public class SquareExercise extends AbstractPExercise {
     Id nSqId;
 
     public SquareExercise(int N) {
-        super("Calculate the square of '" + N + "' and store it in 'nSq'.", 1);
+        super("Calculate the square of '" + N + "' and store it in 'nSq'.", 0);
         n = N;
     }
 
