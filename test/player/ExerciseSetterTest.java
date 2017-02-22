@@ -1,24 +1,20 @@
 package player;
 
+import entryPoints.ExerciseSetter;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
-import miniJAST.expressions.assignment.UnaryPreIncExpr;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import questions.Difficulty;
-import questions.FactorialExercise;
-import questions.FillArrayToNExercise;
-import questions.SquareExercise;
 
 import java.util.ArrayList;
 
@@ -26,9 +22,6 @@ import static org.testng.Assert.*;
 
 public class ExerciseSetterTest {
     ExerciseSetter setter;
-    SquareExercise sE;
-    FactorialExercise fE;
-    FillArrayToNExercise aE;
 
     @BeforeMethod
     public void setUp() throws Exception {

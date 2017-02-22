@@ -1,6 +1,6 @@
 package gui.forms;
 
-import player.ExerciseSetter;
+import entryPoints.ExerciseSetter;
 import questions.Difficulty;
 
 import javax.swing.*;

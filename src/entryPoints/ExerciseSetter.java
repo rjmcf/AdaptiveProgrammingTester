@@ -1,4 +1,4 @@
-package player;
+package entryPoints;
 
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
@@ -27,7 +27,6 @@ public class ExerciseSetter {
         setIndex(1);
     }
 
-    // TODO need way to distinguish hardest of one from easiest of another
     public Difficulty getCurrentDifficulty() { return new Difficulty(exercise.getBaseDifficulty(), exercise.getNodesBlank()); }
 
     public void setOutput(OutputStream o) { output = o; }
