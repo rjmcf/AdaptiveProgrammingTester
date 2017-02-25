@@ -1,9 +1,15 @@
 public class Main {
 
     public static void main(String[] args) {
-        int ar[] = new int[2];
-        ar[1] = 2;
-        System.out.println(ar[0]);
-        System.out.println(ar[1]);
+        int n = 5;
+        n *= 2;
+        int a[] = new int[n];
+        for (int i = 0; i < n; i++) {
+            a[i] = i;
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.println(a[i]);
+        }
     }
 }
