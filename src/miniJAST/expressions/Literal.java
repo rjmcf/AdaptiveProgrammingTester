@@ -30,6 +30,7 @@ public class Literal extends PrimaryExpr{
                     throw new TypeException("Type is boolean, but val is not true or false.");
                 return new ReturnValuesBool(v);
             case CHAR:
+                value = value.replace("'", "");
                 if (value.length() > 1)
                     throw new TypeException("Type is char, but value is more than one character.");
                 return new ReturnValuesChar(value.charAt(0));
