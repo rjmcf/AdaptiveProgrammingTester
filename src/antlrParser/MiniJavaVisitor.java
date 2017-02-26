@@ -18,12 +18,12 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFillBlock(MiniJavaParser.FillBlockContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code makeLVD}
+	 * Visit a parse tree produced by the {@code localVariableDeclaration}
 	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMakeLVD(MiniJavaParser.MakeLVDContext ctx);
+	T visitLocalVariableDeclaration(MiniJavaParser.LocalVariableDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code makeStmnt}
 	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
@@ -31,13 +31,6 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMakeStmnt(MiniJavaParser.MakeStmntContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code setType4LVD}
-	 * labeled alternative in {@link MiniJavaParser#localVariableDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSetType4LVD(MiniJavaParser.SetType4LVDContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code makeBlock}
 	 * labeled alternative in {@link MiniJavaParser#statement}.
