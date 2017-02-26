@@ -8,9 +8,11 @@ import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.Block;
 import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -39,6 +41,24 @@ public class MiniJavaASTBuilderTest {
     public void setUp() throws Exception {
         builder = new MiniJavaASTBuilder();
         c = new Context();
+    }
+
+    @Test
+    public void testVisitBlock() throws Exception {
+        is = new ByteArrayInputStream("int d; {int a = 1; d = a;}".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.block(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof Block);
+        Block b = (Block) result;
+        b.executeStart(c);
+
+        Id d = new Id();
+        d.setUpIdSimple(UnannType.INT, "d");
+        assertEquals(((ReturnValuesInt)d.evaluate(c)).value, 1);
     }
 
     @Test
@@ -171,6 +191,36 @@ public class MiniJavaASTBuilderTest {
         } catch (VariableNotInitException e) {
             //pass
         }
+    }
+
+    @Test
+    public void testVisitAssignExpr() throws Exception {
+        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        is = new ByteArrayInputStream("i = 3".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.expression(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof AssignExpr);
+        AssignExpr aE = (AssignExpr) result;
+        aE.evaluate(c);
+
+        Id i = new Id();
+        i.setUpIdSimple(UnannType.INT, "i");
+        assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 3);
+
+        is = new ByteArrayInputStream("i += 3".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.expression(); // parse
+        result = builder.visit(tree);
+        AssignExpr aE1 = (AssignExpr) result;
+        aE1.evaluate(c);
+        assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 6);
     }
 
 

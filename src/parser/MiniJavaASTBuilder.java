@@ -5,6 +5,10 @@ import antlrParser.MiniJavaParser;
 import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Literal;
+import miniJAST.expressions.assignment.AssignExpr;
+import miniJAST.expressions.assignment.AssignOp;
+import miniJAST.statements.Block;
+import miniJAST.statements.BlockStatement;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
@@ -13,6 +17,18 @@ import miniJAST.types.UnannTypeCarrier;
 import miniJAST.types.UnannType;
 
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
+
+    @Override
+    public MiniJASTNode visitFillBlock(MiniJavaParser.FillBlockContext ctx) {
+        Block b = new Block(false);
+        for (MiniJavaParser.BlockStatementContext c : ctx.blockStatement()) {
+            BlockStatement bS = (BlockStatement)visit(c);
+            b.addBlockStmnt(bS);
+        }
+
+        return b;
+    }
+
     @Override
     public MiniJASTNode visitLiteral(MiniJavaParser.LiteralContext ctx) {
         Literal l = new Literal();
@@ -77,5 +93,30 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
             lvd.addVarDec(vD);
         }
         return lvd;
+    }
+
+    @Override
+    public MiniJASTNode visitAssignExpr(MiniJavaParser.AssignExprContext ctx) {
+        AssignExpr aE = new AssignExpr();
+        AssignOp op;
+        switch(ctx.op.getText()) {
+            case "=":
+                op = AssignOp.EQ;
+                break;
+            case "+=":
+                op = AssignOp.PLUSEQ;
+                break;
+            case "-=":
+                op = AssignOp.SUBEQ;
+                break;
+            case "*=":
+                op = AssignOp.TIMESEQ;
+                break;
+            default: // /=
+                op = AssignOp.DIVEQ;
+        }
+        aE.setUpAssignExpr((Expression)visit(ctx.expression(0)), op, (Expression)visit(ctx.expression(1)));
+
+        return aE;
     }
 }
