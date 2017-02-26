@@ -10,7 +10,7 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.*;
 import miniJAST.types.UnannType;
 
-public class DoStmnt extends CondLoopBase implements StmntNoTrailSubstmnt {
+public class DoStmnt extends CondLoopBase implements Statement, StatementNoShortIf {
     public void setUpDo(Statement s, Expression c) { baseSetUpCondLoop(c, s); }
 
     @Override
