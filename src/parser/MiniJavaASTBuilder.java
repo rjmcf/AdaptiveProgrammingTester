@@ -3,8 +3,12 @@ package parser;
 import antlrParser.MiniJavaBaseVisitor;
 import antlrParser.MiniJavaParser;
 import miniJAST.MiniJASTNode;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.Literal;
-import miniJAST.types.Type;
+import miniJAST.statements.LVD.LocalVarDec;
+import miniJAST.statements.LVD.VarDeclarator;
+import miniJAST.statements.arrays.ArrayCreationWithInitList;
+import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.UnannTypeCarrier;
 import miniJAST.types.UnannType;
 
@@ -35,5 +39,43 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         else // Double
             c = new UnannTypeCarrier(UnannType.DOUBLE);
         return c;
+    }
+
+    @Override
+    public MiniJASTNode visitArrayInitializerSize(MiniJavaParser.ArrayInitializerSizeContext ctx) {
+        ArrayCreationWithSize acws = new ArrayCreationWithSize();
+        acws.setUpACWS(ctx.id, ((UnannTypeCarrier)visit(ctx.primitiveType())).type, (Expression)visit(ctx.expression()));
+        return acws;
+    }
+
+    @Override
+    public MiniJASTNode visitArrayInitializerValues(MiniJavaParser.ArrayInitializerValuesContext ctx) {
+        ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
+        acwil.setUPACWIL(ctx.id);
+        for (MiniJavaParser.VariableInitializerContext c : ctx.variableInitializer()) {
+            Expression e = (Expression)visit(c);
+            acwil.addExpressionACWIL(e);
+        }
+        return acwil;
+    }
+
+    @Override
+    public MiniJASTNode visitSingleVarDec(MiniJavaParser.SingleVarDecContext ctx) {
+        VarDeclarator vD = new VarDeclarator();
+        Expression e = ctx.variableInitializer() == null ? null : (Expression)visit(ctx.variableInitializer());
+        vD.setUpVarDec(ctx.Identifier().getText(), e);
+        return vD;
+    }
+
+    @Override
+    public MiniJASTNode visitLocalVariableDeclaration(MiniJavaParser.LocalVariableDeclarationContext ctx) {
+        LocalVarDec lvd = new LocalVarDec();
+        lvd.setUpLVD(((UnannTypeCarrier)visit(ctx.primitiveType())).type);
+
+        for (MiniJavaParser.VariableDeclaratorContext c : ctx.variableDeclarators().variableDeclarator()) {
+            VarDeclarator vD = (VarDeclarator)visit(c);
+            lvd.addVarDec(vD);
+        }
+        return lvd;
     }
 }

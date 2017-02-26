@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class UnannTypeCarrier implements MiniJASTNode {
 
-    UnannType type;
+    public UnannType type;
 
     public UnannTypeCarrier(UnannType t) { type = t; }
 
