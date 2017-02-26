@@ -73,7 +73,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             c.namesToTypes.put(v.getName(), rb.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesBool) rb).value);
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(type, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN, 1));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -117,7 +117,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             c.namesToTypes.put(v.getName(), rc.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesChar) rc).value);
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(type, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR, 1));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -173,6 +173,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             c.namesToTypes.put(v.getName(), new Type(UnannType.INT, 1));
                         }
                     } else {
+                        // TODO fix assumption that arrays are initialised
                         ArrayCreation ac = (ArrayCreation) v;
                         if (ac.getHasInitList()) {
                             ArrayCreationWithInitList acwil = (ArrayCreationWithInitList) ac;
@@ -226,7 +227,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.INT, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE, 1));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
