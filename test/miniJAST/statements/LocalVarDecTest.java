@@ -69,7 +69,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(boolDec);
         lvd.execute(c, 0);
-        id.setUpIdSimple(UnannType.BOOLEAN, "bDec");
+        id.setUpId("bDec");
         try {
             id.evaluate(c);
             fail("bDec should not be initialised");
@@ -123,7 +123,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(UnannType.BOOLEAN);
         lvd.addVarDec(boolDef);
         lvd.execute(c, 0);
-        id.setUpIdSimple(UnannType.BOOLEAN, "bDef");
+        id.setUpId("bDef");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
         lvd = new LocalVarDec();
@@ -133,23 +133,23 @@ public class LocalVarDecTest {
         lvd.addVarDec(intDec2);
         lvd.addVarDec(intDef2);
         lvd.execute(c, 0);
-        id.setUpIdSimple(UnannType.INT, "iDec1");
+        id.setUpId("iDec1");
         try {
             id.evaluate(c);
             fail("iDec1 should not be initialised");
         } catch (VariableNotInitException vnie) {
             // pass test
         }
-        id.setUpIdSimple(UnannType.INT, "iDef1");
+        id.setUpId("iDef1");
         assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);
-        id.setUpIdSimple(UnannType.INT, "iDec2");
+        id.setUpId("iDec2");
         try {
             id.evaluate(c);
             fail("iDec2 should not be initialised");
         } catch (VariableNotInitException vnie) {
             // pass test
         }
-        id.setUpIdSimple(UnannType.INT, "iDef2");
+        id.setUpId("iDef2");
         assertEquals(3, ((ReturnValuesInt)id.evaluate(c)).value);
     }
 
@@ -195,7 +195,7 @@ public class LocalVarDecTest {
         lvd.addVarDec(aCSize);
         lvd.execute(c, 0);
 
-        id.setUpIdArray(UnannType.BOOLEAN, 2, "boolArray2");
+        id.setUpId("boolArray2");
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
 
         assertEquals(2, ar.getType().size);
@@ -222,7 +222,7 @@ public class LocalVarDecTest {
         lvd.execute(c, 0);
 
         Id id1 = new Id();
-        id1.setUpIdArray(UnannType.BOOLEAN, 1, "boolArray3");
+        id1.setUpId("boolArray3");
         ReturnValuesArray ar1 = (ReturnValuesArray)id1.evaluate(c);
 
         assertEquals(ar1.getType().size, 1);
@@ -241,7 +241,7 @@ public class LocalVarDecTest {
         lvd.addVarDec(aCWIL);
         lvd.executeStart(c);
 
-        id.setUpIdArray(UnannType.BOOLEAN, 3, "boolArray");
+        id.setUpId("boolArray");
         ReturnValuesArray<Boolean> ar = (ReturnValuesArray)id.evaluate(c);
 
         assertEquals(3, ar.getType().size);
@@ -280,7 +280,7 @@ public class LocalVarDecTest {
         lvd.addVarDec(aCWIL1);
         lvd.executeStart(c);
 
-        id.setUpIdArray(UnannType.BOOLEAN, 1, "boolArray1");
+        id.setUpId("boolArray1");
         ReturnValuesArray<Boolean> ar1 = (ReturnValuesArray)id.evaluate(c);
 
         assertEquals(1, ar1.getType().size);

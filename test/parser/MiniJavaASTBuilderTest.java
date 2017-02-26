@@ -57,7 +57,7 @@ public class MiniJavaASTBuilderTest {
         b.executeStart(c);
 
         Id d = new Id();
-        d.setUpIdSimple(UnannType.INT, "d");
+        d.setUpId("d");
         assertEquals(((ReturnValuesInt)d.evaluate(c)).value, 1);
     }
 
@@ -123,13 +123,13 @@ public class MiniJavaASTBuilderTest {
         lvd.executeStart(c);
 
         Id ar1 = new Id();
-        ar1.setUpIdArray(UnannType.INT, 2, "ar1");
+        ar1.setUpId("ar1");
         ReturnValuesArray<Integer> rva1 = (ReturnValuesArray<Integer>)ar1.evaluate(c);
         assertEquals(rva1.getSize(), 2);
         assertEquals((int)rva1.get(0), 0);
 
         Id ar2 = new Id();
-        ar2.setUpIdArray(UnannType.INT, 4, "ar2");
+        ar2.setUpId("ar2");
         ReturnValuesArray<Integer> rva2 = (ReturnValuesArray<Integer>)ar2.evaluate(c);
         assertEquals(rva2.getSize(), 4);
         assertEquals((int)rva2.get(0), 0);
@@ -150,14 +150,14 @@ public class MiniJavaASTBuilderTest {
         lvd.executeStart(c);
 
         Id ar1 = new Id();
-        ar1.setUpIdArray(UnannType.BOOLEAN, 2, "ar1");
+        ar1.setUpId("ar1");
         ReturnValuesArray<Boolean> rva1 = (ReturnValuesArray<Boolean>)ar1.evaluate(c);
         assertEquals(rva1.getSize(), 2);
         assertTrue(rva1.get(0));
         assertFalse(rva1.get(1));
 
         Id ar2 = new Id();
-        ar2.setUpIdArray(UnannType.BOOLEAN, 2, "ar2");
+        ar2.setUpId("ar2");
         ReturnValuesArray<Boolean> rva2 = (ReturnValuesArray<Boolean>)ar2.evaluate(c);
         assertEquals(rva2.getSize(), 2);
         assertFalse(rva2.get(0));
@@ -179,12 +179,12 @@ public class MiniJavaASTBuilderTest {
         lvd.executeStart(c);
 
         Id half = new Id();
-        half.setUpIdSimple(UnannType.DOUBLE, "half");
+        half.setUpId("half");
         ReturnValuesDouble rvd = (ReturnValuesDouble)half.evaluate(c);
         assertEquals(rvd.value, 0.5);
 
         Id empty = new Id();
-        empty.setUpIdSimple(UnannType.DOUBLE, "empty");
+        empty.setUpId("empty");
         try {
             ReturnValuesDouble rvd2 = (ReturnValuesDouble) empty.evaluate(c);
             fail("Id not actually defined");
@@ -195,7 +195,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitAssignExpr() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         is = new ByteArrayInputStream("i = 3".getBytes(StandardCharsets.UTF_8));
         input = new ANTLRInputStream(is);
         lexer = new MiniJavaLexer(input);
@@ -208,7 +208,7 @@ public class MiniJavaASTBuilderTest {
         aE.evaluate(c);
 
         Id i = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
+        i.setUpId("i");
         assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 3);
 
         is = new ByteArrayInputStream("i += 3".getBytes(StandardCharsets.UTF_8));

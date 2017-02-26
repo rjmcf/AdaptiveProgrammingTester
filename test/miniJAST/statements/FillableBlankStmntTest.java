@@ -178,9 +178,9 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         Id i = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
+        i.setUpId("i");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(i, AssignOp.EQ, lit1);
         ExpressionStmnt eS = new ExpressionStmnt(aE);
@@ -196,12 +196,12 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id i = new Id(), cond = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
-        cond.setUpIdSimple(UnannType.BOOLEAN, "cond");
+        i.setUpId("i");
+        cond.setUpId("cond");
         AssignExpr aE1 = new AssignExpr();
         aE1.setUpAssignExpr(i, AssignOp.EQ, lit1);
         ExpressionStmnt eS1 = new ExpressionStmnt(aE1);
@@ -225,12 +225,12 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledWhileNSI() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id i = new Id(), cond = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
-        cond.setUpIdSimple(UnannType.BOOLEAN, "cond");
+        i.setUpId("i");
+        cond.setUpId("cond");
         AssignExpr aE1 = new AssignExpr();
         aE1.setUpAssignExpr(i, AssignOp.EQ, lit1);
         ExpressionStmnt eS1 = new ExpressionStmnt(aE1);
@@ -298,9 +298,9 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
 
         AssignExpr aE1 = new AssignExpr();
         aE1.setUpAssignExpr(iId, AssignOp.EQ, lit1);
@@ -327,9 +327,9 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledITENSI() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
 
         AssignExpr aE1 = new AssignExpr();
         aE1.setUpAssignExpr(iId, AssignOp.EQ, lit1);
@@ -356,9 +356,9 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
 
         AssignExpr aE1 = new AssignExpr();
         aE1.setUpAssignExpr(iId, AssignOp.EQ, lit1);
@@ -383,7 +383,7 @@ public class FillableBlankStmntTest {
         fbs.setStudentStmnt(lvd);
 
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(iId, AssignOp.PLUSEQ, lit2);
         ExpressionStmnt eS = new ExpressionStmnt(aE);
@@ -410,7 +410,7 @@ public class FillableBlankStmntTest {
 
         lvd.executeStart(c);
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 1);
         assertEquals(lvd.stringRepr(0), "int i = 1;");
     }

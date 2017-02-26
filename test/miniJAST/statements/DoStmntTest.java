@@ -46,7 +46,7 @@ public class DoStmntTest {
         f = new Literal();
         f.setUpLiteral(UnannType.BOOLEAN, "false");
         contID = new Id();
-        contID.setUpIdSimple(UnannType.BOOLEAN, "cont");
+        contID.setUpId("cont");
         contFalse = new AssignExpr();
         contFalse.setUpAssignExpr(contID, AssignOp.EQ, f);
         ExpressionStmnt eS1 = new ExpressionStmnt(contFalse);
@@ -69,9 +69,9 @@ public class DoStmntTest {
         dec2.addVarDec(thing);
 
         iID = new Id();
-        iID.setUpIdSimple(UnannType.INT, "i");
+        iID.setUpId("i");
         thingID = new Id();
-        thingID.setUpIdSimple(UnannType.INT, "thing");
+        thingID.setUpId("thing");
         plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, iID);
         thingToI = new AssignExpr();

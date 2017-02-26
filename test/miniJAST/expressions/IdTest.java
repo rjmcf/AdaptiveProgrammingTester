@@ -22,9 +22,9 @@ public class IdTest {
     public void setUp() throws Exception {
         id = new Id();
         c = new Context();
-        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("t", true);
-        c.namesToTypes.put("int2", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("int2", new Type(UnannType.INT));
         c.namesToValues.put("int2", 2);
         c.namesToTypes.put("message", new Type(UnannType.CHAR, 6));
         ArrayList<Character> m = new ArrayList<>();
@@ -40,29 +40,13 @@ public class IdTest {
 
     @Test
     public void testEvaluate() throws Exception {
-        id.setUpIdSimple(UnannType.BOOLEAN, "t");
+        id.setUpId("t");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.BOOLEAN, 2, "t");
-        try {
-            id.evaluate(c);
-            fail("t has wrong type (size)");
-        } catch (VariableDecException e) {
-            // pass test
-        }
-
-        id.setUpIdSimple(UnannType.INT, "t");
-        try {
-            id.evaluate(c);
-            fail("t has wrong type (type)");
-        } catch (VariableDecException e) {
-            // pass test
-        }
-
-        id.setUpIdSimple(UnannType.INT, "int2");
+        id.setUpId("int2");
         assertEquals(2, ((ReturnValuesInt)id.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.CHAR, 6, "message");
+        id.setUpId("message");
         String s = "Id test";
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
         assertEquals(s.length(), ar.getSize());

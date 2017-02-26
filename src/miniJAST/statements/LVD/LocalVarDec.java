@@ -73,7 +73,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             c.namesToTypes.put(v.getName(), rb.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesBool) rb).value);
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -88,6 +88,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesBool)r).value);
                             }
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
                             c.namesToValues.put(v.getName(), vals);
                         } else {
@@ -98,6 +99,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN, size));
                             ArrayList<Boolean> bools = new ArrayList<>(size);
                             while (bools.size() < size)
@@ -117,7 +119,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             c.namesToTypes.put(v.getName(), rc.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesChar) rc).value);
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -132,6 +134,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesChar)r).value);
                             }
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
                             c.namesToValues.put(v.getName(), vals);
                         } else {
@@ -142,6 +145,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR, size));
                             ArrayList<Character> chars = new ArrayList<>(size);
                             while (chars.size() < size)
@@ -170,7 +174,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.INT, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.INT));
                         }
                     } else {
                         // TODO fix assumption that arrays are initialised
@@ -186,6 +190,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesInt)r).value);
                             }
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
                             c.namesToValues.put(v.getName(), vals);
                         } else {
@@ -196,6 +201,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(UnannType.INT, size));
                             ArrayList<Integer> ints = new ArrayList<>(size);
                             while (ints.size() < size)
@@ -227,7 +233,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE, 1));
+                            c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -242,6 +248,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new TypeException("Can not operate on arrays!");
                                 vals.add(((ReturnValuesDouble)r).value);
                             }
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(type, vals.size()));
                             c.namesToValues.put(v.getName(), vals);
                         } else {
@@ -252,6 +259,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
+                            // Will be fixed
                             c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE, size));
                             ArrayList<Double> dubs = new ArrayList<>(size);
                             while (dubs.size() < size)

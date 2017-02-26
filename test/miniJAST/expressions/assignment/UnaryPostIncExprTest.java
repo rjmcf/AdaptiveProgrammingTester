@@ -21,16 +21,16 @@ public class UnaryPostIncExprTest {
     public void setUp() throws Exception {
         e = new UnaryPostIncExpr();
         c = new Context();
-        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("t", true);
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         c.namesToValues.put("i", 0);
         id = new Id();
     }
 
     @Test
     public void testIds() throws Exception {
-        id.setUpIdSimple(UnannType.BOOLEAN, "t");
+        id.setUpId("t");
         e.setUpPostIncExpr(true, id);
         try {
             e.evaluate(c);
@@ -39,7 +39,7 @@ public class UnaryPostIncExprTest {
             // pass test
         }
 
-        id.setUpIdSimple(UnannType.INT, "i");
+        id.setUpId("i");
         e.setUpPostIncExpr(true, id);
         Assert.assertEquals(0, ((ReturnValuesInt)e.evaluate(c)).value);
         Assert.assertEquals(1, ((ReturnValuesInt)id.evaluate(c)).value);

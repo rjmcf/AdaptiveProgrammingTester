@@ -40,7 +40,7 @@ public class IfThenStmntTest {
         t = new Literal();
         t.setUpLiteral(UnannType.BOOLEAN, "true");
         iID = new Id();
-        iID.setUpIdSimple(UnannType.INT, "i");
+        iID.setUpId("i");
         one = new Literal();
         one.setUpLiteral(UnannType.INT, "1");
         i1 = new AssignExpr();
@@ -60,7 +60,7 @@ public class IfThenStmntTest {
         f = new Literal();
         f.setUpLiteral(UnannType.BOOLEAN, "false");
         jID = new Id();
-        jID.setUpIdSimple(UnannType.INT, "j");
+        jID.setUpId("j");
         j1 = new AssignExpr();
         j1.setUpAssignExpr(jID, AssignOp.EQ, one);
         ExpressionStmnt eS2 = new ExpressionStmnt(j1);

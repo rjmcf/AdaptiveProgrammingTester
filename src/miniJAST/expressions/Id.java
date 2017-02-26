@@ -18,8 +18,7 @@ public class Id extends GroundExpr implements AssignLHS{
     private String name;
     private boolean isArray;
 
-    public void setUpIdSimple(UnannType t, String n) { varType = new Type(t, 1); name = n; isArray = false; }
-    public void setUpIdArray(UnannType t, int size, String n) { varType = new Type(t, size); name = n; isArray = true; }
+    public void setUpId(String n) { name = n; }
 
     @Override
     public String stringRepr() {
@@ -28,7 +27,9 @@ public class Id extends GroundExpr implements AssignLHS{
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
-        if (c.namesToTypes.get(name) != null && c.namesToTypes.get(name).equals(varType)) {
+        if (c.namesToTypes.get(name) != null) {
+            varType = c.namesToTypes.get(name);
+            isArray = varType.isArray;
             if (!c.namesToValues.containsKey(name))
                 throw new VariableNotInitException(name);
             if (!isArray) {

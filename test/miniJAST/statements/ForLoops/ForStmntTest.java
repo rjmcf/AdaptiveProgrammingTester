@@ -68,7 +68,7 @@ public class ForStmntTest {
 
         // set up "i > 0"
         iID = new Id();
-        iID.setUpIdSimple(UnannType.INT, "i");
+        iID.setUpId("i");
         zero = new Literal();
         zero.setUpLiteral(UnannType.INT, "0");
         gT = new RelationExpr();
@@ -80,7 +80,7 @@ public class ForStmntTest {
 
         // set up "sum = sum * i"
         sumID = new Id();
-        sumID.setUpIdSimple(UnannType.INT, "sum");
+        sumID.setUpId("sum");
         sumTimesI = new MultExpr();
         sumTimesI.setUpMultExpr(true, sumID, iID);
         sumAss = new AssignExpr();
@@ -102,7 +102,7 @@ public class ForStmntTest {
         jStat.setUpLVD(UnannType.INT);
         jStat.addVarDec(j);
         jID = new Id();
-        jID.setUpIdSimple(UnannType.INT, "j");
+        jID.setUpId("j");
         plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, jID);
         check5 = new EqExpr();

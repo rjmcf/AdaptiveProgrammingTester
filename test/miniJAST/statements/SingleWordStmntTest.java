@@ -84,7 +84,7 @@ public class SingleWordStmntTest {
         iDec.addVarDec(i);
 
         iID = new Id();
-        iID.setUpIdSimple(UnannType.INT, "i");
+        iID.setUpId("i");
         two = new Literal();
         two.setUpLiteral(UnannType.INT, "2");
         eq2 = new EqExpr();
@@ -110,11 +110,11 @@ public class SingleWordStmntTest {
         which = new CondExpr();
         which.setUpCondExpr(lT3, iID, minus);
         resultID = new Id();
-        resultID.setUpIdArray(UnannType.CHAR, 6, "result");
+        resultID.setUpId("result");
         resAcc = new ArrayAccess();
         resAcc.setUpArrayAccess(resultID, which);
         origID = new Id();
-        origID.setUpIdArray(UnannType.CHAR, 9, "orig");
+        origID.setUpId("orig");
         origAcc = new ArrayAccess();
         origAcc.setUpArrayAccess(origID, iID);
         indexAssign = new AssignExpr();
@@ -157,7 +157,7 @@ public class SingleWordStmntTest {
         jDec.setUpLVD(UnannType.INT);
         jDec.addVarDec(j);
         jID = new Id();
-        jID.setUpIdSimple(UnannType.INT, "j");
+        jID.setUpId("j");
         lT1 = new RelationExpr();
         lT1.setUpRelationExpr(RelationOp.LT, jID, one);
         jPlus = new UnaryPostIncExpr();

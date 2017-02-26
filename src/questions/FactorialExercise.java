@@ -56,14 +56,14 @@ public class FactorialExercise extends AbstractPExercise {
         lvd.addVarDec(nDec);
 
         Id nID = new Id();
-        nID.setUpIdSimple(UnannType.INT, "n");
+        nID.setUpId("n");
         RelationExpr gT1 = new RelationExpr();
         gT1.setUpRelationExpr(RelationOp.GT, nID, one);
 
         UnaryPostIncExpr minus = new UnaryPostIncExpr();
         minus.setUpPostIncExpr(false, nID);
         totalId = new Id();
-        totalId.setUpIdSimple(UnannType.INT, "total");
+        totalId.setUpId("total");
         AssignExpr times = new AssignExpr();
         times.setUpAssignExpr(totalId, AssignOp.TIMESEQ, minus);
         ExpressionStmnt eS = new ExpressionStmnt(times);

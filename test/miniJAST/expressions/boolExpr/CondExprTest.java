@@ -62,7 +62,7 @@ public class CondExprTest {
         lvd.addVarDec(iDec);
         lvd.addVarDec(jDec);
         i = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
+        i.setUpId("i");
         tE = new AssignExpr();
         tE.setUpAssignExpr(i, AssignOp.EQ, int2);
         fE = new AssignExpr();
@@ -70,7 +70,7 @@ public class CondExprTest {
         bE = new BracketedExpr();
         bE.setUpBracketExpr(fE);
         j = new Id();
-        j.setUpIdSimple(UnannType.INT, "j");
+        j.setUpId("j");
         outer = new AssignExpr();
         outer.setUpAssignExpr(j, AssignOp.EQ, e);
         b = new Block(true);

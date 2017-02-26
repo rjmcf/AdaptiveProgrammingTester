@@ -76,7 +76,7 @@ public class ArrayAccessTest {
 
     @Test
     public void testEvaluate() throws Exception {
-        id.setUpIdArray(UnannType.BOOLEAN, 2, "boolArray");
+        id.setUpId("boolArray");
         aa.setUpArrayAccess(id, zero);
         assertTrue(((ReturnValuesBoolAA)aa.evaluate(c)).value);
         assertEquals("boolArray", ((ReturnValuesBoolAA)aa.evaluate(c)).getName());
@@ -125,7 +125,7 @@ public class ArrayAccessTest {
             // pass test
         }
 
-        id.setUpIdArray(UnannType.INT, 2, "intArray");
+        id.setUpId("intArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals(1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
 
@@ -140,21 +140,21 @@ public class ArrayAccessTest {
             // pass test
         }
 
-        id.setUpIdArray(UnannType.DOUBLE, 2, "dubArray");
+        id.setUpId("dubArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals(0.5, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
         assertEquals(0.25, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.CHAR, 2, "charArray");
+        id.setUpId("charArray");
         aa.setUpArrayAccess(id, zero);
         assertEquals('A', ((ReturnValuesCharAA)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
         assertEquals('!', ((ReturnValuesCharAA)aa.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.INT, 1, "singleInt");
+        id.setUpId("singleInt");
         aa.setUpArrayAccess(id, zero);
         aa.evaluate(c);
         assertEquals(((ReturnValuesInt)aa.evaluate(c)).value, 3);

@@ -44,10 +44,10 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
-        nId.setUpIdSimple(UnannType.INT, "n");
+        nId.setUpId("n");
         setter.fillBlank(blankIds.get(2), nId);
         Id totId = new Id();
-        totId.setUpIdSimple(UnannType.INT, "total");
+        totId.setUpId("total");
         setter.fillBlank(blankIds.get(4), totId);
 
         assertFalse(setter.submitAttempt());
@@ -72,10 +72,10 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
-        nId.setUpIdSimple(UnannType.INT, "n");
+        nId.setUpId("n");
         setter.fillBlank(blankIds.get(2), nId);
         Id totId = new Id();
-        totId.setUpIdSimple(UnannType.INT, "total");
+        totId.setUpId("total");
         setter.fillBlank(blankIds.get(4), totId);
 
         setter.submitAttempt();
@@ -148,10 +148,10 @@ public class ExerciseSetterTest {
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
-        nId.setUpIdSimple(UnannType.INT, "n");
+        nId.setUpId("n");
         setter.fillBlank(blankIds.get(2), nId);
         Id totId = new Id();
-        totId.setUpIdSimple(UnannType.INT, "total");
+        totId.setUpId("total");
         setter.fillBlank(blankIds.get(4), totId);
 
         setter.submitAttempt();

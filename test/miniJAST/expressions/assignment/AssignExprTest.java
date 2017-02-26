@@ -41,12 +41,12 @@ public class AssignExprTest {
 
     @Test
     public void testEqId() throws Exception {
-        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN, 1));
-        c.namesToTypes.put("o", new Type(UnannType.INT, 1));
-        c.namesToTypes.put("h", new Type(UnannType.DOUBLE, 1));
-        c.namesToTypes.put("a", new Type(UnannType.CHAR, 1));
+        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("o", new Type(UnannType.INT));
+        c.namesToTypes.put("h", new Type(UnannType.DOUBLE));
+        c.namesToTypes.put("a", new Type(UnannType.CHAR));
 
-        id.setUpIdSimple(UnannType.BOOLEAN, "t");
+        id.setUpId("t");
         aE.setUpAssignExpr(id, AssignOp.EQ, eT);
         aE.evaluate(c);
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
@@ -55,17 +55,17 @@ public class AssignExprTest {
         aE.evaluate(c);
         assertFalse(((ReturnValuesBool)id.evaluate(c)).value);
 
-        id.setUpIdSimple(UnannType.INT, "o");
+        id.setUpId("o");
         aE.setUpAssignExpr(id, AssignOp.EQ, one);
         aE.evaluate(c);
         assertEquals(1, ((ReturnValuesInt)id.evaluate(c)).value);
 
-        id.setUpIdSimple(UnannType.DOUBLE, "h");
+        id.setUpId("h");
         aE.setUpAssignExpr(id, AssignOp.EQ, half);
         aE.evaluate(c);
         assertEquals(0.5, ((ReturnValuesDouble)id.evaluate(c)).value);
 
-        id.setUpIdSimple(UnannType.CHAR, "a");
+        id.setUpId("a");
         aE.setUpAssignExpr(id, AssignOp.EQ, A);
         aE.evaluate(c);
         assertEquals('A', ((ReturnValuesChar)id.evaluate(c)).value);
@@ -98,25 +98,25 @@ public class AssignExprTest {
         }
         c.namesToValues.put("charArray2", chars);
 
-        id.setUpIdArray(UnannType.BOOLEAN, 2, "boolArray2");
+        id.setUpId("boolArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, eT);
         aE.evaluate(c);
         assertTrue(((ReturnValuesBoolAA)aa.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.INT, 2, "intArray2");
+        id.setUpId("intArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, one);
         aE.evaluate(c);
         assertEquals(1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.DOUBLE, 2, "dubArray2");
+        id.setUpId("dubArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, half);
         aE.evaluate(c);
         assertEquals(0.5, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
 
-        id.setUpIdArray(UnannType.CHAR, 2, "charArray2");
+        id.setUpId("charArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, A);
         aE.evaluate(c);

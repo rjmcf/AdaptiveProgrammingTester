@@ -38,7 +38,7 @@ public class MultExprTest {
         ints.add(2);
         c.namesToValues.put("array", ints);
         id = new Id();
-        id.setUpIdArray(UnannType.INT, 2, "array");
+        id.setUpId("array");
         int2 = new Literal();
         int2.setUpLiteral(UnannType.INT, "2");
         int3 = new Literal();

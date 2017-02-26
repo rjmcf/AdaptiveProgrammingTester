@@ -381,7 +381,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
             switch (op) {
                 case EQ:
-                    switch (id.getType().uType) {
+                    switch (c.namesToTypes.get(id.getName()).uType) {
                         case BOOLEAN:
                             if (ex.getType().uType != UnannType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
@@ -431,7 +431,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (id.getType().uType) {
+                    switch (c.namesToTypes.get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -477,7 +477,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use += on variable of type boolean");
                     }
                 case SUBEQ:
-                    switch (id.getType().uType) {
+                    switch (c.namesToTypes.get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -523,7 +523,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use -= on variable of type boolean");
                     }
                 case TIMESEQ:
-                    switch (id.getType().uType) {
+                    switch (c.namesToTypes.get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -569,7 +569,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use *= on variable of type boolean");
                     }
                 default: // DIVEQ
-                    switch (id.getType().uType) {
+                    switch (c.namesToTypes.get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != UnannType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");

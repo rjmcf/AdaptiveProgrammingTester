@@ -58,7 +58,7 @@ public class FillableBlankExprTest {
         litT = new Literal();
         litT.setUpLiteral(UnannType.BOOLEAN, "true");
         id = new Id();
-        id.setUpIdArray(UnannType.INT, 2, "fakeArray");
+        id.setUpId("fakeArray");
         lvd = new LocalVarDec();
         testS = new PrintStatement();
         testS.setUpPrint(lit0);
@@ -586,7 +586,7 @@ public class FillableBlankExprTest {
         c.namesToValues.put("ar", vals);
 
         Id ar = new Id();
-        ar.setUpIdArray(UnannType.INT, 2, "ar");
+        ar.setUpId("ar");
         ArrayAccess aa = new ArrayAccess();
         aa.setUpArrayAccess(ar, lit1);
 
@@ -604,7 +604,7 @@ public class FillableBlankExprTest {
 
         ArrayAccess aa = new ArrayAccess();
         Id ar = new Id();
-        ar.setUpIdArray(UnannType.INT, 2, "ar");
+        ar.setUpId("ar");
         fbe.setStudentExpr(ar);
         FillableBlankExpr fbe1 = new FillableBlankExpr(0);
         fbe1.setStudentExpr(lit1);
@@ -615,10 +615,10 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsAssignment() throws Exception {
-        c.namesToTypes.put("fakeInt", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("fakeInt", new Type(UnannType.INT));
 
         Id fId = new Id();
-        fId.setUpIdSimple(UnannType.INT, "fakeInt");
+        fId.setUpId("fakeInt");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(fId, AssignOp.EQ, lit1);
         fbe.setStudentExpr(aE);
@@ -648,9 +648,9 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledAssignment() throws Exception {
-        c.namesToTypes.put("fakeInt", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("fakeInt", new Type(UnannType.INT));
         Id fId = new Id();
-        fId.setUpIdSimple(UnannType.INT, "fakeInt");
+        fId.setUpId("fakeInt");
         fbe.setStudentExpr(fId);
         FillableBlankExpr fbe1 = new FillableBlankExpr(0);
         fbe1.setStudentExpr(lit3);
@@ -781,10 +781,10 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsId() throws Exception {
-        c.namesToTypes.put("fakeId", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("fakeId", new Type(UnannType.INT));
         c.namesToValues.put("fakeId", 2);
         Id fakeId = new Id();
-        fakeId.setUpIdSimple(UnannType.INT, "fakeId");
+        fakeId.setUpId("fakeId");
         fbe.setStudentExpr(fakeId);
         assertEquals(((ReturnValuesInt)fbe.evaluate(c)).value, 2);
         assertEquals(fbe.stringRepr(), "fakeId");
@@ -830,7 +830,7 @@ public class FillableBlankExprTest {
         assertEquals(lvd.stringRepr(0), "int fakeAr[] = { 1, 0 };");
         lvd.executeStart(c);
         Id fakeAr = new Id();
-        fakeAr.setUpIdArray(UnannType.INT, 2, "fakeAr");
+        fakeAr.setUpId("fakeAr");
         ArrayAccess aa = new ArrayAccess();
         aa.setUpArrayAccess(fakeAr, lit1);
         assertEquals(((ReturnValuesIntAA)aa.evaluate(c)).value, 0);
@@ -848,7 +848,7 @@ public class FillableBlankExprTest {
         lvd.executeStart(c);
 
         Id fakeAr = new Id();
-        fakeAr.setUpIdArray(UnannType.INT, 2, "fakeAr");
+        fakeAr.setUpId("fakeAr");
         ArrayAccess aa = new ArrayAccess();
         aa.setUpArrayAccess(fakeAr, lit1);
         AssignExpr aE = new AssignExpr();
@@ -859,13 +859,13 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("cond", false);
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
         c.namesToValues.put("i", 1);
         Id condId = new Id(), i = new Id();
-        condId.setUpIdSimple(UnannType.BOOLEAN, "cond");
-        i.setUpIdSimple(UnannType.INT, "i");
+        condId.setUpId("cond");
+        i.setUpId("i");
         UnaryPostIncExpr upiE = new UnaryPostIncExpr();
         upiE.setUpPostIncExpr(true, i);
         ExpressionStmnt eS = new ExpressionStmnt(upiE);
@@ -882,10 +882,10 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id condId = new Id();
-        condId.setUpIdSimple(UnannType.BOOLEAN, "cond");
+        condId.setUpId("cond");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(condId, AssignOp.EQ, litF);
         ExpressionStmnt eS = new ExpressionStmnt(aE);
@@ -900,10 +900,10 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledWhileNSI() throws Exception {
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN, 1));
+        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id condId = new Id();
-        condId.setUpIdSimple(UnannType.BOOLEAN, "cond");
+        condId.setUpId("cond");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(condId, AssignOp.EQ, litF);
         ExpressionStmnt eS = new ExpressionStmnt(aE);
@@ -918,11 +918,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledFor() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
-        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("res", new Type(UnannType.INT));
         c.namesToValues.put("res", 0);
         Id i = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
+        i.setUpId("i");
         AssignExpr init = new AssignExpr();
         init.setUpAssignExpr(i, AssignOp.EQ, lit0);
         fbe.setStudentExpr(init);
@@ -940,7 +940,7 @@ public class FillableBlankExprTest {
         fbe2.setStudentExpr(upiE);
 
         Id res = new Id();
-        res.setUpIdSimple(UnannType.INT, "res");
+        res.setUpId("res");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(res, AssignOp.PLUSEQ, lit3);
         ExpressionStmnt eS = new ExpressionStmnt(aE);
@@ -958,11 +958,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledForNSI() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
-        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("res", new Type(UnannType.INT));
         c.namesToValues.put("res", 0);
         Id i = new Id();
-        i.setUpIdSimple(UnannType.INT, "i");
+        i.setUpId("i");
         AssignExpr init = new AssignExpr();
         init.setUpAssignExpr(i, AssignOp.EQ, lit0);
         fbe.setStudentExpr(init);
@@ -980,7 +980,7 @@ public class FillableBlankExprTest {
         fbe2.setStudentExpr(upiE);
 
         Id res = new Id();
-        res.setUpIdSimple(UnannType.INT, "res");
+        res.setUpId("res");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(res, AssignOp.PLUSEQ, lit3);
         ExpressionStmnt eS = new ExpressionStmnt(aE);
@@ -998,11 +998,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("res", new Type(UnannType.INT));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
-        resId.setUpIdSimple(UnannType.INT, "res");
+        resId.setUpId("res");
         AssignExpr ae1 = new AssignExpr();
         ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
         ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
@@ -1020,11 +1020,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledITENSI() throws Exception {
-        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("res", new Type(UnannType.INT));
 
         fbe.setStudentExpr(litF);
         Id resId = new Id();
-        resId.setUpIdSimple(UnannType.INT, "res");
+        resId.setUpId("res");
         AssignExpr ae1 = new AssignExpr();
         ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
         ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
@@ -1042,11 +1042,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.put("res", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("res", new Type(UnannType.INT));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
-        resId.setUpIdSimple(UnannType.INT, "res");
+        resId.setUpId("res");
         AssignExpr ae1 = new AssignExpr();
         ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
         ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
@@ -1073,16 +1073,16 @@ public class FillableBlankExprTest {
         lvd.executeStart(c);
 
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledExprStmnt() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT, 1));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
 
         Id iId = new Id();
-        iId.setUpIdSimple(UnannType.INT, "i");
+        iId.setUpId("i");
         AssignExpr aE = new AssignExpr();
         aE.setUpAssignExpr(iId, AssignOp.EQ, lit3);
         fbe.setStudentExpr(aE);
