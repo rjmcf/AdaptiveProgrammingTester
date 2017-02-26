@@ -5,7 +5,7 @@ import antlrParser.MiniJavaParser;
 import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Literal;
 import miniJAST.types.Type;
-import miniJAST.types.TypeCarrier;
+import miniJAST.types.UnannTypeCarrier;
 import miniJAST.types.UnannType;
 
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
@@ -25,15 +25,15 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
     public MiniJASTNode visitPrimitiveType(MiniJavaParser.PrimitiveTypeContext ctx) {
-        TypeCarrier c;
+        UnannTypeCarrier c;
         if (ctx.BOOLEAN() != null)
-            c = new TypeCarrier(new Type(UnannType.BOOLEAN,1));
+            c = new UnannTypeCarrier(UnannType.BOOLEAN);
         else if (ctx.CHAR() != null)
-            c = new TypeCarrier(new Type(UnannType.CHAR,1));
+            c = new UnannTypeCarrier(UnannType.CHAR);
         else if (ctx.INT() != null)
-            c = new TypeCarrier(new Type(UnannType.INT,1));
+            c = new UnannTypeCarrier(UnannType.INT);
         else // Double
-            c = new TypeCarrier(new Type(UnannType.DOUBLE,1));
+            c = new UnannTypeCarrier(UnannType.DOUBLE);
         return c;
     }
 }
