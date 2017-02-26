@@ -1,5 +1,7 @@
 package parser;
 
+import antlrParser.MiniJavaLexer;
+import antlrParser.MiniJavaParser;
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Literal;
@@ -12,8 +14,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import parserClass.MiniJavaLexer;
-import parserClass.MiniJavaParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -84,4 +84,6 @@ public class MiniJavaASTBuilderTest {
         l = (Literal)result;
         assertEquals(((ReturnValuesDouble)l.evaluate(c)).value, 0.5);
     }
+
+
 }
