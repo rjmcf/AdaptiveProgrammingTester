@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import static org.testng.Assert.*;
 
@@ -41,24 +42,6 @@ public class MiniJavaASTBuilderTest {
     public void setUp() throws Exception {
         builder = new MiniJavaASTBuilder();
         c = new Context();
-    }
-
-    @Test
-    public void testVisitBlock() throws Exception {
-        is = new ByteArrayInputStream("int d; {int a = 1; d = a;}".getBytes(StandardCharsets.UTF_8));
-        input = new ANTLRInputStream(is);
-        lexer = new MiniJavaLexer(input);
-        tokens = new CommonTokenStream(lexer);
-        parser = new MiniJavaParser(tokens);
-        tree = parser.block(); // parse
-        result = builder.visit(tree);
-        assertTrue(result instanceof Block);
-        Block b = (Block) result;
-        b.executeStart(c);
-
-        Id d = new Id();
-        d.setUpId("d");
-        assertEquals(((ReturnValuesInt)d.evaluate(c)).value, 1);
     }
 
     @Test
@@ -191,6 +174,47 @@ public class MiniJavaASTBuilderTest {
         } catch (VariableNotInitException e) {
             //pass
         }
+    }
+
+    @Test
+    public void testVisitMakeID() throws Exception {
+        c.namesToTypes.put("i", new Type(UnannType.INT));
+        is = new ByteArrayInputStream("i".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.expression(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof Id);
+        Id i1 = (Id) result;
+
+        try {
+            i1.evaluate(c);
+            fail("i is not initialised");
+        } catch (VariableNotInitException e) {
+            // pass
+        }
+        c.namesToValues.put("i", 2);
+        assertEquals(((ReturnValuesInt)i1.evaluate(c)).value, 2);
+
+        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        ArrayList<Integer> ar = new ArrayList<>(2);
+        ar.add(42);
+        ar.add(17);
+        c.namesToValues.put("ar", ar);
+        is = new ByteArrayInputStream("ar".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.expression(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof Id);
+        Id i2 = (Id) result;
+        assertEquals(((ReturnValuesArray<Integer>)i2.evaluate(c)).getSize(), 2);
+        assertEquals((int)((ReturnValuesArray<Integer>)i2.evaluate(c)).get(0), 42);
+        assertEquals((int)((ReturnValuesArray<Integer>)i2.evaluate(c)).get(1), 17);
     }
 
     @Test

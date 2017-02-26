@@ -4,6 +4,7 @@ import antlrParser.MiniJavaBaseVisitor;
 import antlrParser.MiniJavaParser;
 import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
@@ -93,6 +94,13 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
             lvd.addVarDec(vD);
         }
         return lvd;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeID(MiniJavaParser.MakeIDContext ctx) {
+        Id id = new Id();
+        id.setUpId(ctx.Identifier().getText());
+        return id;
     }
 
     @Override
