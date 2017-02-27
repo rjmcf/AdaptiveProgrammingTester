@@ -198,12 +198,6 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForInitExprs(MiniJavaParser.ForInitExprsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniJavaParser#forUpdate}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitForUpdate(MiniJavaParser.ForUpdateContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MiniJavaParser#parExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

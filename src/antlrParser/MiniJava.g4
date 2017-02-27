@@ -61,7 +61,7 @@ statement
     :   block [false]																# makeBlock
     |   IF parExpression statement 													# makeIf
     | 	IF parExpression statementNSI ELSE statement								# makeITE
-    |   FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN statement		# makeFor
+    |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement		# makeFor
     |   WHILE parExpression statement												# makeWhile
     |   DO statement WHILE parExpression SEMI										# makeDo
     |   RETURN SEMI																	# return
@@ -74,7 +74,7 @@ statement
 statementNSI
 	: 	block [false]																# makeBlockNSI
 	| 	IF parExpression statementNSI ELSE statementNSI								# makeITENSI
-	|   FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN statementNSI	# makeForNSI
+	|   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statementNSI	# makeForNSI
     |   WHILE parExpression statementNSI											# makeWhileNSI
 	|   DO statement WHILE parExpression SEMI										# makeDoNSI 
 	|   RETURN SEMI																	# returnNSI													
@@ -87,10 +87,6 @@ statementNSI
 forInit
     :   primitiveType variableDeclarators											# forInitLVD
     |   expressionList																# forInitExprs
-    ;
-
-forUpdate
-    :   expressionList
     ;
 
 // EXPRESSIONS
