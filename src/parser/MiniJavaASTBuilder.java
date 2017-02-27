@@ -16,6 +16,14 @@ import miniJAST.expressions.assignment.UnaryPostIncExpr;
 import miniJAST.expressions.assignment.UnaryPreIncExpr;
 import miniJAST.expressions.boolExpr.*;
 import miniJAST.statements.*;
+import miniJAST.statements.DoAndWhileLoops.DoStmnt;
+import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
+import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
+import miniJAST.statements.ForLoops.ForInit;
+import miniJAST.statements.ForLoops.ForStmnt;
+import miniJAST.statements.ForLoops.ForStmntNoShortIf;
+import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
+import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
@@ -263,17 +271,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     }
 
     @Override
-    public MiniJASTNode visitReturnNSI(MiniJavaParser.ReturnNSIContext ctx) {
-        return SingleWordStmnt.RETURN;
-    }
-
-    @Override
     public MiniJASTNode visitBreak(MiniJavaParser.BreakContext ctx) {
-        return SingleWordStmnt.BREAK;
-    }
-
-    @Override
-    public MiniJASTNode visitBreakNSI(MiniJavaParser.BreakNSIContext ctx) {
         return SingleWordStmnt.BREAK;
     }
 
@@ -283,17 +281,108 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     }
 
     @Override
-    public MiniJASTNode visitContinueNSI(MiniJavaParser.ContinueNSIContext ctx) {
-        return SingleWordStmnt.CONTINUE;
-    }
-
-    @Override
     public MiniJASTNode visitEmpty(MiniJavaParser.EmptyContext ctx) {
         return SingleWordStmnt.EMPTY;
     }
 
     @Override
-    public MiniJASTNode visitEmptyNSI(MiniJavaParser.EmptyNSIContext ctx) {
-        return SingleWordStmnt.EMPTY;
+    public MiniJASTNode visitMakeIf(MiniJavaParser.MakeIfContext ctx) {
+        IfThenStmnt itS = new IfThenStmnt();
+        itS.setUpIfThen((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statement()));
+        return itS;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeITE(MiniJavaParser.MakeITEContext ctx) {
+        IfThenElseStmnt iteS = new IfThenElseStmnt();
+        iteS.setUpITE((Expression)visit(ctx.parExpression()), (StatementNoShortIf)visit(ctx.statementNSI()), (Statement)visit(ctx.statement()));
+        return iteS;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeITENSI(MiniJavaParser.MakeITENSIContext ctx) {
+        IfThenElseStmntNoShortIf itensi = new IfThenElseStmntNoShortIf();
+        itensi.setUpITENSI((Expression)visit(ctx.parExpression()), (StatementNoShortIf)visit(ctx.statementNSI(0)), (StatementNoShortIf)visit(ctx.statementNSI(1)));
+        return itensi;
+    }
+
+    @Override
+    public MiniJASTNode visitForInitLVD(MiniJavaParser.ForInitLVDContext ctx) {
+        ForInit fI = new ForInit();
+        LocalVarDec lvd = new LocalVarDec();
+        lvd.setUpLVD(((UnannTypeCarrier)visit(ctx.primitiveType())).type);
+
+        for (MiniJavaParser.VariableDeclaratorContext c : ctx.variableDeclarators().variableDeclarator()) {
+            VarDeclarator vD = (VarDeclarator)visit(c);
+            lvd.addVarDec(vD);
+        }
+
+        fI.setLocalVarDec(lvd);
+        return fI;
+    }
+
+    @Override
+    public MiniJASTNode visitForInitExprs(MiniJavaParser.ForInitExprsContext ctx) {
+        ForInit fI = new ForInit();
+        for (MiniJavaParser.ExpressionContext c : ctx.expressionList().expression()) {
+            fI.addStmntExpr((Expression)visit(c));
+        }
+
+        return fI;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeFor(MiniJavaParser.MakeForContext ctx) {
+        ForStmnt fS = new ForStmnt();
+        ForInit fI = ctx.forInit() == null ? null : (ForInit)visit(ctx.forInit());
+        Expression cond = ctx.expression() == null ? null : (Expression)visit(ctx.expression());
+        fS.setUpForStmnt(fI, cond);
+        Statement s = ctx.statement() == null ? null : (Statement)visit(ctx.statement());
+        fS.setBody(s);
+        if (ctx.expressionList() != null) {
+            for (MiniJavaParser.ExpressionContext c : ctx.expressionList().expression()) {
+                fS.addUpdate((Expression) visit(c));
+            }
+        }
+
+        return fS;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeForNSI(MiniJavaParser.MakeForNSIContext ctx) {
+        ForStmntNoShortIf fS = new ForStmntNoShortIf();
+        ForInit fI = ctx.forInit() == null ? null : (ForInit)visit(ctx.forInit());
+        Expression cond = ctx.expression() == null ? null : (Expression)visit(ctx.expression());
+        fS.setUpForStmnt(fI, cond);
+        StatementNoShortIf s = ctx.statementNSI() == null ? null : (StatementNoShortIf) visit(ctx.statementNSI());
+        fS.setBodyNSI(s);
+        if (ctx.expressionList() != null) {
+            for (MiniJavaParser.ExpressionContext c : ctx.expressionList().expression()) {
+                fS.addUpdate((Expression) visit(c));
+            }
+        }
+
+        return fS;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeWhile(MiniJavaParser.MakeWhileContext ctx) {
+        WhileStmnt wS = new WhileStmnt();
+        wS.setUpWhile((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statement()));
+        return wS;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeWhileNSI(MiniJavaParser.MakeWhileNSIContext ctx) {
+        WhileStmntNoShortIf wS = new WhileStmntNoShortIf();
+        wS.setUpWhileNSI((Expression)visit(ctx.parExpression()), (StatementNoShortIf) visit(ctx.statementNSI()));
+        return wS;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeDo(MiniJavaParser.MakeDoContext ctx) {
+        DoStmnt dS = new DoStmnt();
+        dS.setUpDo((Statement)visit(ctx.statement()), (Expression)visit(ctx.parExpression()));
+        return dS;
     }
 }

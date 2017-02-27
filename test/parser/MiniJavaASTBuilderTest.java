@@ -5,17 +5,27 @@ import antlrParser.MiniJavaParser;
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.VariableNotInitException;
+import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.Block;
+import miniJAST.statements.DoAndWhileLoops.DoStmnt;
+import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
+import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
+import miniJAST.statements.ForLoops.ForStmnt;
+import miniJAST.statements.ForLoops.ForStmntNoShortIf;
+import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
+import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
+import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.types.Type;
 import miniJAST.types.UnannType;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.atn.DecisionEventInfo;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -304,5 +314,98 @@ public class MiniJavaASTBuilderTest {
         AssignExpr aE1 = (AssignExpr)result;
         aE1.evaluate(c);
         assertTrue(((ReturnValuesBool)r.evaluate(c)).value);
+    }
+
+    @Test
+    public void testIfs() throws Exception {
+        is = new ByteArrayInputStream("if (true) ;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statement(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof IfThenStmnt);
+
+        is = new ByteArrayInputStream("if (true) ; else break;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statement(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof IfThenElseStmnt);
+
+        is = new ByteArrayInputStream("if (true) continue; else return;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statementNSI(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof IfThenElseStmntNoShortIf);
+    }
+
+    @Test
+    public void testFors() throws Exception {
+        is = new ByteArrayInputStream("for (int i = 0; i < 10; i++) ;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statement(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof ForStmnt);
+
+        is = new ByteArrayInputStream("for (int i = 0; i < 10; i++) ;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statementNSI(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof ForStmntNoShortIf);
+    }
+
+    @Test
+    public void testWhiles() throws Exception {
+        is = new ByteArrayInputStream("while (true) ;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statement(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof WhileStmnt);
+
+        is = new ByteArrayInputStream("while (true) ;".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statementNSI(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof WhileStmntNoShortIf);
+    }
+
+    @Test
+    public void testVisitDo() throws Exception {
+        is = new ByteArrayInputStream("do ; while (true);".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statement(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof DoStmnt);
+
+        is = new ByteArrayInputStream("do ; while (true);".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.statementNSI(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof DoStmnt);
     }
 }
