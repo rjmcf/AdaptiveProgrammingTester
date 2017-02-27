@@ -119,6 +119,11 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     }
 
     @Override
+    public MiniJASTNode visitParExpression(MiniJavaParser.ParExpressionContext ctx) {
+        return visit(ctx.expression());
+    }
+
+    @Override
     public MiniJASTNode visitAssignExpr(MiniJavaParser.AssignExprContext ctx) {
         AssignExpr aE = new AssignExpr();
         AssignOp op;
@@ -258,6 +263,11 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         ArrayAccess aa = new ArrayAccess();
         aa.setUpArrayAccess((Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
         return aa;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeStmntExpr(MiniJavaParser.MakeStmntExprContext ctx) {
+        return visit(ctx.expressionStatement());
     }
 
     @Override
