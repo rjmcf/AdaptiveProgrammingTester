@@ -216,11 +216,11 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpressionList(MiniJavaParser.ExpressionListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniJavaParser#statementExpression}.
+	 * Visit a parse tree produced by {@link MiniJavaParser#expressionStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatementExpression(MiniJavaParser.StatementExpressionContext ctx);
+	T visitExpressionStatement(MiniJavaParser.ExpressionStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code makeID}
 	 * labeled alternative in {@link MiniJavaParser#expression}.

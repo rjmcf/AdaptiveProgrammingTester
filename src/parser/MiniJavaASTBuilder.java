@@ -6,10 +6,17 @@ import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
+import miniJAST.expressions.arithExpr.AddExpr;
+import miniJAST.expressions.arithExpr.MultExpr;
+import miniJAST.expressions.arithExpr.UnaryPMExpr;
+import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
-import miniJAST.statements.Block;
-import miniJAST.statements.BlockStatement;
+import miniJAST.expressions.assignment.UnaryPostIncExpr;
+import miniJAST.expressions.assignment.UnaryPreIncExpr;
+import miniJAST.expressions.boolExpr.*;
+import miniJAST.statements.*;
+import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
@@ -126,5 +133,167 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         aE.setUpAssignExpr((Expression)visit(ctx.expression(0)), op, (Expression)visit(ctx.expression(1)));
 
         return aE;
+    }
+
+    @Override
+    public MiniJASTNode visitCondExpr(MiniJavaParser.CondExprContext ctx) {
+        CondExpr cE = new CondExpr();
+        cE.setUpCondExpr((Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)), (Expression)visit(ctx.expression(2)));
+        return cE;
+    }
+
+    @Override
+    public MiniJASTNode visitOrExpr(MiniJavaParser.OrExprContext ctx) {
+        OrExpr oE = new OrExpr();
+        oE.setUpOrExpr((Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return oE;
+    }
+
+    @Override
+    public MiniJASTNode visitAndExpr(MiniJavaParser.AndExprContext ctx) {
+        AndExpr aE = new AndExpr();
+        aE.setUpAndExpr((Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return aE;
+    }
+
+    @Override
+    public MiniJASTNode visitEqExpr(MiniJavaParser.EqExprContext ctx) {
+        EqExpr eE = new EqExpr();
+        eE.setUpEqExpr(ctx.op.getText().equals("=="), (Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return eE;
+    }
+
+    @Override
+    public MiniJASTNode visitRelationalExpr(MiniJavaParser.RelationalExprContext ctx) {
+        RelationExpr rE = new RelationExpr();
+        RelationOp op;
+        switch (ctx.op.getText()) {
+            case "<":
+                op = RelationOp.LT;
+                break;
+            case "<=":
+                op = RelationOp.LTE;
+                break;
+            case ">":
+                op = RelationOp.GT;
+                break;
+            default: // >=
+                op = RelationOp.GTE;
+        }
+
+        rE.setUpRelationExpr(op, (Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return rE;
+    }
+
+    @Override
+    public MiniJASTNode visitAddExpr(MiniJavaParser.AddExprContext ctx) {
+        AddExpr aE = new AddExpr();
+        aE.setUpAddExpr(ctx.op.getText().equals("+"), (Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return aE;
+    }
+
+    @Override
+    public MiniJASTNode visitMultExpr(MiniJavaParser.MultExprContext ctx) {
+        MultExpr mE = new MultExpr();
+        mE.setUpMultExpr(ctx.op.getText().equals("*"), (Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return mE;
+    }
+
+    @Override
+    public MiniJASTNode visitMakeNot(MiniJavaParser.MakeNotContext ctx) {
+        UnaryComplementExpr ucE = new UnaryComplementExpr();
+        ucE.setUpCompExpr((Expression)visit(ctx.expression()));
+        return ucE;
+    }
+
+    @Override
+    public MiniJASTNode visitPreIncEtc(MiniJavaParser.PreIncEtcContext ctx) {
+        boolean isAssign, isPlus;
+        switch(ctx.op.getText()) {
+            case "+":
+                isAssign = false;
+                isPlus = true;
+                break;
+            case "-":
+                isAssign = false;
+                isPlus = false;
+                break;
+            case "++":
+                isAssign = true;
+                isPlus = true;
+                break;
+            default: //--
+                isAssign = true;
+                isPlus = false;
+        }
+
+        if (isAssign) {
+            UnaryPreIncExpr upiE = new UnaryPreIncExpr();
+            upiE.setUpPreIncExpr(isPlus, (Expression)visit(ctx.expression()));
+            return upiE;
+        } else {
+            UnaryPMExpr upE = new UnaryPMExpr();
+            upE.setUpPMExpr(isPlus, (Expression)visit(ctx.expression()));
+            return upE;
+        }
+    }
+
+    @Override
+    public MiniJASTNode visitPostInc(MiniJavaParser.PostIncContext ctx) {
+        UnaryPostIncExpr upiE = new UnaryPostIncExpr();
+        upiE.setUpPostIncExpr(ctx.op.getText().equals("++"), (Expression)visit(ctx.expression()));
+        return upiE;
+    }
+
+    @Override
+    public MiniJASTNode visitArrayAccess(MiniJavaParser.ArrayAccessContext ctx) {
+        ArrayAccess aa = new ArrayAccess();
+        aa.setUpArrayAccess((Expression)visit(ctx.expression(0)), (Expression)visit(ctx.expression(1)));
+        return aa;
+    }
+
+    @Override
+    public MiniJASTNode visitExpressionStatement(MiniJavaParser.ExpressionStatementContext ctx) {
+        return new ExpressionStmnt((Expression)visit(ctx.expression()));
+    }
+
+    @Override
+    public MiniJASTNode visitReturn(MiniJavaParser.ReturnContext ctx) {
+        return SingleWordStmnt.RETURN;
+    }
+
+    @Override
+    public MiniJASTNode visitReturnNSI(MiniJavaParser.ReturnNSIContext ctx) {
+        return SingleWordStmnt.RETURN;
+    }
+
+    @Override
+    public MiniJASTNode visitBreak(MiniJavaParser.BreakContext ctx) {
+        return SingleWordStmnt.BREAK;
+    }
+
+    @Override
+    public MiniJASTNode visitBreakNSI(MiniJavaParser.BreakNSIContext ctx) {
+        return SingleWordStmnt.BREAK;
+    }
+
+    @Override
+    public MiniJASTNode visitContinue(MiniJavaParser.ContinueContext ctx) {
+        return SingleWordStmnt.CONTINUE;
+    }
+
+    @Override
+    public MiniJASTNode visitContinueNSI(MiniJavaParser.ContinueNSIContext ctx) {
+        return SingleWordStmnt.CONTINUE;
+    }
+
+    @Override
+    public MiniJASTNode visitEmpty(MiniJavaParser.EmptyContext ctx) {
+        return SingleWordStmnt.EMPTY;
+    }
+
+    @Override
+    public MiniJASTNode visitEmptyNSI(MiniJavaParser.EmptyNSIContext ctx) {
+        return SingleWordStmnt.EMPTY;
     }
 }

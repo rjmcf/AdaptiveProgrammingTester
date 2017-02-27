@@ -28,13 +28,13 @@ public class MiniJavaParser extends Parser {
 	public static final int
 		RULE_entry = 0, RULE_block = 1, RULE_blockStatement = 2, RULE_statement = 3, 
 		RULE_statementNSI = 4, RULE_forInit = 5, RULE_forUpdate = 6, RULE_parExpression = 7, 
-		RULE_expressionList = 8, RULE_statementExpression = 9, RULE_expression = 10, 
+		RULE_expressionList = 8, RULE_expressionStatement = 9, RULE_expression = 10, 
 		RULE_variableDeclarators = 11, RULE_variableDeclarator = 12, RULE_variableInitializer = 13, 
 		RULE_arrayInitializerValues = 14, RULE_arrayInitializerSize = 15, RULE_primitiveType = 16, 
 		RULE_literal = 17;
 	public static final String[] ruleNames = {
 		"entry", "block", "blockStatement", "statement", "statementNSI", "forInit", 
-		"forUpdate", "parExpression", "expressionList", "statementExpression", 
+		"forUpdate", "parExpression", "expressionList", "expressionStatement", 
 		"expression", "variableDeclarators", "variableDeclarator", "variableInitializer", 
 		"arrayInitializerValues", "arrayInitializerSize", "primitiveType", "literal"
 	};
@@ -420,8 +420,8 @@ public class MiniJavaParser extends Parser {
 		}
 	}
 	public static class MakeStmntExprContext extends StatementContext {
-		public StatementExpressionContext statementExpression() {
-			return getRuleContext(StatementExpressionContext.class,0);
+		public ExpressionStatementContext expressionStatement() {
+			return getRuleContext(ExpressionStatementContext.class,0);
 		}
 		public TerminalNode SEMI() { return getToken(MiniJavaParser.SEMI, 0); }
 		public MakeStmntExprContext(StatementContext ctx) { copyFrom(ctx); }
@@ -630,7 +630,7 @@ public class MiniJavaParser extends Parser {
 				enterOuterAlt(_localctx, 11);
 				{
 				setState(97);
-				statementExpression();
+				expressionStatement();
 				setState(98);
 				match(SEMI);
 				}
@@ -777,8 +777,8 @@ public class MiniJavaParser extends Parser {
 		}
 	}
 	public static class MakeStmntExprNSIContext extends StatementNSIContext {
-		public StatementExpressionContext statementExpression() {
-			return getRuleContext(StatementExpressionContext.class,0);
+		public ExpressionStatementContext expressionStatement() {
+			return getRuleContext(ExpressionStatementContext.class,0);
 		}
 		public TerminalNode SEMI() { return getToken(MiniJavaParser.SEMI, 0); }
 		public MakeStmntExprNSIContext(StatementNSIContext ctx) { copyFrom(ctx); }
@@ -957,7 +957,7 @@ public class MiniJavaParser extends Parser {
 				enterOuterAlt(_localctx, 10);
 				{
 				setState(141);
-				statementExpression();
+				expressionStatement();
 				setState(142);
 				match(SEMI);
 				}
@@ -1204,24 +1204,24 @@ public class MiniJavaParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StatementExpressionContext extends ParserRuleContext {
+	public static class ExpressionStatementContext extends ParserRuleContext {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public StatementExpressionContext(ParserRuleContext parent, int invokingState) {
+		public ExpressionStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_statementExpression; }
+		@Override public int getRuleIndex() { return RULE_expressionStatement; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MiniJavaVisitor ) return ((MiniJavaVisitor<? extends T>)visitor).visitStatementExpression(this);
+			if ( visitor instanceof MiniJavaVisitor ) return ((MiniJavaVisitor<? extends T>)visitor).visitExpressionStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StatementExpressionContext statementExpression() throws RecognitionException {
-		StatementExpressionContext _localctx = new StatementExpressionContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_statementExpression);
+	public final ExpressionStatementContext expressionStatement() throws RecognitionException {
+		ExpressionStatementContext _localctx = new ExpressionStatementContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_expressionStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{

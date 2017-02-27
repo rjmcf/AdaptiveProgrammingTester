@@ -68,7 +68,7 @@ statement
     |   BREAK SEMI																	# break
     |   CONTINUE SEMI																# continue
     |   SEMI																		# empty
-    |   statementExpression SEMI													# makeStmntExpr
+    |   expressionStatement SEMI													# makeStmntExpr
     ;
     
 statementNSI
@@ -81,7 +81,7 @@ statementNSI
     |   BREAK SEMI																	# breakNSI																
     |   CONTINUE SEMI																# continueNSI															
     |   SEMI																		# emptyNSI																
-    |   statementExpression SEMI													# makeStmntExprNSI												
+    |   expressionStatement SEMI													# makeStmntExprNSI												
     ;
 
 forInit
@@ -103,7 +103,7 @@ expressionList
     :   expression (COMMA expression)*
     ;
 
-statementExpression
+expressionStatement
     :   expression
     ;
 

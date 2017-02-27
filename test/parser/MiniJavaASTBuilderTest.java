@@ -45,6 +45,25 @@ public class MiniJavaASTBuilderTest {
     }
 
     @Test
+    public void testVisitBlock() throws Exception {
+        is = new ByteArrayInputStream("{ int i = 42; boolean t = true; }".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.entry(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof Block);
+        Block b = (Block)result;
+        b.executeStart(c);
+
+        Id i = new Id(), t = new Id();
+        i.setUpId("i"); t.setUpId("t");
+        assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 42);
+        assertTrue(((ReturnValuesBool)t.evaluate(c)).value);
+    }
+
+    @Test
     public void testVisitLiteral() throws Exception {
         is = new ByteArrayInputStream("true".getBytes(StandardCharsets.UTF_8));
         input = new ANTLRInputStream(is);
@@ -247,5 +266,43 @@ public class MiniJavaASTBuilderTest {
         assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 6);
     }
 
+    @Test
+    public void testExpressions() throws Exception {
+        c.namesToTypes.put("result", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("j", new Type(UnannType.INT));
+        ArrayList<Integer> ar = new ArrayList<>(2);
+        ar.add(7);
+        ar.add(6);
+        c.namesToValues.put("ar", ar);
+        c.namesToValues.put("i", 2);
+        c.namesToValues.put("j", 3);
+        is = new ByteArrayInputStream("result = true != false || true && !((ar[1] * ++i - 4 * (j-- + -1)) >= 10)".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.expression(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof AssignExpr);
+        AssignExpr aE = (AssignExpr)result;
+        aE.evaluate(c);
 
+        Id r = new Id();
+        r.setUpId("result");
+        assertTrue(((ReturnValuesBool)r.evaluate(c)).value);
+
+        is = new ByteArrayInputStream("result = 1 * 1 + 2 * 3 == 7".getBytes(StandardCharsets.UTF_8));
+        input = new ANTLRInputStream(is);
+        lexer = new MiniJavaLexer(input);
+        tokens = new CommonTokenStream(lexer);
+        parser = new MiniJavaParser(tokens);
+        tree = parser.expression(); // parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof AssignExpr);
+        AssignExpr aE1 = (AssignExpr)result;
+        aE1.evaluate(c);
+        assertTrue(((ReturnValuesBool)r.evaluate(c)).value);
+    }
 }
