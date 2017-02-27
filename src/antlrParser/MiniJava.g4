@@ -104,21 +104,7 @@ expressionStatement
     ;
 
 expression
-    :   parExpression															# makeBracketed
-    |   literal																	# makeLiteral
-    |   Identifier																# makeID
-    |   expression LBRACK expression RBRACK										# arrayAccess
-    |   expression (op=INC | op=DEC)											# postInc
-    |   (op=ADD|op=SUB|op=INC|op=DEC) expression								# preIncEtc
-    |   BANG expression															# makeNot
-    |   expression (op=MUL|op=DIV) expression									# multExpr
-    |   expression (op=ADD|op=SUB) expression									# addExpr
-    |   expression (op=LE | op=GE | op=GT | op=LT) expression					# relationalExpr
-    |   expression (op=EQUAL | op=NOTEQUAL) expression							# eqExpr
-    |   expression AND expression												# andExpr
-    |   expression OR expression												# orExpr
-    |   expression QUESTION expression COLON expression							# condExpr
-    |   <assoc=right> expression												
+    :   <assoc=right> expression												
         (   op=ASSIGN
         |   op=ADD_ASSIGN
         |   op=SUB_ASSIGN
@@ -126,6 +112,20 @@ expression
         |   op=DIV_ASSIGN
         )
         expression																# assignExpr
+    |   <assoc=right> expression QUESTION expression COLON expression			# condExpr
+    |   expression OR expression												# orExpr
+    |   expression AND expression												# andExpr
+    |   expression (op=EQUAL | op=NOTEQUAL) expression							# eqExpr
+    |   expression (op=LE | op=GE | op=GT | op=LT) expression					# relationalExpr
+    |   expression (op=ADD|op=SUB) expression									# addExpr
+    |   expression (op=MUL|op=DIV) expression									# multExpr
+    |   BANG expression															# makeNot
+    |   (op=ADD|op=SUB|op=INC|op=DEC) expression								# preIncEtc
+    |   expression (op=INC | op=DEC)											# postInc
+    |   literal																	# makeLiteral
+    |	parExpression															# makeBracketed
+    |   expression LBRACK expression RBRACK										# arrayAccess
+    |   Identifier																# makeID
     ;
     
 // VARIABLES AND LITERALS
