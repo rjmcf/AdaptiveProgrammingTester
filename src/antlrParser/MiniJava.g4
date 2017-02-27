@@ -44,8 +44,12 @@ grammar MiniJava;
 // STATEMENTS / BLOCKS
 
 // entry point
-block
-    :   LBRACE blockStatement* RBRACE												# fillBlock
+entry
+	: block [true]	
+	;									
+
+block [boolean isOuter]
+    :   LBRACE blockStatement* RBRACE						
     ;
 
 blockStatement
@@ -54,7 +58,7 @@ blockStatement
     ;
 
 statement
-    :   block																		# makeBlock
+    :   block [false]																# makeBlock
     |   IF parExpression statement 													# makeIf
     | 	IF parExpression statementNSI ELSE statement								# makeITE
     |   FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN statement		# makeFor
@@ -68,7 +72,7 @@ statement
     ;
     
 statementNSI
-	: 	block																		# makeBlockNSI
+	: 	block [false]																# makeBlockNSI
 	| 	IF parExpression statementNSI ELSE statementNSI								# makeITENSI
 	|   FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN statementNSI	# makeForNSI
     |   WHILE parExpression statementNSI											# makeWhileNSI

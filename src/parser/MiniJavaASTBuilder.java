@@ -20,8 +20,8 @@ import miniJAST.types.UnannType;
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
-    public MiniJASTNode visitFillBlock(MiniJavaParser.FillBlockContext ctx) {
-        Block b = new Block(false);
+    public MiniJASTNode visitBlock(MiniJavaParser.BlockContext ctx) {
+        Block b = new Block(ctx.isOuter);
         for (MiniJavaParser.BlockStatementContext c : ctx.blockStatement()) {
             BlockStatement bS = (BlockStatement)visit(c);
             b.addBlockStmnt(bS);

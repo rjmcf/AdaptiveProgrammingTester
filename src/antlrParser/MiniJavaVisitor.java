@@ -11,12 +11,17 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code fillBlock}
-	 * labeled alternative in {@link MiniJavaParser#block}.
+	 * Visit a parse tree produced by {@link MiniJavaParser#entry}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFillBlock(MiniJavaParser.FillBlockContext ctx);
+	T visitEntry(MiniJavaParser.EntryContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MiniJavaParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(MiniJavaParser.BlockContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code localVariableDeclaration}
 	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
