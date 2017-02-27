@@ -72,47 +72,12 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMakeWhile(MiniJavaParser.MakeWhileContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code makeDo}
+	 * Visit a parse tree produced by the {@code makeStatementNTS}
 	 * labeled alternative in {@link MiniJavaParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMakeDo(MiniJavaParser.MakeDoContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code return}
-	 * labeled alternative in {@link MiniJavaParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReturn(MiniJavaParser.ReturnContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code break}
-	 * labeled alternative in {@link MiniJavaParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBreak(MiniJavaParser.BreakContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code continue}
-	 * labeled alternative in {@link MiniJavaParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitContinue(MiniJavaParser.ContinueContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code empty}
-	 * labeled alternative in {@link MiniJavaParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEmpty(MiniJavaParser.EmptyContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code makeStmntExpr}
-	 * labeled alternative in {@link MiniJavaParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMakeStmntExpr(MiniJavaParser.MakeStmntExprContext ctx);
+	T visitMakeStatementNTS(MiniJavaParser.MakeStatementNTSContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code makeBlockNSI}
 	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
@@ -142,47 +107,54 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMakeWhileNSI(MiniJavaParser.MakeWhileNSIContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code makeDoNSI}
+	 * Visit a parse tree produced by the {@code makeStatementNTSNSI}
 	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMakeDoNSI(MiniJavaParser.MakeDoNSIContext ctx);
+	T visitMakeStatementNTSNSI(MiniJavaParser.MakeStatementNTSNSIContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code returnNSI}
-	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
+	 * Visit a parse tree produced by the {@code makeDo}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReturnNSI(MiniJavaParser.ReturnNSIContext ctx);
+	T visitMakeDo(MiniJavaParser.MakeDoContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code breakNSI}
-	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
+	 * Visit a parse tree produced by the {@code return}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBreakNSI(MiniJavaParser.BreakNSIContext ctx);
+	T visitReturn(MiniJavaParser.ReturnContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code continueNSI}
-	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
+	 * Visit a parse tree produced by the {@code break}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitContinueNSI(MiniJavaParser.ContinueNSIContext ctx);
+	T visitBreak(MiniJavaParser.BreakContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code emptyNSI}
-	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
+	 * Visit a parse tree produced by the {@code continue}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEmptyNSI(MiniJavaParser.EmptyNSIContext ctx);
+	T visitContinue(MiniJavaParser.ContinueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code makeStmntExprNSI}
-	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
+	 * Visit a parse tree produced by the {@code empty}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMakeStmntExprNSI(MiniJavaParser.MakeStmntExprNSIContext ctx);
+	T visitEmpty(MiniJavaParser.EmptyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code makeStmntExpr}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMakeStmntExpr(MiniJavaParser.MakeStmntExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code forInitLVD}
 	 * labeled alternative in {@link MiniJavaParser#forInit}.

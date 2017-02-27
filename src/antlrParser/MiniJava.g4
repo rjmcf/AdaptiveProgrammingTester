@@ -61,28 +61,28 @@ statement
     :   block [false]																# makeBlock
     |   IF parExpression statement 													# makeIf
     | 	IF parExpression statementNSI ELSE statement								# makeITE
-    |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement		# makeFor
+    |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement	# makeFor
     |   WHILE parExpression statement												# makeWhile
-    |   DO statement WHILE parExpression SEMI										# makeDo
+    |   statementNTS																# makeStatementNTS
+    ;
+    
+statementNSI
+	: 	block [false]																# makeBlockNSI
+	| 	IF parExpression statementNSI ELSE statementNSI								# makeITENSI
+	|   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statementNSI # makeForNSI
+    |   WHILE parExpression statementNSI											# makeWhileNSI
+    |	statementNTS																# makeStatementNTSNSI												
+    ;
+    
+statementNTS
+	:	DO statement WHILE parExpression SEMI										# makeDo
     |   RETURN SEMI																	# return
     |   BREAK SEMI																	# break
     |   CONTINUE SEMI																# continue
     |   SEMI																		# empty
     |   expressionStatement SEMI													# makeStmntExpr
     ;
-    
-statementNSI
-	: 	block [false]																# makeBlockNSI
-	| 	IF parExpression statementNSI ELSE statementNSI								# makeITENSI
-	|   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statementNSI	# makeForNSI
-    |   WHILE parExpression statementNSI											# makeWhileNSI
-	|   DO statement WHILE parExpression SEMI										# makeDoNSI 
-	|   RETURN SEMI																	# returnNSI													
-    |   BREAK SEMI																	# breakNSI																
-    |   CONTINUE SEMI																# continueNSI															
-    |   SEMI																		# emptyNSI																
-    |   expressionStatement SEMI													# makeStmntExprNSI												
-    ;
+
 
 forInit
     :   primitiveType variableDeclarators											# forInitLVD
