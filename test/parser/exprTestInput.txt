@@ -1,1 +1,13 @@
 boolean t = (true);
+{ int ar[] = new int[2]; ar[0] = 2; int a = ar[0]; }
+{ int i = 4, j; j = i++; }
+{ int k = 4, l; l = --k; }
+{ int m = 2, n; n = -m; }
+boolean f = !false;
+int x = 2 * 3;
+int y = 1 - 2;
+boolean g = 4 > 3;
+boolean e = 4 == 4;
+boolean c = true && false;
+boolean d = true || false;
+int cond = true ? 1 : 2;

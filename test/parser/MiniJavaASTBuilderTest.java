@@ -233,38 +233,117 @@ public class MiniJavaASTBuilderTest {
         id.setUpId("t");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
-        /*
-
-
-        c.namesToTypes.put("result", new Type(UnannType.BOOLEAN));
-        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
-        c.namesToTypes.put("i", new Type(UnannType.INT));
-        c.namesToTypes.put("j", new Type(UnannType.INT));
-        ArrayList<Integer> ar = new ArrayList<>(2);
-        ar.add(7);
-        ar.add(6);
-        c.namesToValues.put("ar", ar);
-        c.namesToValues.put("i", 2);
-        c.namesToValues.put("j", 3);
-        is = new ByteArrayInputStream("result = true != false || true && !((ar[1] * ++i - 4 * (j-- + -1)) >= 10)".getBytes(StandardCharsets.UTF_8));
-        input = new ANTLRInputStream(is);
-        lexer = new MiniJavaLexer(input);
-        tokens = new CommonTokenStream(lexer);
-        parser = new MiniJavaParser(tokens);
-        tree = parser.expression(); // parse
+        parser = getParser(bR.readLine());
+        tree = parser.entry();
         result = builder.visit(tree);
-        assertTrue(result instanceof AssignExpr);
-        AssignExpr aE = (AssignExpr)result;
-        aE.evaluate(c);
+        assertTrue(result instanceof Block);
+        Block b = (Block) result;
+        b.executeStart(c);
+        id.setUpId("a");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 2);
 
-        Id r = new Id();
-        r.setUpId("result");
-        assertTrue(((ReturnValuesBool)r.evaluate(c)).value);
+        parser = getParser(bR.readLine());
+        tree = parser.entry();
+        result = builder.visit(tree);
+        assertTrue(result instanceof Block);
+        b = (Block) result;
+        b.executeStart(c);
+        id.setUpId("i");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 5);
+        id.setUpId("j");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 4);
 
-        Id i = new Id(), j = new Id();
-        i.setUpId("i"); j.setUpId("j");
-        assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 3);
-        assertEquals(((ReturnValuesInt)j.evaluate(c)).value, 2);*/
+        parser = getParser(bR.readLine());
+        tree = parser.entry();
+        result = builder.visit(tree);
+        assertTrue(result instanceof Block);
+        b = (Block) result;
+        b.executeStart(c);
+        id.setUpId("l");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 3);
+        id.setUpId("k");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 3);
+
+        parser = getParser(bR.readLine());
+        tree = parser.entry();
+        result = builder.visit(tree);
+        assertTrue(result instanceof Block);
+        b = (Block) result;
+        b.executeStart(c);
+        id.setUpId("n");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, -2);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("f");
+        assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("x");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 6);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("y");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, -1);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("g");
+        assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("e");
+        assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("c");
+        assertFalse(((ReturnValuesBool)id.evaluate(c)).value);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("d");
+        assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
+
+        parser = getParser(bR.readLine());
+        tree = parser.blockStatement();
+        result = builder.visit(tree);
+        assertTrue(result instanceof LocalVarDec);
+        lvd = (LocalVarDec) result;
+        lvd.executeStart(c);
+        id.setUpId("cond");
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 1);
     }
 
     @Test
