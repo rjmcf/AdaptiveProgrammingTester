@@ -199,14 +199,14 @@ public class MiniJavaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPreIncEtc(MiniJavaParser.PreIncEtcContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMakeID(MiniJavaParser.MakeIDContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMakeID(MiniJavaParser.MakeIDContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPreIncEtc(MiniJavaParser.PreIncEtcContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
