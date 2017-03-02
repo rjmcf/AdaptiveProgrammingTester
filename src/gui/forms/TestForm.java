@@ -15,6 +15,9 @@ public class TestForm {
     private JButton button;
     private JSlider baseSlider;
     private JTextArea display;
+    private JTextField bID;
+    private JTextArea textArea1;
+    private JButton fillBlankButton;
     private static ExerciseSetter eS;
     private static String text;
     private static ByteArrayOutputStream baos;
@@ -36,6 +39,21 @@ public class TestForm {
                 eS.presentQuestion();
                 text = baos.toString();
                 display.setText(text);
+            }
+        });
+
+        fillBlankButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (eS.fillBlank(Integer.valueOf(bID.getText()), textArea1.getText())) {
+                    baos = new ByteArrayOutputStream();
+                    eS.setOutput(baos);
+                    eS.presentQuestion();
+                    text = baos.toString();
+                    display.setText(text);
+                } else {
+                    display.append("There was a problem filling the blank");
+                }
             }
         });
     }
