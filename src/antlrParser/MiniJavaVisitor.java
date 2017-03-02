@@ -11,11 +11,33 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link MiniJavaParser#entry}.
+	 * Visit a parse tree produced by the {@code blockEntry}
+	 * labeled alternative in {@link MiniJavaParser#entry}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEntry(MiniJavaParser.EntryContext ctx);
+	T visitBlockEntry(MiniJavaParser.BlockEntryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockStatementsEntry}
+	 * labeled alternative in {@link MiniJavaParser#entry}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockStatementsEntry(MiniJavaParser.BlockStatementsEntryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code statementEntry}
+	 * labeled alternative in {@link MiniJavaParser#entry}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementEntry(MiniJavaParser.StatementEntryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expressionEntry}
+	 * labeled alternative in {@link MiniJavaParser#entry}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionEntry(MiniJavaParser.ExpressionEntryContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MiniJavaParser#block}.
 	 * @param ctx the parse tree
@@ -36,6 +58,20 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMakeStmnt(MiniJavaParser.MakeStmntContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code stmnt}
+	 * labeled alternative in {@link MiniJavaParser#statementTop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmnt(MiniJavaParser.StmntContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code stmntNSI}
+	 * labeled alternative in {@link MiniJavaParser#statementTop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmntNSI(MiniJavaParser.StmntNSIContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code makeBlock}
 	 * labeled alternative in {@link MiniJavaParser#statement}.

@@ -45,7 +45,10 @@ grammar MiniJava;
 
 // entry point
 entry
-	: block [true]	
+	: block [true]																	# blockEntry
+	| blockStatement+																# blockStatementsEntry
+	| statementTop																	# statementEntry
+	| expression																	# expressionEntry
 	;									
 
 block [boolean isOuter]
@@ -56,6 +59,11 @@ blockStatement
     :   primitiveType variableDeclarators SEMI										# localVariableDeclaration
     |   statement																	# makeStmnt
     ;
+    
+statementTop
+	: statement																		# stmnt
+	| statementNSI																	# stmntNSI
+	;
 
 statement
     :   block [false]																# makeBlock
