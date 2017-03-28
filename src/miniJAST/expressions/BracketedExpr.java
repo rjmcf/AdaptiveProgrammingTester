@@ -2,9 +2,10 @@ package miniJAST.expressions;
 
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
+import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 
-public class BracketedExpr extends PrimaryExpr {
+public class BracketedExpr extends UnaryPostfixExpr {
     private int expr;
 
     public void setUpBracketExpr(Expression e) { expr = 0; subNodes.add(e); }

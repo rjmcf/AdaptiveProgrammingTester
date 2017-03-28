@@ -3,10 +3,11 @@ package miniJAST.expressions;
 import miniJAST.Context;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.TypeException;
+import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.UnannType;
 
-public class Literal extends PrimaryExpr{
+public class Literal extends UnaryPostfixExpr {
     private UnannType litType;
     private String value;
 
