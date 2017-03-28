@@ -79,18 +79,21 @@ public class AssignExprTest {
             bools.add(false);
         }
         c.namesToValues.put("boolArray2", bools);
+
         c.namesToTypes.put("intArray2", new Type(PrimType.INT, 2));
         ArrayList<Integer> ints = new ArrayList<>(2);
         while (ints.size() < 2) {
             ints.add(0);
         }
         c.namesToValues.put("intArray2", ints);
+
         c.namesToTypes.put("dubArray2", new Type(PrimType.DOUBLE, 2));
         ArrayList<Double> dubs = new ArrayList<>(2);
         while (dubs.size() < 2) {
             dubs.add(0.5);
         }
         c.namesToValues.put("dubArray2", dubs);
+
         c.namesToTypes.put("charArray2", new Type(PrimType.CHAR, 2));
         ArrayList<Character> chars = new ArrayList<>(2);
         while (chars.size() < 2) {
@@ -122,6 +125,5 @@ public class AssignExprTest {
         aE.evaluate(c);
         assertEquals('A', ((ReturnValuesCharAA)aa.evaluate(c)).value);
     }
-
     // TODO test other operators
 }
