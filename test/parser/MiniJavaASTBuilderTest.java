@@ -20,7 +20,7 @@ import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -167,7 +167,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitMakeID() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         parser = getParser("i");
         tree = parser.expression(); // parse
         result = builder.visit(tree);
@@ -183,7 +183,7 @@ public class MiniJavaASTBuilderTest {
         c.namesToValues.put("i", 2);
         assertEquals(((ReturnValuesInt)i1.evaluate(c)).value, 2);
 
-        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("ar", new Type(PrimType.INT, 2));
         ArrayList<Integer> ar = new ArrayList<>(2);
         ar.add(42);
         ar.add(17);
@@ -200,7 +200,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitAssignExpr() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         parser = getParser("i = 3");
         tree = parser.expression(); // parse
         result = builder.visit(tree);

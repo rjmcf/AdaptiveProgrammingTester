@@ -11,7 +11,7 @@ import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import questions.Difficulty;
@@ -35,12 +35,12 @@ public class ExerciseSetterTest {
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
         Literal one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();
         total.setUpVarDec("total", one);
         setter.fillBlank(blankIds.get(0), total);
         Literal six = new Literal();
-        six.setUpLiteral(UnannType.INT, "6");
+        six.setUpLiteral(PrimType.INT, "6");
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
@@ -63,12 +63,12 @@ public class ExerciseSetterTest {
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
         Literal one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();
         total.setUpVarDec("total", one);
         setter.fillBlank(blankIds.get(0), total);
         Literal six = new Literal();
-        six.setUpLiteral(UnannType.INT, "6");
+        six.setUpLiteral(PrimType.INT, "6");
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
@@ -109,12 +109,12 @@ public class ExerciseSetterTest {
 
         AddExpr aE = new AddExpr();
         Literal zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         aE.setUpAddExpr(true, zero, one);
         total.setUpVarDec("total", aE);
 
         Literal five = new Literal();
-        five.setUpLiteral(UnannType.INT, "5");
+        five.setUpLiteral(PrimType.INT, "5");
         AddExpr aE2 = new AddExpr();
         aE2.setUpAddExpr(true, one, five);
 
@@ -139,12 +139,12 @@ public class ExerciseSetterTest {
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
         Literal one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();
         total.setUpVarDec("total", one);
         setter.fillBlank(blankIds.get(0), total);
         Literal six = new Literal();
-        six.setUpLiteral(UnannType.INT, "6");
+        six.setUpLiteral(PrimType.INT, "6");
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
@@ -174,7 +174,7 @@ public class ExerciseSetterTest {
         VarDeclarator n = new VarDeclarator();
         n.setUpVarDec("n", six);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(total);
         lvd.addVarDec(n);
 

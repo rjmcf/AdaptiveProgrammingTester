@@ -10,7 +10,7 @@ import miniJAST.expressions.Id;
 import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.*;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class ArrayAccess extends UnaryPostfixExpr implements AssignLHS {
     private int idE;
@@ -53,7 +53,7 @@ public class ArrayAccess extends UnaryPostfixExpr implements AssignLHS {
         ReturnValuesArray ar = (ReturnValuesArray)r;
 
         ReturnValues i = subNodes.get(index).evaluate(c);
-        if (i.getType().uType != UnannType.INT)
+        if (i.getType().uType != PrimType.INT)
             throw new TypeException("Can only index with int value");
 
         if (i.getIsArray())

@@ -25,11 +25,10 @@ import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.PrintStatement;
-import miniJAST.statements.SingleWordStmnt;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -50,13 +49,13 @@ public class FillableBlankExprTest {
         c = new Context();
         fbe = new FillableBlankExpr(0);
         lit0 = new Literal(); lit1 = new Literal();
-        lit0.setUpLiteral(UnannType.INT, "0"); lit1.setUpLiteral(UnannType.INT, "1");
+        lit0.setUpLiteral(PrimType.INT, "0"); lit1.setUpLiteral(PrimType.INT, "1");
         lit2 = new Literal(); lit3 = new Literal();
-        lit2.setUpLiteral(UnannType.INT, "2"); lit3.setUpLiteral(UnannType.INT, "3");
+        lit2.setUpLiteral(PrimType.INT, "2"); lit3.setUpLiteral(PrimType.INT, "3");
         litF = new Literal();
-        litF.setUpLiteral(UnannType.BOOLEAN, "false");
+        litF.setUpLiteral(PrimType.BOOLEAN, "false");
         litT = new Literal();
-        litT.setUpLiteral(UnannType.BOOLEAN, "true");
+        litT.setUpLiteral(PrimType.BOOLEAN, "true");
         id = new Id();
         id.setUpId("fakeArray");
         lvd = new LocalVarDec();
@@ -230,7 +229,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluateArray() throws Exception {
-        c.namesToTypes.put("fakeArray", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("fakeArray", new Type(PrimType.INT, 2));
         c.namesToValues.put("fakeArray", new ArrayList<Integer>(2));
         ArrayAccess aaE = new ArrayAccess();
         aaE.setUpArrayAccess(id, fbe);
@@ -318,7 +317,7 @@ public class FillableBlankExprTest {
         acwil.setUPACWIL("fakeArray");
         acwil.addExpressionACWIL(lit0);
         acwil.addExpressionACWIL(fbe);
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(acwil);
         try {
             lvd.executeStart(c);
@@ -331,8 +330,8 @@ public class FillableBlankExprTest {
     @Test
     public void testEmptyEvaluateArrayCreationSize() throws Exception {
         ArrayCreationWithSize acws = new ArrayCreationWithSize();
-        acws.setUpACWS("fakeArray", UnannType.INT, fbe);
-        lvd.setUpLVD(UnannType.INT);
+        acws.setUpACWS("fakeArray", PrimType.INT, fbe);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(acws);
         try {
             lvd.executeStart(c);
@@ -489,7 +488,7 @@ public class FillableBlankExprTest {
         VarDeclarator fakeId = new VarDeclarator();
         fakeId.setUpVarDec("fake", fbe);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(fakeId);
         try {
             lvd.executeStart(c);
@@ -579,7 +578,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsArrayAccess() throws Exception {
-        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("ar", new Type(PrimType.INT, 2));
         ArrayList<Integer> vals = new ArrayList<>(2);
         vals.add(2);
         vals.add(3);
@@ -597,7 +596,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledArrayAcces() throws Exception {
-        c.namesToTypes.put("ar", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("ar", new Type(PrimType.INT, 2));
         ArrayList<Integer> array = new ArrayList<>();
         array.add(2); array.add(3);
         c.namesToValues.put("ar", array);
@@ -615,7 +614,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsAssignment() throws Exception {
-        c.namesToTypes.put("fakeInt", new Type(UnannType.INT));
+        c.namesToTypes.put("fakeInt", new Type(PrimType.INT));
 
         Id fId = new Id();
         fId.setUpId("fakeInt");
@@ -648,7 +647,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledAssignment() throws Exception {
-        c.namesToTypes.put("fakeInt", new Type(UnannType.INT));
+        c.namesToTypes.put("fakeInt", new Type(PrimType.INT));
         Id fId = new Id();
         fId.setUpId("fakeInt");
         fbe.setStudentExpr(fId);
@@ -781,7 +780,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsId() throws Exception {
-        c.namesToTypes.put("fakeId", new Type(UnannType.INT));
+        c.namesToTypes.put("fakeId", new Type(PrimType.INT));
         c.namesToValues.put("fakeId", 2);
         Id fakeId = new Id();
         fakeId.setUpId("fakeId");
@@ -801,13 +800,13 @@ public class FillableBlankExprTest {
         assertEquals(fbe.stringRepr(), "3");
 
         Literal half = new Literal();
-        half.setUpLiteral(UnannType.DOUBLE, "0.5");
+        half.setUpLiteral(PrimType.DOUBLE, "0.5");
         fbe.setStudentExpr(half);
         assertEquals(((ReturnValuesDouble)fbe.evaluate(c)).value, 0.5);
         assertEquals(fbe.stringRepr(), "0.5");
 
         Literal a = new Literal();
-        a.setUpLiteral(UnannType.CHAR, "a");
+        a.setUpLiteral(PrimType.CHAR, "a");
         fbe.setStudentExpr(a);
         assertEquals(((ReturnValuesChar)fbe.evaluate(c)).value, 'a');
         assertEquals(fbe.stringRepr(), "a");
@@ -824,7 +823,7 @@ public class FillableBlankExprTest {
         acwil.addExpressionACWIL(fbe1);
         assertEquals(acwil.stringRepr(0), "fakeAr[] = { 1, 0 }");
 
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(acwil);
 
         assertEquals(lvd.stringRepr(0), "int fakeAr[] = { 1, 0 };");
@@ -840,10 +839,10 @@ public class FillableBlankExprTest {
     public void testFilledArrayCreationSize() throws Exception {
         ArrayCreationWithSize acws = new ArrayCreationWithSize();
         fbe.setStudentExpr(lit2);
-        acws.setUpACWS("fakeAr", UnannType.INT, fbe);
+        acws.setUpACWS("fakeAr", PrimType.INT, fbe);
         assertEquals(acws.stringRepr(0), "fakeAr[] = new int[2]");
 
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(acws);
         lvd.executeStart(c);
 
@@ -859,9 +858,9 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
         c.namesToValues.put("cond", false);
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         c.namesToValues.put("i", 1);
         Id condId = new Id(), i = new Id();
         condId.setUpId("cond");
@@ -882,7 +881,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id condId = new Id();
         condId.setUpId("cond");
@@ -900,7 +899,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledWhileNSI() throws Exception {
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id condId = new Id();
         condId.setUpId("cond");
@@ -918,8 +917,8 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledFor() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
-        c.namesToTypes.put("res", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.put("res", new Type(PrimType.INT));
         c.namesToValues.put("res", 0);
         Id i = new Id();
         i.setUpId("i");
@@ -958,8 +957,8 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledForNSI() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
-        c.namesToTypes.put("res", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.put("res", new Type(PrimType.INT));
         c.namesToValues.put("res", 0);
         Id i = new Id();
         i.setUpId("i");
@@ -998,7 +997,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.put("res", new Type(UnannType.INT));
+        c.namesToTypes.put("res", new Type(PrimType.INT));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
@@ -1020,7 +1019,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledITENSI() throws Exception {
-        c.namesToTypes.put("res", new Type(UnannType.INT));
+        c.namesToTypes.put("res", new Type(PrimType.INT));
 
         fbe.setStudentExpr(litF);
         Id resId = new Id();
@@ -1042,7 +1041,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.put("res", new Type(UnannType.INT));
+        c.namesToTypes.put("res", new Type(PrimType.INT));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
@@ -1065,7 +1064,7 @@ public class FillableBlankExprTest {
         VarDeclarator i = new VarDeclarator();
         i.setUpVarDec("i", fbe);
 
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(i);
 
         assertEquals(lvd.stringRepr(0), "int i = 2;");
@@ -1079,7 +1078,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledExprStmnt() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
 
         Id iId = new Id();
         iId.setUpId("i");

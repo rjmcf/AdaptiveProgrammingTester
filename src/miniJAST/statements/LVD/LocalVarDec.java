@@ -1,7 +1,6 @@
 package miniJAST.statements.LVD;
 
 import miniJAST.Context;
-import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.*;
 import miniJAST.expressions.Expression;
@@ -14,14 +13,14 @@ import miniJAST.statements.arrays.ArrayCreation;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 import java.util.ArrayList;
 
 public class LocalVarDec extends StatementBase implements BlockStatement {
-    protected UnannType type;
+    protected PrimType type;
 
-    public void setUpLVD(UnannType t) { subNodes.clear(); type = t; }
+    public void setUpLVD(PrimType t) { subNodes.clear(); type = t; }
     public void addVarDec(BlockStatement v) { subNodes.add(v); }
 
     @Override
@@ -66,14 +65,14 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                     if (!v.isArray) {
                         if (v.getExpr() != null) {
                             ReturnValues rb = v.getExpr().evaluate(c);
-                            if (rb.getType().uType != UnannType.BOOLEAN)
+                            if (rb.getType().uType != PrimType.BOOLEAN)
                                 throw new TypeException("boolean variable can only be initialised with boolean value");
                             if (rb.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             c.namesToTypes.put(v.getName(), rb.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesBool) rb).value);
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.BOOLEAN));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -82,7 +81,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             ArrayList<Boolean> vals = new ArrayList<>();
                             for (MiniJASTNode e : acwil.getValues()) {
                                 ReturnValues r = ((Expression)e).evaluate(c);
-                                if (r.getType().uType != UnannType.BOOLEAN)
+                                if (r.getType().uType != PrimType.BOOLEAN)
                                     throw new TypeException("boolean array must be initialised with boolean values");
                                 if (r.getIsArray())
                                     throw new TypeException("Can not operate on arrays!");
@@ -94,13 +93,13 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                         } else {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
-                            if (s.getType().uType != UnannType.INT)
+                            if (s.getType().uType != PrimType.INT)
                                 throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             // Will be fixed
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.BOOLEAN, size));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.BOOLEAN, size));
                             ArrayList<Boolean> bools = new ArrayList<>(size);
                             while (bools.size() < size)
                                 bools.add(false);
@@ -112,14 +111,14 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                     if (!v.isArray) {
                         if (v.getExpr() != null) {
                             ReturnValues rc = v.getExpr().evaluate(c);
-                            if (rc.getType().uType != UnannType.CHAR)
+                            if (rc.getType().uType != PrimType.CHAR)
                                 throw new TypeException("char variable can only be initialised with char value");
                             if (rc.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             c.namesToTypes.put(v.getName(), rc.getType());
                             c.namesToValues.put(v.getName(), ((ReturnValuesChar) rc).value);
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.CHAR));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -128,7 +127,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             ArrayList<Character> vals = new ArrayList<>();
                             for (MiniJASTNode e : acwil.getValues()) {
                                 ReturnValues r = ((Expression)e).evaluate(c);
-                                if (r.getType().uType != UnannType.CHAR)
+                                if (r.getType().uType != PrimType.CHAR)
                                     throw new TypeException("char array must be initialised with char values");
                                 if (r.getIsArray())
                                     throw new TypeException("Can not operate on arrays!");
@@ -140,13 +139,13 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                         } else {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
-                            if (s.getType().uType != UnannType.INT)
+                            if (s.getType().uType != PrimType.INT)
                                 throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             // Will be fixed
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.CHAR, size));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.CHAR, size));
                             ArrayList<Character> chars = new ArrayList<>(size);
                             while (chars.size() < size)
                                 chars.add('\0');
@@ -158,7 +157,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                     if (!v.isArray) {
                         if (v.getExpr() != null) {
                             ReturnValues rc = v.getExpr().evaluate(c);
-                            if (rc.getType().uType != UnannType.CHAR && rc.getType().uType != UnannType.INT)
+                            if (rc.getType().uType != PrimType.CHAR && rc.getType().uType != PrimType.INT)
                                 throw new TypeException("int variable can only be initialised with char or int value");
                             if (rc.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
@@ -174,7 +173,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.INT));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.INT));
                         }
                     } else {
                         // TODO fix assumption that arrays are initialised
@@ -184,7 +183,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             ArrayList<Integer> vals = new ArrayList<>();
                             for (MiniJASTNode e : acwil.getValues()) {
                                 ReturnValues r = ((Expression)e).evaluate(c);
-                                if (r.getType().uType != UnannType.INT)
+                                if (r.getType().uType != PrimType.INT)
                                     throw new TypeException("int array must be initialised with int values");
                                 if (r.getIsArray())
                                     throw new TypeException("Can not operate on arrays!");
@@ -196,13 +195,13 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                         } else {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
-                            if (s.getType().uType != UnannType.INT)
+                            if (s.getType().uType != PrimType.INT)
                                 throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             // Will be fixed
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.INT, size));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.INT, size));
                             ArrayList<Integer> ints = new ArrayList<>(size);
                             while (ints.size() < size)
                                 ints.add(0);
@@ -214,7 +213,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                     if (!v.isArray) {
                         if (v.getExpr() != null) {
                             ReturnValues rc = v.getExpr().evaluate(c);
-                            if (rc.getType().uType == UnannType.BOOLEAN)
+                            if (rc.getType().uType == PrimType.BOOLEAN)
                                 throw new TypeException("double variable cannot be initialised with boolean value");
                             if (rc.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
@@ -233,7 +232,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                                     throw new IncorrectEvaluationException("What are you doing here?");
                             }
                         } else {
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.DOUBLE));
                         }
                     } else {
                         ArrayCreation ac = (ArrayCreation) v;
@@ -242,7 +241,7 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                             ArrayList<Double> vals = new ArrayList<>();
                             for (MiniJASTNode e : acwil.getValues()) {
                                 ReturnValues r = ((Expression)e).evaluate(c);
-                                if (r.getType().uType != UnannType.DOUBLE)
+                                if (r.getType().uType != PrimType.DOUBLE)
                                     throw new TypeException("double array must be initialised with double values");
                                 if (r.getIsArray())
                                     throw new TypeException("Can not operate on arrays!");
@@ -254,13 +253,13 @@ public class LocalVarDec extends StatementBase implements BlockStatement {
                         } else {
                             ArrayCreationWithSize acws = (ArrayCreationWithSize) ac;
                             ReturnValues s = acws.getSize().evaluate(c);
-                            if (s.getType().uType != UnannType.INT)
+                            if (s.getType().uType != PrimType.INT)
                                 throw new TypeException("Size must be an integer");
                             if (s.getIsArray())
                                 throw new TypeException("Can not operate on arrays!");
                             int size = ((ReturnValuesInt)s).value;
                             // Will be fixed
-                            c.namesToTypes.put(v.getName(), new Type(UnannType.DOUBLE, size));
+                            c.namesToTypes.put(v.getName(), new Type(PrimType.DOUBLE, size));
                             ArrayList<Double> dubs = new ArrayList<>(size);
                             while (dubs.size() < size)
                                 dubs.add(0.0);

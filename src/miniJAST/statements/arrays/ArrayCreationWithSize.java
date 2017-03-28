@@ -1,11 +1,11 @@
 package miniJAST.statements.arrays;
 
 import miniJAST.expressions.Expression;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class ArrayCreationWithSize extends ArrayCreation {
     private int size;
-    private UnannType type;
+    private PrimType type;
 
     public ArrayCreationWithSize() { hasInitList = false;}
 
@@ -15,7 +15,7 @@ public class ArrayCreationWithSize extends ArrayCreation {
         return result;
     }
 
-    public void setUpACWS(String n, UnannType t, Expression s) { subNodes.clear(); name = n; type = t; size = 0; subNodes.add(s); }
+    public void setUpACWS(String n, PrimType t, Expression s) { subNodes.clear(); name = n; type = t; size = 0; subNodes.add(s); }
 
     public Expression getSize() { return (Expression)subNodes.get(size); }
 }

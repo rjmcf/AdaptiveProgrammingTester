@@ -7,7 +7,7 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class CondExpr extends ExpressionBase {
     private int cond;
@@ -32,7 +32,7 @@ public class CondExpr extends ExpressionBase {
         checkType(subNodes.get(falseExpr), CondExpr.class);
 
         ReturnValues condV = subNodes.get(cond).evaluate(c);
-        if (condV.getType().uType != UnannType.BOOLEAN)
+        if (condV.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("Conditional expression must have type Boolean");
 
         if (condV.getIsArray())

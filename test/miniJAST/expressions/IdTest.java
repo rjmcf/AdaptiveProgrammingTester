@@ -1,12 +1,11 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.exceptions.VariableDecException;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -22,11 +21,11 @@ public class IdTest {
     public void setUp() throws Exception {
         id = new Id();
         c = new Context();
-        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("t", new Type(PrimType.BOOLEAN));
         c.namesToValues.put("t", true);
-        c.namesToTypes.put("int2", new Type(UnannType.INT));
+        c.namesToTypes.put("int2", new Type(PrimType.INT));
         c.namesToValues.put("int2", 2);
-        c.namesToTypes.put("message", new Type(UnannType.CHAR, 6));
+        c.namesToTypes.put("message", new Type(PrimType.CHAR, 6));
         ArrayList<Character> m = new ArrayList<>();
         m.add('I');
         m.add('d');

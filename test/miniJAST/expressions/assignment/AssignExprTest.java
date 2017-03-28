@@ -6,7 +6,7 @@ import miniJAST.expressions.Literal;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -28,23 +28,23 @@ public class AssignExprTest {
         id = new Id();
         aa = new ArrayAccess();
         eT = new Literal();
-        eT.setUpLiteral(UnannType.BOOLEAN, "true");
+        eT.setUpLiteral(PrimType.BOOLEAN, "true");
         eF = new Literal();
-        eF.setUpLiteral(UnannType.BOOLEAN, "false");
+        eF.setUpLiteral(PrimType.BOOLEAN, "false");
         one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         half = new Literal();
-        half.setUpLiteral(UnannType.DOUBLE, "0.5");
+        half.setUpLiteral(PrimType.DOUBLE, "0.5");
         A = new Literal();
-        A.setUpLiteral(UnannType.CHAR, "A");
+        A.setUpLiteral(PrimType.CHAR, "A");
     }
 
     @Test
     public void testEqId() throws Exception {
-        c.namesToTypes.put("t", new Type(UnannType.BOOLEAN));
-        c.namesToTypes.put("o", new Type(UnannType.INT));
-        c.namesToTypes.put("h", new Type(UnannType.DOUBLE));
-        c.namesToTypes.put("a", new Type(UnannType.CHAR));
+        c.namesToTypes.put("t", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.put("o", new Type(PrimType.INT));
+        c.namesToTypes.put("h", new Type(PrimType.DOUBLE));
+        c.namesToTypes.put("a", new Type(PrimType.CHAR));
 
         id.setUpId("t");
         aE.setUpAssignExpr(id, AssignOp.EQ, eT);
@@ -73,25 +73,25 @@ public class AssignExprTest {
 
     @Test
     public void testEqArray() throws Exception {
-        c.namesToTypes.put("boolArray2", new Type(UnannType.BOOLEAN, 2));
+        c.namesToTypes.put("boolArray2", new Type(PrimType.BOOLEAN, 2));
         ArrayList<Boolean> bools = new ArrayList<>(2);
         while (bools.size() < 2) {
             bools.add(false);
         }
         c.namesToValues.put("boolArray2", bools);
-        c.namesToTypes.put("intArray2", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("intArray2", new Type(PrimType.INT, 2));
         ArrayList<Integer> ints = new ArrayList<>(2);
         while (ints.size() < 2) {
             ints.add(0);
         }
         c.namesToValues.put("intArray2", ints);
-        c.namesToTypes.put("dubArray2", new Type(UnannType.DOUBLE, 2));
+        c.namesToTypes.put("dubArray2", new Type(PrimType.DOUBLE, 2));
         ArrayList<Double> dubs = new ArrayList<>(2);
         while (dubs.size() < 2) {
             dubs.add(0.5);
         }
         c.namesToValues.put("dubArray2", dubs);
-        c.namesToTypes.put("charArray2", new Type(UnannType.CHAR, 2));
+        c.namesToTypes.put("charArray2", new Type(PrimType.CHAR, 2));
         ArrayList<Character> chars = new ArrayList<>(2);
         while (chars.size() < 2) {
             chars.add('\0');

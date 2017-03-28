@@ -13,8 +13,7 @@ import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -36,15 +35,15 @@ public class DoStmntTest {
     public void setUp() throws Exception {
         c = new Context();
         t = new Literal();
-        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(PrimType.BOOLEAN, "true");
         cont = new VarDeclarator();
         cont.setUpVarDec("cont", t);
         contDec = new LocalVarDec();
-        contDec.setUpLVD(UnannType.BOOLEAN);
+        contDec.setUpLVD(PrimType.BOOLEAN);
         contDec.addVarDec(cont);
 
         f = new Literal();
-        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(PrimType.BOOLEAN, "false");
         contID = new Id();
         contID.setUpId("cont");
         contFalse = new AssignExpr();
@@ -58,13 +57,13 @@ public class DoStmntTest {
         block1.addBlockStmnt(doS1);
 
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
         i.setUpVarDec("i", zero);
         thing = new VarDeclarator();
         thing.setUpVarDec("thing", null);
         dec2 = new LocalVarDec();
-        dec2.setUpLVD(UnannType.INT);
+        dec2.setUpLVD(PrimType.INT);
         dec2.addVarDec(i);
         dec2.addVarDec(thing);
 
@@ -77,7 +76,7 @@ public class DoStmntTest {
         thingToI = new AssignExpr();
         thingToI.setUpAssignExpr(thingID, AssignOp.EQ, plus);
         five = new Literal();
-        five.setUpLiteral(UnannType.INT, "5");
+        five.setUpLiteral(PrimType.INT, "5");
         lT5 = new RelationExpr();
         lT5.setUpRelationExpr(RelationOp.LT, thingID, five);
         ExpressionStmnt eS2 = new ExpressionStmnt(thingToI);

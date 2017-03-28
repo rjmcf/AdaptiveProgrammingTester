@@ -1,7 +1,6 @@
 package miniJAST.statements.IfThenEtc;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -11,7 +10,7 @@ import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.Statement;
 import miniJAST.statements.StatementBase;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class IfThenStmnt extends StatementBase implements Statement {
     private int cond;
@@ -31,7 +30,7 @@ public class IfThenStmnt extends StatementBase implements Statement {
         checkType((BlockStatement)subNodes.get(stmnt), Statement.class);
 
         ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);
-        if (r.getType().uType != UnannType.BOOLEAN)
+        if (r.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("Condition must be Boolean type");
         if (r.getIsArray())
             throw new TypeException("Can not operate on arrays!");

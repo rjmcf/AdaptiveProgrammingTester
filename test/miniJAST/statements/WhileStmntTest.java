@@ -14,8 +14,7 @@ import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -40,19 +39,19 @@ public class WhileStmntTest {
     public void setUp() throws Exception {
         c = new Context();
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         i0 = new VarDeclarator();
         i0.setUpVarDec("i", zero);
         sum0 = new VarDeclarator();
         sum0.setUpVarDec("sum", zero);
         one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         two = new Literal();
-        two.setUpLiteral(UnannType.INT, "2");
+        two.setUpLiteral(PrimType.INT, "2");
         three = new Literal();
-        three.setUpLiteral(UnannType.INT, "3");
+        three.setUpLiteral(PrimType.INT, "3");
         four = new Literal();
-        four.setUpLiteral(UnannType.INT, "4");
+        four.setUpLiteral(PrimType.INT, "4");
         nsInit = new ArrayCreationWithInitList();
         nsInit.setUPACWIL("ns");
         nsInit.addExpressionACWIL(one);
@@ -60,13 +59,13 @@ public class WhileStmntTest {
         nsInit.addExpressionACWIL(three);
         nsInit.addExpressionACWIL(four);
         ints = new LocalVarDec();
-        ints.setUpLVD(UnannType.INT);
+        ints.setUpLVD(PrimType.INT);
         ints.addVarDec(i0);
         ints.addVarDec(sum0);
         ints.addVarDec(nsInit);
 
         five = new Literal();
-        five.setUpLiteral(UnannType.INT, "5");
+        five.setUpLiteral(PrimType.INT, "5");
         sumID = new Id();
         sumID.setUpId("sum");
         lT5 = new RelationExpr();
@@ -96,10 +95,10 @@ public class WhileStmntTest {
         j0 = new VarDeclarator();
         j0.setUpVarDec("j", zero);
         dec2 = new LocalVarDec();
-        dec2.setUpLVD(UnannType.INT);
+        dec2.setUpLVD(PrimType.INT);
         dec2.addVarDec(j0);
         f = new Literal();
-        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(PrimType.BOOLEAN, "false");
         jID = new Id();
         jID.setUpId("j");
         j1 = new AssignExpr();

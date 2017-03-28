@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesChar;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class AddExpr extends RelationExpr {
     private boolean isPlus;
@@ -35,7 +35,7 @@ public class AddExpr extends RelationExpr {
         ReturnValues left = subNodes.get(leftSide).evaluate(c);
         ReturnValues right = subNodes.get(rightSide).evaluate(c);
 
-        if (left.getType().uType == UnannType.BOOLEAN || right.getType().uType == UnannType.BOOLEAN)
+        if (left.getType().uType == PrimType.BOOLEAN || right.getType().uType == PrimType.BOOLEAN)
             throw new TypeException("Cannot use + or - on operands of type Boolean");
 
         if (left.getIsArray() || right.getIsArray())

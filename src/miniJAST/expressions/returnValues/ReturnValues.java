@@ -1,7 +1,6 @@
 package miniJAST.expressions.returnValues;
 
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
 
 public abstract class ReturnValues {
     protected Type type;

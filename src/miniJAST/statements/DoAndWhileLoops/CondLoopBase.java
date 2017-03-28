@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public abstract class CondLoopBase extends StatementBase implements BlockStatement{
     protected int cond;
@@ -28,7 +28,7 @@ public abstract class CondLoopBase extends StatementBase implements BlockStateme
         Expression condE = ((Expression)subNodes.get(cond));
 
         ReturnValues rC = condE.evaluate(c);
-        if (rC.getType().uType != UnannType.BOOLEAN)
+        if (rC.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("Condition must be boolean type");
         if (rC.getIsArray())
             throw new TypeException("Can not operate on arrays!");

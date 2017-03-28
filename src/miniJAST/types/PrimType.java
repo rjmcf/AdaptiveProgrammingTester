@@ -1,6 +1,6 @@
 package miniJAST.types;
 
-public enum UnannType {
+public enum PrimType {
     BOOLEAN, CHAR, INT, DOUBLE;
 
     public String name;

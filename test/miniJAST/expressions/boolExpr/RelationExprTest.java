@@ -4,7 +4,7 @@ import miniJAST.Context;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,15 +25,15 @@ public class RelationExprTest {
         e = new RelationExpr();
         c = new Context();
         t = new Literal();
-        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(PrimType.BOOLEAN, "true");
         int2 = new Literal();
-        int2.setUpLiteral(UnannType.INT, "2");
+        int2.setUpLiteral(PrimType.INT, "2");
         int3 = new Literal();
-        int3.setUpLiteral(UnannType.INT, "3");
+        int3.setUpLiteral(PrimType.INT, "3");
         doubHalf = new Literal();
-        doubHalf.setUpLiteral(UnannType.DOUBLE, "0.5");
+        doubHalf.setUpLiteral(PrimType.DOUBLE, "0.5");
         c1 = new Literal();
-        c1.setUpLiteral(UnannType.CHAR, "a");
+        c1.setUpLiteral(PrimType.CHAR, "a");
     }
 
     @Test

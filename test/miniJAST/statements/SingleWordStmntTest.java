@@ -20,8 +20,7 @@ import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -52,59 +51,59 @@ public class SingleWordStmntTest {
         c = new Context();
 
         H = new Literal();
-        H.setUpLiteral(UnannType.CHAR, "H");
+        H.setUpLiteral(PrimType.CHAR, "H");
         e = new Literal();
-        e.setUpLiteral(UnannType.CHAR, "e");
+        e.setUpLiteral(PrimType.CHAR, "e");
         l = new Literal();
-        l.setUpLiteral(UnannType.CHAR, "l");
+        l.setUpLiteral(PrimType.CHAR, "l");
         o = new Literal();
-        o.setUpLiteral(UnannType.CHAR, "o");
+        o.setUpLiteral(PrimType.CHAR, "o");
         exc = new Literal();
-        exc.setUpLiteral(UnannType.CHAR, "!");
+        exc.setUpLiteral(PrimType.CHAR, "!");
         six = new Literal();
-        six.setUpLiteral(UnannType.INT, "6");
+        six.setUpLiteral(PrimType.INT, "6");
         orig = new ArrayCreationWithInitList();
         orig.setUPACWIL("orig");
         Literal[] letters = new Literal[] {H, e, l, l, l, o, exc, exc, exc};
         for (Literal l : letters)
             orig.addExpressionACWIL(l);
         result = new ArrayCreationWithSize();
-        result.setUpACWS("result", UnannType.CHAR,  six);
+        result.setUpACWS("result", PrimType.CHAR,  six);
         arrays = new LocalVarDec();
-        arrays.setUpLVD(UnannType.CHAR);
+        arrays.setUpLVD(PrimType.CHAR);
         arrays.addVarDec(orig);
         arrays.addVarDec(result);
 
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
         i.setUpVarDec("i", zero);
         iDec = new LocalVarDec();
-        iDec.setUpLVD(UnannType.INT);
+        iDec.setUpLVD(PrimType.INT);
         iDec.addVarDec(i);
 
         iID = new Id();
         iID.setUpId("i");
         two = new Literal();
-        two.setUpLiteral(UnannType.INT, "2");
+        two.setUpLiteral(PrimType.INT, "2");
         eq2 = new EqExpr();
         eq2.setUpEqExpr(true, iID, two);
         contIf = new IfThenStmnt();
         contIf.setUpIfThen(eq2, SingleWordStmnt.CONTINUE);
 
         seven = new Literal();
-        seven.setUpLiteral(UnannType.INT, "7");
+        seven.setUpLiteral(PrimType.INT, "7");
         eq7 = new EqExpr();
         eq7.setUpEqExpr(true, iID, seven);
         breakIf = new IfThenStmnt();
         breakIf.setUpIfThen(eq7, SingleWordStmnt.BREAK);
 
         three = new Literal();
-        three.setUpLiteral(UnannType.INT, "3");
+        three.setUpLiteral(PrimType.INT, "3");
         lT3 = new RelationExpr();
         lT3.setUpRelationExpr(RelationOp.LT, iID, three);
         one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         minus = new AddExpr();
         minus.setUpAddExpr(false, iID, one);
         which = new CondExpr();
@@ -121,7 +120,7 @@ public class SingleWordStmntTest {
         indexAssign.setUpAssignExpr(resAcc, AssignOp.EQ, origAcc);
 
         nine = new Literal();
-        nine.setUpLiteral(UnannType.INT, "9");
+        nine.setUpLiteral(PrimType.INT, "9");
         lT9 = new RelationExpr();
         lT9.setUpRelationExpr(RelationOp.LT, iID, nine);
         iPlus = new UnaryPostIncExpr();
@@ -137,7 +136,7 @@ public class SingleWordStmntTest {
         forStmnt1.setBody(inner);
 
         ques = new Literal();
-        ques.setUpLiteral(UnannType.CHAR, "?");
+        ques.setUpLiteral(PrimType.CHAR, "?");
         fakeAcc = new ArrayAccess();
         fakeAcc.setUpArrayAccess(resultID, six);
         r6 = new AssignExpr();
@@ -154,7 +153,7 @@ public class SingleWordStmntTest {
         j = new VarDeclarator();
         j.setUpVarDec("j", zero);
         jDec = new LocalVarDec();
-        jDec.setUpLVD(UnannType.INT);
+        jDec.setUpLVD(PrimType.INT);
         jDec.addVarDec(j);
         jID = new Id();
         jID.setUpId("j");

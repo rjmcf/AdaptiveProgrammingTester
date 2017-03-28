@@ -2,8 +2,7 @@ package questions;
 
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -187,11 +186,11 @@ public class AbstractPExerciseTest {
         System.out.println(ids);
 
         Literal five = new Literal();
-        five.setUpLiteral(UnannType.INT, "5");
+        five.setUpLiteral(PrimType.INT, "5");
         assertTrue(test.fillBlank(ids.get(0), five));
 
         Literal zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         assertTrue(test.fillBlank(ids.get(1), zero));
 
         Id i = new Id();

@@ -14,8 +14,7 @@ import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class FactorialExercise extends AbstractPExercise {
     int n;
@@ -43,15 +42,15 @@ public class FactorialExercise extends AbstractPExercise {
         baseSetUp();
 
         Literal one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator totalDec = new VarDeclarator();
         totalDec.setUpVarDec("total", one);
         Literal nLit = new Literal();
-        nLit.setUpLiteral(UnannType.INT, String.valueOf(n));
+        nLit.setUpLiteral(PrimType.INT, String.valueOf(n));
         VarDeclarator nDec = new VarDeclarator();
         nDec.setUpVarDec("n", nLit);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(totalDec);
         lvd.addVarDec(nDec);
 

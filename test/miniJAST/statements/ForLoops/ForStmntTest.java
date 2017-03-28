@@ -15,8 +15,7 @@ import miniJAST.statements.*;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -44,9 +43,9 @@ public class ForStmntTest {
 
         // set up "int sum = 1"
         sumStat = new LocalVarDec();
-        sumStat.setUpLVD(UnannType.INT);
+        sumStat.setUpLVD(PrimType.INT);
         one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         sum = new VarDeclarator();
         sum.setUpVarDec("sum", one);
         sumStat.addVarDec(sum);
@@ -58,9 +57,9 @@ public class ForStmntTest {
 
         // set up "int i = 5"
         iStat = new LocalVarDec();
-        iStat.setUpLVD(UnannType.INT);
+        iStat.setUpLVD(PrimType.INT);
         five = new Literal();
-        five.setUpLiteral(UnannType.INT, "5");
+        five.setUpLiteral(PrimType.INT, "5");
         i = new VarDeclarator();
         i.setUpVarDec("i", five);
         iStat.addVarDec(i);
@@ -70,7 +69,7 @@ public class ForStmntTest {
         iID = new Id();
         iID.setUpId("i");
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         gT = new RelationExpr();
         gT.setUpRelationExpr(RelationOp.GT, iID, zero);
 
@@ -99,7 +98,7 @@ public class ForStmntTest {
         j = new VarDeclarator();
         j.setUpVarDec("j", zero);
         jStat = new LocalVarDec();
-        jStat.setUpLVD(UnannType.INT);
+        jStat.setUpLVD(PrimType.INT);
         jStat.addVarDec(j);
         jID = new Id();
         jID.setUpId("j");

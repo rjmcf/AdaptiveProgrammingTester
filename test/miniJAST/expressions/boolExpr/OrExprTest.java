@@ -4,7 +4,7 @@ import miniJAST.Context;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -23,11 +23,11 @@ public class OrExprTest {
         e = new OrExpr();
         c = new Context();
         t = new Literal();
-        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(PrimType.BOOLEAN, "true");
         f = new Literal();
-        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(PrimType.BOOLEAN, "false");
         i = new Literal();
-        i.setUpLiteral(UnannType.INT, "2");
+        i.setUpLiteral(PrimType.INT, "2");
     }
 
     @Test

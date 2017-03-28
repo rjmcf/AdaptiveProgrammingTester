@@ -7,7 +7,6 @@ import miniJAST.expressions.Expression;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
-import miniJAST.types.UnannType;
 
 public class VarDeclarator extends StatementBase implements BlockStatement{
     protected String name;

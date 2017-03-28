@@ -7,7 +7,7 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class UnaryComplementExpr extends UnaryExpr {
     // Only logical complement here
@@ -26,7 +26,7 @@ public class UnaryComplementExpr extends UnaryExpr {
 
         ReturnValues e = subNodes.get(expr).evaluate(c);
 
-        if (e.getType().uType != UnannType.BOOLEAN)
+        if (e.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("Cannot apply ! to non-boolean type.");
 
         if (e.getIsArray())

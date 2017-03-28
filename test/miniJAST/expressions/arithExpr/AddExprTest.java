@@ -7,7 +7,7 @@ import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -33,7 +33,7 @@ public class AddExprTest {
     public void setUp() throws Exception {
         e = new AddExpr();
         c = new Context();
-        c.namesToTypes.put("array", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("array", new Type(PrimType.INT, 2));
         ArrayList<Integer> ints = new ArrayList<>(2);
         ints.add(1);
         ints.add(2);
@@ -41,19 +41,19 @@ public class AddExprTest {
         id = new Id();
         id.setUpId("array");
         int2 = new Literal();
-        int2.setUpLiteral(UnannType.INT, "2");
+        int2.setUpLiteral(PrimType.INT, "2");
         int3 = new Literal();
-        int3.setUpLiteral(UnannType.INT, "3");
+        int3.setUpLiteral(PrimType.INT, "3");
         doubHalf = new Literal();
-        doubHalf.setUpLiteral(UnannType.DOUBLE, "0.5");
+        doubHalf.setUpLiteral(PrimType.DOUBLE, "0.5");
         doubQuart = new Literal();
-        doubQuart.setUpLiteral(UnannType.DOUBLE, "0.25");
+        doubQuart.setUpLiteral(PrimType.DOUBLE, "0.25");
         charA = new Literal();
-        charA.setUpLiteral(UnannType.CHAR, "A");
+        charA.setUpLiteral(PrimType.CHAR, "A");
         charB = new Literal();
-        charB.setUpLiteral(UnannType.CHAR, "B");
+        charB.setUpLiteral(PrimType.CHAR, "B");
         boolTrue = new Literal();
-        boolTrue.setUpLiteral(UnannType.BOOLEAN, "true");
+        boolTrue.setUpLiteral(PrimType.BOOLEAN, "true");
 
     }
 

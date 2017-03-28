@@ -2,14 +2,9 @@ package miniJAST.statements.DoAndWhileLoops;
 
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
-import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
-import miniJAST.statements.StatementBase;
-import miniJAST.types.UnannType;
 
 public abstract class WhileStmntBase extends CondLoopBase {
     @Override

@@ -6,7 +6,7 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.returnValues.*;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class RelationExpr extends EqExpr {
     private RelationOp op;
@@ -46,7 +46,7 @@ public class RelationExpr extends EqExpr {
         ReturnValues l = subNodes.get(leftSide).evaluate(c);
         ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
-        if (l.getType().uType == UnannType.BOOLEAN || r.getType().uType == UnannType.BOOLEAN)
+        if (l.getType().uType == PrimType.BOOLEAN || r.getType().uType == PrimType.BOOLEAN)
             throw new TypeException("Cannot relate boolean values");
 
         if (l.getIsArray() || r.getIsArray())

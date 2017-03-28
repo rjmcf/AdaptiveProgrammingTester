@@ -1,8 +1,6 @@
 package miniJAST.statements.ForLoops;
 
 import miniJAST.Context;
-import miniJAST.FillableBlank;
-import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
@@ -10,8 +8,7 @@ import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.*;
-import miniJAST.statements.LVD.LocalVarDec;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 import java.util.ArrayList;
 
@@ -73,7 +70,7 @@ public abstract class ForStmntBase extends StatementBase implements BlockStateme
         else
             condR = new ReturnValuesBool(true);
 
-        if (condR.getType().uType != UnannType.BOOLEAN)
+        if (condR.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("Condition must have boolean type");
         if (condR.getIsArray())
             throw new TypeException("Can not operate on arrays!");

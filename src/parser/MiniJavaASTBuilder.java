@@ -29,8 +29,8 @@ import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
-import miniJAST.types.UnannTypeCarrier;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimTypeCarrier;
+import miniJAST.types.PrimType;
 
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
@@ -49,34 +49,34 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     public MiniJASTNode visitLiteral(MiniJavaParser.LiteralContext ctx) {
         Literal l = new Literal();
         if (ctx.BooleanLiteral() != null)
-            l.setUpLiteral(UnannType.BOOLEAN, ctx.getText());
+            l.setUpLiteral(PrimType.BOOLEAN, ctx.getText());
         else if (ctx.CharacterLiteral() != null)
-            l.setUpLiteral(UnannType.CHAR, ctx.getText());
+            l.setUpLiteral(PrimType.CHAR, ctx.getText());
         else if (ctx.IntegerLiteral() != null)
-            l.setUpLiteral(UnannType.INT, ctx.getText());
+            l.setUpLiteral(PrimType.INT, ctx.getText());
         else // Double
-            l.setUpLiteral(UnannType.DOUBLE, ctx.getText());
+            l.setUpLiteral(PrimType.DOUBLE, ctx.getText());
         return l;
     }
 
     @Override
     public MiniJASTNode visitPrimitiveType(MiniJavaParser.PrimitiveTypeContext ctx) {
-        UnannTypeCarrier c;
+        PrimTypeCarrier c;
         if (ctx.BOOLEAN() != null)
-            c = new UnannTypeCarrier(UnannType.BOOLEAN);
+            c = new PrimTypeCarrier(PrimType.BOOLEAN);
         else if (ctx.CHAR() != null)
-            c = new UnannTypeCarrier(UnannType.CHAR);
+            c = new PrimTypeCarrier(PrimType.CHAR);
         else if (ctx.INT() != null)
-            c = new UnannTypeCarrier(UnannType.INT);
+            c = new PrimTypeCarrier(PrimType.INT);
         else // Double
-            c = new UnannTypeCarrier(UnannType.DOUBLE);
+            c = new PrimTypeCarrier(PrimType.DOUBLE);
         return c;
     }
 
     @Override
     public MiniJASTNode visitArrayInitializerSize(MiniJavaParser.ArrayInitializerSizeContext ctx) {
         ArrayCreationWithSize acws = new ArrayCreationWithSize();
-        acws.setUpACWS(ctx.id, ((UnannTypeCarrier)visit(ctx.primitiveType())).type, (Expression)visit(ctx.expression()));
+        acws.setUpACWS(ctx.id, ((PrimTypeCarrier)visit(ctx.primitiveType())).type, (Expression)visit(ctx.expression()));
         return acws;
     }
 
@@ -102,7 +102,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     @Override
     public MiniJASTNode visitLocalVariableDeclaration(MiniJavaParser.LocalVariableDeclarationContext ctx) {
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(((UnannTypeCarrier)visit(ctx.primitiveType())).type);
+        lvd.setUpLVD(((PrimTypeCarrier)visit(ctx.primitiveType())).type);
 
         for (MiniJavaParser.VariableDeclaratorContext c : ctx.variableDeclarators().variableDeclarator()) {
             VarDeclarator vD = (VarDeclarator)visit(c);
@@ -320,7 +320,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     public MiniJASTNode visitForInitLVD(MiniJavaParser.ForInitLVDContext ctx) {
         ForInit fI = new ForInit();
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(((UnannTypeCarrier)visit(ctx.primitiveType())).type);
+        lvd.setUpLVD(((PrimTypeCarrier)visit(ctx.primitiveType())).type);
 
         for (MiniJavaParser.VariableDeclaratorContext c : ctx.variableDeclarators().variableDeclarator()) {
             VarDeclarator vD = (VarDeclarator)visit(c);

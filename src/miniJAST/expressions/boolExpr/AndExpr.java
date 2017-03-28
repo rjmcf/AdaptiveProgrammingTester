@@ -6,7 +6,7 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class AndExpr extends OrExpr {
     private int leftSide; // Left associative
@@ -30,7 +30,7 @@ public class AndExpr extends OrExpr {
 
         ReturnValues l = subNodes.get(leftSide).evaluate(c);
 
-        if (l.getType().uType != UnannType.BOOLEAN)
+        if (l.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("&& operator not applicable to operands that aren't of type boolean");
 
         if (l.getIsArray())
@@ -42,7 +42,7 @@ public class AndExpr extends OrExpr {
 
         ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
-        if (r.getType().uType != UnannType.BOOLEAN)
+        if (r.getType().uType != PrimType.BOOLEAN)
         throw new TypeException("&& operator not applicable to operands that aren't of type boolean");
 
         if (r.getIsArray())

@@ -1,6 +1,5 @@
 package questions;
 
-import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
@@ -18,8 +17,7 @@ import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class FillArrayToNExercise extends AbstractPExercise {
     int max;
@@ -42,18 +40,18 @@ public class FillArrayToNExercise extends AbstractPExercise {
         baseSetUp();
 
         Literal n = new Literal();
-        n.setUpLiteral(UnannType.INT, String.valueOf(max));
+        n.setUpLiteral(PrimType.INT, String.valueOf(max));
         ArrayCreationWithSize ns = new ArrayCreationWithSize();
-        ns.setUpACWS("ns", UnannType.INT, n);
+        ns.setUpACWS("ns", PrimType.INT, n);
         LocalVarDec array = new LocalVarDec();
-        array.setUpLVD(UnannType.INT);
+        array.setUpLVD(PrimType.INT);
         array.addVarDec(ns);
         Literal zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         VarDeclarator i = new VarDeclarator();
         i.setUpVarDec("i", zero);
         LocalVarDec iDec = new LocalVarDec();
-        iDec.setUpLVD(UnannType.INT);
+        iDec.setUpLVD(PrimType.INT);
         iDec.addVarDec(i);
         Id iID = new Id();
         iID.setUpId("i");

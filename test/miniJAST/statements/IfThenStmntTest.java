@@ -9,8 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,18 +30,18 @@ public class IfThenStmntTest {
     public void setUp() throws Exception {
         c = new Context();
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
         i.setUpVarDec("i", zero);
         i0 = new LocalVarDec();
-        i0.setUpLVD(UnannType.INT);
+        i0.setUpLVD(PrimType.INT);
         i0.addVarDec(i);
         t = new Literal();
-        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(PrimType.BOOLEAN, "true");
         iID = new Id();
         iID.setUpId("i");
         one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         i1 = new AssignExpr();
         i1.setUpAssignExpr(iID, AssignOp.EQ, one);
         ExpressionStmnt eS1 = new ExpressionStmnt(i1);
@@ -55,10 +54,10 @@ public class IfThenStmntTest {
         j = new VarDeclarator();
         j.setUpVarDec("j", zero);
         j0 = new LocalVarDec();
-        j0.setUpLVD(UnannType.INT);
+        j0.setUpLVD(PrimType.INT);
         j0.addVarDec(j);
         f = new Literal();
-        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(PrimType.BOOLEAN, "false");
         jID = new Id();
         jID.setUpId("j");
         j1 = new AssignExpr();

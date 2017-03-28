@@ -10,14 +10,12 @@ import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesIntAA;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-
-import static org.testng.Assert.*;
 
 public class PrintStatementTest {
     PrintStatement pr;
@@ -98,7 +96,7 @@ public class PrintStatementTest {
                 string.add('i');
                 string.add('n');
                 string.add('t');
-                return new ReturnValuesArray<Character>(new Type(UnannType.CHAR,5), string);
+                return new ReturnValuesArray<Character>(new Type(PrimType.CHAR,5), string);
             }
 
             @Override

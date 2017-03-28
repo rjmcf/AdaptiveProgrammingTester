@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ExerciseSetter {
     JavaToMiniJava translator = new JavaToMiniJava();
@@ -91,7 +90,7 @@ public class ExerciseSetter {
     }
 
     public boolean fillBlank(int bId, String input) {
-        return fillBlank(bId, translator.makeNode(input));
+        return fillBlank(bId, translator.makeAST(input));
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) {

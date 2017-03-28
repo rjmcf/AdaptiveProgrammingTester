@@ -1,6 +1,5 @@
 package miniJAST;
 
-import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
@@ -8,26 +7,19 @@ import miniJAST.expressions.arithExpr.MultExpr;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
-import miniJAST.expressions.boolExpr.EqExpr;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
-import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.Block;
 import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
-import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-
-import static org.testng.Assert.*;
 
 public class MiniJASTNodeTest {
     ForStmnt fS1;
@@ -53,7 +45,7 @@ public class MiniJASTNodeTest {
 
         // set up "int sum = ..."
         sumStat = new LocalVarDec();
-        sumStat.setUpLVD(UnannType.INT);
+        sumStat.setUpLVD(PrimType.INT);
         fbe1 = new FillableBlankExpr(0);
         blankIds.add(fbe1.getId());
         sum = new VarDeclarator();
@@ -67,9 +59,9 @@ public class MiniJASTNodeTest {
 
         // set up "int i = 5"
         iStat = new LocalVarDec();
-        iStat.setUpLVD(UnannType.INT);
+        iStat.setUpLVD(PrimType.INT);
         five = new Literal();
-        five.setUpLiteral(UnannType.INT, "5");
+        five.setUpLiteral(PrimType.INT, "5");
         i = new VarDeclarator();
         i.setUpVarDec("i", five);
         iStat.addVarDec(i);
@@ -100,11 +92,11 @@ public class MiniJASTNodeTest {
         // Set up replacements!
 
         one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
 
         // set up "i > 0"
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         gT = new RelationExpr();
         gT.setUpRelationExpr(RelationOp.GT, iID, zero);
 

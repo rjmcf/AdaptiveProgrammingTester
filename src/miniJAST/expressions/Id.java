@@ -1,7 +1,6 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableDecException;
@@ -10,7 +9,6 @@ import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 

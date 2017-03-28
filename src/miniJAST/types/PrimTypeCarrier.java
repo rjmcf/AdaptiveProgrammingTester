@@ -5,11 +5,11 @@ import miniJAST.NodeCount;
 
 import java.util.ArrayList;
 
-public class UnannTypeCarrier implements MiniJASTNode {
+public class PrimTypeCarrier implements MiniJASTNode {
 
-    public UnannType type;
+    public PrimType type;
 
-    public UnannTypeCarrier(UnannType t) { type = t; }
+    public PrimTypeCarrier(PrimType t) { type = t; }
 
     @Override
     public NodeCount getTreeSize() {

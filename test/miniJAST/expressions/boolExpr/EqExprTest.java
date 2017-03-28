@@ -3,9 +3,8 @@ package miniJAST.expressions.boolExpr;
 import miniJAST.Context;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Literal;
-import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -27,17 +26,17 @@ public class EqExprTest {
         e = new EqExpr();
         c = new Context();
         t = new Literal();
-        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(PrimType.BOOLEAN, "true");
         f = new Literal();
-        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(PrimType.BOOLEAN, "false");
         c1 = new Literal();
-        c1.setUpLiteral(UnannType.CHAR, "a");
+        c1.setUpLiteral(PrimType.CHAR, "a");
         c2 = new Literal();
-        c2.setUpLiteral(UnannType.CHAR, "b");
+        c2.setUpLiteral(PrimType.CHAR, "b");
         int2 = new Literal();
-        int2.setUpLiteral(UnannType.INT, "2");
+        int2.setUpLiteral(PrimType.INT, "2");
         int3 = new Literal();
-        int3.setUpLiteral(UnannType.INT, "3");
+        int3.setUpLiteral(PrimType.INT, "3");
     }
 
     @Test

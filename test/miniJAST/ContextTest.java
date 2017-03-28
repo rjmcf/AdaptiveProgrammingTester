@@ -11,8 +11,7 @@ import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -35,14 +34,14 @@ public class ContextTest {
         c = new Context();
 
         zero = new Literal();
-        zero.setUpLiteral(UnannType.INT, "0");
+        zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
         i.setUpVarDec("i", zero);
         iDec = new LocalVarDec();
-        iDec.setUpLVD(UnannType.INT);
+        iDec.setUpLVD(PrimType.INT);
         iDec.addVarDec(i);
         two = new Literal();
-        two.setUpLiteral(UnannType.INT, "2");
+        two.setUpLiteral(PrimType.INT, "2");
         iID = new Id();
         iID.setUpId("i");
         lT2 = new RelationExpr();
@@ -52,7 +51,7 @@ public class ContextTest {
         j = new VarDeclarator();
         j.setUpVarDec("j", iID);
         jDec = new LocalVarDec();
-        jDec.setUpLVD(UnannType.INT);
+        jDec.setUpLVD(PrimType.INT);
         jDec.addVarDec(j);
         jID = new Id();
         jID.setUpId("j");

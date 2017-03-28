@@ -1,17 +1,16 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.*;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public class Literal extends UnaryPostfixExpr {
-    private UnannType litType;
+    private PrimType litType;
     private String value;
 
-    public void setUpLiteral(UnannType lT, String v) { litType = lT; value = v; }
+    public void setUpLiteral(PrimType lT, String v) { litType = lT; value = v; }
 
     @Override
     public String stringRepr() {

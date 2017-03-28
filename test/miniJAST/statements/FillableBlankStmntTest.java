@@ -1,7 +1,6 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
-import miniJAST.FillableBlank;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
@@ -20,7 +19,7 @@ import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -37,15 +36,15 @@ public class FillableBlankStmntTest {
         c = new Context();
         fbs = new FillableBlankStmnt(0);
         lit0 = new Literal();
-        lit0.setUpLiteral(UnannType.INT, "0");
+        lit0.setUpLiteral(PrimType.INT, "0");
         lit1 = new Literal();
-        lit1.setUpLiteral(UnannType.INT, "1");
+        lit1.setUpLiteral(PrimType.INT, "1");
         lit2 = new Literal();
-        lit2.setUpLiteral(UnannType.INT, "2");
+        lit2.setUpLiteral(PrimType.INT, "2");
         litT = new Literal();
-        litT.setUpLiteral(UnannType.BOOLEAN, "true");
+        litT.setUpLiteral(PrimType.BOOLEAN, "true");
         litF = new Literal();
-        litF.setUpLiteral(UnannType.BOOLEAN, "false");
+        litF.setUpLiteral(PrimType.BOOLEAN, "false");
         testS = new PrintStatement();
         testS.setUpPrint(lit0);
     }
@@ -178,7 +177,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         Id i = new Id();
         i.setUpId("i");
         AssignExpr aE = new AssignExpr();
@@ -196,8 +195,8 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id i = new Id(), cond = new Id();
         i.setUpId("i");
@@ -225,8 +224,8 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledWhileNSI() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
-        c.namesToTypes.put("cond", new Type(UnannType.BOOLEAN));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
         c.namesToValues.put("cond", true);
         Id i = new Id(), cond = new Id();
         i.setUpId("i");
@@ -257,7 +256,7 @@ public class FillableBlankStmntTest {
         VarDeclarator iDec = new VarDeclarator();
         iDec.setUpVarDec("i", lit0);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(iDec);
         ForInit fI = new ForInit();
         fI.setLocalVarDec(lvd);
@@ -279,7 +278,7 @@ public class FillableBlankStmntTest {
         VarDeclarator iDec = new VarDeclarator();
         iDec.setUpVarDec("i", lit0);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(iDec);
         ForInit fI = new ForInit();
         fI.setLocalVarDec(lvd);
@@ -298,7 +297,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         Id iId = new Id();
         iId.setUpId("i");
 
@@ -327,7 +326,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledITENSI() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         Id iId = new Id();
         iId.setUpId("i");
 
@@ -356,7 +355,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.put("i", new Type(UnannType.INT));
+        c.namesToTypes.put("i", new Type(PrimType.INT));
         Id iId = new Id();
         iId.setUpId("i");
 
@@ -378,7 +377,7 @@ public class FillableBlankStmntTest {
         VarDeclarator v = new VarDeclarator();
         v.setUpVarDec("i", lit0);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(v);
         fbs.setStudentStmnt(lvd);
 
@@ -405,7 +404,7 @@ public class FillableBlankStmntTest {
         v.setUpVarDec("i", lit1);
         fbs.setStudentStmnt(v);
         LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(fbs);
 
         lvd.executeStart(c);

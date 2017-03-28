@@ -1,14 +1,9 @@
 package miniJAST.statements.DoAndWhileLoops;
 
 import miniJAST.Context;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
-import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.*;
-import miniJAST.types.UnannType;
 
 public class DoStmnt extends CondLoopBase implements Statement, StatementNoShortIf {
     public void setUpDo(Statement s, Expression c) { baseSetUpCondLoop(c, s); }

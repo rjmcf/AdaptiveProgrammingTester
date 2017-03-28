@@ -2,7 +2,6 @@ package miniJAST.statements.arrays;
 
 import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Expression;
-import miniJAST.types.UnannType;
 
 import java.util.ArrayList;
 

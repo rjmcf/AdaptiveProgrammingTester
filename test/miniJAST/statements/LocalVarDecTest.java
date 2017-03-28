@@ -20,8 +20,7 @@ import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.arrays.ArrayCreationWithInitList;
 import miniJAST.statements.arrays.ArrayCreationWithSize;
-import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -39,9 +38,9 @@ public class LocalVarDecTest {
     public void setUp() throws Exception {
         c = new Context();
         t = new Literal();
-        t.setUpLiteral(UnannType.BOOLEAN, "true");
+        t.setUpLiteral(PrimType.BOOLEAN, "true");
         f = new Literal();
-        f.setUpLiteral(UnannType.BOOLEAN, "false");
+        f.setUpLiteral(PrimType.BOOLEAN, "false");
         id = new Id();
     }
 
@@ -56,17 +55,17 @@ public class LocalVarDecTest {
         VarDeclarator intDec2 = new VarDeclarator();
         intDec2.setUpVarDec("iDec2", null);
         Literal int2 = new Literal();
-        int2.setUpLiteral(UnannType.INT, "2");
+        int2.setUpLiteral(PrimType.INT, "2");
         VarDeclarator intDef1 = new VarDeclarator();
         intDef1.setUpVarDec("iDef1", int2);
         Literal int3 = new Literal();
-        int3.setUpLiteral(UnannType.INT, "3");
+        int3.setUpLiteral(PrimType.INT, "3");
         VarDeclarator intDef2 = new VarDeclarator();
         intDef2.setUpVarDec("iDef2", int3);
         AssignExpr aE = new AssignExpr();
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(boolDec);
         lvd.execute(c, 0);
         id.setUpId("bDec");
@@ -120,14 +119,14 @@ public class LocalVarDecTest {
         }
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(boolDef);
         lvd.execute(c, 0);
         id.setUpId("bDef");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.INT);
+        lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(intDec1);
         lvd.addVarDec(intDef1);
         lvd.addVarDec(intDec2);
@@ -188,10 +187,10 @@ public class LocalVarDecTest {
         };
 
         ArrayCreationWithSize aCSize = new ArrayCreationWithSize();
-        aCSize.setUpACWS("boolArray2", UnannType.BOOLEAN, two);
+        aCSize.setUpACWS("boolArray2", PrimType.BOOLEAN, two);
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(aCSize);
         lvd.execute(c, 0);
 
@@ -200,9 +199,9 @@ public class LocalVarDecTest {
 
         assertEquals(2, ar.getType().size);
 
-        aCSize.setUpACWS("boolArrayT", UnannType.BOOLEAN, t);
+        aCSize.setUpACWS("boolArrayT", PrimType.BOOLEAN, t);
 
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(aCSize);
         try {
             lvd.execute(c, 0);
@@ -212,12 +211,12 @@ public class LocalVarDecTest {
         }
 
         Literal one = new Literal();
-        one.setUpLiteral(UnannType.INT, "1");
+        one.setUpLiteral(PrimType.INT, "1");
         ArrayCreationWithSize aCSize1 = new ArrayCreationWithSize();
-        aCSize1.setUpACWS("boolArray3", UnannType.BOOLEAN, one);
+        aCSize1.setUpACWS("boolArray3", PrimType.BOOLEAN, one);
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(aCSize1);
         lvd.execute(c, 0);
 
@@ -237,7 +236,7 @@ public class LocalVarDecTest {
         aCWIL.addExpressionACWIL(t);
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(aCWIL);
         lvd.executeStart(c);
 
@@ -258,11 +257,11 @@ public class LocalVarDecTest {
 
         c = new Context();
         Literal two = new Literal();
-        two.setUpLiteral(UnannType.INT, "2");
+        two.setUpLiteral(PrimType.INT, "2");
         aCWIL.addExpressionACWIL(two);
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(aCWIL);
         try {
             lvd.executeStart(c);
@@ -276,7 +275,7 @@ public class LocalVarDecTest {
         aCWIL1.addExpressionACWIL(t);
 
         lvd = new LocalVarDec();
-        lvd.setUpLVD(UnannType.BOOLEAN);
+        lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(aCWIL1);
         lvd.executeStart(c);
 

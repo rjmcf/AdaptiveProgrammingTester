@@ -7,7 +7,7 @@ import miniJAST.expressions.Literal;
 import miniJAST.expressions.returnValues.ReturnValuesDouble;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.types.Type;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,7 +29,7 @@ public class UnaryPMExprTest {
     public void setUp() throws Exception {
         e = new UnaryPMExpr();
         c = new Context();
-        c.namesToTypes.put("array", new Type(UnannType.INT, 2));
+        c.namesToTypes.put("array", new Type(PrimType.INT, 2));
         ArrayList<Integer> ints = new ArrayList<>(2);
         ints.add(1);
         ints.add(2);
@@ -37,13 +37,13 @@ public class UnaryPMExprTest {
         id = new Id();
         id.setUpId("array");
         intE = new Literal();
-        intE.setUpLiteral(UnannType.INT, "2");
+        intE.setUpLiteral(PrimType.INT, "2");
         doubE = new Literal();
-        doubE.setUpLiteral(UnannType.DOUBLE, "0.5");
+        doubE.setUpLiteral(PrimType.DOUBLE, "0.5");
         charE = new Literal();
-        charE.setUpLiteral(UnannType.CHAR, "E");
+        charE.setUpLiteral(PrimType.CHAR, "E");
         boolE = new Literal();
-        boolE.setUpLiteral(UnannType.BOOLEAN, "false");
+        boolE.setUpLiteral(PrimType.BOOLEAN, "false");
     }
 
     @Test

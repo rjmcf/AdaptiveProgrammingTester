@@ -7,7 +7,7 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.*;
-import miniJAST.types.UnannType;
+import miniJAST.types.PrimType;
 
 public abstract class IfThenElseBase extends StatementBase implements BlockStatement {
     protected int cond;
@@ -34,7 +34,7 @@ public abstract class IfThenElseBase extends StatementBase implements BlockState
         checkType((BlockStatement)subNodes.get(falseStmnt), BlockStatement.class);
 
         ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);
-        if (r.getType().uType != UnannType.BOOLEAN)
+        if (r.getType().uType != PrimType.BOOLEAN)
             throw new TypeException("Condition must be Boolean type");
         if (r.getIsArray())
             throw new TypeException("Can not operate on arrays!");
