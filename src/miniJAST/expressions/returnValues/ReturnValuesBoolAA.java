@@ -8,7 +8,6 @@ public class ReturnValuesBoolAA extends ReturnValuesBool implements ReturnValues
         super(v);
         name = n;
         index = i;
-        isArrayAccess = true;
     }
 
     @Override

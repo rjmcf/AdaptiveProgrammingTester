@@ -8,7 +8,6 @@ public class ReturnValuesIntAA extends ReturnValuesInt implements ReturnValuesAr
         super(v);
         name = n;
         index = i;
-        isArrayAccess = true;
     }
 
     @Override

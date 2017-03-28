@@ -8,7 +8,6 @@ public class ReturnValuesCharAA extends ReturnValuesChar implements ReturnValues
         super(v);
         name = n;
         index = i;
-        isArrayAccess = true;
     }
 
     @Override

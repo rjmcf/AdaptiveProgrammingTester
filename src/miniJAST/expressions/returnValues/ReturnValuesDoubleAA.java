@@ -8,7 +8,6 @@ public class ReturnValuesDoubleAA extends ReturnValuesDouble implements ReturnVa
         super(v);
         name = n;
         index = i;
-        isArrayAccess = true;
     }
 
     @Override

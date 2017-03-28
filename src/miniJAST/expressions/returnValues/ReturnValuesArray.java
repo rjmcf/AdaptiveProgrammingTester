@@ -8,7 +8,7 @@ public class ReturnValuesArray<T> extends ReturnValues{
     protected ArrayList<T> values;
 
     public ReturnValuesArray(Type t, ArrayList<T> vs){
-        super(new Type(t.uType, t.size), false);
+        super(new Type(t.uType, t.size));
 
         values = vs;
     }

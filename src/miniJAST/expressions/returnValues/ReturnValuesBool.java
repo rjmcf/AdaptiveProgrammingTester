@@ -6,5 +6,5 @@ import miniJAST.types.PrimType;
 public class ReturnValuesBool extends ReturnValues {
     public boolean value;
 
-    public ReturnValuesBool(boolean v) { super(new Type(PrimType.BOOLEAN), false); value = v; }
+    public ReturnValuesBool(boolean v) { super(new Type(PrimType.BOOLEAN)); value = v; }
 }
