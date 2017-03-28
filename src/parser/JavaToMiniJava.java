@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 public class JavaToMiniJava {
     MiniJavaASTBuilder builder = new MiniJavaASTBuilder();
 
-    public MiniJASTNode makeNode(String input) {
+    public MiniJASTNode makeAST(String input) {
         try {
             InputStream is = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
             ANTLRInputStream inputS = new ANTLRInputStream(is);
