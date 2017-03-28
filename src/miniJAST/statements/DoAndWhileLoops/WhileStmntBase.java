@@ -11,7 +11,7 @@ import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 import miniJAST.types.UnannType;
 
-public abstract class WhileStmntBase extends CondLoopBase implements BlockStatement {
+public abstract class WhileStmntBase extends CondLoopBase {
     @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "while (" + ((Expression)subNodes.get(cond)).stringRepr() + ") \n" +

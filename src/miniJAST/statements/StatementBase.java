@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-public abstract class StatementBase implements MiniJASTNode {
+public abstract class StatementBase implements BlockStatement {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
     @Override
     public ArrayList<MiniJASTNode> getSubNodes() { return subNodes; }
