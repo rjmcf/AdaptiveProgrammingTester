@@ -45,7 +45,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
 
     @Override
     public int compareTo(AbstractPExercise o) {
-        return (int)(baseDifficulty - o.baseDifficulty);
+        return (baseDifficulty - o.baseDifficulty);
     }
 
     public AbstractPExercise(String q, int diff) { question = q; baseDifficulty = diff; }
