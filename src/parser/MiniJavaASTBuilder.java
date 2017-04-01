@@ -20,7 +20,6 @@ import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
-import miniJAST.statements.ForLoops.ForStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
 import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
@@ -359,12 +358,12 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
     public MiniJASTNode visitMakeForNSI(MiniJavaParser.MakeForNSIContext ctx) {
-        ForStmntNoShortIf fS = new ForStmntNoShortIf();
+        ForStmnt fS = new ForStmnt();
         ForInit fI = ctx.forInit() == null ? null : (ForInit)visit(ctx.forInit());
         Expression cond = ctx.expression() == null ? null : (Expression)visit(ctx.expression());
         fS.setUpForStmnt(fI, cond);
-        StatementNoShortIf s = ctx.statementNSI() == null ? null : (StatementNoShortIf) visit(ctx.statementNSI());
-        fS.setBodyNSI(s);
+        Statement s = ctx.statementNSI() == null ? null : (Statement) visit(ctx.statementNSI());
+        fS.setBody(s);
         if (ctx.expressionList() != null) {
             for (MiniJavaParser.ExpressionContext c : ctx.expressionList().expression()) {
                 fS.addUpdate((Expression) visit(c));

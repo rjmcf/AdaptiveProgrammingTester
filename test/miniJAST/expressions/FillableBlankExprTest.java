@@ -17,7 +17,6 @@ import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
-import miniJAST.statements.ForLoops.ForStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
 import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
@@ -391,41 +390,6 @@ public class FillableBlankExprTest {
         fS.setUpForStmnt(null, null);
         fS.addUpdate(fbe);
         fS.setBody(testS);
-        try {
-            fS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-    }
-
-    @Test
-    public void testEmptyEvaluateForNSI() throws Exception {
-        ForStmntNoShortIf fS = new ForStmntNoShortIf();
-        fS.setUpForStmnt(null, fbe);
-        fS.setBodyNSI(testS);
-        try {
-            fS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-
-        ForInit fI = new ForInit();
-        fI.addStmntExpr(fbe);
-        fS = new ForStmntNoShortIf();
-        fS.setUpForStmnt(fI, null);
-        try {
-            fS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-
-        fS = new ForStmntNoShortIf();
-        fS.setUpForStmnt(null, null);
-        fS.addUpdate(fbe);
-        fS.setBodyNSI(testS);
         try {
             fS.executeStart(c);
             fail("Blank not filled");

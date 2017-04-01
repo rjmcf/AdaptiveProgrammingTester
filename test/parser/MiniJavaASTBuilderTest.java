@@ -13,7 +13,6 @@ import miniJAST.statements.Block;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.ForLoops.ForStmnt;
-import miniJAST.statements.ForLoops.ForStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
 import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
@@ -369,11 +368,6 @@ public class MiniJavaASTBuilderTest {
         tree = parser.statement(); // parse
         result = builder.visit(tree);
         assertTrue(result instanceof ForStmnt);
-
-        parser = getParser("for (int i = 0; i < 10; i++) ;");
-        tree = parser.statementNSI(); // parse
-        result = builder.visit(tree);
-        assertTrue(result instanceof ForStmntNoShortIf);
     }
 
     @Test
