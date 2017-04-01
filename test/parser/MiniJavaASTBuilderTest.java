@@ -12,7 +12,6 @@ import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.Block;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
-import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.ForLoops.ForStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
@@ -383,11 +382,6 @@ public class MiniJavaASTBuilderTest {
         tree = parser.statement(); // parse
         result = builder.visit(tree);
         assertTrue(result instanceof WhileStmnt);
-
-        parser = getParser("while (true) ;");
-        tree = parser.statementNSI(); // parse
-        result = builder.visit(tree);
-        assertTrue(result instanceof WhileStmntNoShortIf);
     }
 
     @Test

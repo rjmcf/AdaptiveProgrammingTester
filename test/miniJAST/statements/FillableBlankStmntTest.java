@@ -9,12 +9,9 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
-import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
-import miniJAST.statements.ForLoops.ForStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
-import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
@@ -74,35 +71,10 @@ public class FillableBlankStmntTest {
     }
 
     @Test
-    public void testEmptyEvaluateWhileNSI() throws Exception {
-        WhileStmntNoShortIf wS = new WhileStmntNoShortIf();
-        wS.setUpWhileNSI(litT, fbs);
-        try {
-            wS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-    }
-
-    @Test
     public void testEmptyEvaluateFor() throws Exception {
         ForStmnt fS = new ForStmnt();
         fS.setUpForStmnt(null, litT);
         fS.setBody(fbs);
-        try {
-            fS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-    }
-
-    @Test
-    public void testEmptyEvaluateForNSI() throws Exception {
-        ForStmntNoShortIf fS = new ForStmntNoShortIf();
-        fS.setUpForStmnt(null, litT);
-        fS.setBodyNSI(fbs);
         try {
             fS.executeStart(c);
             fail("Blank not filled");
@@ -123,26 +95,6 @@ public class FillableBlankStmntTest {
         }
 
         iteS.setUpITE(litF, testS, fbs);
-        try {
-            iteS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-    }
-
-    @Test
-    public void testEmptyEvaluateITENSI() throws Exception {
-        IfThenElseStmntNoShortIf iteS = new IfThenElseStmntNoShortIf();
-        iteS.setUpITENSI(litT, fbs, testS);
-        try {
-            iteS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-
-        iteS.setUpITENSI(litF, testS, fbs);
         try {
             iteS.executeStart(c);
             fail("Blank not filled");
@@ -223,35 +175,6 @@ public class FillableBlankStmntTest {
     }
 
     @Test
-    public void testFilledWhileNSI() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
-        c.namesToValues.put("cond", true);
-        Id i = new Id(), cond = new Id();
-        i.setUpId("i");
-        cond.setUpId("cond");
-        AssignExpr aE1 = new AssignExpr();
-        aE1.setUpAssignExpr(i, AssignOp.EQ, lit1);
-        ExpressionStmnt eS1 = new ExpressionStmnt(aE1);
-        AssignExpr aE2 = new AssignExpr();
-        aE2.setUpAssignExpr(cond, AssignOp.EQ, litF);
-        ExpressionStmnt eS2 = new ExpressionStmnt(aE2);
-        Block b = new Block(false);
-        b.addBlockStmnt(eS1);
-        b.addBlockStmnt(eS2);
-
-        fbs.setStudentStmnt(b);
-
-        WhileStmntNoShortIf wS = new WhileStmntNoShortIf();
-        wS.setUpWhileNSI(cond, fbs);
-
-        wS.executeStart(c);
-
-        assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 1);
-        assertEquals(wS.stringRepr(0), "while (cond) \n{\n    i = 1;\n    cond = false;\n}");
-    }
-
-    @Test
     public void testFilledFor() throws Exception {
         VarDeclarator iDec = new VarDeclarator();
         iDec.setUpVarDec("i", lit0);
@@ -268,28 +191,6 @@ public class FillableBlankStmntTest {
         ForStmnt fS = new ForStmnt();
         fS.setUpForStmnt(fbs, litT);
         fS.setBody(fbs1);
-
-        fS.executeStart(c);
-        assertEquals(fS.stringRepr(0), "for (int i = 0; true; ) \n    break;");
-    }
-
-    @Test
-    public void testFilledForNSI() throws Exception {
-        VarDeclarator iDec = new VarDeclarator();
-        iDec.setUpVarDec("i", lit0);
-        LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(PrimType.INT);
-        lvd.addVarDec(iDec);
-        ForInit fI = new ForInit();
-        fI.setLocalVarDec(lvd);
-        fbs.setStudentStmnt(fI);
-
-        FillableBlankStmnt fbs1 = new FillableBlankStmnt(0);
-        fbs1.setStudentStmnt(SingleWordStmnt.BREAK);
-
-        ForStmntNoShortIf fS = new ForStmntNoShortIf();
-        fS.setUpForStmnt(fbs, litT);
-        fS.setBodyNSI(fbs1);
 
         fS.executeStart(c);
         assertEquals(fS.stringRepr(0), "for (int i = 0; true; ) \n    break;");
@@ -319,35 +220,6 @@ public class FillableBlankStmntTest {
         assertEquals(ite.stringRepr(0), "if (true) \n    i = 1;\nelse \n    i = 2;");
 
         ite.setUpITE(litF, fbs, fbs1);
-        ite.executeStart(c);
-
-        assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);
-    }
-
-    @Test
-    public void testFilledITENSI() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        Id iId = new Id();
-        iId.setUpId("i");
-
-        AssignExpr aE1 = new AssignExpr();
-        aE1.setUpAssignExpr(iId, AssignOp.EQ, lit1);
-        ExpressionStmnt eS1 = new ExpressionStmnt(aE1);
-        fbs.setStudentStmnt(eS1);
-        AssignExpr aE2 = new AssignExpr();
-        aE2.setUpAssignExpr(iId, AssignOp.EQ, lit2);
-        ExpressionStmnt eS2 = new ExpressionStmnt(aE2);
-        FillableBlankStmnt fbs1 = new FillableBlankStmnt(0);
-        fbs1.setStudentStmnt(eS2);
-
-        IfThenElseStmntNoShortIf ite = new IfThenElseStmntNoShortIf();
-        ite.setUpITENSI(litT, fbs, fbs1);
-        ite.executeStart(c);
-
-        assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 1);
-        assertEquals(ite.stringRepr(0), "if (true) \n    i = 1;\nelse \n    i = 2;");
-
-        ite.setUpITENSI(litF, fbs, fbs1);
         ite.executeStart(c);
 
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);

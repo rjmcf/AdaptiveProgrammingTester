@@ -14,7 +14,6 @@ import miniJAST.expressions.boolExpr.*;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
-import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
 import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
@@ -357,18 +356,6 @@ public class FillableBlankExprTest {
     public void testEmptyEvaluateWhile() throws Exception {
         WhileStmnt wS = new WhileStmnt();
         wS.setUpWhile(fbe, testS);
-        try {
-            wS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-    }
-
-    @Test
-    public void testEmptyEvaluateWhileNSI() throws Exception {
-        WhileStmntNoShortIf wS = new WhileStmntNoShortIf();
-        wS.setUpWhileNSI(fbe, testS);
         try {
             wS.executeStart(c);
             fail("Blank not filled");
@@ -898,24 +885,6 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledWhileNSI() throws Exception {
-        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
-        c.namesToValues.put("cond", true);
-        Id condId = new Id();
-        condId.setUpId("cond");
-        AssignExpr aE = new AssignExpr();
-        aE.setUpAssignExpr(condId, AssignOp.EQ, litF);
-        ExpressionStmnt eS = new ExpressionStmnt(aE);
-        fbe.setStudentExpr(condId);
-
-        WhileStmntNoShortIf wSNSI = new WhileStmntNoShortIf();
-        wSNSI.setUpWhileNSI(fbe, eS);
-        assertEquals(wSNSI.stringRepr(0), "while (cond) \n    cond = false;");
-        wSNSI.executeStart(c);
-        assertFalse(((ReturnValuesBool)condId.evaluate(c)).value);
-    }
-
-    @Test
     public void testFilledFor() throws Exception {
         c.namesToTypes.put("i", new Type(PrimType.INT));
         c.namesToTypes.put("res", new Type(PrimType.INT));
@@ -956,46 +925,6 @@ public class FillableBlankExprTest {
     }
 
     @Test
-    public void testFilledForNSI() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        c.namesToTypes.put("res", new Type(PrimType.INT));
-        c.namesToValues.put("res", 0);
-        Id i = new Id();
-        i.setUpId("i");
-        AssignExpr init = new AssignExpr();
-        init.setUpAssignExpr(i, AssignOp.EQ, lit0);
-        fbe.setStudentExpr(init);
-        ForInit fI = new ForInit();
-        fI.addStmntExpr(fbe);
-
-        RelationExpr rE = new RelationExpr();
-        rE.setUpRelationExpr(RelationOp.LT, i, lit1);
-        FillableBlankExpr fbe1 = new FillableBlankExpr(0);
-        fbe1.setStudentExpr(rE);
-
-        UnaryPostIncExpr upiE = new UnaryPostIncExpr();
-        upiE.setUpPostIncExpr(true, i);
-        FillableBlankExpr fbe2 = new FillableBlankExpr(0);
-        fbe2.setStudentExpr(upiE);
-
-        Id res = new Id();
-        res.setUpId("res");
-        AssignExpr aE = new AssignExpr();
-        aE.setUpAssignExpr(res, AssignOp.PLUSEQ, lit3);
-        ExpressionStmnt eS = new ExpressionStmnt(aE);
-
-        ForStmntNoShortIf fS = new ForStmntNoShortIf();
-        fS.setUpForStmnt(fI, fbe1);
-        fS.addUpdate(fbe2);
-        fS.setBodyNSI(eS);
-
-        assertEquals(fS.stringRepr(0), "for (i = 0; i < 1; i++) \n    res += 3;");
-
-        fS.executeStart(c);
-        assertEquals(((ReturnValuesInt)res.evaluate(c)).value, 3);
-    }
-
-    @Test
     public void testFilledITE() throws Exception {
         c.namesToTypes.put("res", new Type(PrimType.INT));
 
@@ -1015,28 +944,6 @@ public class FillableBlankExprTest {
 
         ite.executeStart(c);
         assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 2);
-    }
-
-    @Test
-    public void testFilledITENSI() throws Exception {
-        c.namesToTypes.put("res", new Type(PrimType.INT));
-
-        fbe.setStudentExpr(litF);
-        Id resId = new Id();
-        resId.setUpId("res");
-        AssignExpr ae1 = new AssignExpr();
-        ae1.setUpAssignExpr(resId, AssignOp.EQ, lit2);
-        ExpressionStmnt eS1 = new ExpressionStmnt(ae1);
-        AssignExpr ae2 = new AssignExpr();
-        ae2.setUpAssignExpr(resId, AssignOp.EQ, lit3);
-        ExpressionStmnt eS2 = new ExpressionStmnt(ae2);
-
-        IfThenElseStmntNoShortIf ite = new IfThenElseStmntNoShortIf();
-        ite.setUpITENSI(fbe, eS1, eS2);
-        assertEquals(ite.stringRepr(0), "if (false) \n    res = 2;\nelse \n    res = 3;");
-
-        ite.executeStart(c);
-        assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 3);
     }
 
     @Test

@@ -18,7 +18,6 @@ import miniJAST.expressions.boolExpr.*;
 import miniJAST.statements.*;
 import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
-import miniJAST.statements.DoAndWhileLoops.WhileStmntNoShortIf;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.ForLoops.ForStmntNoShortIf;
@@ -384,8 +383,8 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
     public MiniJASTNode visitMakeWhileNSI(MiniJavaParser.MakeWhileNSIContext ctx) {
-        WhileStmntNoShortIf wS = new WhileStmntNoShortIf();
-        wS.setUpWhileNSI((Expression)visit(ctx.parExpression()), (StatementNoShortIf) visit(ctx.statementNSI()));
+        WhileStmnt wS = new WhileStmnt();
+        wS.setUpWhile((Expression)visit(ctx.parExpression()), (Statement) visit(ctx.statementNSI()));
         return wS;
     }
 
