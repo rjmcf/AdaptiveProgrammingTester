@@ -5,7 +5,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.statements.*;
 
-public class DoStmnt extends CondLoopBase implements Statement, StatementNoShortIf {
+public class DoStmnt extends CondLoopBase implements BlockStatement {
     public void setUpDo(Statement s, Expression c) { baseSetUpCondLoop(c, s); }
 
     @Override

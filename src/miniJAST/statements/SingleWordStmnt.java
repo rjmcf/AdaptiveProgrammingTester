@@ -7,7 +7,7 @@ import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
-public enum SingleWordStmnt implements Statement, StatementNoShortIf{
+public enum SingleWordStmnt implements BlockStatement{
     EMPTY {
         @Override
         public NodeCount getTreeSize() { return new NodeCount(1,0); }

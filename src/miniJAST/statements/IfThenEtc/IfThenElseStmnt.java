@@ -32,7 +32,7 @@ public class IfThenElseStmnt extends StatementBase implements BlockStatement {
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         checkType((Expression)subNodes.get(cond), Expression.class);
-        checkType((BlockStatement)subNodes.get(trueStmnt), StatementNoShortIf.class);
+        checkType((BlockStatement)subNodes.get(trueStmnt), Statement.class);
         checkType((BlockStatement)subNodes.get(falseStmnt), BlockStatement.class);
 
         ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);

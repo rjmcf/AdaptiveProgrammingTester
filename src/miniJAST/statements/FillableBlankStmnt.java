@@ -9,7 +9,7 @@ import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
-public class FillableBlankStmnt extends FillableBlank implements Statement, StatementNoShortIf {
+public class FillableBlankStmnt extends FillableBlank implements BlockStatement {
     BlockStatement studentStmnt;
 
     public void setStudentStmnt(BlockStatement sS) { studentStmnt = sS; }

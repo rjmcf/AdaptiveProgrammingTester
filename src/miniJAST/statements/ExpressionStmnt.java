@@ -5,7 +5,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.StatementExpr;
 
-public class ExpressionStmnt extends StatementBase implements Statement, StatementNoShortIf {
+public class ExpressionStmnt extends StatementBase implements BlockStatement {
     private int expr;
 
     public ExpressionStmnt(Expression sE) { subNodes.clear(); expr = 0; subNodes.add(sE); }

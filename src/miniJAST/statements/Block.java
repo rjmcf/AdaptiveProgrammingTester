@@ -7,7 +7,7 @@ import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
-public class Block extends StatementBase implements Statement, StatementNoShortIf {
+public class Block extends StatementBase implements BlockStatement {
     boolean isOuterMost;
 
     public Block(boolean isOuter) { isOuterMost = isOuter; }
