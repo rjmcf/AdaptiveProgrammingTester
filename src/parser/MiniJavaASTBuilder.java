@@ -21,7 +21,6 @@ import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
-import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
@@ -303,14 +302,14 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     @Override
     public MiniJASTNode visitMakeITE(MiniJavaParser.MakeITEContext ctx) {
         IfThenElseStmnt iteS = new IfThenElseStmnt();
-        iteS.setUpITE((Expression)visit(ctx.parExpression()), (StatementNoShortIf)visit(ctx.statementNSI()), (Statement)visit(ctx.statement()));
+        iteS.setUpITE((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statementNSI()), (Statement)visit(ctx.statement()));
         return iteS;
     }
 
     @Override
     public MiniJASTNode visitMakeITENSI(MiniJavaParser.MakeITENSIContext ctx) {
-        IfThenElseStmntNoShortIf itensi = new IfThenElseStmntNoShortIf();
-        itensi.setUpITENSI((Expression)visit(ctx.parExpression()), (StatementNoShortIf)visit(ctx.statementNSI(0)), (StatementNoShortIf)visit(ctx.statementNSI(1)));
+        IfThenElseStmnt itensi = new IfThenElseStmnt();
+        itensi.setUpITE((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statementNSI(0)), (Statement)visit(ctx.statementNSI(1)));
         return itensi;
     }
 

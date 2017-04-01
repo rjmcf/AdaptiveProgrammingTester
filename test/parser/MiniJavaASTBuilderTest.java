@@ -14,7 +14,6 @@ import miniJAST.statements.DoAndWhileLoops.DoStmnt;
 import miniJAST.statements.DoAndWhileLoops.WhileStmnt;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
-import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.types.Type;
@@ -355,11 +354,6 @@ public class MiniJavaASTBuilderTest {
         tree = parser.statement(); // parse
         result = builder.visit(tree);
         assertTrue(result instanceof IfThenElseStmnt);
-
-        parser = getParser("if (true) continue; else return;");
-        tree = parser.statementNSI(); // parse
-        result = builder.visit(tree);
-        assertTrue(result instanceof IfThenElseStmntNoShortIf);
     }
 
     @Test

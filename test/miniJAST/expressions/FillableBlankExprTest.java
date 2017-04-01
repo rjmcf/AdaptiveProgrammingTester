@@ -18,7 +18,6 @@ import miniJAST.statements.ExpressionStmnt;
 import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
-import miniJAST.statements.IfThenEtc.IfThenElseStmntNoShortIf;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
@@ -404,18 +403,6 @@ public class FillableBlankExprTest {
         iteS.setUpITE(fbe, testS, testS);
         try {
             iteS.executeStart(c);
-            fail("Blank not filled");
-        } catch (BlankEmptyException bee){
-            // pass test
-        }
-    }
-
-    @Test
-    public void testEmptyEvaluateITENSI() throws Exception {
-        IfThenElseStmntNoShortIf itensiS = new IfThenElseStmntNoShortIf();
-        itensiS.setUpITENSI(fbe, testS, testS);
-        try {
-            itensiS.executeStart(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
