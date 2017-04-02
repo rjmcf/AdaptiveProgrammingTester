@@ -1,7 +1,6 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
-import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
@@ -11,7 +10,6 @@ import miniJAST.expressions.FillableBlankExpr;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.ListIterator;
 
 public abstract class StatementBase implements BlockStatement {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();

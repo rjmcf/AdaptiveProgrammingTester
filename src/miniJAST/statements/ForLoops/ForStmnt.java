@@ -44,7 +44,7 @@ public class ForStmnt extends StatementBase implements BlockStatement {
         return result;
     }
 
-    public void setBody(Statement s) { baseSetBody(s); }
+    public void setBody(BlockStatement s) { baseSetBody(s); }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {

@@ -9,13 +9,10 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.FillableBlankExpr;
-import miniJAST.expressions.Id;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FillableBlankStmnt;
-import miniJAST.statements.Statement;
 import miniJAST.statements.StatementBase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ListIterator;

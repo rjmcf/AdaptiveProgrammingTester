@@ -14,7 +14,7 @@ public class IfThenElseStmnt extends StatementBase implements BlockStatement {
     protected int trueStmnt;
     protected int falseStmnt;
 
-    protected void baseSetUpITE(Expression c, Statement t, BlockStatement f) {
+    protected void baseSetUpITE(Expression c, BlockStatement t, BlockStatement f) {
         subNodes.clear();
         subNodes.add(c); subNodes.add(t); subNodes.add(f);
         cond = 0; trueStmnt = 1; falseStmnt = 2;
@@ -27,12 +27,12 @@ public class IfThenElseStmnt extends StatementBase implements BlockStatement {
                 "else \n" + ((BlockStatement)subNodes.get(falseStmnt)).stringRepr(blocksDeep+1);
     }
 
-    public void setUpITE(Expression c, Statement t, Statement f) { baseSetUpITE(c, t, f); }
+    public void setUpITE(Expression c, BlockStatement t, BlockStatement f) { baseSetUpITE(c, t, f); }
 
     @Override
     public FlowControl execute(Context c, int d) throws MiniJASTException {
         checkType((Expression)subNodes.get(cond), Expression.class);
-        checkType((BlockStatement)subNodes.get(trueStmnt), Statement.class);
+        checkType((BlockStatement)subNodes.get(trueStmnt), BlockStatement.class);
         checkType((BlockStatement)subNodes.get(falseStmnt), BlockStatement.class);
 
         ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);

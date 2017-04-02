@@ -6,7 +6,7 @@ import miniJAST.expressions.Expression;
 import miniJAST.statements.*;
 
 public class DoStmnt extends CondLoopBase implements BlockStatement {
-    public void setUpDo(Statement s, Expression c) { baseSetUpCondLoop(c, s); }
+    public void setUpDo(BlockStatement s, Expression c) { baseSetUpCondLoop(c, s); }
 
     @Override
     public String stringRepr(int blocksDeep) {

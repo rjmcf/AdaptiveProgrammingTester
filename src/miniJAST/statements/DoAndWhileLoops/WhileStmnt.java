@@ -5,7 +5,6 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
-import miniJAST.statements.Statement;
 
 public class WhileStmnt extends CondLoopBase {
     @Override
@@ -19,5 +18,5 @@ public class WhileStmnt extends CondLoopBase {
         return condAndLoop(c, d);
     }
 
-    public void setUpWhile(Expression c, Statement s) { baseSetUpCondLoop(c, s); }
+    public void setUpWhile(Expression c, BlockStatement s) { baseSetUpCondLoop(c, s); }
 }
