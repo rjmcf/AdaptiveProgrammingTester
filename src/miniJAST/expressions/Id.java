@@ -5,14 +5,14 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableDecException;
 import miniJAST.exceptions.VariableNotInitException;
+import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
-import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.Type;
 
 import java.util.ArrayList;
 
-public class Id extends UnaryPostfixExpr implements AssignLHS{
+public class Id extends UnaryExpr implements AssignLHS{
     private Type varType;
     private String name;
     private boolean isArray;

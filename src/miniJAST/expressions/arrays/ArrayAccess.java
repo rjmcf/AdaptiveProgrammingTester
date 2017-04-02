@@ -7,12 +7,12 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.expressions.Id;
+import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
-import miniJAST.expressions.assignment.UnaryPostfixExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.PrimType;
 
-public class ArrayAccess extends UnaryPostfixExpr implements AssignLHS {
+public class ArrayAccess extends UnaryExpr implements AssignLHS {
     private int idE;
     private int index;
 

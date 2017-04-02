@@ -2,11 +2,11 @@ package miniJAST.expressions;
 
 import miniJAST.Context;
 import miniJAST.exceptions.TypeException;
-import miniJAST.expressions.assignment.UnaryPostfixExpr;
+import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.PrimType;
 
-public class Literal extends UnaryPostfixExpr {
+public class Literal extends UnaryExpr {
     private PrimType litType;
     private String value;
 

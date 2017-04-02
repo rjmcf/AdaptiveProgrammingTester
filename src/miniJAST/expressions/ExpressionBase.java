@@ -1,15 +1,12 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
-import miniJAST.FillableBlank;
-import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.returnValues.ReturnValues;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public abstract class ExpressionBase implements Expression {
     protected ArrayList<Expression> subNodes = new ArrayList<>();

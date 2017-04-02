@@ -9,12 +9,13 @@ import miniJAST.expressions.Expression;
 import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.StatementExpr;
+import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.returnValues.*;
 
 import java.util.ArrayList;
 
-public class UnaryPostIncExpr extends UnaryPostfixExpr implements StatementExpr {
+public class UnaryPostIncExpr extends UnaryExpr implements StatementExpr {
     private boolean isPlus;
     private int exprI;
 

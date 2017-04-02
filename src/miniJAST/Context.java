@@ -2,7 +2,6 @@ package miniJAST;
 
 import miniJAST.types.Type;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Context {

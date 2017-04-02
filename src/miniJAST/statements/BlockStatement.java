@@ -2,7 +2,6 @@ package miniJAST.statements;
 
 import miniJAST.Context;
 import miniJAST.MiniJASTNode;
-import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 
 public interface BlockStatement extends MiniJASTNode{
