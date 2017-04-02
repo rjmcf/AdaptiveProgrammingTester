@@ -409,6 +409,30 @@ public class MiniJavaASTBuilderTest {
         }
     }
 
+    @Test
+    public void testNSI() throws Exception {
+        String s =
+                "{" +
+                "int i = 0;" +
+                "if (true)" +
+                    "if (false)" +
+                        "i = 0;" +
+                    "else " +
+                        "i = 1;" +
+                "}";
+        parser = getParser(s);
+        tree = parser.entry(); //parse
+        result = builder.visit(tree);
+        assertTrue(result instanceof Block);
+        Block b = (Block)result;
+
+        b.executeStart(c);
+        Id iId = new Id();
+        iId.setUpId("i");
+        ReturnValuesInt r = (ReturnValuesInt)iId.evaluate(c);
+        assertEquals(r.value, 1);
+    }
+
     private MiniJavaParser getParser(String s) throws Exception {
         InputStream is = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         ANTLRInputStream input = new ANTLRInputStream(is);
