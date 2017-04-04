@@ -11,7 +11,7 @@ import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 import miniJAST.types.PrimType;
 
-public abstract class CondLoopBase extends StatementBase implements BlockStatement{
+public abstract class CondLoopBase extends StatementBase {
     protected int cond;
     protected int stmnt;
 

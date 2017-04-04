@@ -17,7 +17,7 @@ import miniJAST.types.PrimType;
 
 import java.util.ArrayList;
 
-public class LocalVarDec extends StatementBase implements BlockStatement {
+public class LocalVarDec extends StatementBase {
     protected PrimType type;
 
     public void setUpLVD(PrimType t) { subNodes.clear(); type = t; }

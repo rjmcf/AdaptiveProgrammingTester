@@ -12,7 +12,7 @@ import miniJAST.types.PrimType;
 
 import java.util.ArrayList;
 
-public class ForStmnt extends StatementBase implements BlockStatement {
+public class ForStmnt extends StatementBase {
     protected int init;
     protected int condI;
     protected ArrayList<Integer> updates = new ArrayList<>();

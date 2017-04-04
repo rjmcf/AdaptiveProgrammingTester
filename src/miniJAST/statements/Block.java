@@ -4,7 +4,7 @@ import miniJAST.Context;
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
 
-public class Block extends StatementBase implements BlockStatement {
+public class Block extends StatementBase {
     boolean isOuterMost;
 
     public Block(boolean isOuter) { isOuterMost = isOuter; }

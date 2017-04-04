@@ -9,7 +9,7 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.statements.*;
 import miniJAST.types.PrimType;
 
-public class IfThenElseStmnt extends StatementBase implements BlockStatement {
+public class IfThenElseStmnt extends StatementBase {
     protected int cond;
     protected int trueStmnt;
     protected int falseStmnt;

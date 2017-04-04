@@ -11,7 +11,7 @@ import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.expressions.StatementExpr;
 import miniJAST.statements.StatementBase;
 
-public class ForInit extends StatementBase implements BlockStatement{
+public class ForInit extends StatementBase {
     private boolean hasLVD = false;
 
     public void setLocalVarDec(BlockStatement lv) { subNodes.clear(); hasLVD = true; subNodes.add(lv); }

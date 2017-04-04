@@ -8,7 +8,7 @@ import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 
-public class VarDeclarator extends StatementBase implements BlockStatement{
+public class VarDeclarator extends StatementBase {
     protected String name;
     private int expr;
     protected boolean isArray = false;
