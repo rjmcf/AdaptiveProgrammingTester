@@ -15,9 +15,10 @@ public class TestForm {
     private JButton button;
     private JSlider baseSlider;
     private JTextArea display;
-    private JTextField bID;
     private JTextArea textArea1;
     private JButton fillBlankButton;
+    private JSpinner spinner1;
+    private JButton runButton;
     private static ExerciseSetter eS;
     private static String text;
     private static ByteArrayOutputStream baos;
@@ -45,14 +46,25 @@ public class TestForm {
         fillBlankButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (eS.fillBlank(Integer.valueOf(bID.getText()), textArea1.getText())) {
+                if (eS.fillBlank((int)spinner1.getValue(), textArea1.getText())) {
                     baos = new ByteArrayOutputStream();
                     eS.setOutput(baos);
                     eS.presentQuestion();
                     text = baos.toString();
                     display.setText(text);
                 } else {
-                    display.append("There was a problem filling the blank");
+                    display.append("There was a problem filling the blank\n");
+                }
+            }
+        });
+
+        runButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (eS.runSolution()) {
+                    display.append("Exercised completed!\n");
+                } else {
+                    display.append("A mistake was made somewhere.\n");
                 }
             }
         });

@@ -9,7 +9,4 @@ public abstract class FillableBlank {
 
     public int getId() { return id; }
     public FillableBlank(int nReplaced) { id = nextId.incrementAndGet(); nodesReplaced = nReplaced; }
-    public boolean fillBlank(int blankId, MiniJASTNode replacement) {
-        return false;
-    }
 }

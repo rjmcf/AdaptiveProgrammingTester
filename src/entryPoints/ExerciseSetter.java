@@ -94,6 +94,7 @@ public class ExerciseSetter {
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) {
+        //TODO fix the fact that VarDeclarators are treated as AssignExpr so you can't fill the blank
         try {
             if (!exercise.fillBlank(bId, replacement)) {
                 // Report that the blank could not be filled
