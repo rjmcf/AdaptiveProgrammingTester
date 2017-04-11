@@ -60,6 +60,11 @@ public class FillableBlankStmnt extends FillableBlank implements BlockStatement 
             return studentStmnt.stringRepr(blocksDeep);
     }
 
+    @Override
+    public void empty() {
+        studentStmnt = null;
+    }
+
     private String pad(int count) {
         return new String(new char[count]).replace("\0", "    ");
     }

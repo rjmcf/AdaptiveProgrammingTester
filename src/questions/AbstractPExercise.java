@@ -112,6 +112,27 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         return false;
     }
 
+    public boolean emptyBlank(int bId) {
+        Stack<MiniJASTNode> nodes = new Stack<>();
+        nodes.push(solution);
+        while (!nodes.empty()) {
+            if (nodes.peek() instanceof FillableBlank) {
+                if (((FillableBlank) nodes.peek()).getId() == bId) {
+                    ((FillableBlank) nodes.peek()).empty();
+                    return true;
+                } else {
+                    nodes.pop();
+                }
+            } else {
+                ArrayList<? extends MiniJASTNode> children = nodes.pop().getSubNodes();
+                ListIterator<? extends MiniJASTNode> it = children.listIterator(children.size());
+                while (it.hasPrevious())
+                    nodes.push(it.previous());
+            }
+        }
+        return false;
+    }
+
     public ArrayList<Integer> getBlankIds() {
         ArrayList<Integer> blankIds = new ArrayList<>();
         Stack<MiniJASTNode> nodes = new Stack<>();

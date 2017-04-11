@@ -108,6 +108,14 @@ public class ExerciseSetter {
         }
     }
 
+    public boolean emptyBlank(int bId) {
+        if (!exercise.emptyBlank(bId)) {
+            System.err.println("There was no blank with that id!");
+            return false;
+        }
+        return true;
+    }
+
     public boolean runSolution() {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {

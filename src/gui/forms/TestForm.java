@@ -19,6 +19,7 @@ public class TestForm {
     private JButton fillBlankButton;
     private JSpinner spinner1;
     private JButton runButton;
+    private JButton emptyBlankButton;
     private static ExerciseSetter eS;
     private static String text;
     private static ByteArrayOutputStream baos;
@@ -47,11 +48,7 @@ public class TestForm {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (eS.fillBlank((int)spinner1.getValue(), textArea1.getText())) {
-                    baos = new ByteArrayOutputStream();
-                    eS.setOutput(baos);
-                    eS.presentQuestion();
-                    text = baos.toString();
-                    display.setText(text);
+                    setQuestion();
                 } else {
                     display.append("There was a problem filling the blank\n");
                 }
@@ -68,6 +65,25 @@ public class TestForm {
                 }
             }
         });
+
+        emptyBlankButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (eS.emptyBlank((int)spinner1.getValue())) {
+                    setQuestion();
+                } else {
+                    display.append("There was a problem filling the blank\n");
+                }
+            }
+        });
+    }
+
+    private void setQuestion() {
+        baos = new ByteArrayOutputStream();
+        eS.setOutput(baos);
+        eS.presentQuestion();
+        text = baos.toString();
+        display.setText(text);
     }
 
     public static void main(String[] args) {

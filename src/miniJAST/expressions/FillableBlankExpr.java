@@ -52,4 +52,9 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
         else
             return studentExpr.stringRepr();
     }
+
+    @Override
+    public void empty() {
+        studentExpr = null;
+    }
 }

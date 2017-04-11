@@ -9,4 +9,5 @@ public abstract class FillableBlank {
 
     public int getId() { return id; }
     public FillableBlank(int nReplaced) { id = nextId.incrementAndGet(); nodesReplaced = nReplaced; }
+    public abstract void empty();
 }
