@@ -98,7 +98,6 @@ public class ExerciseSetter {
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) throws MiniJASTException{
-        //TODO fix the fact that VarDeclarators are treated as AssignExpr so you can't fill the blank
         if (!exercise.fillBlank(bId, replacement)) {
             // Report that the blank could not be filled
             System.err.println("There was no blank with that id!");
