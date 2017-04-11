@@ -65,7 +65,7 @@ public class TestForm {
             public void mouseClicked(MouseEvent e) {
                 try {
                     if (eS.runSolution()) {
-                        display.append("\nExercised completed!\n");
+                        display.append("\nExercise completed!\n");
                     } else {
                         display.append("\nA mistake was made somewhere.\n");
                     }

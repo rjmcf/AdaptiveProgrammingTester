@@ -83,6 +83,27 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         return solution.stringRepr(1);
     }
 
+    public boolean blankIsExpression(int bId) throws MiniJASTException{
+        Stack<MiniJASTNode> nodes = new Stack<>();
+        nodes.push(solution);
+        while (!nodes.empty()) {
+            if (nodes.peek() instanceof FillableBlank) {
+                if (((FillableBlank) nodes.peek()).getId() == bId) {
+                    if (nodes.peek() instanceof FillableBlankExpr) return true;
+                    else return false;
+                } else {
+                    nodes.pop();
+                }
+            } else {
+                ArrayList<? extends MiniJASTNode> children = nodes.pop().getSubNodes();
+                ListIterator<? extends MiniJASTNode> it = children.listIterator(children.size());
+                while (it.hasPrevious())
+                    nodes.push(it.previous());
+            }
+        }
+        throw new MiniJASTException("Blank Id not found");
+    }
+
     public boolean fillBlank(int bId, MiniJASTNode replacement) throws MiniJASTException{
         Stack<MiniJASTNode> nodes = new Stack<>();
         nodes.push(solution);

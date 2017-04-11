@@ -90,7 +90,11 @@ public class ExerciseSetter {
     }
 
     public boolean fillBlank(int bId, String input) throws MiniJASTException {
-        return fillBlank(bId, translator.makeAST(input));
+        if (exercise.blankIsExpression(bId)) {
+            return fillBlank(bId, translator.makeExpr(input));
+        } else {
+            return fillBlank(bId, translator.makeStmnt(input));
+        }
     }
 
     public boolean fillBlank(int bId, MiniJASTNode replacement) throws MiniJASTException{

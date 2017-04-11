@@ -57,6 +57,7 @@ block [boolean isOuter]
 
 blockStatement
     :   primitiveType variableDeclarators SEMI										# localVariableDeclaration
+    | 	variableDeclarator															# makeVarDec
     |   statement																	# makeStmnt
     ;
     
