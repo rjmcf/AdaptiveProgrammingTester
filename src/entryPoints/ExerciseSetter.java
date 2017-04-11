@@ -89,23 +89,18 @@ public class ExerciseSetter {
         return exercise.getBlankIds();
     }
 
-    public boolean fillBlank(int bId, String input) {
+    public boolean fillBlank(int bId, String input) throws MiniJASTException {
         return fillBlank(bId, translator.makeAST(input));
     }
 
-    public boolean fillBlank(int bId, MiniJASTNode replacement) {
+    public boolean fillBlank(int bId, MiniJASTNode replacement) throws MiniJASTException{
         //TODO fix the fact that VarDeclarators are treated as AssignExpr so you can't fill the blank
-        try {
-            if (!exercise.fillBlank(bId, replacement)) {
-                // Report that the blank could not be filled
-                System.err.println("There was no blank with that id!");
-                return false;
-            }
-            return true;
-        } catch (MiniJASTException e) {
-            System.err.println("Blank with id " + bId + " cannot be filled with object of type " + replacement.getClass() + ".");
+        if (!exercise.fillBlank(bId, replacement)) {
+            // Report that the blank could not be filled
+            System.err.println("There was no blank with that id!");
             return false;
         }
+        return true;
     }
 
     public boolean emptyBlank(int bId) {
@@ -116,7 +111,7 @@ public class ExerciseSetter {
         return true;
     }
 
-    public boolean runSolution() {
+    public boolean runSolution() throws MiniJASTException{
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
             exercise.runSolution();
@@ -130,23 +125,13 @@ public class ExerciseSetter {
             writer.write("Incorrect submission.\n");
             writer.flush();
             return false;
-        } catch (MiniJASTException mE) {
-            // report failed submission
-            try {
-                writer.write("Incorrect submission.\n");
-                writer.flush();
-                return false;
-            } catch (IOException e) {
-                System.out.println("Stream error");
-                return false;
-            }
         } catch (IOException e) {
             System.out.println("Stream error");
             return false;
         }
     }
 
-    public boolean submitAttempt() {
+    public boolean submitAttempt() throws MiniJASTException{
         attempts++;
         return runSolution();
     }

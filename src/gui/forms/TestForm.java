@@ -1,6 +1,7 @@
 package gui.forms;
 
 import entryPoints.ExerciseSetter;
+import miniJAST.exceptions.MiniJASTException;
 import questions.Difficulty;
 
 import javax.swing.*;
@@ -47,10 +48,14 @@ public class TestForm {
         fillBlankButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (eS.fillBlank((int)spinner1.getValue(), textArea1.getText())) {
-                    setQuestion();
-                } else {
-                    display.append("There was a problem filling the blank\n");
+                try {
+                    if (eS.fillBlank((int) spinner1.getValue(), textArea1.getText())) {
+                        setQuestion();
+                    } else {
+                        display.append("\nThere is no blank with that Id\n");
+                    }
+                } catch (MiniJASTException me) {
+                    display.append("\nSomething went wrong, the following error was raised:\n\""+me.getMessage()+"\"\n");
                 }
             }
         });
@@ -58,10 +63,14 @@ public class TestForm {
         runButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (eS.runSolution()) {
-                    display.append("Exercised completed!\n");
-                } else {
-                    display.append("A mistake was made somewhere.\n");
+                try {
+                    if (eS.runSolution()) {
+                        display.append("\nExercised completed!\n");
+                    } else {
+                        display.append("\nA mistake was made somewhere.\n");
+                    }
+                } catch (MiniJASTException me) {
+                    display.append("\nA mistake was made somewhere. The following error was raised: \n\"" + me.getMessage() + "\"\n");
                 }
             }
         });
@@ -72,7 +81,7 @@ public class TestForm {
                 if (eS.emptyBlank((int)spinner1.getValue())) {
                     setQuestion();
                 } else {
-                    display.append("There was a problem filling the blank\n");
+                    display.append("\nThere is no blank with that Id.\n");
                 }
             }
         });

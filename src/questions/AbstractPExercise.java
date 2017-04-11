@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ListIterator;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractPExercise implements Comparable<AbstractPExercise> {
     protected String question;
@@ -93,11 +95,19 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
                         } else if (nodes.peek() instanceof FillableBlankStmnt) {
                             ((FillableBlankStmnt) nodes.peek()).setStudentStmnt((BlockStatement) replacement);
                         } else {
-                            throw new ClassCastException("node is neither Expression not Statement!");
+                            throw new TypeException("node is neither Expression not Statement!");
                         }
                         return true;
                     } catch (ClassCastException e) {
-                        throw new TypeException("Incorrect type submitted for blank");
+                        Pattern p = Pattern.compile(".*\\.(.*) cannot be cast to .*\\.(.*)");
+                        Matcher m = p.matcher(e.getMessage());
+                        String text = "Incorrect type submitted for blank";
+                        if (m.matches()) {
+                            String from = m.group(1);
+                            String to = m.group(2);
+                            text += ": cannot cast from " + from + " to " + to +".";
+                        }
+                        throw new TypeException(text);
                     }
                 } else {
                     nodes.pop();

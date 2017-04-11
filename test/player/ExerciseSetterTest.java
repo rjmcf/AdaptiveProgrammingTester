@@ -1,6 +1,7 @@
 package player;
 
 import entryPoints.ExerciseSetter;
+import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arithExpr.AddExpr;
@@ -30,7 +31,12 @@ public class ExerciseSetterTest {
 
     @Test
     public void testSubmitAttempt() throws Exception {
-        assertFalse(setter.submitAttempt());
+        try {
+            setter.submitAttempt();
+            fail("No error thrown");
+        } catch (BlankEmptyException be) {
+            //pass
+        }
 
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
@@ -50,7 +56,12 @@ public class ExerciseSetterTest {
         totId.setUpId("total");
         setter.fillBlank(blankIds.get(4), totId);
 
-        assertFalse(setter.submitAttempt());
+        try {
+            setter.submitAttempt();
+            fail("No error thrown");
+        } catch (BlankEmptyException be) {
+            //pass
+        }
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
@@ -78,7 +89,12 @@ public class ExerciseSetterTest {
         totId.setUpId("total");
         setter.fillBlank(blankIds.get(4), totId);
 
-        setter.submitAttempt();
+        try {
+            setter.submitAttempt();
+            fail("No error thrown.");
+        } catch (BlankEmptyException be) {
+            //pass
+        }
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());
@@ -87,8 +103,19 @@ public class ExerciseSetterTest {
         assertTrue(setter.reportPerformance() > 0 && setter.reportPerformance() < 5);
 
         setter.setUp();
-        assertFalse(setter.submitAttempt());
-        setter.submitAttempt();
+        try {
+            setter.submitAttempt();
+            fail("No error thrown");
+        } catch (BlankEmptyException be) {
+            //pass
+        }
+        // Artificially force attempts to be larger.
+        try {
+            setter.submitAttempt();
+            fail("No error thrown");
+        } catch (BlankEmptyException be) {
+            //pass
+        }
 
         blankIds = setter.getBlankIds();
         setter.fillBlank(blankIds.get(0), total);
@@ -154,7 +181,12 @@ public class ExerciseSetterTest {
         totId.setUpId("total");
         setter.fillBlank(blankIds.get(4), totId);
 
-        setter.submitAttempt();
+        try {
+            setter.submitAttempt();
+            fail("No error thrown");
+        } catch (BlankEmptyException be) {
+            //pass
+        }
         setter.fillBlank(blankIds.get(5), nId);
 
         assertTrue(setter.submitAttempt());

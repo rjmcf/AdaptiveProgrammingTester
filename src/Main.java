@@ -1,16 +1,16 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Main {
 
     public static void main(String[] args) {
-        int a[] = new int[5];
-        for (int i = 0; i < 5; i+=2) {
-
-            a[i--] = i;
+        String t = "miniJAST.expressions.assignment.AssignExpr cannot be cast to miniJAST.statements.BlockStatement";
+        Pattern p = Pattern.compile(".*\\.(.*) cannot be cast to .*\\.(.*)");
+        Matcher m = p.matcher(t);
+        if (m.matches()) {
+            System.out.println(m.group(2));
+        } else {
+            System.out.println("No match");
         }
-
-        for (int i : a) {
-            System.out.println(i);
-        }
-
-
     }
 }
