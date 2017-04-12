@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class ExerciseSetter {
     JavaToMiniJava translator = new JavaToMiniJava();
     ArrayList<AbstractPExercise> possibleExs = new ArrayList<>();
-    private int currentIndex = 0;
+    private static final int INITIAL_EX = 1;
+    private int currentIndex;
     AbstractPExercise exercise;
     private int attempts = 0;
     int numNodes;
@@ -25,7 +26,7 @@ public class ExerciseSetter {
         possibleExs.add(new SquareExercise(5));
         possibleExs.add(new FactorialExercise(6));
         possibleExs.add(new FillArrayToNExercise(10));
-        setIndex(1);
+        setIndex(INITIAL_EX);
     }
 
     public Difficulty getCurrentDifficulty() { return new Difficulty(exercise.getBaseDifficulty(), exercise.getNodesBlank()); }
