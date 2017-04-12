@@ -21,29 +21,7 @@ public class AbstractPExerciseTest {
 
     @Test
     public void testAddBlank() throws Exception {
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
-        assertTrue(test.addBlank());
+        while (test.addBlank());
 
         assertFalse(test.addBlank());
     }
@@ -66,10 +44,10 @@ public class AbstractPExerciseTest {
         assertEquals(test.makeHarder(1), 0);
         assertEquals(test.makeHarder(3), 0);
         assertEquals(test.makeHarder(15), 0);
-        assertTrue(test.makeHarder(2) > 0);
+        assertTrue(test.makeHarder(3) > 0);
 
         test.setUp();
-        assertEquals(test.makeHarder(20), 0);
+        assertEquals(test.makeHarder(21), 0);
         assertTrue(test.makeHarder(1) > 0);
     }
 
@@ -148,7 +126,7 @@ public class AbstractPExerciseTest {
     public void testGetQuestionDifficultyModifier() throws Exception {
         float newDifficulty, currentDifficulty = test.getQuestionDiffModifier();
         assertEquals(currentDifficulty, 0.0f);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 21; i++) {
             test.addBlank();
             newDifficulty = test.getQuestionDiffModifier();
             assertTrue(newDifficulty >= currentDifficulty, "Test failed on iteration " + i);
@@ -162,7 +140,7 @@ public class AbstractPExerciseTest {
     @Test
     public void testGetQuestionDifficulty() throws Exception {
         float orig = test.getQuestionDifficulty();
-        test.makeHarder(20);
+        test.makeHarder(21);
         assertTrue(orig + 1 == test.getQuestionDifficulty());
     }
 

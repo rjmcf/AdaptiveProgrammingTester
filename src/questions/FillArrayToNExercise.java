@@ -4,6 +4,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.expressions.arrays.ArrayCreation;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
@@ -16,7 +17,6 @@ import miniJAST.statements.ForLoops.ForInit;
 import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.PrimType;
 
 public class FillArrayToNExercise extends AbstractPExercise {
@@ -41,15 +41,16 @@ public class FillArrayToNExercise extends AbstractPExercise {
 
         Literal n = new Literal();
         n.setUpLiteral(PrimType.INT, String.valueOf(max));
-        ArrayCreationWithSize ns = new ArrayCreationWithSize();
-        ns.setUpACWS("ns", PrimType.INT, n);
+        ArrayCreation nsR = new ArrayCreation(PrimType.INT, n);
+        VarDeclarator ns = new VarDeclarator();
+        ns.setUpVarDec("ns", true, nsR);
         LocalVarDec array = new LocalVarDec();
         array.setUpLVD(PrimType.INT);
         array.addVarDec(ns);
         Literal zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
         VarDeclarator i = new VarDeclarator();
-        i.setUpVarDec("i", zero);
+        i.setUpVarDec("i", false, zero);
         LocalVarDec iDec = new LocalVarDec();
         iDec.setUpLVD(PrimType.INT);
         iDec.addVarDec(i);

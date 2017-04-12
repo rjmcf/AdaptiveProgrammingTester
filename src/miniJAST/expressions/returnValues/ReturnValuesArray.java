@@ -16,6 +16,6 @@ public class ReturnValuesArray<T> extends ReturnValues{
     public T get(int index){
         return values.get(index);
     }
-
+    public ArrayList<T> getArray() { return values; }
     public int getSize() { return values.size(); }
 }

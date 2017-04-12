@@ -53,9 +53,9 @@ public class CondExprTest {
         doubQuart.setUpLiteral(PrimType.DOUBLE, "0.25");
 
         iDec = new VarDeclarator();
-        iDec.setUpVarDec("i", null);
+        iDec.setUpVarDec("i", false, null);
         jDec = new VarDeclarator();
-        jDec.setUpVarDec("j", null);
+        jDec.setUpVarDec("j", false, null);
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(iDec);

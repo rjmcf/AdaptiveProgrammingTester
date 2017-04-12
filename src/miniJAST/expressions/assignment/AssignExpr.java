@@ -7,6 +7,7 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.*;
+import miniJAST.expressions.arrays.ArrayInit;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.types.PrimType;
@@ -377,6 +378,28 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
             }
         } else {
             Id id = (Id) lhs;
+            try {
+                id.evaluate(c);
+            } catch (VariableNotInitException ve) {
+                // don't care
+            }
+
+
+            if (id.getIsArray()) {
+                if (op != AssignOp.EQ)
+                    throw new TypeException("Can only use = assignment operator with arrays");
+                if (subNodes.get(expr) instanceof ArrayInit)
+                    throw new TypeException("Cannot use Array Initialiser in assign expression");
+                ReturnValues rV = subNodes.get(expr).evaluate(c);
+                if (!rV.getIsArray())
+                    throw new TypeException("You must assign an array to an array variable");
+                if (rV.getType().uType != id.getType().uType)
+                    throw new TypeException("The types of the arrays do not match");
+                c.namesToTypes.put(id.getName(), rV.getType());
+                c.namesToValues.put(id.getName(), ((ReturnValuesArray)rV).getArray());
+                return rV;
+            }
+
             ReturnValues ex = subNodes.get(expr).evaluate(c);
 
             switch (op) {

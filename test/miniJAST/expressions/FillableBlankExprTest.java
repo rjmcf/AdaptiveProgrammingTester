@@ -6,6 +6,8 @@ import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.arithExpr.MultExpr;
 import miniJAST.expressions.arithExpr.UnaryPMExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.expressions.arrays.ArrayCreation;
+import miniJAST.expressions.arrays.ArrayInit;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
@@ -22,8 +24,6 @@ import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.statements.PrintStatement;
-import miniJAST.statements.arrays.ArrayCreationWithInitList;
-import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.Type;
 import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
@@ -310,12 +310,13 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluateArrayCreationList() throws Exception {
-        ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
-        acwil.setUPACWIL("fakeArray");
-        acwil.addExpressionACWIL(lit0);
-        acwil.addExpressionACWIL(fbe);
+        ArrayInit aI = new ArrayInit();
+        aI.addExpression(lit0);
+        aI.addExpression(fbe);
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("fakeArray", true, aI);
         lvd.setUpLVD(PrimType.INT);
-        lvd.addVarDec(acwil);
+        lvd.addVarDec(vD);
         try {
             lvd.executeStart(c);
             fail("Blank not filled.");
@@ -326,10 +327,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluateArrayCreationSize() throws Exception {
-        ArrayCreationWithSize acws = new ArrayCreationWithSize();
-        acws.setUpACWS("fakeArray", PrimType.INT, fbe);
+        ArrayCreation aC = new ArrayCreation(PrimType.INT, fbe);
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("fakeArray", true, aC);
         lvd.setUpLVD(PrimType.INT);
-        lvd.addVarDec(acws);
+        lvd.addVarDec(vD);
         try {
             lvd.executeStart(c);
             fail("Blank not filled.");
@@ -424,7 +426,7 @@ public class FillableBlankExprTest {
     @Test
     public void testEmptyEvaluateLVD() throws Exception {
         VarDeclarator fakeId = new VarDeclarator();
-        fakeId.setUpVarDec("fake", fbe);
+        fakeId.setUpVarDec("fake", false, fbe);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(fakeId);
@@ -753,16 +755,17 @@ public class FillableBlankExprTest {
     @Test
     public void testFilledArrayCreationList() throws Exception {
         FillableBlankExpr fbe1 = new FillableBlankExpr(1);
-        ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
-        acwil.setUPACWIL("fakeAr");
+        ArrayInit aC = new ArrayInit();
         fbe.setStudentExpr(lit1);
         fbe1.setStudentExpr(lit0);
-        acwil.addExpressionACWIL(fbe);
-        acwil.addExpressionACWIL(fbe1);
-        assertEquals(acwil.stringRepr(0), "fakeAr[] = { 1, 0 }");
+        aC.addExpression(fbe);
+        aC.addExpression(fbe1);
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("fakeAr", true, aC);
+        assertEquals(vD.stringRepr(0), "fakeAr[] = { 1, 0 }");
 
         lvd.setUpLVD(PrimType.INT);
-        lvd.addVarDec(acwil);
+        lvd.addVarDec(vD);
 
         assertEquals(lvd.stringRepr(0), "int fakeAr[] = { 1, 0 };");
         lvd.executeStart(c);
@@ -775,13 +778,14 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledArrayCreationSize() throws Exception {
-        ArrayCreationWithSize acws = new ArrayCreationWithSize();
         fbe.setStudentExpr(lit2);
-        acws.setUpACWS("fakeAr", PrimType.INT, fbe);
-        assertEquals(acws.stringRepr(0), "fakeAr[] = new int[2]");
+        ArrayCreation aI = new ArrayCreation(PrimType.INT, fbe);
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("fakeAr", true, aI);
+        assertEquals(vD.stringRepr(0), "fakeAr[] = new int[2]");
 
         lvd.setUpLVD(PrimType.INT);
-        lvd.addVarDec(acws);
+        lvd.addVarDec(vD);
         lvd.executeStart(c);
 
         Id fakeAr = new Id();
@@ -920,7 +924,7 @@ public class FillableBlankExprTest {
     public void testFilledLVD() throws Exception {
         fbe.setStudentExpr(lit2);
         VarDeclarator i = new VarDeclarator();
-        i.setUpVarDec("i", fbe);
+        i.setUpVarDec("i", false, fbe);
 
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(i);

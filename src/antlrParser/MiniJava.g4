@@ -57,8 +57,8 @@ block [boolean isOuter]
 
 blockStatement
     :   primitiveType variableDeclarators SEMI										# localVariableDeclaration
-    | 	variableDeclarator															# makeVarDec
     |   statement																	# makeStmnt
+    | 	variableDeclarator															# makeVarDec
     ;
     
 statementTop
@@ -144,21 +144,21 @@ variableDeclarators
     ;
 
 variableDeclarator
-    :   Identifier LBRACK RBRACK ASSIGN variableInitializer[$Identifier.text]   # arrayVarDec // This will change to look more like singleVarDec
-    |	Identifier (ASSIGN variableInitializer[$Identifier.text])?				# singleVarDec
+    :   Identifier LBRACK RBRACK (ASSIGN variableInitializer)? 					# arrayVarDec 
+    |	Identifier (ASSIGN variableInitializer)?				 				# singleVarDec
     ;
 
-variableInitializer [String id]
-    :   arrayInitializerValues[id]												# arrayInitVals
-    |	arrayInitializerSize[id]												# arrayInitSize
+variableInitializer 
+    :   arrayInitializerValues													# arrayInitVals
+    |	arrayInitializerSize													# arrayInitSize
     |   expression																# initExpr
     ;
 
-arrayInitializerValues [String id]
-    :   LBRACE variableInitializer[id] (COMMA variableInitializer [id])* (COMMA)? RBRACE	
+arrayInitializerValues
+    :   LBRACE variableInitializer (COMMA variableInitializer)* (COMMA)? RBRACE	
     ;
     
-arrayInitializerSize [String id]
+arrayInitializerSize
 	: 	NEW primitiveType LBRACK expression RBRACK
 	;
 

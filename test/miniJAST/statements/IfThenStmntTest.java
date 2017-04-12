@@ -32,7 +32,7 @@ public class IfThenStmntTest {
         zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
-        i.setUpVarDec("i", zero);
+        i.setUpVarDec("i", false, zero);
         i0 = new LocalVarDec();
         i0.setUpLVD(PrimType.INT);
         i0.addVarDec(i);
@@ -52,7 +52,7 @@ public class IfThenStmntTest {
         block1.addBlockStmnt(iTS1);
 
         j = new VarDeclarator();
-        j.setUpVarDec("j", zero);
+        j.setUpVarDec("j", false, zero);
         j0 = new LocalVarDec();
         j0.setUpLVD(PrimType.INT);
         j0.addVarDec(j);

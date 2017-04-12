@@ -5,6 +5,8 @@ import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.expressions.arrays.ArrayCreation;
+import miniJAST.expressions.arrays.ArrayInit;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
@@ -18,8 +20,6 @@ import miniJAST.statements.ForLoops.ForStmnt;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.statements.arrays.ArrayCreationWithInitList;
-import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,9 +29,9 @@ import static org.testng.Assert.*;
 public class SingleWordStmntTest {
     Context c;
     Literal H, e, l, o, exc, ques, six, zero, nine, two, seven, three, one;
-    ArrayCreationWithInitList orig;
-    ArrayCreationWithSize result;
-    VarDeclarator i, j;
+    ArrayInit origR;
+    ArrayCreation resultR;
+    VarDeclarator i, j, orig, result;
     ForInit init2;
     ForStmnt forStmnt1, forStmnt2;
     LocalVarDec arrays, iDec, jDec;
@@ -62,13 +62,16 @@ public class SingleWordStmntTest {
         exc.setUpLiteral(PrimType.CHAR, "!");
         six = new Literal();
         six.setUpLiteral(PrimType.INT, "6");
-        orig = new ArrayCreationWithInitList();
-        orig.setUPACWIL("orig");
+        origR = new ArrayInit();
         Literal[] letters = new Literal[] {H, e, l, l, l, o, exc, exc, exc};
         for (Literal l : letters)
-            orig.addExpressionACWIL(l);
-        result = new ArrayCreationWithSize();
-        result.setUpACWS("result", PrimType.CHAR,  six);
+            origR.addExpression(l);
+        orig = new VarDeclarator();
+        orig.setUpVarDec("orig", true, origR);
+
+        resultR = new ArrayCreation(PrimType.CHAR,  six);
+        result = new VarDeclarator();
+        result.setUpVarDec("result", true,  resultR);
         arrays = new LocalVarDec();
         arrays.setUpLVD(PrimType.CHAR);
         arrays.addVarDec(orig);
@@ -77,7 +80,7 @@ public class SingleWordStmntTest {
         zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
-        i.setUpVarDec("i", zero);
+        i.setUpVarDec("i", false, zero);
         iDec = new LocalVarDec();
         iDec.setUpLVD(PrimType.INT);
         iDec.addVarDec(i);
@@ -151,7 +154,7 @@ public class SingleWordStmntTest {
         outer.addBlockStmnt(eS2);
 
         j = new VarDeclarator();
-        j.setUpVarDec("j", zero);
+        j.setUpVarDec("j", false, zero);
         jDec = new LocalVarDec();
         jDec.setUpLVD(PrimType.INT);
         jDec.addVarDec(j);

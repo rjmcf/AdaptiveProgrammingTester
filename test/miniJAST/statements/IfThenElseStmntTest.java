@@ -29,7 +29,7 @@ public class IfThenElseStmntTest {
     public void setUp() throws Exception {
         c = new Context();
         i = new VarDeclarator();
-        i.setUpVarDec("i", null);
+        i.setUpVarDec("i", false, null);
         iE = new LocalVarDec();
         iE.setUpLVD(PrimType.INT);
         iE.addVarDec(i);
@@ -54,7 +54,7 @@ public class IfThenElseStmntTest {
         block1.addBlockStmnt(iTES1);
 
         j = new VarDeclarator();
-        j.setUpVarDec("j", null);
+        j.setUpVarDec("j", false, null);
         jE = new LocalVarDec();
         jE.setUpLVD(PrimType.INT);
         jE.addVarDec(j);

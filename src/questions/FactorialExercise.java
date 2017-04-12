@@ -44,11 +44,11 @@ public class FactorialExercise extends AbstractPExercise {
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator totalDec = new VarDeclarator();
-        totalDec.setUpVarDec("total", one);
+        totalDec.setUpVarDec("total", false, one);
         Literal nLit = new Literal();
         nLit.setUpLiteral(PrimType.INT, String.valueOf(n));
         VarDeclarator nDec = new VarDeclarator();
-        nDec.setUpVarDec("n", nLit);
+        nDec.setUpVarDec("n", false, nLit);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(totalDec);

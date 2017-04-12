@@ -177,7 +177,7 @@ public class FillableBlankStmntTest {
     @Test
     public void testFilledFor() throws Exception {
         VarDeclarator iDec = new VarDeclarator();
-        iDec.setUpVarDec("i", lit0);
+        iDec.setUpVarDec("i", false, lit0);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(iDec);
@@ -247,7 +247,7 @@ public class FillableBlankStmntTest {
     @Test
     public void testFilledBlock() throws Exception {
         VarDeclarator v = new VarDeclarator();
-        v.setUpVarDec("i", lit0);
+        v.setUpVarDec("i", false, lit0);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(v);
@@ -273,7 +273,7 @@ public class FillableBlankStmntTest {
     @Test
     public void testFilledLVD() throws Exception {
         VarDeclarator v = new VarDeclarator();
-        v.setUpVarDec("i", lit1);
+        v.setUpVarDec("i", false, lit1);
         fbs.setStudentStmnt(v);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);

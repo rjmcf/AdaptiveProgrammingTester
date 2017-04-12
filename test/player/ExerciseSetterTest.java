@@ -43,7 +43,7 @@ public class ExerciseSetterTest {
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();
-        total.setUpVarDec("total", one);
+        total.setUpVarDec("total", false, one);
         setter.fillBlank(blankIds.get(0), total);
         Literal six = new Literal();
         six.setUpLiteral(PrimType.INT, "6");
@@ -76,7 +76,7 @@ public class ExerciseSetterTest {
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();
-        total.setUpVarDec("total", one);
+        total.setUpVarDec("total", false, one);
         setter.fillBlank(blankIds.get(0), total);
         Literal six = new Literal();
         six.setUpLiteral(PrimType.INT, "6");
@@ -138,7 +138,7 @@ public class ExerciseSetterTest {
         Literal zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
         aE.setUpAddExpr(true, zero, one);
-        total.setUpVarDec("total", aE);
+        total.setUpVarDec("total", false, aE);
 
         Literal five = new Literal();
         five.setUpLiteral(PrimType.INT, "5");
@@ -168,7 +168,7 @@ public class ExerciseSetterTest {
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();
-        total.setUpVarDec("total", one);
+        total.setUpVarDec("total", false, one);
         setter.fillBlank(blankIds.get(0), total);
         Literal six = new Literal();
         six.setUpLiteral(PrimType.INT, "6");
@@ -204,7 +204,7 @@ public class ExerciseSetterTest {
             setter.submitAttempt();
 
         VarDeclarator n = new VarDeclarator();
-        n.setUpVarDec("n", six);
+        n.setUpVarDec("n", false, six);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(total);

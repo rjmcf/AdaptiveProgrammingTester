@@ -10,6 +10,8 @@ import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
+import miniJAST.expressions.arrays.ArrayCreation;
+import miniJAST.expressions.arrays.ArrayInit;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.returnValues.ReturnValues;
@@ -18,8 +20,6 @@ import miniJAST.expressions.returnValues.ReturnValuesBool;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.statements.arrays.ArrayCreationWithInitList;
-import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -47,21 +47,21 @@ public class LocalVarDecTest {
     @Test
     public void testSimpleExecute() throws Exception {
         VarDeclarator boolDec = new VarDeclarator();
-        boolDec.setUpVarDec("bDec", null);
+        boolDec.setUpVarDec("bDec", false, null);
         VarDeclarator boolDef = new VarDeclarator();
-        boolDef.setUpVarDec("bDef", t);
+        boolDef.setUpVarDec("bDef", false, t);
         VarDeclarator intDec1 = new VarDeclarator();
-        intDec1.setUpVarDec("iDec1", null);
+        intDec1.setUpVarDec("iDec1", false, null);
         VarDeclarator intDec2 = new VarDeclarator();
-        intDec2.setUpVarDec("iDec2", null);
+        intDec2.setUpVarDec("iDec2", false, null);
         Literal int2 = new Literal();
         int2.setUpLiteral(PrimType.INT, "2");
         VarDeclarator intDef1 = new VarDeclarator();
-        intDef1.setUpVarDec("iDef1", int2);
+        intDef1.setUpVarDec("iDef1", false, int2);
         Literal int3 = new Literal();
         int3.setUpLiteral(PrimType.INT, "3");
         VarDeclarator intDef2 = new VarDeclarator();
-        intDef2.setUpVarDec("iDef2", int3);
+        intDef2.setUpVarDec("iDef2", false, int3);
         AssignExpr aE = new AssignExpr();
 
         lvd = new LocalVarDec();
@@ -186,12 +186,13 @@ public class LocalVarDecTest {
             }
         };
 
-        ArrayCreationWithSize aCSize = new ArrayCreationWithSize();
-        aCSize.setUpACWS("boolArray2", PrimType.BOOLEAN, two);
+        ArrayCreation aC = new ArrayCreation(PrimType.BOOLEAN, two);
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("boolArray2", true, aC);
 
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
-        lvd.addVarDec(aCSize);
+        lvd.addVarDec(vD);
         lvd.execute(c, 0);
 
         id.setUpId("boolArray2");
@@ -199,10 +200,11 @@ public class LocalVarDecTest {
 
         assertEquals(2, ar.getType().size);
 
-        aCSize.setUpACWS("boolArrayT", PrimType.BOOLEAN, t);
+        aC = new ArrayCreation(PrimType.BOOLEAN, t);
+        vD.setUpVarDec("boolArrayT", true, aC);
 
         lvd.setUpLVD(PrimType.BOOLEAN);
-        lvd.addVarDec(aCSize);
+        lvd.addVarDec(vD);
         try {
             lvd.execute(c, 0);
             fail("Size must be integer type");
@@ -212,12 +214,12 @@ public class LocalVarDecTest {
 
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
-        ArrayCreationWithSize aCSize1 = new ArrayCreationWithSize();
-        aCSize1.setUpACWS("boolArray3", PrimType.BOOLEAN, one);
+        ArrayCreation aC1 = new ArrayCreation(PrimType.BOOLEAN, one);
+        vD.setUpVarDec("boolArray3", true, aC1);
 
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
-        lvd.addVarDec(aCSize1);
+        lvd.addVarDec(vD);
         lvd.execute(c, 0);
 
         Id id1 = new Id();
@@ -229,15 +231,17 @@ public class LocalVarDecTest {
 
     @Test
     public void testArrayInitListExecute() throws Exception {
-        ArrayCreationWithInitList aCWIL = new ArrayCreationWithInitList();
-        aCWIL.setUPACWIL("boolArray");
-        aCWIL.addExpressionACWIL(t);
-        aCWIL.addExpressionACWIL(f);
-        aCWIL.addExpressionACWIL(t);
+        ArrayInit aI = new ArrayInit();
+        aI.addExpression(t);
+        aI.addExpression(f);
+        aI.addExpression(t);
+
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("boolArray", true, aI);
 
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
-        lvd.addVarDec(aCWIL);
+        lvd.addVarDec(vD);
         lvd.executeStart(c);
 
         id.setUpId("boolArray");
@@ -258,11 +262,11 @@ public class LocalVarDecTest {
         c = new Context();
         Literal two = new Literal();
         two.setUpLiteral(PrimType.INT, "2");
-        aCWIL.addExpressionACWIL(two);
+        aI.addExpression(two);
 
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
-        lvd.addVarDec(aCWIL);
+        lvd.addVarDec(vD);
         try {
             lvd.executeStart(c);
             fail("Types do not match");
@@ -270,13 +274,14 @@ public class LocalVarDecTest {
             // pass test
         }
 
-        ArrayCreationWithInitList aCWIL1 = new ArrayCreationWithInitList();
-        aCWIL1.setUPACWIL("boolArray1");
-        aCWIL1.addExpressionACWIL(t);
+        ArrayInit aI1 = new ArrayInit();
+        aI1.addExpression(t);
+
+        vD.setUpVarDec("boolArray1", true, aI1);
 
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
-        lvd.addVarDec(aCWIL1);
+        lvd.addVarDec(vD);
         lvd.executeStart(c);
 
         id.setUpId("boolArray1");
@@ -284,5 +289,72 @@ public class LocalVarDecTest {
 
         assertEquals(1, ar1.getType().size);
         assertTrue(ar1.get(0));
+    }
+
+    @Test
+    public void testArrayNotInitialised() throws Exception {
+        /* Code is:
+        int i[], j[];
+        i = new int[2];
+        j = {1,2}; //Should fail
+         */
+
+        VarDeclarator iDec = new VarDeclarator(), jDec = new VarDeclarator();
+        iDec.setUpVarDec("i", true, null);
+        jDec.setUpVarDec("j", true, null);
+
+        Id i = new Id(), j = new Id();
+        i.setUpId("i"); j.setUpId("j");
+
+        Literal two = new Literal(), one = new Literal();
+        one.setUpLiteral(PrimType.INT, "1");
+        two.setUpLiteral(PrimType.INT, "2");
+        ArrayCreation aC = new ArrayCreation(PrimType.INT, two);
+        ArrayInit aI = new ArrayInit();
+        aI.addExpression(one);
+        aI.addExpression(two);
+
+        LocalVarDec lvd = new LocalVarDec();
+        lvd.setUpLVD(PrimType.INT);
+        lvd.addVarDec(iDec);
+        lvd.addVarDec(jDec);
+        lvd.executeStart(c);
+
+        AssignExpr aE1 = new AssignExpr(), aE2 = new AssignExpr();
+        aE1.setUpAssignExpr(i, AssignOp.EQ, aC);
+        aE1.evaluate(c);
+        ReturnValues rV = i.evaluate(c);
+        assertTrue(rV.getIsArray());
+        assertEquals(rV.getType().uType, PrimType.INT);
+        assertEquals(rV.getType().size, 2);
+
+        aE2.setUpAssignExpr(j, AssignOp.EQ, aI);
+        try {
+            aE2.evaluate(c);
+            fail("Array initialiser not allowed in assign expression");
+        } catch (TypeException te) {
+            //pass
+        }
+    }
+
+    @Test
+    public void testEmptyInitialiser() throws Exception {
+        /* Code is:
+        int i[] = {};
+         */
+        ArrayInit aI = new ArrayInit();
+        VarDeclarator vD = new VarDeclarator();
+        vD.setUpVarDec("i", true, aI);
+        LocalVarDec lvd = new LocalVarDec();
+        lvd.setUpLVD(PrimType.INT);
+        lvd.addVarDec(vD);
+        lvd.executeStart(c);
+
+        Id i = new Id();
+        i.setUpId("i");
+        ReturnValues rV = i.evaluate(c);
+        assertTrue(rV.getIsArray());
+        assertEquals(rV.getType().uType, PrimType.INT);
+        assertEquals(rV.getType().size, 0);
     }
 }

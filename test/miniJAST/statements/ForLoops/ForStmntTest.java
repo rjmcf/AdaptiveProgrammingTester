@@ -47,7 +47,7 @@ public class ForStmntTest {
         one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
         sum = new VarDeclarator();
-        sum.setUpVarDec("sum", one);
+        sum.setUpVarDec("sum", false, one);
         sumStat.addVarDec(sum);
 
         // set up ForStmnt
@@ -61,7 +61,7 @@ public class ForStmntTest {
         five = new Literal();
         five.setUpLiteral(PrimType.INT, "5");
         i = new VarDeclarator();
-        i.setUpVarDec("i", five);
+        i.setUpVarDec("i", false, five);
         iStat.addVarDec(i);
         fI.setLocalVarDec(iStat);
 
@@ -96,7 +96,7 @@ public class ForStmntTest {
 
 
         j = new VarDeclarator();
-        j.setUpVarDec("j", zero);
+        j.setUpVarDec("j", false, zero);
         jStat = new LocalVarDec();
         jStat.setUpLVD(PrimType.INT);
         jStat.addVarDec(j);

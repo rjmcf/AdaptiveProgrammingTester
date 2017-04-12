@@ -9,12 +9,12 @@ import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 
 public class VarDeclarator extends StatementBase {
-    protected String name;
+    private String name;
     private int expr;
-    protected boolean isArray = false;
+    private boolean isArray;
     private boolean hasExpr;
 
-    public void setUpVarDec(String n, Expression e) {
+    public void setUpVarDec(String n, boolean isA, Expression e) {
         subNodes.clear();
         name = n;
         expr = 0;
@@ -24,10 +24,13 @@ public class VarDeclarator extends StatementBase {
             hasExpr = true;
             subNodes.add(e);
         }
+        isArray = isA;
     }
 
     public String getName() { return name; }
     public Expression getExpr() { return hasExpr ? (Expression)subNodes.get(expr) : null; }
+    public boolean getIsArray() { return isArray; }
+    public boolean getHasExpr() { return hasExpr; }
 
     @Override
     public FlowControl execute(Context c, int depth) throws MiniJASTException {
@@ -41,6 +44,6 @@ public class VarDeclarator extends StatementBase {
 
     @Override
     public String stringRepr(int blocksDeep) {
-        return name + (hasExpr ? (" = " + ((Expression)subNodes.get(expr)).stringRepr()) : "");
+        return name + (isArray ? "[]" : "") + (hasExpr ? (" = " + ((Expression)subNodes.get(expr)).stringRepr()) : "");
     }
 }

@@ -34,9 +34,9 @@ public class SquareExercise extends AbstractPExercise {
         Literal nLit = new Literal();
         nLit.setUpLiteral(PrimType.INT, String.valueOf(n));
         VarDeclarator nDec = new VarDeclarator();
-        nDec.setUpVarDec("n", nLit);
+        nDec.setUpVarDec("n", false, nLit);
         VarDeclarator nSqDec = new VarDeclarator();
-        nSqDec.setUpVarDec("nSq", null);
+        nSqDec.setUpVarDec("nSq", false, null);
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(nDec);

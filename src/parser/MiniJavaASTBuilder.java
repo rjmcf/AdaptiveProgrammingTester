@@ -10,6 +10,8 @@ import miniJAST.expressions.arithExpr.AddExpr;
 import miniJAST.expressions.arithExpr.MultExpr;
 import miniJAST.expressions.arithExpr.UnaryPMExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
+import miniJAST.expressions.arrays.ArrayCreation;
+import miniJAST.expressions.arrays.ArrayInit;
 import miniJAST.expressions.assignment.AssignExpr;
 import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
@@ -24,8 +26,6 @@ import miniJAST.statements.IfThenEtc.IfThenElseStmnt;
 import miniJAST.statements.IfThenEtc.IfThenStmnt;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.statements.arrays.ArrayCreationWithInitList;
-import miniJAST.statements.arrays.ArrayCreationWithSize;
 import miniJAST.types.PrimTypeCarrier;
 import miniJAST.types.PrimType;
 
@@ -72,27 +72,33 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
     public MiniJASTNode visitArrayInitializerSize(MiniJavaParser.ArrayInitializerSizeContext ctx) {
-        ArrayCreationWithSize acws = new ArrayCreationWithSize();
-        acws.setUpACWS(ctx.id, ((PrimTypeCarrier)visit(ctx.primitiveType())).type, (Expression)visit(ctx.expression()));
-        return acws;
+        ArrayCreation aC = new ArrayCreation(((PrimTypeCarrier)visit(ctx.primitiveType())).type, (Expression)visit(ctx.expression()));
+        return aC;
     }
 
     @Override
     public MiniJASTNode visitArrayInitializerValues(MiniJavaParser.ArrayInitializerValuesContext ctx) {
-        ArrayCreationWithInitList acwil = new ArrayCreationWithInitList();
-        acwil.setUPACWIL(ctx.id);
+        ArrayInit aI = new ArrayInit();
         for (MiniJavaParser.VariableInitializerContext c : ctx.variableInitializer()) {
             Expression e = (Expression)visit(c);
-            acwil.addExpressionACWIL(e);
+            aI.addExpression(e);
         }
-        return acwil;
+        return aI;
+    }
+
+    @Override
+    public MiniJASTNode visitArrayVarDec(MiniJavaParser.ArrayVarDecContext ctx) {
+        VarDeclarator vD = new VarDeclarator();
+        Expression e = ctx.variableInitializer() == null ? null : (Expression)visit(ctx.variableInitializer());
+        vD.setUpVarDec(ctx.Identifier().getText(), true, e);
+        return vD;
     }
 
     @Override
     public MiniJASTNode visitSingleVarDec(MiniJavaParser.SingleVarDecContext ctx) {
         VarDeclarator vD = new VarDeclarator();
         Expression e = ctx.variableInitializer() == null ? null : (Expression)visit(ctx.variableInitializer());
-        vD.setUpVarDec(ctx.Identifier().getText(), e);
+        vD.setUpVarDec(ctx.Identifier().getText(), false, e);
         return vD;
     }
 

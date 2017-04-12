@@ -49,7 +49,7 @@ public class MiniJASTNodeTest {
         fbe1 = new FillableBlankExpr(0);
         blankIds.add(fbe1.getId());
         sum = new VarDeclarator();
-        sum.setUpVarDec("sum", fbe1);
+        sum.setUpVarDec("sum", false, fbe1);
         sumStat.addVarDec(sum);
 
         // set up ForStmnt
@@ -63,7 +63,7 @@ public class MiniJASTNodeTest {
         five = new Literal();
         five.setUpLiteral(PrimType.INT, "5");
         i = new VarDeclarator();
-        i.setUpVarDec("i", five);
+        i.setUpVarDec("i", false, five);
         iStat.addVarDec(i);
         fI.setLocalVarDec(iStat);
 

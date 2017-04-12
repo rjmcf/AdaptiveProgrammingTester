@@ -37,7 +37,7 @@ public class DoStmntTest {
         t = new Literal();
         t.setUpLiteral(PrimType.BOOLEAN, "true");
         cont = new VarDeclarator();
-        cont.setUpVarDec("cont", t);
+        cont.setUpVarDec("cont", false, t);
         contDec = new LocalVarDec();
         contDec.setUpLVD(PrimType.BOOLEAN);
         contDec.addVarDec(cont);
@@ -59,9 +59,9 @@ public class DoStmntTest {
         zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
-        i.setUpVarDec("i", zero);
+        i.setUpVarDec("i", false, zero);
         thing = new VarDeclarator();
-        thing.setUpVarDec("thing", null);
+        thing.setUpVarDec("thing", false, null);
         dec2 = new LocalVarDec();
         dec2.setUpLVD(PrimType.INT);
         dec2.addVarDec(i);

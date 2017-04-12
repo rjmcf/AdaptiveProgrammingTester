@@ -36,7 +36,7 @@ public class ContextTest {
         zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
         i = new VarDeclarator();
-        i.setUpVarDec("i", zero);
+        i.setUpVarDec("i", false, zero);
         iDec = new LocalVarDec();
         iDec.setUpLVD(PrimType.INT);
         iDec.addVarDec(i);
@@ -49,7 +49,7 @@ public class ContextTest {
         plus = new UnaryPostIncExpr();
         plus.setUpPostIncExpr(true, iID);
         j = new VarDeclarator();
-        j.setUpVarDec("j", iID);
+        j.setUpVarDec("j", false, iID);
         jDec = new LocalVarDec();
         jDec.setUpLVD(PrimType.INT);
         jDec.addVarDec(j);

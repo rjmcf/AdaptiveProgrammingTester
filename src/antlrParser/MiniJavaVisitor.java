@@ -52,19 +52,19 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLocalVariableDeclaration(MiniJavaParser.LocalVariableDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code makeVarDec}
-	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMakeVarDec(MiniJavaParser.MakeVarDecContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code makeStmnt}
 	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMakeStmnt(MiniJavaParser.MakeStmntContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code makeVarDec}
+	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMakeVarDec(MiniJavaParser.MakeVarDecContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code stmnt}
 	 * labeled alternative in {@link MiniJavaParser#statementTop}.
