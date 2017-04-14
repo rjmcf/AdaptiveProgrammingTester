@@ -202,6 +202,7 @@ public class ExerciseSetterTest {
 
         for (int i = 0; i < 3; i++)
             setter.submitAttempt();
+        //TODO understand why this throws an exception where it didn't before.
 
         VarDeclarator n = new VarDeclarator();
         n.setUpVarDec("n", false, six);

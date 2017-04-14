@@ -24,7 +24,7 @@ public class PrintStatementTest {
 
     @BeforeMethod
     public void setUp() {
-        pr = new PrintStatement();
+        pr = new PrintStatement(System.out);
         boolExpr = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {

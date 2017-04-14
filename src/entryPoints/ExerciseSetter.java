@@ -81,6 +81,7 @@ public class ExerciseSetter {
         try {
             writer.write(exercise.deliverQuestion());
             writer.flush();
+            writer.close();
         } catch (IOException e) {
             System.err.println("stream error");
         }

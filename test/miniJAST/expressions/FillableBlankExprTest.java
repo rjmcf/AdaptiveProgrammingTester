@@ -56,7 +56,7 @@ public class FillableBlankExprTest {
         id = new Id();
         id.setUpId("fakeArray");
         lvd = new LocalVarDec();
-        testS = new PrintStatement();
+        testS = new PrintStatement(System.out);
         testS.setUpPrint(lit0);
     }
 
@@ -451,7 +451,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluatePrStmnt() throws Exception {
-        PrintStatement pS = new PrintStatement();
+        PrintStatement pS = new PrintStatement(System.out);
         pS.setUpPrint(fbe);
         try {
             pS.executeStart(c);
@@ -957,7 +957,7 @@ public class FillableBlankExprTest {
     @Test
     public void testFilledPrStmnt() throws Exception {
         fbe.setStudentExpr(lit2);
-        PrintStatement pS = new PrintStatement();
+        PrintStatement pS = new PrintStatement(System.out);
         pS.setUpPrint(fbe);
         assertEquals(pS.stringRepr(0), "System.out.println(2);");
         pS.executeStart(c);

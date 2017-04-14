@@ -5,8 +5,16 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+
 public class PrintStatement extends StatementBase {
     private int expr;
+    OutputStream printTo;
+
+    public PrintStatement(OutputStream out) { printTo = out; }
 
     public void setUpPrint(Expression e) { subNodes.clear(); expr = 0; subNodes.add(e); }
 
@@ -20,31 +28,33 @@ public class PrintStatement extends StatementBase {
         checkType((Expression)subNodes.get(expr), Expression.class);
 
         ReturnValues v = ((Expression)subNodes.get(expr)).evaluate(c);
-
+        PrintStream writer = new PrintStream(printTo);
         if (v.getIsArray()) {
             ReturnValuesArray var = (ReturnValuesArray) v;
-            System.out.print("[ ");
+            writer.print("[ ");
             for (int i = 0; i < var.getSize(); i++) {
-                System.out.print(var.get(i));
+                writer.print(var.get(i));
                 if (i != var.getSize() - 1)
-                    System.out.print(", ");
+                    writer.print(", ");
             }
-            System.out.println(" ]");
+            writer.println(" ]");
         } else {
             switch (v.getType().uType) {
                 case BOOLEAN:
-                    System.out.println(((ReturnValuesBool) v).value);
+                    writer.println(((ReturnValuesBool) v).value);
                     break;
                 case CHAR:
-                    System.out.println(((ReturnValuesChar) v).value);
+                    writer.println(((ReturnValuesChar) v).value);
                     break;
                 case INT:
-                    System.out.println(((ReturnValuesInt) v).value);
+                    writer.println(((ReturnValuesInt) v).value);
                     break;
                 default: // DOUBLE
-                    System.out.println(((ReturnValuesDouble) v).value);
+                    writer.println(((ReturnValuesDouble) v).value);
             }
         }
+        writer.flush();
+        writer.close();
 
         return FlowControl.NONE;
     }

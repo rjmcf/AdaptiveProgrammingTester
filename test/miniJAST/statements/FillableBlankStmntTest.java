@@ -42,7 +42,7 @@ public class FillableBlankStmntTest {
         litT.setUpLiteral(PrimType.BOOLEAN, "true");
         litF = new Literal();
         litF.setUpLiteral(PrimType.BOOLEAN, "false");
-        testS = new PrintStatement();
+        testS = new PrintStatement(System.out);
         testS.setUpPrint(lit0);
     }
 
