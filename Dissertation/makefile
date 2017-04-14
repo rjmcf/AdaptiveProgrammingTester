@@ -56,4 +56,4 @@ clean:
 	rm -f *~ *.lof *.toc *.blg *.bbl
 
 distclean: clean
-	rm -f figs/*.pdf proposal.pdf diss.pdf
+	rm -f proposal.pdf diss.pdf

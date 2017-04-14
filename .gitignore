@@ -8,3 +8,7 @@ out/
 *.log*
 *.out*
 *.synctex.gz*
+*.bbl*
+*.blg*
+*.lof*
+*.toc
