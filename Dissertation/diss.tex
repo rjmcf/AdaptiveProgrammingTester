@@ -242,6 +242,8 @@ In this section I describe the implementation and function of the GUI peripheral
 \label{Fig:GUI}
 \end{figure}
 
+\textcolor{red}{Make the GUI textbox on the right editable!}
+
 The GUI demonstrates some of the possible uses of this set of tools. It shows how a teacher might manually set the difficulty of a particular exercise and how a student could fill in the blanks and run their solution. An example screen from the GUI is shown in Fig 3. The top slider determines the problem that is presented: the further to the left the slider is, the easier the problem will be. The bottom slider affects the difficulty of that problem: the further it is to the left, the fewer blanks there will be and thus the easier the problem will be to solve. When the ``Generate'' button is pressed, the corresponding exercise will be displayed in the box on the right. 
 
 When an exercise is generated, the blanks within the solution that need to be filled are shown as numbers in brackets surrounded by ellipses. To fill one of the blanks, the user must enter its number in the spinbox, and then enter the code with which to fill the blank in the text box, before pressing the button marked ``Fill Blank''. A blank with a given number can be emptied by entering its number into the spinbox and pressing the button marked ``Empty Blank''. The solution, i.e. the text in the large box on the right, can be executed at any time by pressing the ``Run'' button. The GUI will report whether the solution is correct or not.
