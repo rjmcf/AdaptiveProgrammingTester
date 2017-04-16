@@ -44,7 +44,7 @@ public class FillableBlankStmntTest {
         litT.setUpLiteral(PrimType.BOOLEAN, "true");
         litF = new Literal();
         litF.setUpLiteral(PrimType.BOOLEAN, "false");
-        testS = new PrintStatement("test/testOutput.txt");
+        testS = new PrintStatement("test/testOutput.txt", true);
         testS.setUpPrint(lit0);
     }
 

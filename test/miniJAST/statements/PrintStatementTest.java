@@ -25,7 +25,7 @@ public class PrintStatementTest {
 
     @BeforeMethod
     public void setUp() throws Exception{
-        pr = new PrintStatement("test/testOutput.txt");
+        pr = new PrintStatement("test/testOutput.txt", true);
         boolExpr = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {

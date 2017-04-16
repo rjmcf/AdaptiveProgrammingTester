@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            PrintStatement p = new PrintStatement("test/testOutput.txt");
+            PrintStatement p = new PrintStatement("test/testOutput.txt",true);
             Literal l = new Literal(), m = new Literal();
             l.setUpLiteral(PrimType.INT, "42"); m.setUpLiteral(PrimType.CHAR, "\n");
             p.setUpPrint(l);

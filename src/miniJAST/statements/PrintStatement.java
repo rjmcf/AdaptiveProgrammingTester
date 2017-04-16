@@ -10,8 +10,9 @@ import java.io.*;
 public class PrintStatement extends StatementBase {
     private int expr;
     String fName;
+    boolean append;
 
-    public PrintStatement(String fileName) { fName = fileName; }
+    public PrintStatement(String fileName, boolean append) { fName = fileName; this.append = append; }
 
     public void setUpPrint(Expression e) { subNodes.clear(); expr = 0; subNodes.add(e); }
 
@@ -26,7 +27,7 @@ public class PrintStatement extends StatementBase {
 
         ReturnValues v = ((Expression)subNodes.get(expr)).evaluate(c);
         try {
-            FileWriter fw = new FileWriter(fName, true);
+            FileWriter fw = new FileWriter(fName, append);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter printTo = new PrintWriter(bw);
             if (v.getIsArray()) {
