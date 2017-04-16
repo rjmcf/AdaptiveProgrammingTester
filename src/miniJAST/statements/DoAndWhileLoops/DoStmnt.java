@@ -15,9 +15,10 @@ public class DoStmnt extends CondLoopBase {
     }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
-        ((BlockStatement)subNodes.get(stmnt)).execute(c, d+1);
-        removeDecsAtDepth(c, d+1);
-        return condAndLoop(c, d);
+    public FlowControl execute(Context c) throws MiniJASTException {
+        stepIn(c);
+        ((BlockStatement)subNodes.get(stmnt)).execute(c);
+        stepOut(c);
+        return condAndLoop(c);
     }
 }

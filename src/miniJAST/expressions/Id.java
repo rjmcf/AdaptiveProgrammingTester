@@ -26,21 +26,21 @@ public class Id extends UnaryExpr implements AssignLHS{
 
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
-        if (c.namesToTypes.get(name) != null) {
-            varType = c.namesToTypes.get(name);
+        if (c.namesToTypes.peek().get(name) != null) {
+            varType = c.namesToTypes.peek().get(name);
             isArray = varType.isArray;
-            if (!c.namesToValues.containsKey(name))
+            if (!c.namesToValues.peek().containsKey(name))
                 throw new VariableNotInitException(name);
             if (!isArray) {
                 switch (varType.uType) {
                     case BOOLEAN:
-                        return new ReturnValuesBool((boolean) c.namesToValues.get(name));
+                        return new ReturnValuesBool((boolean) c.namesToValues.peek().get(name));
                     case CHAR:
-                        return new ReturnValuesChar((char) c.namesToValues.get(name));
+                        return new ReturnValuesChar((char) c.namesToValues.peek().get(name));
                     case INT:
-                        return new ReturnValuesInt((int) c.namesToValues.get(name));
+                        return new ReturnValuesInt((int) c.namesToValues.peek().get(name));
                     case DOUBLE:
-                        return new ReturnValuesDouble((double) c.namesToValues.get(name));
+                        return new ReturnValuesDouble((double) c.namesToValues.peek().get(name));
                     default:
                         throw new TypeException("'varType' was not one of possible UnannTypes.");
                 }
@@ -48,13 +48,13 @@ public class Id extends UnaryExpr implements AssignLHS{
                 try {
                     switch (varType.uType) {
                         case BOOLEAN:
-                            return new ReturnValuesArray<Boolean>(varType, (ArrayList<Boolean>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Boolean>(varType, (ArrayList<Boolean>) c.namesToValues.peek().get(name));
                         case CHAR:
-                            return new ReturnValuesArray<Character>(varType, (ArrayList<Character>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Character>(varType, (ArrayList<Character>) c.namesToValues.peek().get(name));
                         case INT:
-                            return new ReturnValuesArray<Integer>(varType, (ArrayList<Integer>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Integer>(varType, (ArrayList<Integer>) c.namesToValues.peek().get(name));
                         default: // DOUBLE
-                            return new ReturnValuesArray<Double>(varType, (ArrayList<Double>) c.namesToValues.get(name));
+                            return new ReturnValuesArray<Double>(varType, (ArrayList<Double>) c.namesToValues.peek().get(name));
                     }
                 } catch (Exception e) {
                     throw new TypeException("Array cast failed");

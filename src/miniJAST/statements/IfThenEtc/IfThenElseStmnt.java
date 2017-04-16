@@ -30,7 +30,7 @@ public class IfThenElseStmnt extends StatementBase {
     public void setUpITE(Expression c, BlockStatement t, BlockStatement f) { baseSetUpITE(c, t, f); }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         checkType((Expression)subNodes.get(cond), Expression.class);
         checkType((BlockStatement)subNodes.get(trueStmnt), BlockStatement.class);
         checkType((BlockStatement)subNodes.get(falseStmnt), BlockStatement.class);
@@ -42,19 +42,16 @@ public class IfThenElseStmnt extends StatementBase {
             throw new TypeException("Can not operate on arrays!");
 
         if (((ReturnValuesBool)r).value) {
-            FlowControl result = ((BlockStatement)subNodes.get(trueStmnt)).execute(c, d+1);
-            removeDecsAtDepth(c, d+1);
+            stepIn(c);
+            FlowControl result = ((BlockStatement)subNodes.get(trueStmnt)).execute(c);
+            stepOut(c);
             return result;
         }
         else {
-            FlowControl result = ((BlockStatement)subNodes.get(falseStmnt)).execute(c, d+1);
-            removeDecsAtDepth(c, d+1);
+            stepIn(c);
+            FlowControl result = ((BlockStatement)subNodes.get(falseStmnt)).execute(c);
+            stepOut(c);
             return result;
         }
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 }

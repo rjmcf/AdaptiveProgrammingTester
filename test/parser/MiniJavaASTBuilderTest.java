@@ -50,7 +50,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof Block);
         Block b = (Block)result;
-        b.executeStart(c);
+        b.execute(c);
 
         Id i = new Id(), t = new Id();
         i.setUpId("i"); t.setUpId("t");
@@ -97,7 +97,7 @@ public class MiniJavaASTBuilderTest {
 
         assertTrue(result instanceof LocalVarDec);
         LocalVarDec lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         Id ar1 = new Id();
         ar1.setUpId("ar1");
@@ -120,7 +120,7 @@ public class MiniJavaASTBuilderTest {
 
         assertTrue(result instanceof LocalVarDec);
         LocalVarDec lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         Id ar1 = new Id();
         ar1.setUpId("ar1");
@@ -145,7 +145,7 @@ public class MiniJavaASTBuilderTest {
 
         assertTrue(result instanceof LocalVarDec);
         LocalVarDec lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         Id half = new Id();
         half.setUpId("half");
@@ -164,7 +164,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitMakeID() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
         parser = getParser("i");
         tree = parser.expression(); // parse
         result = builder.visit(tree);
@@ -177,14 +177,14 @@ public class MiniJavaASTBuilderTest {
         } catch (VariableNotInitException e) {
             // pass
         }
-        c.namesToValues.put("i", 2);
+        c.namesToValues.peek().put("i", 2);
         assertEquals(((ReturnValuesInt)i1.evaluate(c)).value, 2);
 
-        c.namesToTypes.put("ar", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, 2));
         ArrayList<Integer> ar = new ArrayList<>(2);
         ar.add(42);
         ar.add(17);
-        c.namesToValues.put("ar", ar);
+        c.namesToValues.peek().put("ar", ar);
         parser = getParser("ar");
         tree = parser.expression(); // parse
         result = builder.visit(tree);
@@ -197,7 +197,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitAssignExpr() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
         parser = getParser("i = 3");
         tree = parser.expression(); // parse
         result = builder.visit(tree);
@@ -225,7 +225,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         LocalVarDec lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         Id id = new Id();
         id.setUpId("t");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
@@ -235,7 +235,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof Block);
         Block b = (Block) result;
-        b.executeStart(c);
+        b.execute(c);
         id.setUpId("a");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 2);
 
@@ -244,7 +244,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof Block);
         b = (Block) result;
-        b.executeStart(c);
+        b.execute(c);
         id.setUpId("i");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 5);
         id.setUpId("j");
@@ -255,7 +255,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof Block);
         b = (Block) result;
-        b.executeStart(c);
+        b.execute(c);
         id.setUpId("l");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 3);
         id.setUpId("k");
@@ -266,7 +266,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof Block);
         b = (Block) result;
-        b.executeStart(c);
+        b.execute(c);
         id.setUpId("n");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, -2);
 
@@ -275,7 +275,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("f");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -284,7 +284,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("x");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 6);
 
@@ -293,7 +293,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("y");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, -1);
 
@@ -302,7 +302,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("g");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -311,7 +311,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("e");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -320,7 +320,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("c");
         assertFalse(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -329,7 +329,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("d");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -338,7 +338,7 @@ public class MiniJavaASTBuilderTest {
         result = builder.visit(tree);
         assertTrue(result instanceof LocalVarDec);
         lvd = (LocalVarDec) result;
-        lvd.executeStart(c);
+        lvd.execute(c);
         id.setUpId("cond");
         assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 1);
     }
@@ -399,7 +399,7 @@ public class MiniJavaASTBuilderTest {
         assertTrue(result instanceof Block);
         Block b = (Block)result;
 
-        b.executeStart(c);
+        b.execute(c);
         Id nsID = new Id();
         nsID.setUpId("ns");
         ReturnValuesArray<Integer> result = (ReturnValuesArray) nsID.evaluate(c);
@@ -426,7 +426,7 @@ public class MiniJavaASTBuilderTest {
         assertTrue(result instanceof Block);
         Block b = (Block)result;
 
-        b.executeStart(c);
+        b.execute(c);
         Id iId = new Id();
         iId.setUpId("i");
         ReturnValuesInt r = (ReturnValuesInt)iId.evaluate(c);

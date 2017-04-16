@@ -123,7 +123,7 @@ public class WhileStmntTest {
         }
         check sum == 6
          */
-        outer.executeStart(c);
+        outer.execute(c);
         assertEquals(6, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
         /* Code is:
@@ -133,7 +133,7 @@ public class WhileStmntTest {
         }
         check j == 0;
         */
-        block2.executeStart(c);
+        block2.execute(c);
         assertEquals(0, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

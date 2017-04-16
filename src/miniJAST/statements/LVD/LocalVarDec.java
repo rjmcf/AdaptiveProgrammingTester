@@ -33,7 +33,7 @@ public class LocalVarDec extends StatementBase {
     }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         for (MiniJASTNode vB : subNodes) {
             checkType((BlockStatement)vB, VarDeclarator.class);
             VarDeclarator v;
@@ -47,7 +47,7 @@ public class LocalVarDec extends StatementBase {
                 throw new TypeException("VarDeclarator submitted to LVD must be of type VarDeclarator");
             }
 
-            if (c.namesToTypes.containsKey(v.getName()))
+            if (c.namesToTypes.peek().containsKey(v.getName()))
                 throw new VariableDecException(v.getName(), true);
 
             if (type == null) {
@@ -63,19 +63,19 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Booleans.");
                             if (!rvBA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.put(v.getName(), new Type(PrimType.BOOLEAN, rvBA.getType().size));
-                            c.namesToValues.put(v.getName(), ((ReturnValuesArray)rvBA).getArray());
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.BOOLEAN, rvBA.getType().size));
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvBA).getArray());
                         } else {
                             ReturnValues rvB = v.getExpr().evaluate(c);
                             if (rvB.getType().uType != type)
                                 throw new TypeException("Can only initialise with Boolean.");
                             if (rvB.getIsArray())
                                 throw new TypeException("Must not be array.");
-                            c.namesToTypes.put(v.getName(), rvB.getType());
-                            c.namesToValues.put(v.getName(), ((ReturnValuesBool)rvB).value);
+                            c.namesToTypes.peek().put(v.getName(), rvB.getType());
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesBool)rvB).value);
                         }
                     } else {
-                        c.namesToTypes.put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
                     }
                     break;
                 case CHAR:
@@ -86,19 +86,19 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Characters.");
                             if (!rvCA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.put(v.getName(), new Type(PrimType.CHAR, rvCA.getType().size));
-                            c.namesToValues.put(v.getName(), ((ReturnValuesArray)rvCA).getArray());
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.CHAR, rvCA.getType().size));
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvCA).getArray());
                         } else {
                             ReturnValues rvC = v.getExpr().evaluate(c);
                             if (rvC.getType().uType != type)
                                 throw new TypeException("Can only initialise with Character.");
                             if (rvC.getIsArray())
                                 throw new TypeException("Must not be array.");
-                            c.namesToTypes.put(v.getName(), rvC.getType());
-                            c.namesToValues.put(v.getName(), ((ReturnValuesChar)rvC).value);
+                            c.namesToTypes.peek().put(v.getName(), rvC.getType());
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesChar)rvC).value);
                         }
                     } else {
-                        c.namesToTypes.put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
                     }
                     break;
                 case INT:
@@ -109,19 +109,19 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Integers.");
                             if (!rvIA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.put(v.getName(), new Type(PrimType.INT, rvIA.getType().size));
-                            c.namesToValues.put(v.getName(), ((ReturnValuesArray)rvIA).getArray());
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.INT, rvIA.getType().size));
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvIA).getArray());
                         } else {
                             ReturnValues rvI = v.getExpr().evaluate(c);
                             if (rvI.getType().uType != type)
                                 throw new TypeException("Can only initialise with Integer.");
                             if (rvI.getIsArray())
                                 throw new TypeException("Must not be array.");
-                            c.namesToTypes.put(v.getName(), rvI.getType());
-                            c.namesToValues.put(v.getName(), ((ReturnValuesInt)rvI).value);
+                            c.namesToTypes.peek().put(v.getName(), rvI.getType());
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesInt)rvI).value);
                         }
                     } else {
-                        c.namesToTypes.put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
                     }
                     break;
                 default: // DOUBLE
@@ -132,28 +132,22 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Doubles.");
                             if (!rvDA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.put(v.getName(), new Type(PrimType.DOUBLE, rvDA.getType().size));
-                            c.namesToValues.put(v.getName(), ((ReturnValuesArray)rvDA).getArray());
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.DOUBLE, rvDA.getType().size));
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvDA).getArray());
                         } else {
                             ReturnValues rvD = v.getExpr().evaluate(c);
                             if (rvD.getType().uType != type)
                                 throw new TypeException("Can only initialise with Double.");
                             if (rvD.getIsArray())
                                 throw new TypeException("Must not be array.");
-                            c.namesToTypes.put(v.getName(), rvD.getType());
-                            c.namesToValues.put(v.getName(), ((ReturnValuesDouble)rvD).value);
+                            c.namesToTypes.peek().put(v.getName(), rvD.getType());
+                            c.namesToValues.peek().put(v.getName(), ((ReturnValuesDouble)rvD).value);
                         }
                     } else {
-                        c.namesToTypes.put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
                     }
             }
-            c.namesToDepths.put(v.getName(), d);
         }
         return FlowControl.NONE;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 }

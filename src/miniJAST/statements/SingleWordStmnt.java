@@ -35,12 +35,9 @@ public enum SingleWordStmnt implements BlockStatement{
         }
 
         @Override
-        public FlowControl execute(Context c, int d) {
+        public FlowControl execute(Context c) {
             return FlowControl.NONE;
         }
-
-        @Override
-        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.NONE; }
     },
     BREAK {
         @Override
@@ -69,12 +66,9 @@ public enum SingleWordStmnt implements BlockStatement{
         }
 
         @Override
-        public FlowControl execute(Context c, int d) {
+        public FlowControl execute(Context c) {
             return FlowControl.BREAK;
         }
-
-        @Override
-        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.BREAK; }
     },
     CONTINUE {
         @Override
@@ -103,12 +97,9 @@ public enum SingleWordStmnt implements BlockStatement{
         }
 
         @Override
-        public FlowControl execute(Context c, int d) {
+        public FlowControl execute(Context c) {
             return FlowControl.CONTINUE;
         }
-
-        @Override
-        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.CONTINUE; }
     },
     RETURN {
         @Override
@@ -137,11 +128,8 @@ public enum SingleWordStmnt implements BlockStatement{
         }
 
         @Override
-        public FlowControl execute(Context c, int d) {
+        public FlowControl execute(Context c) {
             return FlowControl.RETURN;
         }
-
-        @Override
-        public FlowControl executeStart(Context c) throws MiniJASTException { return FlowControl.RETURN; }
     }
 }

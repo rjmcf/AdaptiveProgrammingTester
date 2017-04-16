@@ -20,11 +20,13 @@ public class Block extends StatementBase {
     }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException{
+    public FlowControl execute(Context c) throws MiniJASTException{
+        if (!isOuterMost)
+            stepIn(c);
         for (MiniJASTNode b : subNodes) {
             checkType((BlockStatement)b, BlockStatement.class);
 
-            FlowControl fc = ((BlockStatement)b).execute(c, isOuterMost ? d : d+1);
+            FlowControl fc = ((BlockStatement)b).execute(c);
             switch (fc) {
                 case NONE:
                     break;
@@ -34,12 +36,7 @@ public class Block extends StatementBase {
         }
 
         if (!isOuterMost)
-            removeDecsAtDepth(c, d+1);
+            stepOut(c);
         return FlowControl.NONE;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 }

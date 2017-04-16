@@ -7,9 +7,12 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.FillableBlankExpr;
+import miniJAST.types.Type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Objects;
 
 public abstract class StatementBase implements BlockStatement {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
@@ -29,21 +32,28 @@ public abstract class StatementBase implements BlockStatement {
     public boolean getIsMarked() { return isMarked; }
     @Override
     public void setMarked(boolean b) { isMarked = b; }
-    protected void removeDecsAtDepth(Context c, int d) {
-        if (d == 0)
+    protected void stepIn(Context c) {
+        HashMap<String, Type> newMap1 = new HashMap<>();
+        HashMap<String, Object> newMap2 = new HashMap<>();
+        for (String s : c.namesToTypes.peek().keySet())
+            newMap1.put(s, c.namesToTypes.peek().get(s));
+        c.namesToTypes.push(newMap1);
+        for (String s : c.namesToValues.peek().keySet())
+            newMap2.put(s, c.namesToValues.peek().get(s));
+        c.namesToValues.push(newMap2);
+    }
+    protected void stepOut(Context c) {
+        if (c.namesToTypes.size() == 1)
             return;
-        Iterator<String> nTDs = c.namesToDepths.keySet().iterator();
-        Iterator<String> nTVs = c.namesToValues.keySet().iterator();
-        Iterator<String> nTTs = c.namesToTypes.keySet().iterator();
-        while (nTDs.hasNext()) {
-            nTVs.next();
-            nTTs.next();
-            if (c.namesToDepths.get(nTDs.next()) >= d) {
-                nTVs.remove();
-                nTTs.remove();
-                nTDs.remove();
-            }
-        }
+
+        HashMap<String, Type> oldMap1 = c.namesToTypes.pop();
+        for (String s : oldMap1.keySet())
+            if (c.namesToTypes.peek().containsKey(s))
+                c.namesToTypes.peek().put(s, oldMap1.get(s));
+        HashMap<String, Object> oldMap2 = c.namesToValues.pop();
+        for (String s : oldMap2.keySet())
+            if (c.namesToTypes.peek().containsKey(s))
+                c.namesToValues.peek().put(s, oldMap2.get(s));
     }
 
     @Override
@@ -80,7 +90,7 @@ public abstract class StatementBase implements BlockStatement {
 
         if (e instanceof FillableBlankStmnt) {
             if (!((FillableBlankStmnt) e).isFilled())
-                e.executeStart(new Context());
+                e.execute(new Context());
             else
                 return;
         }

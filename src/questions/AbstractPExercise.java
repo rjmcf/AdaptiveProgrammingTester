@@ -39,7 +39,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
 
     public void runSolution() throws MiniJASTException {
         c = new Context();
-        solution.executeStart(c);
+        solution.execute(c);
     }
 
     @Override

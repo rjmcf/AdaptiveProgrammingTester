@@ -227,8 +227,8 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluateArray() throws Exception {
-        c.namesToTypes.put("fakeArray", new Type(PrimType.INT, 2));
-        c.namesToValues.put("fakeArray", new ArrayList<Integer>(2));
+        c.namesToTypes.peek().put("fakeArray", new Type(PrimType.INT, 2));
+        c.namesToValues.peek().put("fakeArray", new ArrayList<Integer>(2));
         ArrayAccess aaE = new ArrayAccess();
         aaE.setUpArrayAccess(id, fbe);
         try {
@@ -319,7 +319,7 @@ public class FillableBlankExprTest {
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(vD);
         try {
-            lvd.executeStart(c);
+            lvd.execute(c);
             fail("Blank not filled.");
         } catch (BlankEmptyException bee) {
             // pass test
@@ -334,7 +334,7 @@ public class FillableBlankExprTest {
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(vD);
         try {
-            lvd.executeStart(c);
+            lvd.execute(c);
             fail("Blank not filled.");
         } catch (BlankEmptyException bee) {
             // pass test
@@ -346,7 +346,7 @@ public class FillableBlankExprTest {
         DoStmnt dS = new DoStmnt();
         dS.setUpDo(testS, fbe);
         try {
-            dS.executeStart(c);
+            dS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -358,7 +358,7 @@ public class FillableBlankExprTest {
         WhileStmnt wS = new WhileStmnt();
         wS.setUpWhile(fbe, testS);
         try {
-            wS.executeStart(c);
+            wS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -371,7 +371,7 @@ public class FillableBlankExprTest {
         fS.setUpForStmnt(null, fbe);
         fS.setBody(testS);
         try {
-            fS.executeStart(c);
+            fS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -382,7 +382,7 @@ public class FillableBlankExprTest {
         fS = new ForStmnt();
         fS.setUpForStmnt(fI, null);
         try {
-            fS.executeStart(c);
+            fS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -393,7 +393,7 @@ public class FillableBlankExprTest {
         fS.addUpdate(fbe);
         fS.setBody(testS);
         try {
-            fS.executeStart(c);
+            fS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -405,7 +405,7 @@ public class FillableBlankExprTest {
         IfThenElseStmnt iteS = new IfThenElseStmnt();
         iteS.setUpITE(fbe, testS, testS);
         try {
-            iteS.executeStart(c);
+            iteS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -417,7 +417,7 @@ public class FillableBlankExprTest {
         IfThenStmnt itS = new IfThenStmnt();
         itS.setUpIfThen(fbe, testS);
         try {
-            itS.executeStart(c);
+            itS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -432,7 +432,7 @@ public class FillableBlankExprTest {
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(fakeId);
         try {
-            lvd.executeStart(c);
+            lvd.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -443,7 +443,7 @@ public class FillableBlankExprTest {
     public void testEmptyEvaluateExprStmnt() throws Exception {
         ExpressionStmnt eS = new ExpressionStmnt(fbe);
         try {
-            eS.executeStart(c);
+            eS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -455,7 +455,7 @@ public class FillableBlankExprTest {
         PrintStatement pS = new PrintStatement("test/testOutput.txt", true);
         pS.setUpPrint(fbe);
         try {
-            pS.executeStart(c);
+            pS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -519,11 +519,11 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsArrayAccess() throws Exception {
-        c.namesToTypes.put("ar", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, 2));
         ArrayList<Integer> vals = new ArrayList<>(2);
         vals.add(2);
         vals.add(3);
-        c.namesToValues.put("ar", vals);
+        c.namesToValues.peek().put("ar", vals);
 
         Id ar = new Id();
         ar.setUpId("ar");
@@ -537,10 +537,10 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledArrayAcces() throws Exception {
-        c.namesToTypes.put("ar", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, 2));
         ArrayList<Integer> array = new ArrayList<>();
         array.add(2); array.add(3);
-        c.namesToValues.put("ar", array);
+        c.namesToValues.peek().put("ar", array);
 
         ArrayAccess aa = new ArrayAccess();
         Id ar = new Id();
@@ -555,7 +555,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsAssignment() throws Exception {
-        c.namesToTypes.put("fakeInt", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("fakeInt", new Type(PrimType.INT));
 
         Id fId = new Id();
         fId.setUpId("fakeInt");
@@ -588,7 +588,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledAssignment() throws Exception {
-        c.namesToTypes.put("fakeInt", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("fakeInt", new Type(PrimType.INT));
         Id fId = new Id();
         fId.setUpId("fakeInt");
         fbe.setStudentExpr(fId);
@@ -721,8 +721,8 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsId() throws Exception {
-        c.namesToTypes.put("fakeId", new Type(PrimType.INT));
-        c.namesToValues.put("fakeId", 2);
+        c.namesToTypes.peek().put("fakeId", new Type(PrimType.INT));
+        c.namesToValues.peek().put("fakeId", 2);
         Id fakeId = new Id();
         fakeId.setUpId("fakeId");
         fbe.setStudentExpr(fakeId);
@@ -769,7 +769,7 @@ public class FillableBlankExprTest {
         lvd.addVarDec(vD);
 
         assertEquals(lvd.stringRepr(0), "int fakeAr[] = { 1, 0 };");
-        lvd.executeStart(c);
+        lvd.execute(c);
         Id fakeAr = new Id();
         fakeAr.setUpId("fakeAr");
         ArrayAccess aa = new ArrayAccess();
@@ -787,7 +787,7 @@ public class FillableBlankExprTest {
 
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(vD);
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         Id fakeAr = new Id();
         fakeAr.setUpId("fakeAr");
@@ -801,10 +801,10 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
-        c.namesToValues.put("cond", false);
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        c.namesToValues.put("i", 1);
+        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN));
+        c.namesToValues.peek().put("cond", false);
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToValues.peek().put("i", 1);
         Id condId = new Id(), i = new Id();
         condId.setUpId("cond");
         i.setUpId("i");
@@ -817,15 +817,15 @@ public class FillableBlankExprTest {
         dS.setUpDo(eS, fbe);
         assertEquals(dS.stringRepr(0), "do \n    i++; while (cond)");
 
-        dS.executeStart(c);
+        dS.execute(c);
         assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 2);
 
     }
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
-        c.namesToValues.put("cond", true);
+        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN));
+        c.namesToValues.peek().put("cond", true);
         Id condId = new Id();
         condId.setUpId("cond");
         AssignExpr aE = new AssignExpr();
@@ -836,15 +836,15 @@ public class FillableBlankExprTest {
         WhileStmnt wS = new WhileStmnt();
         wS.setUpWhile(fbe, eS);
         assertEquals(wS.stringRepr(0), "while (cond) \n    cond = false;");
-        wS.executeStart(c);
+        wS.execute(c);
         assertFalse(((ReturnValuesBool)condId.evaluate(c)).value);
     }
 
     @Test
     public void testFilledFor() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        c.namesToTypes.put("res", new Type(PrimType.INT));
-        c.namesToValues.put("res", 0);
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("res", new Type(PrimType.INT));
+        c.namesToValues.peek().put("res", 0);
         Id i = new Id();
         i.setUpId("i");
         AssignExpr init = new AssignExpr();
@@ -876,13 +876,13 @@ public class FillableBlankExprTest {
 
         assertEquals(fS.stringRepr(0), "for (i = 0; i < 1; i++) \n    res += 3;");
 
-        fS.executeStart(c);
+        fS.execute(c);
         assertEquals(((ReturnValuesInt)res.evaluate(c)).value, 3);
     }
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.put("res", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("res", new Type(PrimType.INT));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
@@ -898,13 +898,13 @@ public class FillableBlankExprTest {
         ite.setUpITE(fbe, eS1, eS2);
         assertEquals(ite.stringRepr(0), "if (true) \n    res = 2;\nelse \n    res = 3;");
 
-        ite.executeStart(c);
+        ite.execute(c);
         assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.put("res", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("res", new Type(PrimType.INT));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
@@ -917,7 +917,7 @@ public class FillableBlankExprTest {
         ite.setUpIfThen(fbe, eS1);
         assertEquals(ite.stringRepr(0), "if (true) \n    res = 2;");
 
-        ite.executeStart(c);
+        ite.execute(c);
         assertEquals(((ReturnValuesInt)resId.evaluate(c)).value, 2);
     }
 
@@ -932,7 +932,7 @@ public class FillableBlankExprTest {
 
         assertEquals(lvd.stringRepr(0), "int i = 2;");
 
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         Id iId = new Id();
         iId.setUpId("i");
@@ -941,7 +941,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledExprStmnt() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
 
         Id iId = new Id();
         iId.setUpId("i");
@@ -951,7 +951,7 @@ public class FillableBlankExprTest {
         ExpressionStmnt eS = new ExpressionStmnt(fbe);
 
         assertEquals(eS.stringRepr(0), "i = 3;");
-        eS.executeStart(c);
+        eS.execute(c);
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 3);
     }
 
@@ -961,6 +961,6 @@ public class FillableBlankExprTest {
         PrintStatement pS = new PrintStatement("test/testOutput.txt", true);
         pS.setUpPrint(fbe);
         assertEquals(pS.stringRepr(0), "System.out.println(2);");
-        pS.executeStart(c);
+        pS.execute(c);
     }
 }

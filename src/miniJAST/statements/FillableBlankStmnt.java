@@ -29,19 +29,11 @@ public class FillableBlankStmnt extends FillableBlank implements BlockStatement 
     public BlockStatement getStudentStmnt() { return studentStmnt; }
 
     @Override
-    public FlowControl execute(Context c, int depth) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         if (studentStmnt == null)
             throw new BlankEmptyException();
         else
-            return studentStmnt.execute(c, depth);
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        if (studentStmnt == null)
-            throw new BlankEmptyException();
-        else
-            return studentStmnt.executeStart(c);
+            return studentStmnt.execute(c);
     }
 
     @Override

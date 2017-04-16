@@ -18,7 +18,7 @@ public class ForInit extends StatementBase {
     public void addStmntExpr(Expression se) { hasLVD = false; subNodes.add(se); }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         if (!hasLVD) {
             for (MiniJASTNode se : subNodes) {
                 checkType((Expression)se, StatementExpr.class);
@@ -26,15 +26,10 @@ public class ForInit extends StatementBase {
             }
         } else {
             checkType((BlockStatement)subNodes.get(0), LocalVarDec.class);
-            ((BlockStatement)subNodes.get(0)).execute(c, d);
+            ((BlockStatement)subNodes.get(0)).execute(c);
         }
 
         return null;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        throw new IncorrectEvaluationException("Should not be starting execution on ForInit");
     }
 
     @Override

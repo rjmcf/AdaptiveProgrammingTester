@@ -47,17 +47,19 @@ public class ForStmnt extends StatementBase {
     public void setBody(BlockStatement s) { baseSetBody(s); }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         checkType((BlockStatement)subNodes.get(init), ForInit.class);
         checkType((Expression)subNodes.get(condI), Expression.class);
         checkType((BlockStatement)subNodes.get(stmnt), BlockStatement.class);
 
+        stepIn(c);
+
         if (subNodes.get(init) != null) {
             try {
                 if (subNodes.get(init) instanceof FillableBlankStmnt) {
-                    ((FillableBlankStmnt)subNodes.get(init)).getStudentStmnt().execute(c, d+1);
+                    ((FillableBlankStmnt)subNodes.get(init)).getStudentStmnt().execute(c);
                 } else {
-                    ((ForInit)subNodes.get(init)).execute(c, d+1);
+                    ((ForInit)subNodes.get(init)).execute(c);
                 }
             } catch (ClassCastException e) {
                 throw new TypeException("Init for For must have type ForInit!");
@@ -79,8 +81,9 @@ public class ForStmnt extends StatementBase {
 
         loop:
         while(((ReturnValuesBool)condR).value) {
-            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c, d+2);
-            removeDecsAtDepth(c, d+2);
+            stepIn(c);
+            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c);
+            stepOut(c);
             switch(fC) {
                 case BREAK:
                     break loop;
@@ -106,13 +109,8 @@ public class ForStmnt extends StatementBase {
                 condR = cond.evaluate(c);
         }
 
-        removeDecsAtDepth(c, d+1);
+        stepOut(c);
 
         return FlowControl.NONE;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 }

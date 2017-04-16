@@ -22,7 +22,7 @@ public class PrintStatement extends StatementBase {
     }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         checkType((Expression)subNodes.get(expr), Expression.class);
 
         ReturnValues v = ((Expression)subNodes.get(expr)).evaluate(c);
@@ -75,10 +75,5 @@ public class PrintStatement extends StatementBase {
             System.err.println("Could not print to file");
             throw new MiniJASTException("Could not print to file");
         }
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 }

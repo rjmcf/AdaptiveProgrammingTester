@@ -95,7 +95,7 @@ public class DoStmntTest {
             cont = false;
         } while (cont);
          */
-        block1.executeStart(c);
+        block1.execute(c);
         assertFalse(((ReturnValuesBool)contID.evaluate(c)).value);
 
         /* Code is:
@@ -105,7 +105,7 @@ public class DoStmntTest {
         } while (thing < 5)
         check thing == 5; i == 6;
          */
-        block2.executeStart(c);
+        block2.execute(c);
         assertEquals(5, ((ReturnValuesInt)thingID.evaluate(c)).value);
         assertEquals(6, ((ReturnValuesInt)iID.evaluate(c)).value);
     }

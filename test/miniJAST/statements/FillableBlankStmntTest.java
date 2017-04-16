@@ -53,7 +53,7 @@ public class FillableBlankStmntTest {
         DoStmnt dS = new DoStmnt();
         dS.setUpDo(fbs, litT);
         try {
-            dS.executeStart(c);
+            dS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -65,7 +65,7 @@ public class FillableBlankStmntTest {
         WhileStmnt wS = new WhileStmnt();
         wS.setUpWhile(litT, fbs);
         try {
-            wS.executeStart(c);
+            wS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -78,7 +78,7 @@ public class FillableBlankStmntTest {
         fS.setUpForStmnt(null, litT);
         fS.setBody(fbs);
         try {
-            fS.executeStart(c);
+            fS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -90,7 +90,7 @@ public class FillableBlankStmntTest {
         IfThenElseStmnt iteS = new IfThenElseStmnt();
         iteS.setUpITE(litT, fbs, testS);
         try {
-            iteS.executeStart(c);
+            iteS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -98,7 +98,7 @@ public class FillableBlankStmntTest {
 
         iteS.setUpITE(litF, testS, fbs);
         try {
-            iteS.executeStart(c);
+            iteS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -110,7 +110,7 @@ public class FillableBlankStmntTest {
         IfThenStmnt iteS = new IfThenStmnt();
         iteS.setUpIfThen(litT, fbs);
         try {
-            iteS.executeStart(c);
+            iteS.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -122,7 +122,7 @@ public class FillableBlankStmntTest {
         Block b = new Block(true);
         b.addBlockStmnt(fbs);
         try {
-            b.executeStart(c);
+            b.execute(c);
             fail("Blank not filled");
         } catch (BlankEmptyException bee){
             // pass test
@@ -131,7 +131,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
         Id i = new Id();
         i.setUpId("i");
         AssignExpr aE = new AssignExpr();
@@ -141,7 +141,7 @@ public class FillableBlankStmntTest {
 
         DoStmnt dS = new DoStmnt();
         dS.setUpDo(fbs, litF);
-        dS.executeStart(c);
+        dS.execute(c);
 
         assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 1);
         assertEquals(dS.stringRepr(0), "do \n    i = 1; while (false)");
@@ -149,9 +149,9 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        c.namesToTypes.put("cond", new Type(PrimType.BOOLEAN));
-        c.namesToValues.put("cond", true);
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN));
+        c.namesToValues.peek().put("cond", true);
         Id i = new Id(), cond = new Id();
         i.setUpId("i");
         cond.setUpId("cond");
@@ -170,7 +170,7 @@ public class FillableBlankStmntTest {
         WhileStmnt wS = new WhileStmnt();
         wS.setUpWhile(cond, fbs);
 
-        wS.executeStart(c);
+        wS.execute(c);
 
         assertEquals(((ReturnValuesInt)i.evaluate(c)).value, 1);
         assertEquals(wS.stringRepr(0), "while (cond) \n{\n    i = 1;\n    cond = false;\n}");
@@ -194,13 +194,13 @@ public class FillableBlankStmntTest {
         fS.setUpForStmnt(fbs, litT);
         fS.setBody(fbs1);
 
-        fS.executeStart(c);
+        fS.execute(c);
         assertEquals(fS.stringRepr(0), "for (int i = 0; true; ) \n    break;");
     }
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
         Id iId = new Id();
         iId.setUpId("i");
 
@@ -216,20 +216,20 @@ public class FillableBlankStmntTest {
 
         IfThenElseStmnt ite = new IfThenElseStmnt();
         ite.setUpITE(litT, fbs, fbs1);
-        ite.executeStart(c);
+        ite.execute(c);
 
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 1);
         assertEquals(ite.stringRepr(0), "if (true) \n    i = 1;\nelse \n    i = 2;");
 
         ite.setUpITE(litF, fbs, fbs1);
-        ite.executeStart(c);
+        ite.execute(c);
 
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);
     }
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
         Id iId = new Id();
         iId.setUpId("i");
 
@@ -240,7 +240,7 @@ public class FillableBlankStmntTest {
 
         IfThenStmnt ite = new IfThenStmnt();
         ite.setUpIfThen(litT, fbs);
-        ite.executeStart(c);
+        ite.execute(c);
 
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 1);
         assertEquals(ite.stringRepr(0), "if (true) \n    i = 1;");
@@ -267,7 +267,7 @@ public class FillableBlankStmntTest {
         b.addBlockStmnt(fbs);
         b.addBlockStmnt(fbs1);
 
-        b.executeStart(c);
+        b.execute(c);
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 2);
         assertEquals(b.stringRepr(1), "{\n    int i = 0;\n    i += 2;\n}");
     }
@@ -281,7 +281,7 @@ public class FillableBlankStmntTest {
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(fbs);
 
-        lvd.executeStart(c);
+        lvd.execute(c);
         Id iId = new Id();
         iId.setUpId("i");
         assertEquals(((ReturnValuesInt)iId.evaluate(c)).value, 1);

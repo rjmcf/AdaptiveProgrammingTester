@@ -67,7 +67,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(boolDec);
-        lvd.execute(c, 0);
+        lvd.execute(c);
         id.setUpId("bDec");
         try {
             id.evaluate(c);
@@ -112,7 +112,7 @@ public class LocalVarDecTest {
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
         try {
-            lvd.execute(c, 0);
+            lvd.execute(c);
             fail("bDec is already declared");
         } catch (VariableDecException vde) {
             // pass test
@@ -121,7 +121,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(boolDef);
-        lvd.execute(c, 0);
+        lvd.execute(c);
         id.setUpId("bDef");
         assertTrue(((ReturnValuesBool)id.evaluate(c)).value);
 
@@ -131,7 +131,7 @@ public class LocalVarDecTest {
         lvd.addVarDec(intDef1);
         lvd.addVarDec(intDec2);
         lvd.addVarDec(intDef2);
-        lvd.execute(c, 0);
+        lvd.execute(c);
         id.setUpId("iDec1");
         try {
             id.evaluate(c);
@@ -193,7 +193,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(vD);
-        lvd.execute(c, 0);
+        lvd.execute(c);
 
         id.setUpId("boolArray2");
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
@@ -206,7 +206,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(vD);
         try {
-            lvd.execute(c, 0);
+            lvd.execute(c);
             fail("Size must be integer type");
         } catch (TypeException te) {
             // pass test
@@ -220,7 +220,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(vD);
-        lvd.execute(c, 0);
+        lvd.execute(c);
 
         Id id1 = new Id();
         id1.setUpId("boolArray3");
@@ -242,7 +242,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(vD);
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         id.setUpId("boolArray");
         ReturnValuesArray<Boolean> ar = (ReturnValuesArray)id.evaluate(c);
@@ -268,7 +268,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(vD);
         try {
-            lvd.executeStart(c);
+            lvd.execute(c);
             fail("Types do not match");
         } catch (TypeException te) {
             // pass test
@@ -282,7 +282,7 @@ public class LocalVarDecTest {
         lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.BOOLEAN);
         lvd.addVarDec(vD);
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         id.setUpId("boolArray1");
         ReturnValuesArray<Boolean> ar1 = (ReturnValuesArray)id.evaluate(c);
@@ -318,7 +318,7 @@ public class LocalVarDecTest {
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(iDec);
         lvd.addVarDec(jDec);
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         AssignExpr aE1 = new AssignExpr(), aE2 = new AssignExpr();
         aE1.setUpAssignExpr(i, AssignOp.EQ, aC);
@@ -348,7 +348,7 @@ public class LocalVarDecTest {
         LocalVarDec lvd = new LocalVarDec();
         lvd.setUpLVD(PrimType.INT);
         lvd.addVarDec(vD);
-        lvd.executeStart(c);
+        lvd.execute(c);
 
         Id i = new Id();
         i.setUpId("i");

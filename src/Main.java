@@ -12,11 +12,11 @@ public class Main {
             Literal l = new Literal(), m = new Literal();
             l.setUpLiteral(PrimType.INT, "42"); m.setUpLiteral(PrimType.CHAR, "\n");
             p.setUpPrint(l);
-            p.executeStart(new Context());
+            p.execute(new Context());
             p.setUpPrint(m);
-            p.executeStart(new Context());
+            p.execute(new Context());
             p.setUpPrint(l);
-            p.executeStart(new Context());
+            p.execute(new Context());
         } catch (MiniJASTException mE) {
             System.out.println("Oh fuck son");
         }

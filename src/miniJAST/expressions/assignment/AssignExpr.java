@@ -76,18 +76,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             if (ex.getType().uType != PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
-                            ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.get(rbaa.getName());
+                            ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.peek().get(rbaa.getName());
                             bs.set(rbaa.getIndex(), b);
-                            c.namesToValues.put(rbaa.getName(), bs);
+                            c.namesToValues.peek().put(rbaa.getName(), bs);
                             return new ReturnValuesBool(b);
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
                             chs.set(rcaa.getIndex(), ch);
-                            c.namesToValues.put(rcaa.getName(), chs);
+                            c.namesToValues.peek().put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
@@ -104,9 +104,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
                             is.set(riaa.getIndex(), i);
-                            c.namesToValues.put(riaa.getName(), is);
+                            c.namesToValues.peek().put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
@@ -126,9 +126,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
                             ds.set(rdaa.getIndex(), d);
-                            c.namesToValues.put(rdaa.getName(), ds);
+                            c.namesToValues.peek().put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
@@ -140,11 +140,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
-                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
                                 throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.put(rcaa.getName(), chs);
+                            c.namesToValues.peek().put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
@@ -161,11 +161,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(riaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
                                 throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.put(riaa.getName(), is);
+                            c.namesToValues.peek().put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
@@ -185,11 +185,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
                                 throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.put(rdaa.getName(), ds);
+                            c.namesToValues.peek().put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case SUBEQ:
@@ -201,11 +201,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value - ((ReturnValuesChar) ex).value);
-                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
                                 throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.put(rcaa.getName(), chs);
+                            c.namesToValues.peek().put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
@@ -222,11 +222,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(riaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
                                 throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.put(riaa.getName(), is);
+                            c.namesToValues.peek().put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
@@ -246,11 +246,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
                                 throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.put(rdaa.getName(), ds);
+                            c.namesToValues.peek().put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case TIMESEQ:
@@ -262,11 +262,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value * ((ReturnValuesChar) ex).value);
-                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
                                 throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.put(rcaa.getName(), chs);
+                            c.namesToValues.peek().put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
@@ -283,11 +283,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(riaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
                                 throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.put(riaa.getName(), is);
+                            c.namesToValues.peek().put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
@@ -307,11 +307,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
                                 throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.put(rdaa.getName(), ds);
+                            c.namesToValues.peek().put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 default: // DIVEQ
@@ -323,11 +323,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value / ((ReturnValuesChar) ex).value);
-                            if (!c.namesToValues.containsKey(rcaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
                                 throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.get(rcaa.getName());
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
                             chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.put(rcaa.getName(), chs);
+                            c.namesToValues.peek().put(rcaa.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
@@ -344,11 +344,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(riaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
                                 throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.get(riaa.getName());
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
                             is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.put(riaa.getName(), is);
+                            c.namesToValues.peek().put(riaa.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
@@ -368,11 +368,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.containsKey(rdaa.getName()))
+                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
                                 throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.get(rdaa.getName());
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
                             ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.put(rdaa.getName(), ds);
+                            c.namesToValues.peek().put(rdaa.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
             }
@@ -395,8 +395,8 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                     throw new TypeException("You must assign an array to an array variable");
                 if (rV.getType().uType != id.getType().uType)
                     throw new TypeException("The types of the arrays do not match");
-                c.namesToTypes.put(id.getName(), rV.getType());
-                c.namesToValues.put(id.getName(), ((ReturnValuesArray)rV).getArray());
+                c.namesToTypes.peek().put(id.getName(), rV.getType());
+                c.namesToValues.peek().put(id.getName(), ((ReturnValuesArray)rV).getArray());
                 return rV;
             }
 
@@ -404,18 +404,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
             switch (op) {
                 case EQ:
-                    switch (c.namesToTypes.get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
                         case BOOLEAN:
                             if (ex.getType().uType != PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
-                            c.namesToValues.put(id.getName(), b);
+                            c.namesToValues.peek().put(id.getName(), b);
                             return new ReturnValuesBool(b);
                         case CHAR:
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
-                            c.namesToValues.put(id.getName(), ch);
+                            c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
@@ -431,7 +431,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), i);
+                            c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             if (ex.getType().uType == PrimType.BOOLEAN)
@@ -450,16 +450,16 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), d);
+                            c.namesToValues.peek().put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (c.namesToTypes.get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(((ReturnValuesChar) ex).value + ((char)c.namesToValues.get(id.getName())));
-                            c.namesToValues.put(id.getName(), ch);
+                            char ch = (char)(((ReturnValuesChar) ex).value + ((char)c.namesToValues.peek().get(id.getName())));
+                            c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
@@ -467,15 +467,15 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = ((ReturnValuesChar) ex).value + (int)c.namesToValues.get(id.getName());
+                                    i = ((ReturnValuesChar) ex).value + (int)c.namesToValues.peek().get(id.getName());
                                     break;
                                 case INT:
-                                    i = ((ReturnValuesInt) ex).value + (int)c.namesToValues.get(id.getName());
+                                    i = ((ReturnValuesInt) ex).value + (int)c.namesToValues.peek().get(id.getName());
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), i);
+                            c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == PrimType.BOOLEAN)
@@ -483,29 +483,29 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = ((ReturnValuesChar) ex).value  + (double)c.namesToValues.get(id.getName());
+                                    d = ((ReturnValuesChar) ex).value  + (double)c.namesToValues.peek().get(id.getName());
                                     break;
                                 case INT:
-                                    d = ((ReturnValuesInt) ex).value  + (double)c.namesToValues.get(id.getName());
+                                    d = ((ReturnValuesInt) ex).value  + (double)c.namesToValues.peek().get(id.getName());
                                     break;
                                 case DOUBLE:
-                                    d = ((ReturnValuesDouble) ex).value  + (double)c.namesToValues.get(id.getName());
+                                    d = ((ReturnValuesDouble) ex).value  + (double)c.namesToValues.peek().get(id.getName());
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), d);
+                            c.namesToValues.peek().put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
                             throw new TypeException("Cannot use += on variable of type boolean");
                     }
                 case SUBEQ:
-                    switch (c.namesToTypes.get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(((char)c.namesToValues.get(id.getName())) - ((ReturnValuesChar) ex).value);
-                            c.namesToValues.put(id.getName(), ch);
+                            char ch = (char)(((char)c.namesToValues.peek().get(id.getName())) - ((ReturnValuesChar) ex).value);
+                            c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
@@ -513,15 +513,15 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = (int)c.namesToValues.get(id.getName()) - ((ReturnValuesChar) ex).value;
+                                    i = (int)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    i = (int)c.namesToValues.get(id.getName()) - ((ReturnValuesInt) ex).value;
+                                    i = (int)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), i);
+                            c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == PrimType.BOOLEAN)
@@ -529,29 +529,29 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = (double)c.namesToValues.get(id.getName()) - ((ReturnValuesChar) ex).value;
+                                    d = (double)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    d = (double)c.namesToValues.get(id.getName()) - ((ReturnValuesInt) ex).value;
+                                    d = (double)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesInt) ex).value;
                                     break;
                                 case DOUBLE:
-                                    d = (double)c.namesToValues.get(id.getName()) - ((ReturnValuesDouble) ex).value;
+                                    d = (double)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), d);
+                            c.namesToValues.peek().put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
                             throw new TypeException("Cannot use -= on variable of type boolean");
                     }
                 case TIMESEQ:
-                    switch (c.namesToTypes.get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(((ReturnValuesChar) ex).value * ((char)c.namesToValues.get(id.getName())));
-                            c.namesToValues.put(id.getName(), ch);
+                            char ch = (char)(((ReturnValuesChar) ex).value * ((char)c.namesToValues.peek().get(id.getName())));
+                            c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
@@ -559,15 +559,15 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = ((ReturnValuesChar) ex).value * (int)c.namesToValues.get(id.getName());
+                                    i = ((ReturnValuesChar) ex).value * (int)c.namesToValues.peek().get(id.getName());
                                     break;
                                 case INT:
-                                    i = ((ReturnValuesInt) ex).value * (int)c.namesToValues.get(id.getName());
+                                    i = ((ReturnValuesInt) ex).value * (int)c.namesToValues.peek().get(id.getName());
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), i);
+                            c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == PrimType.BOOLEAN)
@@ -575,29 +575,29 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = ((ReturnValuesChar) ex).value  * (double)c.namesToValues.get(id.getName());
+                                    d = ((ReturnValuesChar) ex).value  * (double)c.namesToValues.peek().get(id.getName());
                                     break;
                                 case INT:
-                                    d = ((ReturnValuesInt) ex).value  * (double)c.namesToValues.get(id.getName());
+                                    d = ((ReturnValuesInt) ex).value  * (double)c.namesToValues.peek().get(id.getName());
                                     break;
                                 case DOUBLE:
-                                    d = ((ReturnValuesDouble) ex).value  * (double)c.namesToValues.get(id.getName());
+                                    d = ((ReturnValuesDouble) ex).value  * (double)c.namesToValues.peek().get(id.getName());
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), d);
+                            c.namesToValues.peek().put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
                             throw new TypeException("Cannot use *= on variable of type boolean");
                     }
                 default: // DIVEQ
-                    switch (c.namesToTypes.get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
                         case CHAR:
                             if (ex.getType().uType != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(((char)c.namesToValues.get(id.getName())) / ((ReturnValuesChar) ex).value);
-                            c.namesToValues.put(id.getName(), ch);
+                            char ch = (char)(((char)c.namesToValues.peek().get(id.getName())) / ((ReturnValuesChar) ex).value);
+                            c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
                             if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
@@ -605,15 +605,15 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             int i;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    i = (int)c.namesToValues.get(id.getName()) / ((ReturnValuesChar) ex).value;
+                                    i = (int)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    i = (int)c.namesToValues.get(id.getName()) / ((ReturnValuesInt) ex).value;
+                                    i = (int)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesInt) ex).value;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), i);
+                            c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
                             if (ex.getType().uType == PrimType.BOOLEAN)
@@ -621,18 +621,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             double d;
                             switch (ex.getType().uType) {
                                 case CHAR:
-                                    d = (double)c.namesToValues.get(id.getName()) / ((ReturnValuesChar) ex).value;
+                                    d = (double)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesChar) ex).value;
                                     break;
                                 case INT:
-                                    d = (double)c.namesToValues.get(id.getName()) / ((ReturnValuesInt) ex).value;
+                                    d = (double)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesInt) ex).value;
                                     break;
                                 case DOUBLE:
-                                    d = (double)c.namesToValues.get(id.getName()) / ((ReturnValuesDouble) ex).value;
+                                    d = (double)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesDouble) ex).value;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            c.namesToValues.put(id.getName(), d);
+                            c.namesToValues.peek().put(id.getName(), d);
                             return new ReturnValuesDouble(d);
                         default:
                             throw new TypeException("Cannot use /= on variable of type boolean");

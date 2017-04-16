@@ -33,12 +33,7 @@ public class VarDeclarator extends StatementBase {
     public boolean getHasExpr() { return hasExpr; }
 
     @Override
-    public FlowControl execute(Context c, int depth) throws MiniJASTException {
-        throw new IncorrectEvaluationException("Should not be executing a VarDeclarator");
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         throw new IncorrectEvaluationException("Should not be executing a VarDeclarator");
     }
 

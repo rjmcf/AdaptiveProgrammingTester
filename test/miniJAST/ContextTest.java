@@ -60,7 +60,7 @@ public class ContextTest {
         fS = new ForStmnt();
         fS.setUpForStmnt(init, lT2);
         fS.addUpdate(plus);
-        b1 = new Block(true);
+        b1 = new Block(false);
         b1.addBlockStmnt(jDec);
         fS.setBody(b1);
     }
@@ -73,7 +73,7 @@ public class ContextTest {
         }
         Check that i and j are not defined
          */
-        fS.executeStart(c);
+        fS.execute(c);
         try {
             iID.evaluate(c);
             fail("'i' should not be defined here");

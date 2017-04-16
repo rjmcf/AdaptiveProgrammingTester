@@ -41,10 +41,10 @@ public class AssignExprTest {
 
     @Test
     public void testEqId() throws Exception {
-        c.namesToTypes.put("t", new Type(PrimType.BOOLEAN));
-        c.namesToTypes.put("o", new Type(PrimType.INT));
-        c.namesToTypes.put("h", new Type(PrimType.DOUBLE));
-        c.namesToTypes.put("a", new Type(PrimType.CHAR));
+        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.peek().put("o", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("h", new Type(PrimType.DOUBLE));
+        c.namesToTypes.peek().put("a", new Type(PrimType.CHAR));
 
         id.setUpId("t");
         aE.setUpAssignExpr(id, AssignOp.EQ, eT);
@@ -73,33 +73,33 @@ public class AssignExprTest {
 
     @Test
     public void testEqArray() throws Exception {
-        c.namesToTypes.put("boolArray2", new Type(PrimType.BOOLEAN, 2));
+        c.namesToTypes.peek().put("boolArray2", new Type(PrimType.BOOLEAN, 2));
         ArrayList<Boolean> bools = new ArrayList<>(2);
         while (bools.size() < 2) {
             bools.add(false);
         }
-        c.namesToValues.put("boolArray2", bools);
+        c.namesToValues.peek().put("boolArray2", bools);
 
-        c.namesToTypes.put("intArray2", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("intArray2", new Type(PrimType.INT, 2));
         ArrayList<Integer> ints = new ArrayList<>(2);
         while (ints.size() < 2) {
             ints.add(0);
         }
-        c.namesToValues.put("intArray2", ints);
+        c.namesToValues.peek().put("intArray2", ints);
 
-        c.namesToTypes.put("dubArray2", new Type(PrimType.DOUBLE, 2));
+        c.namesToTypes.peek().put("dubArray2", new Type(PrimType.DOUBLE, 2));
         ArrayList<Double> dubs = new ArrayList<>(2);
         while (dubs.size() < 2) {
             dubs.add(0.5);
         }
-        c.namesToValues.put("dubArray2", dubs);
+        c.namesToValues.peek().put("dubArray2", dubs);
 
-        c.namesToTypes.put("charArray2", new Type(PrimType.CHAR, 2));
+        c.namesToTypes.peek().put("charArray2", new Type(PrimType.CHAR, 2));
         ArrayList<Character> chars = new ArrayList<>(2);
         while (chars.size() < 2) {
             chars.add('\0');
         }
-        c.namesToValues.put("charArray2", chars);
+        c.namesToValues.peek().put("charArray2", chars);
 
         id.setUpId("boolArray2");
         aa.setUpArrayAccess(id, one);

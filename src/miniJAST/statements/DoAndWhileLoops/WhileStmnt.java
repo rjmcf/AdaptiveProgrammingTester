@@ -14,8 +14,8 @@ public class WhileStmnt extends CondLoopBase {
     }
 
     @Override
-    public FlowControl execute(Context c, int d) throws MiniJASTException {
-        return condAndLoop(c, d);
+    public FlowControl execute(Context c) throws MiniJASTException {
+        return condAndLoop(c);
     }
 
     public void setUpWhile(Expression c, BlockStatement s) { baseSetUpCondLoop(c, s); }

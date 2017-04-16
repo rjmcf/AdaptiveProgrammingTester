@@ -21,7 +21,7 @@ public abstract class CondLoopBase extends StatementBase {
         subNodes.add(s); stmnt = 1;
     }
 
-    protected FlowControl condAndLoop(Context c, int d) throws MiniJASTException {
+    protected FlowControl condAndLoop(Context c) throws MiniJASTException {
         checkType((Expression)subNodes.get(cond), Expression.class);
         checkType((BlockStatement)subNodes.get(stmnt), BlockStatement.class);
 
@@ -35,8 +35,9 @@ public abstract class CondLoopBase extends StatementBase {
 
         loop:
         while (((ReturnValuesBool)rC).value) {
-            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c, d+1);
-            removeDecsAtDepth(c, d+1);
+            stepIn(c);
+            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c);
+            stepOut(c);
             switch (fC) {
                 case BREAK:
                     break loop;
@@ -49,10 +50,5 @@ public abstract class CondLoopBase extends StatementBase {
         }
 
         return FlowControl.NONE;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 }

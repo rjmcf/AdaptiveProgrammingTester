@@ -126,7 +126,7 @@ public class ForStmntTest {
         }
         Check sum = 5! = 120
          */
-        block1.executeStart(c);
+        block1.execute(c);
         assertEquals(120, ((ReturnValuesInt)sumID.evaluate(c)).value);
 
         /* Code is:
@@ -137,7 +137,7 @@ public class ForStmntTest {
         }
         Check j == 5
          */
-        block2.executeStart(c);
+        block2.execute(c);
         assertEquals(5, ((ReturnValuesInt)jID.evaluate(c)).value);
     }
 }

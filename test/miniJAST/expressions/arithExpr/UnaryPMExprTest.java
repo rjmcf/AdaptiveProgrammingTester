@@ -29,11 +29,11 @@ public class UnaryPMExprTest {
     public void setUp() throws Exception {
         e = new UnaryPMExpr();
         c = new Context();
-        c.namesToTypes.put("array", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("array", new Type(PrimType.INT, 2));
         ArrayList<Integer> ints = new ArrayList<>(2);
         ints.add(1);
         ints.add(2);
-        c.namesToValues.put("array", ints);
+        c.namesToValues.peek().put("array", ints);
         id = new Id();
         id.setUpId("array");
         intE = new Literal();

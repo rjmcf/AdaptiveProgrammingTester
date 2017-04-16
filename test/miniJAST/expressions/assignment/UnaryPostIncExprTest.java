@@ -21,10 +21,10 @@ public class UnaryPostIncExprTest {
     public void setUp() throws Exception {
         e = new UnaryPostIncExpr();
         c = new Context();
-        c.namesToTypes.put("t", new Type(PrimType.BOOLEAN));
-        c.namesToValues.put("t", true);
-        c.namesToTypes.put("i", new Type(PrimType.INT));
-        c.namesToValues.put("i", 0);
+        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN));
+        c.namesToValues.peek().put("t", true);
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToValues.peek().put("i", 0);
         id = new Id();
     }
 

@@ -104,7 +104,7 @@ public class CondExprTest {
         Check both j and i are 2
         */
         e.setUpCondExpr(t, tE, bE);
-        b.executeStart(c);
+        b.execute(c);
 
         assertEquals(2, ((ReturnValuesInt)i.evaluate(c)).value);
         assertEquals(2, ((ReturnValuesInt)j.evaluate(c)).value);

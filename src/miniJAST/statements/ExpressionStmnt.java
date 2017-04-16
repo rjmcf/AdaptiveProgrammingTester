@@ -11,15 +11,10 @@ public class ExpressionStmnt extends StatementBase {
     public ExpressionStmnt(Expression sE) { subNodes.clear(); expr = 0; subNodes.add(sE); }
 
     @Override
-    public FlowControl execute(Context c, int depth) throws MiniJASTException {
+    public FlowControl execute(Context c) throws MiniJASTException {
         checkType((Expression)subNodes.get(expr), StatementExpr.class);
         ((Expression)subNodes.get(expr)).evaluate(c);
         return FlowControl.NONE;
-    }
-
-    @Override
-    public FlowControl executeStart(Context c) throws MiniJASTException {
-        return execute(c, 0);
     }
 
     @Override
