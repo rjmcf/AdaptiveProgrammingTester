@@ -8,6 +8,7 @@ import questions.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 
 public class ExerciseSetter {
@@ -19,9 +20,9 @@ public class ExerciseSetter {
     private int attempts = 0;
     int numNodes;
     int nodesToRemove;
-    OutputStream output;
+    Writer output;
 
-    public ExerciseSetter(OutputStream o) {
+    public ExerciseSetter(Writer o) {
         output = o;
         possibleExs.add(new SquareExercise(5));
         possibleExs.add(new FactorialExercise(6));
@@ -31,7 +32,7 @@ public class ExerciseSetter {
 
     public Difficulty getCurrentDifficulty() { return new Difficulty(exercise.getBaseDifficulty(), exercise.getNodesBlank()); }
 
-    public void setOutput(OutputStream o) { output = o; }
+    public void setOutput(Writer o) { output = o; }
 
     public void setCurrentDifficulty(Difficulty d) {
         if (d.base != currentIndex) {
@@ -77,11 +78,9 @@ public class ExerciseSetter {
     }
 
     public void presentQuestion() {
-        OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
-            writer.write(exercise.deliverQuestion());
-            writer.flush();
-            writer.close();
+            output.write(exercise.deliverQuestion());
+            output.flush();
         } catch (IOException e) {
             System.err.println("stream error");
         }
@@ -117,18 +116,17 @@ public class ExerciseSetter {
     }
 
     public boolean runSolution() throws MiniJASTException{
-        OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
             exercise.runSolution();
             if (exercise.checkSolved()) {
                 // report succesful submission
-                writer.write("Correct submission in " + attempts + " attempts.\n");
-                writer.flush();
+                output.write("Correct submission in " + attempts + " attempts.\n");
+                output.flush();
                 return true;
             }
             // report failed submission
-            writer.write("Incorrect submission.\n");
-            writer.flush();
+            output.write("Incorrect submission.\n");
+            output.flush();
             return false;
         } catch (IOException e) {
             System.out.println("Stream error");

@@ -15,6 +15,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class PrintStatementTest {
@@ -23,8 +24,8 @@ public class PrintStatementTest {
     Context c;
 
     @BeforeMethod
-    public void setUp() {
-        pr = new PrintStatement(System.out);
+    public void setUp() throws Exception{
+        pr = new PrintStatement("test/testOutput.txt");
         boolExpr = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {

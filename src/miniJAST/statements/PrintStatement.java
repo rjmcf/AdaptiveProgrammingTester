@@ -5,16 +5,13 @@ import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
+import java.io.*;
 
 public class PrintStatement extends StatementBase {
     private int expr;
-    OutputStream printTo;
+    String fName;
 
-    public PrintStatement(OutputStream out) { printTo = out; }
+    public PrintStatement(String fileName) { fName = fileName; }
 
     public void setUpPrint(Expression e) { subNodes.clear(); expr = 0; subNodes.add(e); }
 
@@ -28,35 +25,55 @@ public class PrintStatement extends StatementBase {
         checkType((Expression)subNodes.get(expr), Expression.class);
 
         ReturnValues v = ((Expression)subNodes.get(expr)).evaluate(c);
-        PrintStream writer = new PrintStream(printTo);
-        if (v.getIsArray()) {
-            ReturnValuesArray var = (ReturnValuesArray) v;
-            writer.print("[ ");
-            for (int i = 0; i < var.getSize(); i++) {
-                writer.print(var.get(i));
-                if (i != var.getSize() - 1)
-                    writer.print(", ");
-            }
-            writer.println(" ]");
-        } else {
-            switch (v.getType().uType) {
-                case BOOLEAN:
-                    writer.println(((ReturnValuesBool) v).value);
-                    break;
-                case CHAR:
-                    writer.println(((ReturnValuesChar) v).value);
-                    break;
-                case INT:
-                    writer.println(((ReturnValuesInt) v).value);
-                    break;
-                default: // DOUBLE
-                    writer.println(((ReturnValuesDouble) v).value);
-            }
-        }
-        writer.flush();
-        writer.close();
+        try {
+            FileWriter fw = new FileWriter(fName, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter printTo = new PrintWriter(bw);
+            if (v.getIsArray()) {
+                ReturnValuesArray var = (ReturnValuesArray) v;
+                printTo.print("[ ");
+                for (int i = 0; i < var.getSize(); i++) {
+                    switch (var.getType().uType) {
+                        case BOOLEAN:
+                            printTo.print((boolean)var.get(i));
+                            break;
+                        case CHAR:
+                            printTo.print((char)var.get(i));
+                            break;
+                        case INT:
+                            printTo.print((int)var.get(i));
+                            break;
+                        case DOUBLE:
+                            printTo.print((double) var.get(i));
+                    }
 
-        return FlowControl.NONE;
+                    if (i != var.getSize() - 1)
+                        printTo.print(", ");
+                }
+                printTo.println(" ]");
+            } else {
+                switch (v.getType().uType) {
+                    case BOOLEAN:
+                        printTo.println(((ReturnValuesBool) v).value);
+                        break;
+                    case CHAR:
+                        printTo.println(((ReturnValuesChar) v).value);
+                        break;
+                    case INT:
+                        printTo.println(((ReturnValuesInt) v).value);
+                        break;
+                    default: // DOUBLE
+                        printTo.println(((ReturnValuesDouble) v).value);
+                }
+            }
+            printTo.flush();
+            printTo.close();
+
+            return FlowControl.NONE;
+        } catch (IOException e) {
+            System.err.println("Could not print to file");
+            throw new MiniJASTException("Could not print to file");
+        }
     }
 
     @Override

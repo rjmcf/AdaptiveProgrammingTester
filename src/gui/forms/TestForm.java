@@ -3,11 +3,13 @@ package gui.forms;
 import entryPoints.ExerciseSetter;
 import miniJAST.exceptions.MiniJASTException;
 import questions.Difficulty;
+import sun.plugin2.jvm.CircularByteBuffer;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
+import java.lang.reflect.Method;
 
 public class TestForm {
 
@@ -23,7 +25,7 @@ public class TestForm {
     private JButton emptyBlankButton;
     private static ExerciseSetter eS;
     private static String text;
-    private static ByteArrayOutputStream baos;
+    private static StringWriter w;
 
     public TestForm() {
         button.addMouseListener(new MouseAdapter() {
@@ -37,10 +39,10 @@ public class TestForm {
                 int nodes = eS.getNumNodes();
                 blankSlider.setMaximum(nodes);
                 blankSlider.setValue(diff.nodesBlank);
-                baos = new ByteArrayOutputStream();
-                eS.setOutput(baos);
+                w = new StringWriter();
+                eS.setOutput(w);
                 eS.presentQuestion();
-                text = baos.toString();
+                text = w.toString();
                 display.setText(text);
             }
         });
@@ -67,6 +69,7 @@ public class TestForm {
                     if (eS.runSolution()) {
                         display.append("\nExercise completed!\n");
                     } else {
+                        //TODO why is VariableDecException caught and not thrown?
                         display.append("\nA mistake was made somewhere.\n");
                     }
                 } catch (MiniJASTException me) {
@@ -88,19 +91,18 @@ public class TestForm {
     }
 
     private void setQuestion() {
-        baos = new ByteArrayOutputStream();
-        eS.setOutput(baos);
+        w = new StringWriter();
+        eS.setOutput(w);
         eS.presentQuestion();
-        text = baos.toString();
+        text = w.toString();
         display.setText(text);
     }
 
     public static void main(String[] args) {
-        baos = new ByteArrayOutputStream();
-        eS = new ExerciseSetter(baos);
+        w = new StringWriter();
+        eS = new ExerciseSetter(w);
         eS.presentQuestion();
-        text = baos.toString();
-
+        text = w.toString();
         JFrame frame = new JFrame("TestForm");
         frame.setContentPane(new TestForm().panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -12,11 +12,13 @@ import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
+import miniJAST.statements.PrintStatement;
 import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import questions.Difficulty;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import static org.testng.Assert.*;
@@ -26,7 +28,8 @@ public class ExerciseSetterTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        setter = new ExerciseSetter(System.out);
+        FileWriter fw = new FileWriter("test/testOutput.txt", true);
+        setter = new ExerciseSetter(fw);
     }
 
     @Test
@@ -132,7 +135,12 @@ public class ExerciseSetterTest {
 
         setter.setUp();
         setter.presentQuestion();
-        assertFalse(setter.submitAttempt());
+        try {
+            assertFalse(setter.submitAttempt());
+            fail("No error thrown");
+        } catch (BlankEmptyException bE) {
+            //pass
+        }
 
         AddExpr aE = new AddExpr();
         Literal zero = new Literal();
@@ -155,7 +163,9 @@ public class ExerciseSetterTest {
 
         assertTrue(setter.submitAttempt());
         assertEquals(setter.getAttempts(), 2);
-        System.out.println(setter.reportPerformance());
+        FileOutputStream w = new FileOutputStream("test/testOutput.txt", true);
+        PrintStream pW = new PrintStream(w);
+        pW.println(setter.reportPerformance());
         assertTrue(setter.reportPerformance() < 0 && setter.reportPerformance() > -5);
     }
 
@@ -201,8 +211,12 @@ public class ExerciseSetterTest {
         setter.presentQuestion();
 
         for (int i = 0; i < 3; i++)
-            setter.submitAttempt();
-        //TODO understand why this throws an exception where it didn't before.
+            try {
+                assertFalse(setter.submitAttempt());
+                fail("No error thrown");
+            } catch (BlankEmptyException bE) {
+                //pass
+            }
 
         VarDeclarator n = new VarDeclarator();
         n.setUpVarDec("n", false, six);

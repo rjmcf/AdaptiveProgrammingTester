@@ -29,6 +29,7 @@ import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import static org.testng.Assert.*;
@@ -56,7 +57,7 @@ public class FillableBlankExprTest {
         id = new Id();
         id.setUpId("fakeArray");
         lvd = new LocalVarDec();
-        testS = new PrintStatement(System.out);
+        testS = new PrintStatement("test/testOutput.txt");
         testS.setUpPrint(lit0);
     }
 
@@ -451,7 +452,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluatePrStmnt() throws Exception {
-        PrintStatement pS = new PrintStatement(System.out);
+        PrintStatement pS = new PrintStatement("test/testOutput.txt");
         pS.setUpPrint(fbe);
         try {
             pS.executeStart(c);
@@ -957,7 +958,7 @@ public class FillableBlankExprTest {
     @Test
     public void testFilledPrStmnt() throws Exception {
         fbe.setStudentExpr(lit2);
-        PrintStatement pS = new PrintStatement(System.out);
+        PrintStatement pS = new PrintStatement("test/testOutput.txt");
         pS.setUpPrint(fbe);
         assertEquals(pS.stringRepr(0), "System.out.println(2);");
         pS.executeStart(c);

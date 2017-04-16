@@ -20,6 +20,8 @@ import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.FileOutputStream;
+
 import static org.testng.Assert.*;
 
 public class FillableBlankStmntTest {
@@ -42,7 +44,7 @@ public class FillableBlankStmntTest {
         litT.setUpLiteral(PrimType.BOOLEAN, "true");
         litF = new Literal();
         litF.setUpLiteral(PrimType.BOOLEAN, "false");
-        testS = new PrintStatement(System.out);
+        testS = new PrintStatement("test/testOutput.txt");
         testS.setUpPrint(lit0);
     }
 

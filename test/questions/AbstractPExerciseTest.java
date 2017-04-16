@@ -6,6 +6,7 @@ import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import static org.testng.Assert.*;
@@ -161,7 +162,9 @@ public class AbstractPExerciseTest {
         }
 
         ArrayList<Integer> ids = test.getBlankIds();
-        System.out.println(ids);
+        FileOutputStream fO = new FileOutputStream("test/testOutput.txt", true);
+        PrintStream pW = new PrintStream(fO);
+        pW.println(ids);
 
         Literal five = new Literal();
         five.setUpLiteral(PrimType.INT, "5");
