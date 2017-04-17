@@ -3,6 +3,7 @@ package miniJAST;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class FillableBlank {
+    protected static final boolean SHOWIDS = false;
     private static AtomicInteger nextId = new AtomicInteger(0);
     private int id;
     protected int nodesReplaced;

@@ -47,7 +47,7 @@ public class FillableBlankStmnt extends FillableBlank implements BlockStatement 
     @Override
     public String stringRepr(int blocksDeep) {
         if (studentStmnt == null)
-            return pad(blocksDeep) + "..(" + getId() + ")..";
+            return pad(blocksDeep) + (SHOWIDS ? "..(" + getId() + ").." : ".....");
         else
             return studentStmnt.stringRepr(blocksDeep);
     }

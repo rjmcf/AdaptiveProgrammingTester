@@ -42,6 +42,10 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         solution.execute(c);
     }
 
+    public void setSolution(BlockStatement s) {
+        solution = s;
+    }
+
     @Override
     public int compareTo(AbstractPExercise o) {
         return (baseDifficulty - o.baseDifficulty);
@@ -78,6 +82,8 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         result += printSolution();
         return result;
     }
+
+    public String getQuestion() { return question; }
 
     public String printSolution() {
         return solution.stringRepr(1);

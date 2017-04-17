@@ -3,32 +3,27 @@ package gui.forms;
 import entryPoints.ExerciseSetter;
 import miniJAST.exceptions.MiniJASTException;
 import questions.Difficulty;
-import sun.plugin2.jvm.CircularByteBuffer;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.lang.reflect.Method;
 
 public class TestForm {
 
     private JPanel panel;
     private JSlider blankSlider;
-    private JButton button;
+    private JButton genButton;
     private JSlider baseSlider;
     private JTextArea display;
-    private JTextArea textArea1;
-    private JButton fillBlankButton;
-    private JSpinner spinner1;
     private JButton runButton;
-    private JButton emptyBlankButton;
+    private JTextField questionField;
     private static ExerciseSetter eS;
-    private static String text;
-    private static StringWriter w;
+    private static String question;
+    private static String solution;
 
     public TestForm() {
-        button.addMouseListener(new MouseAdapter() {
+        genButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int b = baseSlider.getValue();
@@ -39,26 +34,7 @@ public class TestForm {
                 int nodes = eS.getNumNodes();
                 blankSlider.setMaximum(nodes);
                 blankSlider.setValue(diff.nodesBlank);
-                w = new StringWriter();
-                eS.setOutput(w);
-                eS.presentQuestion();
-                text = w.toString();
-                display.setText(text);
-            }
-        });
-
-        fillBlankButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    if (eS.fillBlank((int) spinner1.getValue(), textArea1.getText())) {
-                        setQuestion();
-                    } else {
-                        display.append("\nThere is no blank with that Id\n");
-                    }
-                } catch (MiniJASTException me) {
-                    display.append("\nSomething went wrong, the following error was raised:\n\""+me.getMessage()+"\"\n");
-                }
+                setQuestion();
             }
         });
 
@@ -66,6 +42,8 @@ public class TestForm {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
+                    String submitted = display.getText();
+                    eS.setSolution(submitted);
                     if (eS.runSolution()) {
                         display.append("\nExercise completed!\n");
                     } else {
@@ -77,35 +55,20 @@ public class TestForm {
                 }
             }
         });
-
-        emptyBlankButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (eS.emptyBlank((int)spinner1.getValue())) {
-                    setQuestion();
-                } else {
-                    display.append("\nThere is no blank with that Id.\n");
-                }
-            }
-        });
     }
 
     private void setQuestion() {
-        w = new StringWriter();
-        eS.setOutput(w);
-        eS.presentQuestion();
-        text = w.toString();
-        display.setText(text);
+        question = eS.getQuestion();
+        solution = eS.getSolution();
+        questionField.setText(question);
+        display.setText(solution);
     }
 
     public static void main(String[] args) {
-        w = new StringWriter();
-        eS = new ExerciseSetter(w);
-        eS.presentQuestion();
-        text = w.toString();
+        eS = new ExerciseSetter(new StringWriter());
         JFrame frame = new JFrame("TestForm");
         frame.setContentPane(new TestForm().panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
@@ -124,6 +87,5 @@ public class TestForm {
         blankSlider.setMinorTickSpacing(1);
         blankSlider.setPaintTicks(true);
         blankSlider.setSnapToTicks(true);
-        display = new JTextArea(text);
     }
 }
