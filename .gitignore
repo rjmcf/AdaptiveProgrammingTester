@@ -12,3 +12,6 @@ out/
 *.blg*
 *.lof*
 *.toc
+
+# Test #
+test/*.txt
