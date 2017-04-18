@@ -96,6 +96,14 @@ extent for a comparable purpose.
 
 \chapter{Preparation}
 
+\textcolor{red}{
+\begin{itemize}
+\item{First attempt using Strings}
+\item{Why I had to make my own language}
+\item{Research into other projects etc, like Arjen and the PhD}
+\end{itemize}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementation chapter
 \chapter{Implementation}
@@ -106,28 +114,68 @@ extent for a comparable purpose.
 
 In this chapter I detail the work completed. I begin by describing how I implemented MiniJava, (a small imperative programming language based on Java), as well as a parser for MiniJava's grammar. I then describe the algorithm that allows the addition and removal of ``blanks'' within a MiniJava program. I then describe how a programming exercise is conceptualised in the abstract sense, and give an example of an implementation of a specific question. Finally, I describe the two peripherals I developed to interact with the language; the \texttt{ExerciseSetter} and the Graphical User Interface (GUI).
 
-\section{The Language: MiniJava}
+\section{Designing the Abstract Syntax Tree for MiniJava}
 
-\textcolor{red}{Remove all references to "language features", they are "productions in the abstract syntax".}
+In this section I describe how I designed the MiniJava language.
 
-In this section I describe how I implemented the MiniJava language.
+Since part of my aim was to demonstrate a possible method for teaching Java, I wanted the language I was using to be as close to Java as possible. However, re-implementing all of Java would have been too much unnecessary complexity, so I designed MiniJava with reference to only a small subset of the Java 8 grammar \cite[p.714]{Java8}. Because my eventual aim was to replace parts of MiniJava programs with blanks for a student to fill in, storing MiniJava programs as Abstract Syntax Trees (ASTs) was the obvious choice. Since nodes in the AST represent constructs in the source code, replacing a node in the AST with a notional ``blank'' node would be representative of making parts of the source code blank. 
+
+Each class in my implementation represents a different production rule in the abstract syntax for MiniJava, found in Appendix \ref{App:Parser} in the form of a parser specification. My first task was to differentiate between MiniJava expressions and MiniJava statements. This distinction is important as they must be used in different places: for example, in the production rule \texttt{WHILE~parExpression~statement} representing a \texttt{while} loop, \texttt{parExpression} may be substituted with any MiniJava expression (surrounded by parentheses), while \texttt{statement} may be substituted with any MiniJava statement. The reverse is not allowed however, meaning that \texttt{statement} may not be replaced by a MiniJava expression and vice versa. To encode this distinction, I made the interfaces \texttt{Expression} and \texttt{BlockStatement} (which all MiniJava expressions and statements implement respectively), and the abstract classes \texttt{ExpressionBase} and \texttt{StatementBase} (which all MiniJava expressions and statements extend respectively). For justification of why both the interfaces and the abstract classes are required, see section \ref{Sec:Blanks}.
+
+As important as the distinction between expressions and statements is, there do exist some expressions that can be used in statements. For an example, the MiniJava code \texttt{i~=~5;} is a statement because it ends in a semicolon,~``\texttt{;}'', but this statement consists entirely of the expression \texttt{i~=~5}. This sort of expression within a statement construct is not possible with all expressions, for example the code \texttt{i~+~4;} would not be valid MiniJava. To make the distinction between expressions which may be used in statements like this and those which may not, I made the interface \texttt{StatementExpression}. This interface is only implemented by those expressions which can be used in a statement this way.
+
+A feature of MiniJava is the concept of operator precedence, which is used to disambiguate an otherwise ambiguous grammar of expressions. Without the concept of operator precedence, the code \texttt{1~+~2~*~3} is ambiguous, as it can be read as either \texttt{(1~+~2)~*~3} which equates to 9, or as \texttt{1~+~(2~*~3)} which equates to 7. Since a single arithmetic expression cannot have more than one value, a decision must be made as to which of these interpretations is declared valid. The decision taken aligns with the standard arithmetic order of operations, such that the answer of 7 is the correct answer in this case. This example demonstrates that the multiplication operator, ``\texttt{*}'', has a higher precedence than the addition operator, ``\texttt{+}''. All the possible operators in MiniJava are found within this precedence hierarchy, and I needed some way to encode this. The method I chose for this is the natural choice, since it is suggested by the Java grammar itself \cite[p.723]{Java8}. The production rule for \texttt{AdditiveExpression} is as follows:
+\samepage{
+\begin{lstlisting}
+AdditiveExpression:
+	MultiplicativeExpression								(1)
+	AdditiveExpression + MultiplicativeExpression			(2)
+	AdditiveExpression - MultiplicativeExpression			(3)
+\end{lstlisting}}
+and the production rule for \texttt{MultiplicativeExpression} is as follows:
+\samepage{
+\begin{lstlisting}
+MultiplicativeExpression:
+	UnaryExpression
+	MultiplicativeExpression * UnaryExpression
+	MultiplicativeExpression / UnaryExpression 
+	// Note that the modulus operator, %, was removed from MiniJava
+\end{lstlisting}}
+This means that for any expression $A$\texttt{ + }$B$, both $A$ and $B$ must only contain subexpressions that use operators with precedence at least as high as \texttt{+} and \texttt{-}, and that for any expression $A$\texttt{ * }$B$, neither $A$ nor $B$ can contain subexpressions that use operators with precedence lower than \texttt{*} and \texttt{/}. This in turn indicates that an expression such as \texttt{1~+~2~*~3~+~4} can only be interpreted as \texttt{1~+~(2~*~3)~+~4}, and an expression such as \texttt{1~*~2~+~3~*~4} can only be interpreted as \texttt{(1~*~2)~+~(3~*~4)}. I wanted an operator precedence for MiniJava that is hardcoded within the grammar of MiniJava itself, just as the operator precedence of Java is hardcoded within the grammar of Java. The production rules for Java shown above suggest a natural implementation of the class that represents addition expressions:
+\samepage{
+\begin{lstlisting}
+class AddExpr {
+	private boolean isPlus;
+	private AddExpr leftSide;
+	private MultExpr rightSide;
+	
+	...
+}
+\end{lstlisting}}
+Here, the \texttt{isPlus} field records whether the expression is an addition or a subtraction, \texttt{leftSide} and \texttt{rightSide} store the left and right operands of the expression, and \texttt{MultExpr} is the class representing multiplication expressions. What has been implemented so far encapsulates parts (2) and (3) of the \texttt{AdditiveExpression} production rule above, but not part (1). This part is encapsulated by making the class \texttt{MultExpr} extend the class \texttt{AddExpr}, such that an instance of \texttt{MultExpr} may always be used in place of an instance of \texttt{AddExpr}. Note that since multiplication operators are higher in the operator precedence hierarchy, their representations are lower in the object hierarchy. This then is the solution to the operator precedence problem: to enforce an operator precedence hierarchy, first enforce an inverse object hierarchy in their representative classes, and then choose the type of each expression's operands to match the relevant terminal symbols in the relevant production rule.\footnote{Note that if you were to look at my implementation of \texttt{AddExpr}, \texttt{leftSide} and \texttt{rightSide} would both be \texttt{int}s, not \texttt{AddExpr} and \texttt{MultExpr} instances. The reason behind this is explained in section \ref{Sec:Blanks}.}
+
+Still to explain:
+\begin{enumerate}
+\item{The PrimType and Type classes (paragraph on how the types of expressions are propagated)}
+\item{SingleWordStmnt (paragraph on why four statements are stored in one enumeration)}
+\item{AssignOp and RelationOp (paragraph comparing the \texttt{isPlus} field used when the operator is either + or - and the AssignOp enum for when the possible operator is =, +=, -=, *= or /=)}
+\item{AssignLHS (paragraph on the extra classification of expressions as being able to be assigned to)}
+\item{ArrayAssignRightSide and VarDeclarator (paragraph on the evolution of the class VarDeclarator, and a paragraph on the extra classification of expressions as being able to be assigned to an array)}
+\end{enumerate}
+ 
 
 \begin{figure}
 \centering
 \includegraphics{TopLevelUML}
-\caption{The UML diagram showing the top of the object hierarchy for \texttt{MiniJASTNode}s.}
+\caption{The UML diagram showing the top of the object hierarchy for \texttt{MiniJASTNode}s. \textcolor{red}{I haven't yet used this in my explanation, but it will probably go at the end of my last paragraph, just to collect together everything I've said so far.}}
 \label{Fig:UML}
 \end{figure}
 
-MiniJava is a subset of Java 8 \textcolor{red}{(Fix citation to read [2, p. 714])} (\cite{Java8}  page 714) formed by removing some of the more complex language features, like all object-oriented features. Also, only single-dimensional arrays are allowed. A full description of the grammar of the language can be found in Appendix \ref{App:Parser}. Productions in the abstract syntax of the language have corresponding classes in the implementation. For example, there is a class called \texttt{CondExpr} that corresponds to the production for conditional expressions.. Fig \ref{Fig:UML} shows the top levels of classification that all language features implemented by MiniJava fall into. Ignoring \texttt{MiniJASTNode} for a moment, all language features can be categorised as being either \texttt{Expression} or \texttt{BlockStatements}. Every \texttt{Expression} extends the abstract class \texttt{ExpressionBase}. Some expressions, like \texttt{AssignExpr}, also implement \texttt{StatementExpression}, while others, like \texttt{CondExpr}, do not \textcolor{red}{(Explain the distinction)}. All other expressions extend \texttt{CondExpr}, which gives rise to an implicit operator precedence \textcolor{red}{(Explain this)}. All \texttt{BlockStatements} subclass \texttt{StatementBase}. A MiniJava program can be represented as a tree similar to a parse tree \textcolor{red}{(Make this actually important)}. Thus every class involved needs to implement \texttt{MiniJASTNode} so that operations can be performed on every node of the tree \textcolor{red}{(Explain this better)}. 
+\section{Interpreting the language}
 
-Looking at the \texttt{Expression} interface \textcolor{red}{(Either give the code inline or include it in the UML)}, we see the two methods \texttt{evaluate} and \texttt{stringRepr}. The method \texttt{stringRepr} simply returns a \texttt{String} representation of the \texttt{Expression}, evaluated recursively through its sub-nodes. For example: 
+In this section I explain how I wrote an interpreter for MiniJava.
 
-\begin{lstlisting}
-AddExpr::stringRepr() {
-	return leftOperand.stringRepr() + " + " + rightOperand.stringRepr();
-}
-\end{lstlisting}
+\textcolor{red}{Remove all references to "language features", they are "productions in the abstract syntax".}
 
 \textcolor{red}{(Distinguish between the tree and the interpreter.)}The \texttt{evaluate} method takes a \texttt{Context} object and returns a \texttt{ReturnValues} object \textcolor{red}{(Use bottom explanation, i.e. "The evaluate method implements an interpreter for MiniJava. Before looking at its implementation, let us introduce some helper classes that are needed by the implementation of evaluate.")}. \textcolor{red}{(Give more intuition about what the classes do!)}A \texttt{Context} object stores three maps: \textcolor{red}{(Give the names and then the descriptions)} one map of names to \texttt{Types}, one of names to values, and one of names to depths. A \texttt{Type} object stores the primitive type (\texttt{boolean}, \texttt{char}, \texttt{int}, or \texttt{double}) associated with the type, and whether the type is an array type or not, and also the size of the type (this is not 1 only if the value is an array). The \texttt{Context} object allows the use of variables. If an identifier has been declared in this scope then it will have an entry in the \texttt{namesToTypes} and \texttt{namesToDepths} maps. If it has also been defined, then it will also have an entry in the \texttt{namesToValues} map. Thus, on variable initialisation, we can check if the identifier has already been used in this scope, and also update its value on assignment. The \texttt{namesToDepths} map is used to keep track of scope, as every time we leave a block (and thus our depth decreases), we remove all the entries from these maps where the depth value is the depth just left.
 
@@ -147,8 +195,6 @@ In the evaluation of this code, \texttt{a[i++]} is first evaluated as an array a
 Looking now at the \texttt{BlockStatement} interface\textcolor{red}{(Show it again)}, we see the three methods \texttt{execute}, \texttt{executeStart} and \texttt{stringRepr}. In some ways these are analogous to the methods found in the \texttt{Expression} interface. \texttt{stringRepr} returns a \texttt{String} representation of the statement, but also requires a \texttt{blocksDeep} parameter to know how many tab characters to put in front of the text. The \texttt{execute} method takes a \texttt{Context} object and a \texttt{depth} parameter and returns a \texttt{FlowControl} value. The \texttt{depth} parameter is used in scope management by the \texttt{removeDecsAtDepth} method in \texttt{StatementBase}. \texttt{FlowControl} is an enumeration determining what action must be taken after a statement is executed, and can take one of four values: \texttt{BREAK}, \texttt{CONTINUE}, \texttt{RETURN} and \texttt{NONE}. \texttt{executeStart} is simply a helper method for starting an execution with the appropriate initial depth value.
 
 Whenever something goes wrong during execution, for example there is a type error or a variable is used before it is initialised, a custom exception is thrown. Information about the mistake that was made can be extracted from the exception type and from the message passed with it.
-
-In this section I described how the MiniJava language has been designed to allow a program to be stored and executed, and how information can be passed around the program tree.
 
 \section{The Parser}
 
@@ -182,6 +228,7 @@ This demonstrates one of the two ways that solutions can be checked: either the 
 In this section I have presented the class \texttt{AbstractPExercise} and given an example implementation of it.
 
 \section{Adding and Removing Blanks}
+\label{Sec:Blanks}
 
 This section explains the implementation of \texttt{FillableBlank} and its two implementations, before describing the algorithm that adds a blank to a MiniJava program that can later be filled in by a student, and the algorithm that replaces a blank with the original code snippet.
 
@@ -241,8 +288,6 @@ In this section I describe the implementation and function of the GUI peripheral
 \caption{An example screenshot taken of the GUI peripheral.}
 \label{Fig:GUI}
 \end{figure}
-
-\textcolor{red}{Make the GUI textbox on the right editable!}
 
 The GUI demonstrates some of the possible uses of this set of tools. It shows how a teacher might manually set the difficulty of a particular exercise and how a student could fill in the blanks and run their solution. An example screen from the GUI is shown in Fig 3. The top slider determines the problem that is presented: the further to the left the slider is, the easier the problem will be. The bottom slider affects the difficulty of that problem: the further it is to the left, the fewer blanks there will be and thus the easier the problem will be to solve. When the ``Generate'' button is pressed, the corresponding exercise will be displayed in the box on the right. 
 
