@@ -36,7 +36,7 @@ public class ArrayCreation extends ArrayAssignRightSide {
         for (int i = 0; i < s.value; i++) {
             list.add(type.defaultVal);
         }
-        return new ReturnValuesArray<>(new Type(type, s.value), list);
+        return new ReturnValuesArray<>(type, list);
     }
 
     @Override

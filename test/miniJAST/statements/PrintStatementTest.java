@@ -97,7 +97,7 @@ public class PrintStatementTest {
                 string.add('i');
                 string.add('n');
                 string.add('t');
-                return new ReturnValuesArray<Character>(new Type(PrimType.CHAR,5), string);
+                return new ReturnValuesArray<Character>(PrimType.CHAR, string);
             }
 
             @Override

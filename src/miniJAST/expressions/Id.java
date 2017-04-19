@@ -48,13 +48,13 @@ public class Id extends UnaryExpr implements AssignLHS{
                 try {
                     switch (varType.uType) {
                         case BOOLEAN:
-                            return new ReturnValuesArray<Boolean>(varType, (ArrayList<Boolean>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Boolean>(varType.uType, (ArrayList<Boolean>) c.namesToValues.peek().get(name));
                         case CHAR:
-                            return new ReturnValuesArray<Character>(varType, (ArrayList<Character>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Character>(varType.uType, (ArrayList<Character>) c.namesToValues.peek().get(name));
                         case INT:
-                            return new ReturnValuesArray<Integer>(varType, (ArrayList<Integer>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Integer>(varType.uType, (ArrayList<Integer>) c.namesToValues.peek().get(name));
                         default: // DOUBLE
-                            return new ReturnValuesArray<Double>(varType, (ArrayList<Double>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Double>(varType.uType, (ArrayList<Double>) c.namesToValues.peek().get(name));
                     }
                 } catch (Exception e) {
                     throw new TypeException("Array cast failed");

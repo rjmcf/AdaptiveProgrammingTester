@@ -20,7 +20,7 @@ public class ArrayInit extends ArrayAssignRightSide {
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         sizeOnceEvaluated = subNodes.size();
         if (subNodes.size() == 0) {
-            return new ReturnValuesArray<>(new Type(null, 0), new ArrayList<>());
+            return new ReturnValuesArray<>(null, new ArrayList<>());
         }
         Expression first = subNodes.get(0);
         ReturnValues r = first.evaluate(c);
@@ -33,7 +33,7 @@ public class ArrayInit extends ArrayAssignRightSide {
                     for (int i = 1; i < subNodes.size(); i++) {
                         bList.add(((ReturnValuesBool) subNodes.get(i).evaluate(c)).value);
                     }
-                    return new ReturnValuesArray<>(new Type(PrimType.BOOLEAN, subNodes.size()), bList);
+                    return new ReturnValuesArray<>(PrimType.BOOLEAN, bList);
                 } catch (ClassCastException ce) {
                     throw new TypeException("All values must be of type Boolean.");
                 }
@@ -44,7 +44,7 @@ public class ArrayInit extends ArrayAssignRightSide {
                     for (int i = 1; i < subNodes.size(); i++) {
                         cList.add(((ReturnValuesChar) subNodes.get(i).evaluate(c)).value);
                     }
-                    return new ReturnValuesArray<>(new Type(PrimType.CHAR, subNodes.size()), cList);
+                    return new ReturnValuesArray<>(PrimType.CHAR, cList);
                 } catch (ClassCastException ce) {
                     throw new TypeException("All values must be of type Character.");
                 }
@@ -55,7 +55,7 @@ public class ArrayInit extends ArrayAssignRightSide {
                     for (int i = 1; i < subNodes.size(); i++) {
                         iList.add(((ReturnValuesInt) subNodes.get(i).evaluate(c)).value);
                     }
-                    return new ReturnValuesArray<>(new Type(PrimType.INT, subNodes.size()), iList);
+                    return new ReturnValuesArray<>(PrimType.INT, iList);
                 } catch (ClassCastException ce) {
                     throw new TypeException("All values must be of type Integer.");
                 }
@@ -66,7 +66,7 @@ public class ArrayInit extends ArrayAssignRightSide {
                     for (int i = 1; i < subNodes.size(); i++) {
                         dList.add(((ReturnValuesDouble) subNodes.get(i).evaluate(c)).value);
                     }
-                    return new ReturnValuesArray<>(new Type(PrimType.DOUBLE, subNodes.size()), dList);
+                    return new ReturnValuesArray<>(PrimType.DOUBLE, dList);
                 } catch (ClassCastException ce) {
                     throw new TypeException("All values must be of type Double.");
                 }

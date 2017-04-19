@@ -61,8 +61,9 @@ public class ArrayAccess extends UnaryExpr implements AssignLHS {
 
         int index = ((ReturnValuesInt)i).value;
 
-        if (index < 0 || index >= id.getType().size)
-            throw new OutOfBoundsException(index, id.getType().size);
+        int size = ar.getSize();
+        if (index < 0 || index >= size)
+            throw new OutOfBoundsException(index, size);
 
         switch (r.getType().uType) {
             case BOOLEAN:

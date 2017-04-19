@@ -198,8 +198,6 @@ public class LocalVarDecTest {
         id.setUpId("boolArray2");
         ReturnValuesArray ar = (ReturnValuesArray)id.evaluate(c);
 
-        assertEquals(2, ar.getType().size);
-
         aC = new ArrayCreation(PrimType.BOOLEAN, t);
         vD.setUpVarDec("boolArrayT", true, aC);
 
@@ -225,8 +223,6 @@ public class LocalVarDecTest {
         Id id1 = new Id();
         id1.setUpId("boolArray3");
         ReturnValuesArray ar1 = (ReturnValuesArray)id1.evaluate(c);
-
-        assertEquals(ar1.getType().size, 1);
     }
 
     @Test
@@ -246,8 +242,6 @@ public class LocalVarDecTest {
 
         id.setUpId("boolArray");
         ReturnValuesArray<Boolean> ar = (ReturnValuesArray)id.evaluate(c);
-
-        assertEquals(3, ar.getType().size);
         assertTrue(ar.get(0));
         assertFalse(ar.get(1));
         assertTrue(ar.get(2));
@@ -286,8 +280,6 @@ public class LocalVarDecTest {
 
         id.setUpId("boolArray1");
         ReturnValuesArray<Boolean> ar1 = (ReturnValuesArray)id.evaluate(c);
-
-        assertEquals(1, ar1.getType().size);
         assertTrue(ar1.get(0));
     }
 
@@ -326,7 +318,6 @@ public class LocalVarDecTest {
         ReturnValues rV = i.evaluate(c);
         assertTrue(rV.getIsArray());
         assertEquals(rV.getType().uType, PrimType.INT);
-        assertEquals(rV.getType().size, 2);
 
         aE2.setUpAssignExpr(j, AssignOp.EQ, aI);
         try {
@@ -355,6 +346,5 @@ public class LocalVarDecTest {
         ReturnValues rV = i.evaluate(c);
         assertTrue(rV.getIsArray());
         assertEquals(rV.getType().uType, PrimType.INT);
-        assertEquals(rV.getType().size, 0);
     }
 }

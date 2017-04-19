@@ -21,9 +21,9 @@ public class UnaryPostIncExprTest {
     public void setUp() throws Exception {
         e = new UnaryPostIncExpr();
         c = new Context();
-        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN, false));
         c.namesToValues.peek().put("t", true);
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         c.namesToValues.peek().put("i", 0);
         id = new Id();
     }

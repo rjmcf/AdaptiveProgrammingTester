@@ -131,7 +131,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         Id i = new Id();
         i.setUpId("i");
         AssignExpr aE = new AssignExpr();
@@ -149,8 +149,8 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
-        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
+        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN, false));
         c.namesToValues.peek().put("cond", true);
         Id i = new Id(), cond = new Id();
         i.setUpId("i");
@@ -200,7 +200,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         Id iId = new Id();
         iId.setUpId("i");
 
@@ -229,7 +229,7 @@ public class FillableBlankStmntTest {
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         Id iId = new Id();
         iId.setUpId("i");
 

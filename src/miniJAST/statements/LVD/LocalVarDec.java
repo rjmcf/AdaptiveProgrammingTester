@@ -63,7 +63,7 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Booleans.");
                             if (!rvBA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.BOOLEAN, rvBA.getType().size));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.BOOLEAN, rvBA.getIsArray()));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvBA).getArray());
                         } else {
                             ReturnValues rvB = v.getExpr().evaluate(c);
@@ -75,7 +75,7 @@ public class LocalVarDec extends StatementBase {
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesBool)rvB).value);
                         }
                     } else {
-                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, true) : new Type(type, false));
                     }
                     break;
                 case CHAR:
@@ -86,7 +86,7 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Characters.");
                             if (!rvCA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.CHAR, rvCA.getType().size));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.CHAR, rvCA.getType().isArray));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvCA).getArray());
                         } else {
                             ReturnValues rvC = v.getExpr().evaluate(c);
@@ -98,7 +98,7 @@ public class LocalVarDec extends StatementBase {
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesChar)rvC).value);
                         }
                     } else {
-                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, true) : new Type(type, false));
                     }
                     break;
                 case INT:
@@ -109,7 +109,7 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Integers.");
                             if (!rvIA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.INT, rvIA.getType().size));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.INT, rvIA.getType().isArray));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvIA).getArray());
                         } else {
                             ReturnValues rvI = v.getExpr().evaluate(c);
@@ -121,7 +121,7 @@ public class LocalVarDec extends StatementBase {
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesInt)rvI).value);
                         }
                     } else {
-                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, true) : new Type(type, false));
                     }
                     break;
                 default: // DOUBLE
@@ -132,7 +132,7 @@ public class LocalVarDec extends StatementBase {
                                 throw new TypeException("Can only initialise with Doubles.");
                             if (!rvDA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.DOUBLE, rvDA.getType().size));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.DOUBLE, rvDA.getType().isArray));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvDA).getArray());
                         } else {
                             ReturnValues rvD = v.getExpr().evaluate(c);
@@ -144,7 +144,7 @@ public class LocalVarDec extends StatementBase {
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesDouble)rvD).value);
                         }
                     } else {
-                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, 0) : new Type(type));
+                        c.namesToTypes.peek().put(v.getName(), v.getIsArray() ? new Type(type, true) : new Type(type, false));
                     }
             }
         }

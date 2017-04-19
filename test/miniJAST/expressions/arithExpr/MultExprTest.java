@@ -32,7 +32,7 @@ public class MultExprTest {
     public void setUp() throws Exception {
         e = new MultExpr();
         c = new Context();
-        c.namesToTypes.peek().put("array", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("array", new Type(PrimType.INT, true));
         ArrayList<Integer> ints = new ArrayList<>(2);
         ints.add(1);
         ints.add(2);

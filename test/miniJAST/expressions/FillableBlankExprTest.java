@@ -227,7 +227,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEmptyEvaluateArray() throws Exception {
-        c.namesToTypes.peek().put("fakeArray", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("fakeArray", new Type(PrimType.INT, true));
         c.namesToValues.peek().put("fakeArray", new ArrayList<Integer>(2));
         ArrayAccess aaE = new ArrayAccess();
         aaE.setUpArrayAccess(id, fbe);
@@ -519,7 +519,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsArrayAccess() throws Exception {
-        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, true));
         ArrayList<Integer> vals = new ArrayList<>(2);
         vals.add(2);
         vals.add(3);
@@ -537,7 +537,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledArrayAcces() throws Exception {
-        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, true));
         ArrayList<Integer> array = new ArrayList<>();
         array.add(2); array.add(3);
         c.namesToValues.peek().put("ar", array);
@@ -555,7 +555,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsAssignment() throws Exception {
-        c.namesToTypes.peek().put("fakeInt", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("fakeInt", new Type(PrimType.INT, false));
 
         Id fId = new Id();
         fId.setUpId("fakeInt");
@@ -588,7 +588,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledAssignment() throws Exception {
-        c.namesToTypes.peek().put("fakeInt", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("fakeInt", new Type(PrimType.INT, false));
         Id fId = new Id();
         fId.setUpId("fakeInt");
         fbe.setStudentExpr(fId);
@@ -721,7 +721,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testEvaluateAsId() throws Exception {
-        c.namesToTypes.peek().put("fakeId", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("fakeId", new Type(PrimType.INT, false));
         c.namesToValues.peek().put("fakeId", 2);
         Id fakeId = new Id();
         fakeId.setUpId("fakeId");
@@ -801,9 +801,9 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledDo() throws Exception {
-        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN, false));
         c.namesToValues.peek().put("cond", false);
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         c.namesToValues.peek().put("i", 1);
         Id condId = new Id(), i = new Id();
         condId.setUpId("cond");
@@ -824,7 +824,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledWhile() throws Exception {
-        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.peek().put("cond", new Type(PrimType.BOOLEAN, false));
         c.namesToValues.peek().put("cond", true);
         Id condId = new Id();
         condId.setUpId("cond");
@@ -842,8 +842,8 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledFor() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
-        c.namesToTypes.peek().put("res", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
+        c.namesToTypes.peek().put("res", new Type(PrimType.INT, false));
         c.namesToValues.peek().put("res", 0);
         Id i = new Id();
         i.setUpId("i");
@@ -882,7 +882,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledITE() throws Exception {
-        c.namesToTypes.peek().put("res", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("res", new Type(PrimType.INT, false));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
@@ -904,7 +904,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledIT() throws Exception {
-        c.namesToTypes.peek().put("res", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("res", new Type(PrimType.INT, false));
 
         fbe.setStudentExpr(litT);
         Id resId = new Id();
@@ -941,7 +941,7 @@ public class FillableBlankExprTest {
 
     @Test
     public void testFilledExprStmnt() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
 
         Id iId = new Id();
         iId.setUpId("i");

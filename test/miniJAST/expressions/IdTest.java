@@ -21,11 +21,11 @@ public class IdTest {
     public void setUp() throws Exception {
         id = new Id();
         c = new Context();
-        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN));
+        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN, false));
         c.namesToValues.peek().put("t", true);
-        c.namesToTypes.peek().put("int2", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("int2", new Type(PrimType.INT, false));
         c.namesToValues.peek().put("int2", 2);
-        c.namesToTypes.peek().put("message", new Type(PrimType.CHAR, 6));
+        c.namesToTypes.peek().put("message", new Type(PrimType.CHAR, true));
         ArrayList<Character> m = new ArrayList<>();
         m.add('I');
         m.add('d');

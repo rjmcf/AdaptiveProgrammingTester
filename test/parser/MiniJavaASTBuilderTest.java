@@ -164,7 +164,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitMakeID() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         parser = getParser("i");
         tree = parser.expression(); // parse
         result = builder.visit(tree);
@@ -180,7 +180,7 @@ public class MiniJavaASTBuilderTest {
         c.namesToValues.peek().put("i", 2);
         assertEquals(((ReturnValuesInt)i1.evaluate(c)).value, 2);
 
-        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, 2));
+        c.namesToTypes.peek().put("ar", new Type(PrimType.INT, true));
         ArrayList<Integer> ar = new ArrayList<>(2);
         ar.add(42);
         ar.add(17);
@@ -197,7 +197,7 @@ public class MiniJavaASTBuilderTest {
 
     @Test
     public void testVisitAssignExpr() throws Exception {
-        c.namesToTypes.peek().put("i", new Type(PrimType.INT));
+        c.namesToTypes.peek().put("i", new Type(PrimType.INT, false));
         parser = getParser("i = 3");
         tree = parser.expression(); // parse
         result = builder.visit(tree);
