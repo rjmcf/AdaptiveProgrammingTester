@@ -5,10 +5,7 @@ import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.returnValues.ReturnValues;
-import miniJAST.expressions.returnValues.ReturnValuesArray;
-import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.expressions.returnValues.ReturnValuesIntAA;
+import miniJAST.expressions.returnValues.*;
 import miniJAST.types.Type;
 import miniJAST.types.PrimType;
 import org.testng.Assert;
@@ -60,7 +57,7 @@ public class PrintStatementTest {
         intAAExpr = new Expression() {
             @Override
             public ReturnValues evaluate(Context c) throws MiniJASTException {
-                return new ReturnValuesIntAA("fakeArray", 2, 42);
+                return new ReturnValuesInt(42);
             }
 
             @Override

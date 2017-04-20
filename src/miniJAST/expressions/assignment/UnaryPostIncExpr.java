@@ -12,6 +12,7 @@ import miniJAST.expressions.StatementExpr;
 import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.expressions.returnValues.*;
+import miniJAST.types.Type;
 
 import java.util.ArrayList;
 
@@ -46,36 +47,34 @@ public class UnaryPostIncExpr extends UnaryExpr implements StatementExpr {
 
         if (expr instanceof ArrayAccess) {
             ArrayAccess aa = (ArrayAccess) expr;
-            ReturnValues raa = aa.evaluate(c);
+            if (!aa.checkDefined(c)) {
+                throw new VariableNotInitException(aa.getName());
+            }
+            Type arType = aa.getArType();
+            int index = aa.evaluateIndex(c).value;
 
-            switch (raa.getPType()) {
+            switch (arType.pType) {
                 case CHAR:
-                    ReturnValuesCharAA rcaa = (ReturnValuesCharAA) raa;
-                    char ch = isPlus ? (char) (rcaa.value + 1) : (char) (rcaa.value - 1);
-                    if (!c.namesToValues.peek().containsKey(rcaa.getName()))
-                        throw new VariableNotInitException((rcaa).getName());
-                    ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
-                    chs.set(rcaa.getIndex(), ch);
-                    c.namesToValues.peek().put(rcaa.getName(), chs);
-                    return new ReturnValuesChar(rcaa.value);
+                    ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(aa.getName());
+                    char cVal = chs.get(index);
+                    char ch = isPlus ? (char) (cVal + 1) : (char) (cVal - 1);
+                    chs.set(index, ch);
+                    c.namesToValues.peek().put(aa.getName(), chs);
+                    return new ReturnValuesChar(cVal);
                 case INT:
-                    ReturnValuesIntAA riaa = (ReturnValuesIntAA) raa;
-                    int i = isPlus ? riaa.value + 1 :  riaa.value - 1;
-                    if (!c.namesToValues.peek().containsKey(riaa.getName()))
-                        throw new VariableNotInitException((riaa).getName());
-                    ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
-                    is.set(riaa.getIndex(), i);
-                    c.namesToValues.peek().put(riaa.getName(), is);
-                    return new ReturnValuesInt(riaa.value);
+                    ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(aa.getName());
+                    int iVal = is.get(index);
+                    int i = isPlus ? iVal + 1 : iVal - 1;
+                    is.set(index, i);
+                    c.namesToValues.peek().put(aa.getName(), is);
+                    return new ReturnValuesInt(iVal);
                 case DOUBLE:
-                    ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) raa;
-                    double d = isPlus ? rdaa.value + 1 : rdaa.value - 1;
-                    if (!c.namesToValues.peek().containsKey(rdaa.getName()))
-                        throw new VariableNotInitException((rdaa).getName());
-                    ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
-                    ds.set(rdaa.getIndex(), d);
-                    c.namesToValues.peek().put(rdaa.getName(), ds);
-                    return new ReturnValuesDouble(rdaa.value);
+                    ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(aa.getName());
+                    double dVal = ds.get(index);
+                    double d = isPlus ? dVal + 1 : dVal - 1;
+                    ds.set(index, d);
+                    c.namesToValues.peek().put(aa.getName(), ds);
+                    return new ReturnValuesDouble(dVal);
                 default: // BOOLEAN
                     throw new TypeException("Cannot increment or decrement a Boolean expression");
             }
@@ -83,21 +82,25 @@ public class UnaryPostIncExpr extends UnaryExpr implements StatementExpr {
 
         } else {
             Id id = (Id) expr;
-            ReturnValues e = id.evaluate(c);
+            if (!id.checkDefined(c))
+                throw new VariableNotInitException(id.getName());
 
-            switch (e.getPType()) {
+            switch (id.getType().pType) {
                 case CHAR:
-                    char ch = isPlus ? (char) (((ReturnValuesChar) e).value + 1) : (char) (((ReturnValuesChar) e).value - 1);
+                    char cVal = (char)c.namesToValues.peek().get(id.getName());
+                    char ch = isPlus ? (char) (cVal + 1) : (char) (cVal - 1);
                     c.namesToValues.peek().put(id.getName(), ch);
-                    return new ReturnValuesChar(((ReturnValuesChar) e).value);
+                    return new ReturnValuesChar(cVal);
                 case INT:
-                    int i = isPlus ? ((ReturnValuesInt) e).value + 1 : ((ReturnValuesInt) e).value - 1;
+                    int iVal = (int)c.namesToValues.peek().get(id.getName());
+                    int i = isPlus ? iVal + 1 : iVal - 1;
                     c.namesToValues.peek().put(id.getName(), i);
-                    return new ReturnValuesInt(((ReturnValuesInt) e).value);
+                    return new ReturnValuesInt(iVal);
                 case DOUBLE:
-                    double d = isPlus ? ((ReturnValuesDouble) e).value + 1 : ((ReturnValuesDouble) e).value - 1;
+                    double dVal = (double)c.namesToValues.peek().get(id.getName());
+                    double d = isPlus ? dVal + 1 : dVal - 1;
                     c.namesToValues.peek().put(id.getName(), d);
-                    return new ReturnValuesDouble(((ReturnValuesDouble) e).value);
+                    return new ReturnValuesDouble(dVal);
                 default: // BOOLEAN
                     throw new TypeException("Cannot increment or decrement a Boolean expression");
             }

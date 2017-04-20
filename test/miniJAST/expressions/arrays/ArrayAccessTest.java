@@ -76,12 +76,10 @@ public class ArrayAccessTest {
     public void testEvaluate() throws Exception {
         id.setUpId("boolArray");
         aa.setUpArrayAccess(id, zero);
-        assertTrue(((ReturnValuesBoolAA)aa.evaluate(c)).value);
-        assertEquals("boolArray", ((ReturnValuesBoolAA)aa.evaluate(c)).getName());
-        assertEquals(0, ((ReturnValuesBoolAA)aa.evaluate(c)).getIndex());
+        assertTrue(((ReturnValuesBool)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
-        assertFalse(((ReturnValuesBoolAA)aa.evaluate(c)).value);
+        assertFalse(((ReturnValuesBool)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, two);
         try {
@@ -125,10 +123,10 @@ public class ArrayAccessTest {
 
         id.setUpId("intArray");
         aa.setUpArrayAccess(id, zero);
-        assertEquals(1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
+        assertEquals(1, ((ReturnValuesInt)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
-        assertEquals(-1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
+        assertEquals(-1, ((ReturnValuesInt)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, id);
         try {
@@ -140,17 +138,17 @@ public class ArrayAccessTest {
 
         id.setUpId("dubArray");
         aa.setUpArrayAccess(id, zero);
-        assertEquals(0.5, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
+        assertEquals(0.5, ((ReturnValuesDouble)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
-        assertEquals(0.25, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
+        assertEquals(0.25, ((ReturnValuesDouble)aa.evaluate(c)).value);
 
         id.setUpId("charArray");
         aa.setUpArrayAccess(id, zero);
-        assertEquals('A', ((ReturnValuesCharAA)aa.evaluate(c)).value);
+        assertEquals('A', ((ReturnValuesChar)aa.evaluate(c)).value);
 
         aa.setUpArrayAccess(id, one);
-        assertEquals('!', ((ReturnValuesCharAA)aa.evaluate(c)).value);
+        assertEquals('!', ((ReturnValuesChar)aa.evaluate(c)).value);
 
         id.setUpId("singleInt");
         aa.setUpArrayAccess(id, zero);

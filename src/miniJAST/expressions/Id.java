@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class Id extends UnaryExpr implements AssignLHS{
     private Type varType;
     private String name;
-    private boolean isArray;
 
     public void setUpId(String n) { name = n; }
 
@@ -24,14 +23,21 @@ public class Id extends UnaryExpr implements AssignLHS{
         return name;
     }
 
+    public boolean checkDefined(Context c) throws MiniJASTException {
+        Type vT = c.namesToTypes.peek().get(name);
+        if (vT == null)
+            throw new VariableDecException(name, false);
+        varType = vT;
+        return c.namesToValues.peek().get(name) != null;
+    }
+
     @Override
     public ReturnValues evaluate(Context c) throws MiniJASTException{
         if (c.namesToTypes.peek().get(name) != null) {
             varType = c.namesToTypes.peek().get(name);
-            isArray = varType.isArray;
             if (!c.namesToValues.peek().containsKey(name))
                 throw new VariableNotInitException(name);
-            if (!isArray) {
+            if (!varType.isArray) {
                 switch (varType.pType) {
                     case BOOLEAN:
                         return new ReturnValuesBool((boolean) c.namesToValues.peek().get(name));
@@ -66,5 +72,5 @@ public class Id extends UnaryExpr implements AssignLHS{
 
     public String getName() { return name; }
     public Type getType() { return varType; }
-    public boolean getIsArray() { return isArray; }
+    public boolean getIsArray() { return varType.isArray; }
 }

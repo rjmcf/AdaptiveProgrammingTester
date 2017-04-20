@@ -11,6 +11,7 @@ import miniJAST.expressions.arrays.ArrayInit;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.expressions.arrays.ArrayAccess;
 import miniJAST.types.PrimType;
+import miniJAST.types.Type;
 
 import java.util.ArrayList;
 
@@ -65,32 +66,33 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
         if (lhs instanceof ArrayAccess) {
             ArrayAccess arac = (ArrayAccess) lhs;
-            ReturnValues access = arac.evaluate(c);
+            if (!arac.checkDefined(c)) {
+                throw new VariableNotInitException(arac.getName());
+            }
+            Type arType = arac.getArType();
+            int index = arac.evaluateIndex(c).value;
             ReturnValues ex = subNodes.get(expr).evaluate(c);
 
             switch (op) {
                 case EQ:
-                    switch (access.getPType()) {
+                    switch (arType.pType) {
                         case BOOLEAN:
-                            ReturnValuesBoolAA rbaa = (ReturnValuesBoolAA) access;
                             if (ex.getPType() != PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
-                            ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.peek().get(rbaa.getName());
-                            bs.set(rbaa.getIndex(), b);
-                            c.namesToValues.peek().put(rbaa.getName(), bs);
+                            ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.peek().get(arac.getName());
+                            bs.set(index, b);
+                            c.namesToValues.peek().put(arac.getName(), bs);
                             return new ReturnValuesBool(b);
                         case CHAR:
-                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
-                            chs.set(rcaa.getIndex(), ch);
-                            c.namesToValues.peek().put(rcaa.getName(), chs);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(arac.getName());
+                            chs.set(index, ch);
+                            c.namesToValues.peek().put(arac.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
@@ -104,12 +106,11 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
-                            is.set(riaa.getIndex(), i);
-                            c.namesToValues.peek().put(riaa.getName(), is);
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(arac.getName());
+                            is.set(index, i);
+                            c.namesToValues.peek().put(arac.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
-                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
@@ -126,264 +127,235 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
-                            ds.set(rdaa.getIndex(), d);
-                            c.namesToValues.peek().put(rdaa.getName(), ds);
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(arac.getName());
+                            ds.set(index, d);
+                            c.namesToValues.peek().put(arac.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (access.getPType()) {
+                    switch (arType.pType) {
                         case BOOLEAN:
                             throw new TypeException("Cannot use += on Boolean");
                         case CHAR:
-                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
-                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
-                                throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
-                            chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.peek().put(rcaa.getName(), chs);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(arac.getName());
+                            char cVal = chs.get(index);
+                            char ch = (char)(((ReturnValuesChar) ex).value + cVal);
+                            chs.set(index, ch);
+                            c.namesToValues.peek().put(arac.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(arac.getName());
+                            int iVal = is.get(index);
                             int i;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    i = ((ReturnValuesChar) ex).value + riaa.value;
+                                    i = ((ReturnValuesChar) ex).value + iVal;
                                     break;
                                 case INT:
-                                    i = ((ReturnValuesInt) ex).value + riaa.value;
+                                    i = ((ReturnValuesInt) ex).value + iVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
-                                throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
-                            is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.peek().put(riaa.getName(), is);
+                            is.set(index, i);
+                            c.namesToValues.peek().put(arac.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
-                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(arac.getName());
+                            double dVal = ds.get(index);
                             double d;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    d = ((ReturnValuesChar) ex).value + rdaa.value;
+                                    d = ((ReturnValuesChar) ex).value + dVal;
                                     break;
                                 case INT:
-                                    d = ((ReturnValuesInt) ex).value + rdaa.value;
+                                    d = ((ReturnValuesInt) ex).value + dVal;
                                     break;
                                 case DOUBLE:
-                                    d = ((ReturnValuesDouble) ex).value + rdaa.value;
+                                    d = ((ReturnValuesDouble) ex).value + dVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
-                                throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
-                            ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.peek().put(rdaa.getName(), ds);
+                            ds.set(index, d);
+                            c.namesToValues.peek().put(arac.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case SUBEQ:
-                    switch (access.getPType()) {
+                    switch (arType.pType) {
                         case BOOLEAN:
-                            throw new TypeException("Cannot use -= on Boolean");
+                            throw new TypeException("Cannot use += on Boolean");
                         case CHAR:
-                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(rcaa.value - ((ReturnValuesChar) ex).value);
-                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
-                                throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
-                            chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.peek().put(rcaa.getName(), chs);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(arac.getName());
+                            char cVal = chs.get(index);
+                            char ch = (char)(((ReturnValuesChar) ex).value - cVal);
+                            chs.set(index, ch);
+                            c.namesToValues.peek().put(arac.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(arac.getName());
+                            int iVal = is.get(index);
                             int i;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    i = riaa.value - ((ReturnValuesChar) ex).value;
+                                    i = ((ReturnValuesChar) ex).value - iVal;
                                     break;
                                 case INT:
-                                    i = riaa.value - ((ReturnValuesInt) ex).value;
+                                    i = ((ReturnValuesInt) ex).value - iVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
-                                throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
-                            is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.peek().put(riaa.getName(), is);
+                            is.set(index, i);
+                            c.namesToValues.peek().put(arac.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
-                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(arac.getName());
+                            double dVal = ds.get(index);
                             double d;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    d = rdaa.value - ((ReturnValuesChar) ex).value;
+                                    d = ((ReturnValuesChar) ex).value - dVal;
                                     break;
                                 case INT:
-                                    d = rdaa.value - ((ReturnValuesInt) ex).value;
+                                    d = ((ReturnValuesInt) ex).value - dVal;
                                     break;
                                 case DOUBLE:
-                                    d = rdaa.value - ((ReturnValuesDouble) ex).value;
+                                    d = ((ReturnValuesDouble) ex).value - dVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
-                                throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
-                            ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.peek().put(rdaa.getName(), ds);
+                            ds.set(index, d);
+                            c.namesToValues.peek().put(arac.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 case TIMESEQ:
-                    switch (access.getPType()) {
+                    switch (arType.pType) {
                         case BOOLEAN:
-                            throw new TypeException("Cannot use -= on Boolean");
+                            throw new TypeException("Cannot use += on Boolean");
                         case CHAR:
-                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(rcaa.value * ((ReturnValuesChar) ex).value);
-                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
-                                throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
-                            chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.peek().put(rcaa.getName(), chs);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(arac.getName());
+                            char cVal = chs.get(index);
+                            char ch = (char)(((ReturnValuesChar) ex).value * cVal);
+                            chs.set(index, ch);
+                            c.namesToValues.peek().put(arac.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(arac.getName());
+                            int iVal = is.get(index);
                             int i;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    i = riaa.value * ((ReturnValuesChar) ex).value;
+                                    i = ((ReturnValuesChar) ex).value * iVal;
                                     break;
                                 case INT:
-                                    i = riaa.value * ((ReturnValuesInt) ex).value;
+                                    i = ((ReturnValuesInt) ex).value * iVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
-                                throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
-                            is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.peek().put(riaa.getName(), is);
+                            is.set(index, i);
+                            c.namesToValues.peek().put(arac.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
-                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(arac.getName());
+                            double dVal = ds.get(index);
                             double d;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    d = rdaa.value * ((ReturnValuesChar) ex).value;
+                                    d = ((ReturnValuesChar) ex).value * dVal;
                                     break;
                                 case INT:
-                                    d = rdaa.value * ((ReturnValuesInt) ex).value;
+                                    d = ((ReturnValuesInt) ex).value * dVal;
                                     break;
                                 case DOUBLE:
-                                    d = rdaa.value * ((ReturnValuesDouble) ex).value;
+                                    d = ((ReturnValuesDouble) ex).value * dVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
-                                throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
-                            ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.peek().put(rdaa.getName(), ds);
+                            ds.set(index, d);
+                            c.namesToValues.peek().put(arac.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
                 default: // DIVEQ
-                    switch (access.getPType()) {
+                    switch (arType.pType) {
                         case BOOLEAN:
-                            throw new TypeException("Cannot use -= on Boolean");
+                            throw new TypeException("Cannot use += on Boolean");
                         case CHAR:
-                            ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
-                            char ch = (char)(rcaa.value / ((ReturnValuesChar) ex).value);
-                            if (!c.namesToValues.peek().containsKey(rcaa.getName()))
-                                throw new VariableNotInitException(rcaa.getName());
-                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
-                            chs.set(rcaa.getIndex(), rcaa.value);
-                            c.namesToValues.peek().put(rcaa.getName(), chs);
+                            ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(arac.getName());
+                            char cVal = chs.get(index);
+                            char ch = (char)(((ReturnValuesChar) ex).value / cVal);
+                            chs.set(index, ch);
+                            c.namesToValues.peek().put(arac.getName(), chs);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
+                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(arac.getName());
+                            int iVal = is.get(index);
                             int i;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    i = riaa.value / ((ReturnValuesChar) ex).value;
+                                    i = ((ReturnValuesChar) ex).value / iVal;
                                     break;
                                 case INT:
-                                    i = riaa.value / ((ReturnValuesInt) ex).value;
+                                    i = ((ReturnValuesInt) ex).value / iVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(riaa.getName()))
-                                throw new VariableNotInitException(riaa.getName());
-                            ArrayList<Integer> is = (ArrayList<Integer>)c.namesToValues.peek().get(riaa.getName());
-                            is.set(riaa.getIndex(), riaa.value);
-                            c.namesToValues.peek().put(riaa.getName(), is);
+                            is.set(index, i);
+                            c.namesToValues.peek().put(arac.getName(), is);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
-                            ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
                             if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
+                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(arac.getName());
+                            double dVal = ds.get(index);
                             double d;
                             switch (ex.getPType()) {
                                 case CHAR:
-                                    d = rdaa.value / ((ReturnValuesChar) ex).value;
+                                    d = ((ReturnValuesChar) ex).value / dVal;
                                     break;
                                 case INT:
-                                    d = rdaa.value / ((ReturnValuesInt) ex).value;
+                                    d = ((ReturnValuesInt) ex).value / dVal;
                                     break;
                                 case DOUBLE:
-                                    d = rdaa.value / ((ReturnValuesDouble) ex).value;
+                                    d = ((ReturnValuesDouble) ex).value / dVal;
                                     break;
                                 default:
                                     throw new IncorrectEvaluationException("You shouldn't be here!");
                             }
-                            if (!c.namesToValues.peek().containsKey(rdaa.getName()))
-                                throw new VariableNotInitException(rdaa.getName());
-                            ArrayList<Double> ds = (ArrayList<Double>)c.namesToValues.peek().get(rdaa.getName());
-                            ds.set(rdaa.getIndex(), rdaa.value);
-                            c.namesToValues.peek().put(rdaa.getName(), ds);
+                            ds.set(index, d);
+                            c.namesToValues.peek().put(arac.getName(), ds);
                             return new ReturnValuesDouble(d);
                     }
             }
         } else {
             Id id = (Id) lhs;
-            try {
-                id.evaluate(c);
-            } catch (VariableNotInitException ve) {
-                // don't care
-            }
-
+            boolean defined = id.checkDefined(c);
 
             if (id.getIsArray()) {
                 if (op != AssignOp.EQ)
@@ -404,7 +376,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
             switch (op) {
                 case EQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
+                    switch (id.getType().pType) {
                         case BOOLEAN:
                             if (ex.getPType() != PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
@@ -454,7 +426,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
+                    if (!defined)
+                        throw new VariableNotInitException(id.getName());
+                    switch (id.getType().pType) {
                         case CHAR:
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -500,7 +474,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use += on variable of type boolean");
                     }
                 case SUBEQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
+                    if (!defined)
+                        throw new VariableNotInitException(id.getName());
+                    switch (id.getType().pType) {
                         case CHAR:
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -546,7 +522,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use -= on variable of type boolean");
                     }
                 case TIMESEQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
+                    if (!defined)
+                        throw new VariableNotInitException(id.getName());
+                    switch (id.getType().pType) {
                         case CHAR:
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
@@ -592,7 +570,9 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use *= on variable of type boolean");
                     }
                 default: // DIVEQ
-                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
+                    if (!defined)
+                        throw new VariableNotInitException(id.getName());
+                    switch (id.getType().pType) {
                         case CHAR:
                             if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");

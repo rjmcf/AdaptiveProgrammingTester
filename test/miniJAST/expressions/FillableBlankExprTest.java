@@ -774,7 +774,7 @@ public class FillableBlankExprTest {
         fakeAr.setUpId("fakeAr");
         ArrayAccess aa = new ArrayAccess();
         aa.setUpArrayAccess(fakeAr, lit1);
-        assertEquals(((ReturnValuesIntAA)aa.evaluate(c)).value, 0);
+        assertEquals(((ReturnValuesInt)aa.evaluate(c)).value, 0);
     }
 
     @Test

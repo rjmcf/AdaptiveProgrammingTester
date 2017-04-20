@@ -1,6 +1,8 @@
 package miniJAST.expressions.assignment;
 
 import miniJAST.Context;
+import miniJAST.exceptions.TypeException;
+import miniJAST.exceptions.VariableNotInitException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arrays.ArrayAccess;
@@ -105,25 +107,84 @@ public class AssignExprTest {
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, eT);
         aE.evaluate(c);
-        assertTrue(((ReturnValuesBoolAA)aa.evaluate(c)).value);
+        assertTrue(((ReturnValuesBool)aa.evaluate(c)).value);
 
         id.setUpId("intArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, one);
         aE.evaluate(c);
-        assertEquals(1, ((ReturnValuesIntAA)aa.evaluate(c)).value);
+        assertEquals(1, ((ReturnValuesInt)aa.evaluate(c)).value);
 
         id.setUpId("dubArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, half);
         aE.evaluate(c);
-        assertEquals(0.5, ((ReturnValuesDoubleAA)aa.evaluate(c)).value);
+        assertEquals(0.5, ((ReturnValuesDouble)aa.evaluate(c)).value);
 
         id.setUpId("charArray2");
         aa.setUpArrayAccess(id, one);
         aE.setUpAssignExpr(aa, AssignOp.EQ, A);
         aE.evaluate(c);
-        assertEquals('A', ((ReturnValuesCharAA)aa.evaluate(c)).value);
+        assertEquals('A', ((ReturnValuesChar)aa.evaluate(c)).value);
     }
-    // TODO test other operators
+
+    @Test
+    public void testPEqId() throws Exception {
+        c.namesToTypes.peek().put("t", new Type(PrimType.BOOLEAN, false));
+        c.namesToValues.peek().put("t", true);
+        c.namesToTypes.peek().put("o", new Type(PrimType.INT, false));
+        c.namesToTypes.peek().put("h", new Type(PrimType.DOUBLE, false));
+        c.namesToTypes.peek().put("a", new Type(PrimType.CHAR, false));
+
+        id.setUpId("t");
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, eT);
+        try {
+            aE.evaluate(c);
+            fail("Cannot use += with bools");
+        } catch (TypeException tE) {
+            //pass
+        }
+
+        id.setUpId("o");
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, one);
+        try {
+            aE.evaluate(c);
+            fail("Variable was not initialised!");
+        } catch (VariableNotInitException vE) {
+            //pass
+        }
+
+        c.namesToValues.peek().put("o", 1);
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, one);
+        aE.evaluate(c);
+        assertEquals(((ReturnValuesInt)id.evaluate(c)).value, 2);
+
+        id.setUpId("h");
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, half);
+        try {
+            aE.evaluate(c);
+            fail("Variable was not initialised!");
+        } catch (VariableNotInitException vE) {
+            //pass
+        }
+
+        c.namesToValues.peek().put("h", 0.5);
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, half);
+        aE.evaluate(c);
+        assertEquals(((ReturnValuesDouble)id.evaluate(c)).value, 1.0);
+
+        id.setUpId("a");
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, A);
+        try {
+            aE.evaluate(c);
+            fail("Variable was not initialised!");
+        } catch (VariableNotInitException vE) {
+            //pass
+        }
+
+        c.namesToValues.peek().put("a", 'A');
+        aE.setUpAssignExpr(id, AssignOp.PLUSEQ, A);
+        aE.evaluate(c);
+        assertEquals(((ReturnValuesChar)id.evaluate(c)).value, 'A' + 'A');
+    }
 }

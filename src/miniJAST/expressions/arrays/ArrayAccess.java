@@ -11,10 +11,12 @@ import miniJAST.expressions.arithExpr.UnaryExpr;
 import miniJAST.expressions.assignment.AssignLHS;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.PrimType;
+import miniJAST.types.Type;
 
 public class ArrayAccess extends UnaryExpr implements AssignLHS {
     private int idE;
     private int index;
+    private Id idOnceChecked;
 
     public void setUpArrayAccess(Expression i, Expression e) {
         subNodes.clear();
@@ -31,9 +33,41 @@ public class ArrayAccess extends UnaryExpr implements AssignLHS {
             return (subNodes.get(idE)).stringRepr() + "[" + subNodes.get(index).stringRepr() + "]";
     }
 
+    public boolean checkDefined(Context c) throws MiniJASTException {
+        checkType(subNodes.get(idE), Id.class);
+        try {
+            if (subNodes.get(idE) instanceof FillableBlankExpr)
+                idOnceChecked = (Id) ((FillableBlankExpr) subNodes.get(idE)).getStudentExpr();
+            else
+                idOnceChecked = (Id) subNodes.get(idE);
+        } catch (ClassCastException e) {
+            throw new TypeException("ID must have type Id!");
+        }
+
+        boolean result = idOnceChecked.checkDefined(c);
+        if (!idOnceChecked.getIsArray())
+            throw new TypeException("Cannot use array access on variable that isn't array");
+        return result;
+    }
+
+    public ReturnValuesInt evaluateIndex(Context c) throws MiniJASTException {
+        try {
+            return (ReturnValuesInt) subNodes.get(index).evaluate(c);
+        } catch (ClassCastException cE) {
+            throw new TypeException("Index must have integer type, and must not be array.");
+        }
+    }
+
+    public Type getArType() {
+        return idOnceChecked.getType();
+    }
+
+    public String getName(){
+        return idOnceChecked.getName();
+    }
+
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         checkType(subNodes.get(idE), Id.class);
-        checkType(subNodes.get(index), Expression.class);
 
         Id id;
         try {
@@ -67,13 +101,13 @@ public class ArrayAccess extends UnaryExpr implements AssignLHS {
 
         switch (r.getPType()) {
             case BOOLEAN:
-                return new ReturnValuesBoolAA(id.getName(), index, (boolean)ar.get(index));
+                return new ReturnValuesBool((boolean)ar.get(index));
             case CHAR:
-                return new ReturnValuesCharAA(id.getName(), index, (char)ar.get(index));
+                return new ReturnValuesChar((char)ar.get(index));
             case INT:
-                return new ReturnValuesIntAA(id.getName(), index, (int)ar.get(index));
+                return new ReturnValuesInt((int)ar.get(index));
             default: // DOUBLE
-                return new ReturnValuesDoubleAA(id.getName(), index, (double)ar.get(index));
+                return new ReturnValuesDouble((double)ar.get(index));
         }
     }
 }
