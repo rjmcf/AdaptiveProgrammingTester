@@ -46,10 +46,7 @@ public abstract class StatementBase implements BlockStatement {
         if (c.namesToTypes.size() == 1)
             return;
 
-        HashMap<String, Type> oldMap1 = c.namesToTypes.pop();
-        for (String s : oldMap1.keySet())
-            if (c.namesToTypes.peek().containsKey(s))
-                c.namesToTypes.peek().put(s, oldMap1.get(s));
+        c.namesToTypes.pop();
         HashMap<String, Object> oldMap2 = c.namesToValues.pop();
         for (String s : oldMap2.keySet())
             if (c.namesToTypes.peek().containsKey(s))
