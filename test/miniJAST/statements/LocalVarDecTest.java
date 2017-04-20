@@ -317,7 +317,7 @@ public class LocalVarDecTest {
         aE1.evaluate(c);
         ReturnValues rV = i.evaluate(c);
         assertTrue(rV.getIsArray());
-        assertEquals(rV.getType().uType, PrimType.INT);
+        assertEquals(rV.getType().pType, PrimType.INT);
 
         aE2.setUpAssignExpr(j, AssignOp.EQ, aI);
         try {
@@ -345,6 +345,6 @@ public class LocalVarDecTest {
         i.setUpId("i");
         ReturnValues rV = i.evaluate(c);
         assertTrue(rV.getIsArray());
-        assertEquals(rV.getType().uType, PrimType.INT);
+        assertEquals(rV.getType().pType, PrimType.INT);
     }
 }

@@ -30,7 +30,7 @@ public class OrExpr extends CondExpr {
 
         ReturnValues l = subNodes.get(leftSide).evaluate(c);
 
-        if (l.getType().uType != PrimType.BOOLEAN)
+        if (l.getPType() != PrimType.BOOLEAN)
             throw new TypeException("|| operator not applicable to operands that aren't of type boolean");
 
         if (l.getIsArray())
@@ -42,7 +42,7 @@ public class OrExpr extends CondExpr {
 
         ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
-        if (r.getType().uType != PrimType.BOOLEAN)
+        if (r.getPType() != PrimType.BOOLEAN)
             throw new TypeException("|| operator not applicable to operands that aren't of type boolean");
 
         if (r.getIsArray())

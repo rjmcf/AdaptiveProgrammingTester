@@ -1,5 +1,6 @@
 package miniJAST.expressions.returnValues;
 
+import miniJAST.types.PrimType;
 import miniJAST.types.Type;
 
 public abstract class ReturnValues {
@@ -7,6 +8,7 @@ public abstract class ReturnValues {
 
     public ReturnValues(Type t) { type = t; }
 
-    public Type getType() {return type;}
+    public PrimType getPType() {return type.pType;}
     public boolean getIsArray() { return type.isArray; }
+    public Type getType() { return type; }
 }

@@ -4,12 +4,10 @@ import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
-import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesArray;
 import miniJAST.expressions.returnValues.ReturnValuesInt;
 import miniJAST.types.PrimType;
-import miniJAST.types.Type;
 
 import java.util.ArrayList;
 
@@ -27,7 +25,7 @@ public class ArrayCreation extends ArrayAssignRightSide {
     public ReturnValues evaluate(Context c) throws MiniJASTException {
         checkType(subNodes.get(size), Expression.class);
         ReturnValues r = subNodes.get(size).evaluate(c);
-        if (r.getType().uType != PrimType.INT) {
+        if (r.getPType() != PrimType.INT) {
             throw new TypeException("Size must be an integer!");
         }
         ReturnValuesInt s = (ReturnValuesInt)r;

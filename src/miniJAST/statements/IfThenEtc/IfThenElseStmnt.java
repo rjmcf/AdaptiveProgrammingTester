@@ -36,7 +36,7 @@ public class IfThenElseStmnt extends StatementBase {
         checkType((BlockStatement)subNodes.get(falseStmnt), BlockStatement.class);
 
         ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);
-        if (r.getType().uType != PrimType.BOOLEAN)
+        if (r.getPType() != PrimType.BOOLEAN)
             throw new TypeException("Condition must be Boolean type");
         if (r.getIsArray())
             throw new TypeException("Can not operate on arrays!");

@@ -7,7 +7,6 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.*;
 import miniJAST.types.PrimType;
-import miniJAST.types.Type;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class ArrayInit extends ArrayAssignRightSide {
         }
         Expression first = subNodes.get(0);
         ReturnValues r = first.evaluate(c);
-        type = r.getType().uType;
+        type = r.getPType();
         switch (type) {
             case BOOLEAN:
                 ArrayList<Boolean> bList = new ArrayList<>();

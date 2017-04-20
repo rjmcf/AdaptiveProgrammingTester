@@ -53,7 +53,7 @@ public class ArrayAccess extends UnaryExpr implements AssignLHS {
         ReturnValuesArray ar = (ReturnValuesArray)r;
 
         ReturnValues i = subNodes.get(index).evaluate(c);
-        if (i.getType().uType != PrimType.INT)
+        if (i.getPType() != PrimType.INT)
             throw new TypeException("Can only index with int value");
 
         if (i.getIsArray())
@@ -65,7 +65,7 @@ public class ArrayAccess extends UnaryExpr implements AssignLHS {
         if (index < 0 || index >= size)
             throw new OutOfBoundsException(index, size);
 
-        switch (r.getType().uType) {
+        switch (r.getPType()) {
             case BOOLEAN:
                 return new ReturnValuesBoolAA(id.getName(), index, (boolean)ar.get(index));
             case CHAR:

@@ -34,7 +34,7 @@ public class PrintStatement extends StatementBase {
                 ReturnValuesArray var = (ReturnValuesArray) v;
                 printTo.print("[ ");
                 for (int i = 0; i < var.getSize(); i++) {
-                    switch (var.getType().uType) {
+                    switch (var.getPType()) {
                         case BOOLEAN:
                             printTo.print((boolean)var.get(i));
                             break;
@@ -53,7 +53,7 @@ public class PrintStatement extends StatementBase {
                 }
                 printTo.println(" ]");
             } else {
-                switch (v.getType().uType) {
+                switch (v.getPType()) {
                     case BOOLEAN:
                         printTo.println(((ReturnValuesBool) v).value);
                         break;

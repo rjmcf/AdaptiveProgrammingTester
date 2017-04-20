@@ -34,16 +34,16 @@ public class MultExpr extends AddExpr {
         ReturnValues left = subNodes.get(leftSide).evaluate(c);
         ReturnValues right = subNodes.get(rightSide).evaluate(c);
 
-        if (left.getType().uType == PrimType.BOOLEAN || right.getType().uType == PrimType.BOOLEAN)
+        if (left.getPType() == PrimType.BOOLEAN || right.getPType() == PrimType.BOOLEAN)
             throw new TypeException("Cannot use * or / on operands of type Boolean");
 
         if (left.getIsArray() || right.getIsArray())
             throw new TypeException("Cannot operate on whole arrays");
 
 
-        switch (left.getType().uType) {
+        switch (left.getPType()) {
             case CHAR:
-                switch (right.getType().uType) {
+                switch (right.getPType()) {
                     case CHAR:
                         return new ReturnValuesInt(isTimes ? ((ReturnValuesChar)left).value * ((ReturnValuesChar)right).value
                                 : ((ReturnValuesChar)left).value / ((ReturnValuesChar)right).value);
@@ -55,7 +55,7 @@ public class MultExpr extends AddExpr {
                                 : ((ReturnValuesChar)left).value / ((ReturnValuesDouble)right).value);
                 }
             case INT:
-                switch (right.getType().uType) {
+                switch (right.getPType()) {
                     case CHAR:
                         return new ReturnValuesInt(isTimes ? ((ReturnValuesInt)left).value * ((ReturnValuesChar)right).value
                                 : ((ReturnValuesInt)left).value / ((ReturnValuesChar)right).value);
@@ -67,7 +67,7 @@ public class MultExpr extends AddExpr {
                                 : ((ReturnValuesInt)left).value / ((ReturnValuesDouble)right).value);
                 }
             default: // DOUBLE
-                switch (right.getType().uType) {
+                switch (right.getPType()) {
                     case CHAR:
                         return new ReturnValuesDouble(isTimes ? ((ReturnValuesDouble)left).value * ((ReturnValuesChar)right).value
                                 : ((ReturnValuesDouble)left).value / ((ReturnValuesChar)right).value);

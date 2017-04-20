@@ -31,13 +31,13 @@ public class EqExpr extends AndExpr {
         ReturnValues l = subNodes.get(leftSide).evaluate(c);
         ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
-        if (l.getType().uType != r.getType().uType)
+        if (l.getPType() != r.getPType())
             throw new TypeException("Type mismatch between arguments of ==");
 
         if (l.getIsArray() || r.getIsArray())
             throw new TypeException("Cannot operate on whole arrays");
 
-        switch (l.getType().uType) {
+        switch (l.getPType()) {
             case BOOLEAN:
                 return isEqualityTest ? new ReturnValuesBool(((ReturnValuesBool)l).value == ((ReturnValuesBool)r).value)
                         : new ReturnValuesBool(((ReturnValuesBool)l).value != ((ReturnValuesBool)r).value);

@@ -70,10 +70,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
             switch (op) {
                 case EQ:
-                    switch (access.getType().uType) {
+                    switch (access.getPType()) {
                         case BOOLEAN:
                             ReturnValuesBoolAA rbaa = (ReturnValuesBoolAA) access;
-                            if (ex.getType().uType != PrimType.BOOLEAN)
+                            if (ex.getPType() != PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
                             ArrayList<Boolean> bs = (ArrayList<Boolean>)c.namesToValues.peek().get(rbaa.getName());
@@ -82,7 +82,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesBool(b);
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
                             ArrayList<Character> chs = (ArrayList<Character>)c.namesToValues.peek().get(rcaa.getName());
@@ -91,10 +91,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = ((ReturnValuesChar) ex).value;
                                     break;
@@ -110,10 +110,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = ((ReturnValuesChar) ex).value;
                                     break;
@@ -132,12 +132,12 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (access.getType().uType) {
+                    switch (access.getPType()) {
                         case BOOLEAN:
                             throw new TypeException("Cannot use += on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + rcaa.value);
                             if (!c.namesToValues.peek().containsKey(rcaa.getName()))
@@ -148,10 +148,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = ((ReturnValuesChar) ex).value + riaa.value;
                                     break;
@@ -169,10 +169,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = ((ReturnValuesChar) ex).value + rdaa.value;
                                     break;
@@ -193,12 +193,12 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case SUBEQ:
-                    switch (access.getType().uType) {
+                    switch (access.getPType()) {
                         case BOOLEAN:
                             throw new TypeException("Cannot use -= on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value - ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.peek().containsKey(rcaa.getName()))
@@ -209,10 +209,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = riaa.value - ((ReturnValuesChar) ex).value;
                                     break;
@@ -230,10 +230,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = rdaa.value - ((ReturnValuesChar) ex).value;
                                     break;
@@ -254,12 +254,12 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case TIMESEQ:
-                    switch (access.getType().uType) {
+                    switch (access.getPType()) {
                         case BOOLEAN:
                             throw new TypeException("Cannot use -= on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value * ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.peek().containsKey(rcaa.getName()))
@@ -270,10 +270,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = riaa.value * ((ReturnValuesChar) ex).value;
                                     break;
@@ -291,10 +291,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = rdaa.value * ((ReturnValuesChar) ex).value;
                                     break;
@@ -315,12 +315,12 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 default: // DIVEQ
-                    switch (access.getType().uType) {
+                    switch (access.getPType()) {
                         case BOOLEAN:
                             throw new TypeException("Cannot use -= on Boolean");
                         case CHAR:
                             ReturnValuesCharAA rcaa = (ReturnValuesCharAA) access;
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(rcaa.value / ((ReturnValuesChar) ex).value);
                             if (!c.namesToValues.peek().containsKey(rcaa.getName()))
@@ -331,10 +331,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesChar(ch);
                         case INT:
                             ReturnValuesIntAA riaa = (ReturnValuesIntAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = riaa.value / ((ReturnValuesChar) ex).value;
                                     break;
@@ -352,10 +352,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
                             ReturnValuesDoubleAA rdaa = (ReturnValuesDoubleAA) access;
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = rdaa.value / ((ReturnValuesChar) ex).value;
                                     break;
@@ -393,7 +393,7 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                 ReturnValues rV = subNodes.get(expr).evaluate(c);
                 if (!rV.getIsArray())
                     throw new TypeException("You must assign an array to an array variable");
-                if (rV.getType().uType != id.getType().uType)
+                if (rV.getPType() != id.getType().pType)
                     throw new TypeException("The types of the arrays do not match");
                 c.namesToTypes.peek().put(id.getName(), rV.getType());
                 c.namesToValues.peek().put(id.getName(), ((ReturnValuesArray)rV).getArray());
@@ -404,24 +404,24 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
 
             switch (op) {
                 case EQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
                         case BOOLEAN:
-                            if (ex.getType().uType != PrimType.BOOLEAN)
+                            if (ex.getPType() != PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign anything but a boolean value to a boolean variable");
                             boolean b = ((ReturnValuesBool) ex).value;
                             c.namesToValues.peek().put(id.getName(), b);
                             return new ReturnValuesBool(b);
                         case CHAR:
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = ((ReturnValuesChar) ex).value;
                             c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = ((ReturnValuesChar) ex).value;
                                     break;
@@ -434,10 +434,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         default: // DOUBLE
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = ((ReturnValuesChar) ex).value;
                                     break;
@@ -454,18 +454,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             return new ReturnValuesDouble(d);
                     }
                 case PLUSEQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
                         case CHAR:
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value + ((char)c.namesToValues.peek().get(id.getName())));
                             c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = ((ReturnValuesChar) ex).value + (int)c.namesToValues.peek().get(id.getName());
                                     break;
@@ -478,10 +478,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = ((ReturnValuesChar) ex).value  + (double)c.namesToValues.peek().get(id.getName());
                                     break;
@@ -500,18 +500,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use += on variable of type boolean");
                     }
                 case SUBEQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
                         case CHAR:
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((char)c.namesToValues.peek().get(id.getName())) - ((ReturnValuesChar) ex).value);
                             c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = (int)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesChar) ex).value;
                                     break;
@@ -524,10 +524,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = (double)c.namesToValues.peek().get(id.getName()) - ((ReturnValuesChar) ex).value;
                                     break;
@@ -546,18 +546,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use -= on variable of type boolean");
                     }
                 case TIMESEQ:
-                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
                         case CHAR:
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((ReturnValuesChar) ex).value * ((char)c.namesToValues.peek().get(id.getName())));
                             c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = ((ReturnValuesChar) ex).value * (int)c.namesToValues.peek().get(id.getName());
                                     break;
@@ -570,10 +570,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = ((ReturnValuesChar) ex).value  * (double)c.namesToValues.peek().get(id.getName());
                                     break;
@@ -592,18 +592,18 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             throw new TypeException("Cannot use *= on variable of type boolean");
                     }
                 default: // DIVEQ
-                    switch (c.namesToTypes.peek().get(id.getName()).uType) {
+                    switch (c.namesToTypes.peek().get(id.getName()).pType) {
                         case CHAR:
-                            if (ex.getType().uType != PrimType.CHAR)
+                            if (ex.getPType() != PrimType.CHAR)
                                 throw new TypeException("Cannot assign anything but a char value to a char variable");
                             char ch = (char)(((char)c.namesToValues.peek().get(id.getName())) / ((ReturnValuesChar) ex).value);
                             c.namesToValues.peek().put(id.getName(), ch);
                             return new ReturnValuesChar(ch);
                         case INT:
-                            if (ex.getType().uType == PrimType.BOOLEAN || ex.getType().uType == PrimType.DOUBLE)
+                            if (ex.getPType() == PrimType.BOOLEAN || ex.getPType() == PrimType.DOUBLE)
                                 throw new TypeException("Can only assign char or int to int variable");
                             int i;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     i = (int)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesChar) ex).value;
                                     break;
@@ -616,10 +616,10 @@ public class AssignExpr extends ExpressionBase implements StatementExpr {
                             c.namesToValues.peek().put(id.getName(), i);
                             return new ReturnValuesInt(i);
                         case DOUBLE:
-                            if (ex.getType().uType == PrimType.BOOLEAN)
+                            if (ex.getPType() == PrimType.BOOLEAN)
                                 throw new TypeException("Cannot assign boolean to double variable");
                             double d;
-                            switch (ex.getType().uType) {
+                            switch (ex.getPType()) {
                                 case CHAR:
                                     d = (double)c.namesToValues.peek().get(id.getName()) / ((ReturnValuesChar) ex).value;
                                     break;

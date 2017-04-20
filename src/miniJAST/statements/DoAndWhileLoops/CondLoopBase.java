@@ -28,7 +28,7 @@ public abstract class CondLoopBase extends StatementBase {
         Expression condE = ((Expression)subNodes.get(cond));
 
         ReturnValues rC = condE.evaluate(c);
-        if (rC.getType().uType != PrimType.BOOLEAN)
+        if (rC.getPType() != PrimType.BOOLEAN)
             throw new TypeException("Condition must be boolean type");
         if (rC.getIsArray())
             throw new TypeException("Can not operate on arrays!");

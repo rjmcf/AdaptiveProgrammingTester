@@ -74,7 +74,7 @@ public class ForStmnt extends StatementBase {
         else
             condR = new ReturnValuesBool(true);
 
-        if (condR.getType().uType != PrimType.BOOLEAN)
+        if (condR.getPType() != PrimType.BOOLEAN)
             throw new TypeException("Condition must have boolean type");
         if (condR.getIsArray())
             throw new TypeException("Can not operate on arrays!");

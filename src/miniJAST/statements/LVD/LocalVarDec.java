@@ -59,7 +59,7 @@ public class LocalVarDec extends StatementBase {
                     if (v.getHasExpr()) {
                         if (v.getIsArray()) {
                             ReturnValues rvBA = v.getExpr().evaluate(c);
-                            if (rvBA.getType().uType != type && rvBA.getType().uType != null)
+                            if (rvBA.getPType() != type && rvBA.getPType() != null)
                                 throw new TypeException("Can only initialise with Booleans.");
                             if (!rvBA.getIsArray())
                                 throw new TypeException("Must be array.");
@@ -67,7 +67,7 @@ public class LocalVarDec extends StatementBase {
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvBA).getArray());
                         } else {
                             ReturnValues rvB = v.getExpr().evaluate(c);
-                            if (rvB.getType().uType != type)
+                            if (rvB.getPType() != type)
                                 throw new TypeException("Can only initialise with Boolean.");
                             if (rvB.getIsArray())
                                 throw new TypeException("Must not be array.");
@@ -82,15 +82,15 @@ public class LocalVarDec extends StatementBase {
                     if (v.getHasExpr()) {
                         if (v.getIsArray()) {
                             ReturnValues rvCA = v.getExpr().evaluate(c);
-                            if (rvCA.getType().uType != type && rvCA.getType().uType != null)
+                            if (rvCA.getPType() != type && rvCA.getPType() != null)
                                 throw new TypeException("Can only initialise with Characters.");
                             if (!rvCA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.CHAR, rvCA.getType().isArray));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.CHAR, rvCA.getIsArray()));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvCA).getArray());
                         } else {
                             ReturnValues rvC = v.getExpr().evaluate(c);
-                            if (rvC.getType().uType != type)
+                            if (rvC.getPType() != type)
                                 throw new TypeException("Can only initialise with Character.");
                             if (rvC.getIsArray())
                                 throw new TypeException("Must not be array.");
@@ -105,15 +105,15 @@ public class LocalVarDec extends StatementBase {
                     if (v.getHasExpr()) {
                         if (v.getIsArray()) {
                             ReturnValues rvIA = v.getExpr().evaluate(c);
-                            if (rvIA.getType().uType != type && rvIA.getType().uType != null)
+                            if (rvIA.getPType() != type && rvIA.getPType() != null)
                                 throw new TypeException("Can only initialise with Integers.");
                             if (!rvIA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.INT, rvIA.getType().isArray));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.INT, rvIA.getIsArray()));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvIA).getArray());
                         } else {
                             ReturnValues rvI = v.getExpr().evaluate(c);
-                            if (rvI.getType().uType != type)
+                            if (rvI.getPType() != type)
                                 throw new TypeException("Can only initialise with Integer.");
                             if (rvI.getIsArray())
                                 throw new TypeException("Must not be array.");
@@ -128,15 +128,15 @@ public class LocalVarDec extends StatementBase {
                     if (v.getHasExpr()) {
                         if (v.getIsArray()) {
                             ReturnValues rvDA = v.getExpr().evaluate(c);
-                            if (rvDA.getType().uType != type && rvDA.getType().uType != null)
+                            if (rvDA.getPType() != type && rvDA.getPType() != null)
                                 throw new TypeException("Can only initialise with Doubles.");
                             if (!rvDA.getIsArray())
                                 throw new TypeException("Must be array.");
-                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.DOUBLE, rvDA.getType().isArray));
+                            c.namesToTypes.peek().put(v.getName(), new Type(PrimType.DOUBLE, rvDA.getIsArray()));
                             c.namesToValues.peek().put(v.getName(), ((ReturnValuesArray)rvDA).getArray());
                         } else {
                             ReturnValues rvD = v.getExpr().evaluate(c);
-                            if (rvD.getType().uType != type)
+                            if (rvD.getPType() != type)
                                 throw new TypeException("Can only initialise with Double.");
                             if (rvD.getIsArray())
                                 throw new TypeException("Must not be array.");

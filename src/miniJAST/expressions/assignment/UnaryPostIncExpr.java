@@ -48,7 +48,7 @@ public class UnaryPostIncExpr extends UnaryExpr implements StatementExpr {
             ArrayAccess aa = (ArrayAccess) expr;
             ReturnValues raa = aa.evaluate(c);
 
-            switch (raa.getType().uType) {
+            switch (raa.getPType()) {
                 case CHAR:
                     ReturnValuesCharAA rcaa = (ReturnValuesCharAA) raa;
                     char ch = isPlus ? (char) (rcaa.value + 1) : (char) (rcaa.value - 1);
@@ -85,7 +85,7 @@ public class UnaryPostIncExpr extends UnaryExpr implements StatementExpr {
             Id id = (Id) expr;
             ReturnValues e = id.evaluate(c);
 
-            switch (e.getType().uType) {
+            switch (e.getPType()) {
                 case CHAR:
                     char ch = isPlus ? (char) (((ReturnValuesChar) e).value + 1) : (char) (((ReturnValuesChar) e).value - 1);
                     c.namesToValues.peek().put(id.getName(), ch);

@@ -26,7 +26,7 @@ public class UnaryComplementExpr extends UnaryExpr {
 
         ReturnValues e = subNodes.get(expr).evaluate(c);
 
-        if (e.getType().uType != PrimType.BOOLEAN)
+        if (e.getPType() != PrimType.BOOLEAN)
             throw new TypeException("Cannot apply ! to non-boolean type.");
 
         if (e.getIsArray())

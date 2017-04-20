@@ -32,7 +32,7 @@ public class Id extends UnaryExpr implements AssignLHS{
             if (!c.namesToValues.peek().containsKey(name))
                 throw new VariableNotInitException(name);
             if (!isArray) {
-                switch (varType.uType) {
+                switch (varType.pType) {
                     case BOOLEAN:
                         return new ReturnValuesBool((boolean) c.namesToValues.peek().get(name));
                     case CHAR:
@@ -46,15 +46,15 @@ public class Id extends UnaryExpr implements AssignLHS{
                 }
             } else {
                 try {
-                    switch (varType.uType) {
+                    switch (varType.pType) {
                         case BOOLEAN:
-                            return new ReturnValuesArray<Boolean>(varType.uType, (ArrayList<Boolean>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Boolean>(varType.pType, (ArrayList<Boolean>) c.namesToValues.peek().get(name));
                         case CHAR:
-                            return new ReturnValuesArray<Character>(varType.uType, (ArrayList<Character>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Character>(varType.pType, (ArrayList<Character>) c.namesToValues.peek().get(name));
                         case INT:
-                            return new ReturnValuesArray<Integer>(varType.uType, (ArrayList<Integer>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Integer>(varType.pType, (ArrayList<Integer>) c.namesToValues.peek().get(name));
                         default: // DOUBLE
-                            return new ReturnValuesArray<Double>(varType.uType, (ArrayList<Double>) c.namesToValues.peek().get(name));
+                            return new ReturnValuesArray<Double>(varType.pType, (ArrayList<Double>) c.namesToValues.peek().get(name));
                     }
                 } catch (Exception e) {
                     throw new TypeException("Array cast failed");

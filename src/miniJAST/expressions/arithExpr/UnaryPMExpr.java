@@ -32,7 +32,7 @@ public class UnaryPMExpr extends UnaryExpr {
         if (e.getIsArray())
             throw new TypeException("Cannot operate on whole arrays");
 
-        switch (e.getType().uType) {
+        switch (e.getPType()) {
             case CHAR:
                 return new ReturnValuesInt(isPlus? +((ReturnValuesChar)e).value : -((ReturnValuesChar)e).value);
             case INT:

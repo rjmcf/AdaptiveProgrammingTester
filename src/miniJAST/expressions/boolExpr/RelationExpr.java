@@ -46,7 +46,7 @@ public class RelationExpr extends EqExpr {
         ReturnValues l = subNodes.get(leftSide).evaluate(c);
         ReturnValues r = subNodes.get(rightSide).evaluate(c);
 
-        if (l.getType().uType == PrimType.BOOLEAN || r.getType().uType == PrimType.BOOLEAN)
+        if (l.getPType() == PrimType.BOOLEAN || r.getPType() == PrimType.BOOLEAN)
             throw new TypeException("Cannot relate boolean values");
 
         if (l.getIsArray() || r.getIsArray())
@@ -54,9 +54,9 @@ public class RelationExpr extends EqExpr {
 
         switch (op) {
             case GT:
-                switch (l.getType().uType) {
+                switch (l.getPType()) {
                     case CHAR:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value > ((ReturnValuesChar)r).value);
                             case INT:
@@ -65,7 +65,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value > ((ReturnValuesDouble)r).value);
                         }
                     case INT:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value > ((ReturnValuesChar)r).value);
                             case INT:
@@ -74,7 +74,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value > ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesDouble)l).value > ((ReturnValuesChar)r).value);
                             case INT:
@@ -86,9 +86,9 @@ public class RelationExpr extends EqExpr {
 
                 }
             case LT:
-                switch (l.getType().uType) {
+                switch (l.getPType()) {
                     case CHAR:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value < ((ReturnValuesChar)r).value);
                             case INT:
@@ -97,7 +97,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value < ((ReturnValuesDouble)r).value);
                         }
                     case INT:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value < ((ReturnValuesChar)r).value);
                             case INT:
@@ -106,7 +106,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value < ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesDouble)l).value < ((ReturnValuesChar)r).value);
                             case INT:
@@ -116,9 +116,9 @@ public class RelationExpr extends EqExpr {
                         }
                 }
             case GTE:
-                switch (l.getType().uType) {
+                switch (l.getPType()) {
                     case CHAR:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value >= ((ReturnValuesChar)r).value);
                             case INT:
@@ -127,7 +127,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value >= ((ReturnValuesDouble)r).value);
                         }
                     case INT:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value >= ((ReturnValuesChar)r).value);
                             case INT:
@@ -136,7 +136,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value >= ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesDouble)l).value >= ((ReturnValuesChar)r).value);
                             case INT:
@@ -146,9 +146,9 @@ public class RelationExpr extends EqExpr {
                         }
                 }
             default: // LTE
-                switch (l.getType().uType) {
+                switch (l.getPType()) {
                     case CHAR:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value <= ((ReturnValuesChar)r).value);
                             case INT:
@@ -157,7 +157,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesChar)l).value <= ((ReturnValuesDouble)r).value);
                         }
                     case INT:
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value <= ((ReturnValuesChar)r).value);
                             case INT:
@@ -166,7 +166,7 @@ public class RelationExpr extends EqExpr {
                                 return new ReturnValuesBool(((ReturnValuesInt)l).value <= ((ReturnValuesDouble)r).value);
                         }
                     default: // DOUBLE
-                        switch (r.getType().uType) {
+                        switch (r.getPType()) {
                             case CHAR:
                                 return new ReturnValuesBool(((ReturnValuesDouble)l).value <= ((ReturnValuesChar)r).value);
                             case INT:

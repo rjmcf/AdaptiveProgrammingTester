@@ -32,7 +32,7 @@ public class CondExpr extends ExpressionBase {
         checkType(subNodes.get(falseExpr), CondExpr.class);
 
         ReturnValues condV = subNodes.get(cond).evaluate(c);
-        if (condV.getType().uType != PrimType.BOOLEAN)
+        if (condV.getPType() != PrimType.BOOLEAN)
             throw new TypeException("Conditional expression must have type Boolean");
 
         if (condV.getIsArray())

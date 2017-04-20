@@ -47,10 +47,10 @@ public abstract class StatementBase implements BlockStatement {
             return;
 
         c.namesToTypes.pop();
-        HashMap<String, Object> oldMap2 = c.namesToValues.pop();
-        for (String s : oldMap2.keySet())
+        HashMap<String, Object> oldMap = c.namesToValues.pop();
+        for (String s : oldMap.keySet())
             if (c.namesToTypes.peek().containsKey(s))
-                c.namesToValues.peek().put(s, oldMap2.get(s));
+                c.namesToValues.peek().put(s, oldMap.get(s));
     }
 
     @Override
