@@ -5,9 +5,8 @@
 \usepackage{graphicx}  % allows inclusion of PDF, PNG and JPG images
 \usepackage{verbatim}
 \usepackage{docmute}   % only needed to allow inclusion of proposal.tex
-\usepackage{listings} % Great for code
+\usepackage{fancyvrb} % Verbatim environment with samepage=true argument produces useful code listings restricted to the same page
 \usepackage{color} % Uses color to remind me of things to do.
-\lstset{language=Java, showstringspaces=false, basicstyle=\ttfamily\footnotesize, tabsize = 4} % listings settings
 
 \graphicspath{ {figs/} }
 
@@ -108,6 +107,8 @@ extent for a comparable purpose.
 
 Since part of my aim was to demonstrate a possible method for teaching Java, I wanted the language I was using to be as close to Java as possible. However, re-implementing all of Java would have been too much unnecessary complexity, so I designed MiniJava with reference to only a small subset of the Java 8 grammar \cite[p.714]{Java8}. Since nodes in the AST represent constructs in the source code, replacing a node in the AST with a notional ``blank'' node would be representative of making parts of the source code blank. 
 
+\textcolor{red}{"Are there any limitations of using antlr and how it compared to other parser generators / techniques"}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementation chapter
 \chapter{Implementation}
@@ -127,32 +128,29 @@ Each class in my implementation represents a different production rule in the ab
 As important as the distinction between expressions and statements is, there do exist some expressions that can be used in statements. For an example, the MiniJava code \texttt{i~=~5;} is a statement because it ends in a semicolon,~``\texttt{;}'', but this statement consists entirely of the expression \texttt{i~=~5} (this allows for the chaining of assignments found in the Java grammar \cite[p.589]{Java8}). This sort of expression within a statement construct is not possible with all expressions, for example the code \texttt{i~+~4;} would not be valid MiniJava. To make the distinction between expressions which may be used in statements like this and those which may not, I made the interface \texttt{StatementExpression}. This interface is only implemented by those expressions which can be used in a statement this way.
 
 A feature of MiniJava is the concept of operator precedence, which is used to disambiguate an otherwise ambiguous grammar of expressions. Without the concept of operator precedence, the code \texttt{1~+~2~*~3} is ambiguous, as it can be read as either \texttt{(1~+~2)~*~3} which equates to 9, or as \texttt{1~+~(2~*~3)} which equates to 7. Since a single arithmetic expression cannot have more than one value, a decision must be made as to which of these interpretations is declared valid. The decision taken aligns with the standard arithmetic order of operations, such that the answer of 7 is the correct answer in this case. This example demonstrates that the multiplication operator, ``\texttt{*}'', has a higher precedence than the addition operator, ``\texttt{+}''. All the possible operators in MiniJava are found within this precedence hierarchy, and I needed some way to encode this. The method I chose for this is the natural choice, since it is suggested by the Java grammar itself \cite[p.723]{Java8}. The production rule for \texttt{AdditiveExpression} is as follows:
-\samepage{
-\begin{lstlisting}
+\begin{Verbatim}[samepage=true]
 AdditiveExpression:
-	MultiplicativeExpression								(1)
-	AdditiveExpression + MultiplicativeExpression			(2)
-	AdditiveExpression - MultiplicativeExpression			(3)
-\end{lstlisting}}
+    MultiplicativeExpression                        (1)
+    AdditiveExpression + MultiplicativeExpression   (2)
+    AdditiveExpression - MultiplicativeExpression   (3)
+\end{Verbatim}
 and the production rule for \texttt{MultiplicativeExpression} is as follows:
-\samepage{
-\begin{lstlisting}
+\begin{Verbatim}[samepage=true]
 MultiplicativeExpression:
-	UnaryExpression
-	MultiplicativeExpression * UnaryExpression
-	MultiplicativeExpression / UnaryExpression 
-	// Note that the modulus operator, %, was removed from MiniJava
-\end{lstlisting}}
+    UnaryExpression
+    MultiplicativeExpression * UnaryExpression
+    MultiplicativeExpression / UnaryExpression 
+    // Note that the modulus operator, %, was removed from MiniJava
+\end{Verbatim}
 This means that for any expression $A$\texttt{ + }$B$, the expression $A$ must only contain subexpressions that use operators with precedence at least as high as \texttt{+} and \texttt{-}, and $B$ must only contain subexpressions that use operators with precedence higher than \texttt{+} and \texttt{-}. For any expression $A$\texttt{ * }$B$, neither $A$ nor $B$ can contain subexpressions that use operators with precedence lower than \texttt{*} and \texttt{/}. This in turn indicates that an expression such as \texttt{1~+~2~*~3~+~4} can only be interpreted as \texttt{1~+~(2~*~3)~+~4}, and an expression such as \texttt{1~*~2~+~3~*~4} can only be interpreted as \texttt{(1~*~2)~+~(3~*~4)}. I wanted an operator precedence for MiniJava that is hardcoded within the grammar of MiniJava itself, just as the operator precedence of Java is hardcoded within the grammar of Java. The production rules for Java shown above suggest a natural implementation of the class that represents addition expressions:
-\samepage{
-\begin{lstlisting}
+\begin{Verbatim}[samepage=true]
 class AddExpr {
-	private boolean isPlus;
-	private AddExpr leftSide;
-	private MultExpr rightSide;
-	...
+    private boolean isPlus;
+    private AddExpr leftSide;
+    private MultExpr rightSide;
+    ...
 }
-\end{lstlisting}}
+\end{Verbatim}
 Here, the \texttt{isPlus} field records whether the expression is an addition or a subtraction, \texttt{leftSide} and \texttt{rightSide} store the left and right operands of the expression, and \texttt{MultExpr} is the class representing multiplication expressions. What has been implemented so far encapsulates parts (2) and (3) of the \texttt{AdditiveExpression} production rule above, but not part (1). This part is encapsulated by making the class \texttt{MultExpr} extend the class \texttt{AddExpr}, such that an instance of \texttt{MultExpr} may always be used in place of an instance of \texttt{AddExpr}. Note that since multiplication operators are higher in the operator precedence hierarchy, their representations are lower in the object hierarchy. This then is the solution to the operator precedence problem: to enforce an operator precedence hierarchy, first enforce an inverse object hierarchy in their representative classes, and then choose the type of each expression's operands to match the relevant terminal symbols in the relevant production rule.\footnote{Note that if you were to look at my implementation of \texttt{AddExpr}, \texttt{leftSide} and \texttt{rightSide} would both be \texttt{int}s, not \texttt{AddExpr} and \texttt{MultExpr} instances. The reason behind this is explained in section \ref{Sec:Blanks}.}
 
 \begin{figure}
@@ -191,13 +189,13 @@ To correctly interpret MiniJava, several requirements must be met by the interpr
 \end{enumerate}
 
 The scope of variables is handled by the interpreter with instances of the \texttt{Context} class. Part of its definition is shown below:
-\begin{lstlisting}
+\begin{Verbatim}[samepage=true]
 public class Context {
-	public Stack<HashMap<String, Type>> namesToTypes;
-	public Stack<HashMap<String, Object>> namesToValues;
-	...
+    public Stack<HashMap<String, Type>> namesToTypes;
+    public Stack<HashMap<String, Object>> namesToValues;
+    ...
 }
-\end{lstlisting}
+\end{Verbatim}
 The \texttt{namesToTypes} field is a stack of maps from names (as \texttt{String} values) to instances of my \texttt{Type} class. Every variable that is declared in this scope will have an entry in the map on top of this stack, recording the type of that variable. The \texttt{namesToValues} field is a stack of maps from names to instances of \texttt{Object}. If a variable has an entry in the map on top of this stack, then the variable has the value stored in the map with it in this scope. It is possible for a variable to have an entry in the map on top of the \texttt{namesToTypes} stack, but not in the map on top of the \texttt{namesToValues} stack: this indicates that the variable has been declared but not initialised in this scope.
 
 During execution, the interpreter must keep track when variables will go out of scope. This is handled by the \texttt{stepIn} and \texttt{stepOut} methods in \texttt{StatementBase}. The \texttt{stepIn} method is called whenever execution enters a new, deeper, scope. This method copies every key value pair in the maps on top of their respective stacks into new maps, and pushes these new maps onto the stack. Thus every entry in one of the stacks represents a different scope: as you move down the stack, you move outward through the nested scope. The \texttt{stepOut} method is called whenever execution leaves the current scope. At this point, all the variables that do not exist in the new scope should be forgotten, and every variable that does exist in this new scope should have their value updated to the value it was in the old scope. The \texttt{stepOut} method first pops the top off both stacks, storing the top of the \texttt{namesToValues} stack in the local variable \texttt{oldMap}. Then, for every key in \texttt{oldMap}, if this key also appears in the new top of the \texttt{namesToTypes} stack, the corresponding value in \texttt{oldMap} is used to update the top of the \texttt{namesToValues} stack. In this way, variables can be updated in deeper levels of scope, and retain their new values when execution moves up the nested scope.
@@ -209,46 +207,99 @@ In the same way that MiniJava expressions dispense values, MiniJava statements d
 Several custom exceptions are used by the interpreter, to differentiate between when an error occurs in the MiniJava program being interpreted, and when an error occurs in the interpreter itself. All these custom exceptions subclass the base class of \texttt{MiniJavaException}, and the majority of them are analogous to standard Java exceptions. For example, the \texttt{OutOfBoundsException} is thrown by the interpreter whenever an index is used in an array where no such index exists. This exception is analogous to Java's \texttt{IndexOutOfBoundsException}. The exception that has no analogy in Java is \texttt{BlankEmptyException}, which is thrown by the interpreter whenever it comes across a blank in code that has not been filled out yet.
 
 The MiniJava interpreter is implemented using the \texttt{evaluate} method in the \texttt{Expression} interface, and the \texttt{execute} method in the \texttt{BlockStatement} interface. The method signatures of these two methods are shown below:
-\samepage{
-\begin{lstlisting}
+\begin{Verbatim}[samepage=true]
 public interface Expression extends MiniJASTNode {
-	ReturnValues evaluate(Context c) throws MiniJASTException;
-	...
+    ReturnValues evaluate(Context c) throws MiniJASTException;
+    ...
 }
 
 public interface BlockStatement extends MiniJASTNode {
-	FlowControl execute(Context c) throws MiniJASTException;
-	...
+    FlowControl execute(Context c) throws MiniJASTException;
+    ...
 }
-\end{lstlisting}}
-It can be seen that the interpreter makes use of all the components meeting the requirements for the interpreter. The \texttt{evaluate} method is overridden by every class representing a MiniJava expression, and the \texttt{execute} method is overridden by every class representing a MiniJava statement. This means that both methods are recursive: expressions being evaluated will call the \texttt{evaluate} method on their subexpressions for example. Typically, execution is initiated with an empty \texttt{Context} object that becomes more populated as more variables are declared. This interpreter can also be plugged in to any peripherals that are made, as it allows external access to any exceptions that are thrown and the initial \texttt{Context} object supplied.
+\end{Verbatim}
+It can be seen that the interpreter makes use of all the components meeting the requirements for the interpreter. The \texttt{evaluate} method is overridden by every class representing a MiniJava expression, and the \texttt{execute} method is overridden by every class representing a MiniJava statement. This means that both methods are recursive: expressions being evaluated will call the \texttt{evaluate} method on their subexpressions for example. Typically, execution is initiated with an empty \texttt{Context} object that becomes more populated as more variables are declared. This interpreter can also be plugged in to peripherals. The values of variables in the outermost scope can be accessed after execution has terminated, and MiniJava has an inbuilt print statement, represented by the class \texttt{PrintStatement}, that can print the values of expressions to a file. Peripherals could also, if they wanted, make use of the custom exceptions thrown during execution, and the initial \texttt{Context} object.
 
 In this section I explained how MiniJava is interpreted.
 
-\section{The Parser}
+\section{Parsing the language}
 
-In this section I explain how a parser for MiniJava was implemented using the ANTLR parser generator \cite{ANTLR4}, and how a MiniJava program tree can be built using it.
+In this section I explain how a parser for MiniJava was implemented using the ANTLR parser generator \cite{ANTLR4}, and how a representation of an input MiniJava program can be built using it.
 
-\textcolor{red}{("I based the parser grammar on an existing one for Java". Also justify this)}
-The GitHub user antlr that owns the antlr4 project containing ANTLR has another project called grammars-v4\footnote{https://github.com/antlr/grammars-v4} that contains lots of example grammars that can be used with ANTLR, including one for Java. I was able to modify this grammar file, in a similar way to how I modified the Java grammar when designing MiniJava, to make a parser generator for MiniJava, \textcolor{red}{(I didn't make a parser generator! A parser generator made my parser to which I added actions)} which can be found in Appendix \ref{App:Parser}. When you \textcolor{red}{(Not you)} use antlr4 on the grammar file, the tool generates a number of files including a \texttt{<GrammarName>BaseVisitor}. By extending this class, one can add actions to the parser. By overriding the appropriate methods in this class, I was able to implement a parser that, given valid MiniJava code, could build a MiniJava program tree. \textcolor{red}{(Talk more about how the parser works)}
+The parser grammar (which can be found in Appendix \ref{App:Parser}) is based on an existing ANTLR parser grammar for Java\footnote{https://github.com/antlr/grammars-v4}. It would not have been worthwhile for me to write an entire grammar from scratch when there was such a readily available alternative. It is always good to use existing libraries or tools if they are available. 
 
-\section{The Abstract Question}
-\textcolor{red}{(Make title more descriptive, and fix the capitals)}
+The ANTLR tool generates recursive descent parsers from input grammars. The typical usage of ANTLR follows this process:
+\begin{enumerate}
+\item{Write a grammar in a grammar file.}
+\item{Run the ANTLR tool on this grammar file to generate a parser.}
+\item{When this parser is executed with input source code, ANTLR's internal representation of the corresponding parse tree is built.}
+\item{Using either a ``listener'' or a ``visitor'', walk the generated parse tree, taking actions at each node, processing the source code as desired.}
+\end{enumerate}
+The following code shows how to build a MiniJava representation for the source code \texttt{i~=~4;}.
+\begin{Verbatim}[samepage=true, numbers=left]
+AssignExpr aE = new AssignExpr();
+Id i = new Id();
+i.setUpId("i");
+Literal four = new Literal();
+four.setUpLiteral(PrimType.INT, "4");
+aE.setUpAssignExpr(i, AssignOp.EQ, four);
+ExpressionStmnt eS = new ExpressionStmnt(aE);
+\end{Verbatim}
+Considering this representation as a parse tree, this can be seen as line 0 (i.e. the invisible line before line 1) visiting the \texttt{ExpressionStmnt} node and visiting its only child, the \texttt{AssignExpr} node in line 1. This node's first child is visited in lines 2 and 3, and its second child is visited in lines 4 and 5. Once all the children of the \texttt{AssignExpr} have been visited, the instance itself can be set up on line 6. Once all the \texttt{ExpressionStmnt}'s children have been visited, its instance can be set up on line 7. This example demonstrates that in general, program representations are generated by recursively visiting each expression or statement's children, in a similar way to how a program representation is interpreted.
 
-In this section I explain the formulation of the abstract question and give an example of how a concrete question can be derived from it. \textcolor{red}{(Explain this)}
+By default, the ANTLR tool generates a listener interface and base class along with the parser. A listener is characterised by providing callback methods that are triggered by an automatic parse tree walker: listener methods don't have to explicitly visit their children. A visitor on the other hand gives the user more control over the walk, requiring explicit commands to visit the children of each node. While this means that it takes less work to use a listener (as the parse tree walker is already built in), the visitor paradigm is more appropriate for building my library's representation of the MiniJava source code. While the listener methods all return \texttt{void}, requiring the instances representing the children nodes to be stored somewhere in memory prior to setting up the current node, the base visitor, \texttt{MiniJavaBaseVisitor<T>}, is generic, with method signatures such as \texttt{public T visitBlock}. This means that the visitor methods can be made to return \texttt{MiniJASTNode}s, which can be cast to \texttt{Expression}s or \texttt{BlockStatement}s as appropriate (as shown in Figure \ref{Fig:UML} on page \pageref{Fig:UML}). By using a visitor rather than a listener, I was able to more closely imitate the way (shown above) that program representations are build in code. My visitor implementation can be found in \texttt{MiniJavaASTBuilder}, a class which extends the \texttt{MiniJavaBaseVisitor<MiniJASTNode>} class supplied by the ANTLR tool.
 
-\textcolor{red}{("The Implementation chapter should not just be a description of every class in your implementation, but an explanation of the key problems you had to solve and how you solved them. From reading your Implementation so far, I have no good idea for why any of these components exist, how they fit together, and what problems they solve.")}
+Java, and by extension MiniJava, is a language that suffers from the ``dangling-else'' problem: a particular problem arising from an ambiguous grammar. Consider the MiniJava code shown below:
+\begin{Verbatim}[samepage=true,tabsize=4]
+if (i == true)		 (1)
+	if (j == false)	(2)
+		k = 1;
+else
+	k = 2;
+\end{Verbatim}
+A parser could not make a decision as to whether the \texttt{else} statement ``belongs'' to the first or the second \texttt{if} statement. Since the grammar is ambiguous, a decision must be made for the parser. The decision taken in Java\cite[p.417]{Java8}, and thus in MiniJava, is to attach the \texttt{else} statement to most inner \texttt{if} statement possible (which in the example above would be the one labeled \texttt{(2)}, even though the indentation may suggest that the programmer intended it to be the one labeled \texttt{(1)}). To implement this decision, the grammar distinguishes between \texttt{Statement}s and \texttt{StatementNSI}s (where NSI stands for ``No Short If'', i.e. no \texttt{if} without \texttt{else}). The way this solves the problem becomes apparent on inspection of the following rules in the grammar (presented in context in Appendix \ref{App:Parser}):
+\begin{Verbatim}[samepage=true, tabsize=4]
+statement:
+	...
+	| IF parExpression statement 				
+	| IF parExpression statementNSI ELSE statement	  
+	...
+	;
+	
+statementNSI:
+	...
+	| IF parExpression statementNSI ELSE statementNSI
+	...
+	;
+\end{Verbatim}
+The \texttt{statement} rule gives productions for both a short \texttt{if} (i.e. with no attached \texttt{else}) and a long \texttt{if}, while the \texttt{statementNSI} rule only produces a long \texttt{if}. It can be seen that using these rules to parse the code above will reach a dead end if the first \texttt{if} statement is parsed as a long \texttt{if}, since its first sub-statement would have to be a \texttt{statementNSI}, and this rule has no viable way of parsing the second \texttt{if} statement. Of course, the visitor rules for \texttt{statement}s and \texttt{statementNSI}s make no distinction as they build the MiniJava representation, returning just a standard short or long \texttt{if} representation as appropriate.
+
+Another problem encountered while writing the parser can be discovered on inspection of the local variable declaration production shown below:
+\begin{Verbatim}[samepage=true, tabsize=4]
+blockStatement: 
+	primitiveType variableDeclarators SEMI	# localVariableDeclaration
+	...
+	;
+\end{Verbatim}
+This production is used in the creation of \texttt{LocalVarDec} instances, which require the appropriate \texttt{PrimType} to set up correctly. As the visitor arrives at a node produced like this in the parse tree (by calling the \texttt{visitLocalVariableDeclaration} method found in \texttt{MiniJavaASTBuilder}) it needs to visit the node's children in order to gather the necessary objects to set up the \texttt{LocalVarDec} object. Since visitor methods return \texttt{MiniJASTNode}s, the \texttt{visitPrimitiveType} method (also found in \texttt{MiniJavaASTBuilder}) needs to return an object whose class implements \texttt{MiniJASTNode} and represents a primitive type. Until this point, no such class existed. The enumeration \texttt{PrimType} does not implement \texttt{MiniJASTNode}, as that would require overriding all the methods declared in the interface separately for each value, as they are in \texttt{SingleWordStmnt}. Since this would be a lot of wasted code, I instead wrote a new class, \texttt{PrimTypeCarrier}, for precisely this purpose. This class implements \texttt{MiniJASTNode} and has a public field of type \texttt{PrimType}, meaning it only needs to implement (trivially) all of the interface methods once. An instance of this class can thus be created in the \texttt{visitPrimitiveType} method (setting the \texttt{PrimType} field value appropriately), which can then be returned to the \texttt{visitLocalVariableDeclaration} method for setting up the \texttt{LocalVarDec} object.
+
+In this section I have described how the ANTLR parser generator can be used to generate parsers for the MiniJava grammar, and how program representations can be built using visitors.
+
+
+\section{Representing questions and solutions}
+
+In this section I explain how the general notion of a question is represented using the \texttt{AbstractPExercise} class, and give an example of how specific questions can be encoded by extending this class.
 
 The abstract class \texttt{AbstractPExercise} represents an abstract programming exercise. It has fields including \texttt{question} (a \texttt{String} containing the question shown to students), \texttt{solution} (a \texttt{BlockStatement} object containing the model solution for the problem) and \texttt{baseDifficulty} (a measurement of the relative difficulty of this exercise compared to others, imposes a natural ordering on exercises in terms of their difficulty), and abstract methods including \texttt{setUp} (where the model solution is built) and \texttt{checkSolved} (where the current response is run and the system can determine whether the student has solved the problem). The other fields are required for either actually running the answer, or for adding blanks to and removing blanks from the model solution.
 
 An example implementation of these abstract methods is found in \texttt{FactorialExercise}, \textcolor{red}{(The code won't be provided so if referenced quote it)} an exercise in which the student is asked to use a while loop to calculate the factorial of some integer \texttt{n}, which is supplied on construction of the object. The overridden \texttt{setUp} method constructs the model solution \textcolor{red}{(Explain)}, which represents the code:
 
-\begin{lstlisting}
+\begin{Verbatim}[samepage=true]
 int total = 1, n = N;
 while (n > 1) {
-	total *= n--;
+    total *= n--;
 }
-\end{lstlisting}
+\end{Verbatim}
 
 where \texttt{N} is the number supplied at construction. This code calculates \texttt{N!} and stores it in \texttt{total} as required. The \texttt{solution} field from \texttt{AbstractPExercise} is filled with the \texttt{Block} object that contains the code. Note also that \texttt{FactorialExercise} defines a new \texttt{totalId} field of type \texttt{Id}, which represents the variable \texttt{total}. This is used in the overriden \texttt{checkSolved} method, where the value of \texttt{total} is checked against the correct answer of \texttt{N!}.
 
@@ -328,6 +379,7 @@ This section described the function and then the implementation of the GUI perip
 
 In this chapter I have described what I have implemented and how I have done it. I started by giving the design of the language MiniJava, explaining some of these choices by introducing the parser and the concept of ``blanks'' within a MiniJava program. From there I explained how a programming exercise is conceptualised in the abstract sense, and gave an example of an implementation of a specific question. I finished by giving two possible uses for the set of tools, the \texttt{ExerciseSetter} and the Graphical User Interface (GUI).
 
+
 \textcolor{red}{Estimated Word Count: 3765}
 
 \chapter{Evaluation}
@@ -346,7 +398,7 @@ In this chapter I have described what I have implemented and how I have done it.
 \chapter{The Parser}
 \label{App:Parser}
 
-\begin{lstlisting}
+\begin{Verbatim}[tabsize=4]
 grammar MiniJava;
 
 // STATEMENTS / BLOCKS
@@ -354,156 +406,161 @@ grammar MiniJava;
 // entry point
 entry
 	: block [true]			# blockEntry
-	| blockStatement+		# blockStatementsEntry
+	| blockStatement+		 # blockStatementsEntry
 	| statementTop			# statementEntry
-	| expression			# expressionEntry
+	| expression			  # expressionEntry
 	;									
 
 block [boolean isOuter]
-    :   LBRACE blockStatement* RBRACE						
-    ;
-
-blockStatement
-    :   primitiveType variableDeclarators SEMI	# localVariableDeclaration
-    |   statement								# makeStmnt
-    | 	variableDeclarator						# makeVarDec
-    ;
-    
-statementTop
-	:	statement						# stmnt
-	|	statementNSI					# stmntNSI
+	: LBRACE blockStatement* RBRACE						
 	;
 
-statement
-    :	block [false]									# makeBlock
-    |   IF parExpression statement 						# makeIf
-    | 	IF parExpression statementNSI ELSE statement	# makeITE
-    |   FOR LPAREN forInit? SEMI expression? 
-    			SEMI expressionList? RPAREN  statement	# makeFor
-    |   WHILE parExpression statement					# makeWhile
-    |   statementNTS									# makeStatementNTS
-    ;
+blockStatement
+	: primitiveType variableDeclarators SEMI	# localVariableDeclaration
+	| statement								 # makeStmnt
+	| variableDeclarator					    # makeVarDec
+	;
     
-statementNSI
-	:  block [false]										# makeBlockNSI
-	| IF parExpression statementNSI ELSE statementNSI		# makeITENSI
+statementTop
+	: statement					   # stmnt
+	| statementNSI					# stmntNSI
+	;
+
+\end{Verbatim}
+\begin{Verbatim}[samepage=true, tabsize=4]
+statement
+	: block [false]									 # makeBlock
+	| IF parExpression statement 					   # makeIf
+	| IF parExpression statementNSI ELSE statement	  # makeITE
 	| FOR LPAREN forInit? SEMI expression? 
-			SEMI expressionList? RPAREN statementNSI 		# makeForNSI
-    |   WHILE parExpression statementNSI					# makeWhileNSI
-    |	statementNTS										# makeStatementNTSNSI												
-    ;
+		SEMI expressionList? RPAREN  statement		  # makeFor
+	| WHILE parExpression statement					 # makeWhile
+	| statementNTS									  # makeStatementNTS
+	;
+\end{Verbatim}
+
+\begin{Verbatim}[tabsize=4]  
+statementNSI
+	: block [false]									  # makeBlockNSI
+	| IF parExpression statementNSI ELSE statementNSI	# makeITENSI
+	| FOR LPAREN forInit? SEMI expression? 
+		SEMI expressionList? RPAREN statementNSI 		# makeForNSI
+	| WHILE parExpression statementNSI				   # makeWhileNSI
+	| statementNTS									   # makeStatementNTSNSI												
+	;
     
 statementNTS
-	:	DO statement WHILE parExpression SEMI	# makeDo
-    |   RETURN SEMI								# return
-    |   BREAK SEMI								# break
-    |   CONTINUE SEMI							# continue
-    |   SEMI									# empty
-    |   expressionStatement SEMI				# makeStmntExpr
-    ;
+	: DO statement WHILE parExpression SEMI	  # makeDo
+	| RETURN SEMI								# return
+	| BREAK SEMI								 # break
+	| CONTINUE SEMI							  # continue
+	| SEMI									   # empty
+	| expressionStatement SEMI				   # makeStmntExpr
+	;
 
 
 forInit
-    :   primitiveType variableDeclarators			# forInitLVD
-    |   expressionList								# forInitExprs
-    ;
+	: primitiveType variableDeclarators			 # forInitLVD
+	| expressionList								# forInitExprs
+	;
 
 // EXPRESSIONS
 
 parExpression
-    :   LPAREN expression RPAREN
-    ;
+	: LPAREN expression RPAREN
+	;
 
 expressionList
-    :   expression (COMMA expression)*
-    ;
+	: expression (COMMA expression)*
+	;
 
 expressionStatement
-    :   expression
-    ;
+	: expression
+	;
 
 expression // Most binding comes first!
-    :   Identifier												# makeID
-    |   expression LBRACK expression RBRACK						# arrayAccess
-    |	parExpression											# makeBracketed
-    |   literal													# makeLiteral
-    |   expression (op=INC | op=DEC)							# postInc
-    |   (op=ADD|op=SUB|op=INC|op=DEC) expression				# preIncEtc
-    |   BANG expression											# makeNot
-    |   expression (op=MUL|op=DIV) expression					# multExpr
-    |   expression (op=ADD|op=SUB) expression					# addExpr
-    |   expression (op=LE | op=GE | op=GT | op=LT) expression	# relationalExpr
-    |   expression (op=EQUAL | op=NOTEQUAL) expression			# eqExpr
-    |   expression AND expression								# andExpr
-    |   expression OR expression								# orExpr
-    |   <assoc=right> expression QUESTION 
-    		expression COLON expression							# condExpr
-    |	<assoc=right> expression												
-        (   op=ASSIGN
-        |   op=ADD_ASSIGN
-        |   op=SUB_ASSIGN
-        |   op=MUL_ASSIGN
-        |   op=DIV_ASSIGN
-        )
-        expression												# assignExpr
-    ;
+	: Identifier											   # makeID
+	| expression LBRACK expression RBRACK					  # arrayAccess
+	| parExpression										    # makeBracketed
+	| literal												  # makeLiteral
+	| expression (op=INC | op=DEC)							 # postInc
+	| (op=ADD|op=SUB|op=INC|op=DEC) expression				 # preIncEtc
+	| BANG expression										  # makeNot
+	| expression (op=MUL|op=DIV) expression				    # multExpr
+	| expression (op=ADD|op=SUB) expression			  	  # addExpr
+	| expression (op=LE | op=GE | op=GT | op=LT) expression	# relationalExpr
+	| expression (op=EQUAL | op=NOTEQUAL) expression		   # eqExpr
+	| expression AND expression								# andExpr
+	| expression OR expression								 # orExpr
+	| <assoc=right> expression QUESTION 
+		expression COLON expression						    # condExpr
+	| <assoc=right> expression												
+		(   op=ASSIGN
+        		|   op=ADD_ASSIGN
+        		|   op=SUB_ASSIGN
+        		|   op=MUL_ASSIGN
+        		|   op=DIV_ASSIGN
+        		)
+        		expression									 # assignExpr
+	;
     
 // VARIABLES AND LITERALS
     
 variableDeclarators
-    :   variableDeclarator (COMMA variableDeclarator)*
-    ;
+	: variableDeclarator (COMMA variableDeclarator)*
+	;
 
 variableDeclarator
-    :   Identifier LBRACK RBRACK (ASSIGN variableInitializer)? 	# arrayVarDec 
-    |	Identifier (ASSIGN variableInitializer)?				# singleVarDec
-    ;
-
+	: Identifier LBRACK RBRACK (ASSIGN variableInitializer)?   # arrayVarDec 
+	| Identifier (ASSIGN variableInitializer)?				 # singleVarDec
+	;
+\end{Verbatim}
+\begin{Verbatim}[samepage=true,tabsize=4]
 variableInitializer 
-    :   arrayInitializerValues									# arrayInitVals
-    |	arrayInitializerSize									# arrayInitSize
-    |   expression												# initExpr
-    ;
-
+	: arrayInitializerValues								   # arrayInitVals
+	| arrayInitializerSize									 # arrayInitSize
+	| expression											   # initExpr
+	;
+\end{Verbatim}
+\begin{Verbatim}[tabsize=4]
 arrayInitializerValues
-    :   LBRACE variableInitializer (COMMA variableInitializer)* (COMMA)? RBRACE	
-    ;
+	: LBRACE variableInitializer (COMMA variableInitializer)* (COMMA)? RBRACE	
+	;
     
 arrayInitializerSize
-	: 	NEW primitiveType LBRACK expression RBRACK
+	: NEW primitiveType LBRACK expression RBRACK
 	;
 
 primitiveType
-    :   BOOLEAN
-    |   CHAR
-    |   INT
-    |   DOUBLE
-    ;
+	: BOOLEAN
+	| CHAR
+	| INT
+	| DOUBLE
+	;
 
 literal
-    :   IntegerLiteral 
-    |   FloatingPointLiteral 
-    |   CharacterLiteral
-    |   BooleanLiteral
-    ;
+	: IntegerLiteral 
+	| FloatingPointLiteral 
+	| CharacterLiteral
+	| BooleanLiteral
+	;
 
 // LEXER
-
 // §3.9 Keywords
 
-BOOLEAN       : 'boolean';
-BREAK         : 'break';
-CHAR          : 'char';
-CONTINUE      : 'continue';
-DO            : 'do';
-DOUBLE        : 'double';
-ELSE          : 'else';
-FOR           : 'for';
-IF            : 'if';
-INT           : 'int';
-NEW			  : 'new';
-RETURN        : 'return';
-WHILE         : 'while';
+BOOLEAN	    : 'boolean';
+BREAK		  : 'break';
+CHAR		   : 'char';
+CONTINUE	   : 'continue';
+DO			 : 'do';
+DOUBLE		 : 'double';
+ELSE		   : 'else';
+FOR			: 'for';
+IF			 : 'if';
+INT			: 'int';
+NEW			: 'new';
+RETURN		 : 'return';
+WHILE		  : 'while';
 
 // §3.10.1 Integer Literals
 // §3.10.2 Floating-Point Literals
@@ -553,7 +610,7 @@ DIV_ASSIGN      : '/=';
 // Whitespace and comments
 //
 // Sections removed for clarity
-\end{lstlisting}
+\end{Verbatim}
 
 \chapter{Project Proposal}
 
