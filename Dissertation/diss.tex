@@ -290,7 +290,50 @@ In this section I have described how the ANTLR parser generator can be used to g
 
 In this section I explain how the general notion of a question is represented using the \texttt{AbstractPExercise} class, and give an example of how specific questions can be encoded by extending this class.
 
-The abstract class \texttt{AbstractPExercise} represents an abstract programming exercise. It has fields including \texttt{question} (a \texttt{String} containing the question shown to students), \texttt{solution} (a \texttt{BlockStatement} object containing the model solution for the problem) and \texttt{baseDifficulty} (a measurement of the relative difficulty of this exercise compared to others, imposes a natural ordering on exercises in terms of their difficulty), and abstract methods including \texttt{setUp} (where the model solution is built) and \texttt{checkSolved} (where the current response is run and the system can determine whether the student has solved the problem). The other fields are required for either actually running the answer, or for adding blanks to and removing blanks from the model solution.
+When presented to a student learning a programming language, a ``question'' can be broken up into the following components:
+\begin{itemize}
+\item{A description of what the student is expected to do.}
+\item{A solution to the problem presented with parts of the code left blank for students to fill in.}
+\item{A measure of difficulty so that both teaching staff and students can monitor progress and assess performance.}
+\end{itemize}
+
+Following these guidelines, a representation of a programming question should be capable of the following:
+\begin{enumerate}
+\item{Storing the description of what the student is expected to do.}
+\item{Building a MiniJava representation of the solution.}
+\item{Making some portions of the solution blank.}
+\item{Calculating the difficulty of the current problem, given how difficult the question is to answer and how much of the solution is blank.}
+\item{Adding and removing blanks from the solution to make the problem harder or easier.}
+\item{Filling those blanks with MiniJava representations of student submitted code.}
+\item{Executing the solution.}
+\item{Checking that the problem is solved by the provided solution.}
+\end{enumerate}
+
+The abstract class \texttt{AbstractPExercise} provides the framework for classes extending it to fulfil all these requirements. I explain how the points above are addressed by \texttt{AbstractPExercise} in order.
+
+\subsubsection*{1. Storing the description of what the student is expected to do}
+
+The \texttt{String} field, \texttt{question}, stores the question provided to students. This field is initialised in the constructor. 
+
+\subsubsection*{2. Building a MiniJava representation of the solution}
+
+\subsubsection*{3. Making some portions of the solution blank}
+
+\subsubsection*{4. Calculating the difficulty of the current problem}
+
+\subsubsection*{5. Adding and removing blanks from the solution}
+
+\subsubsection*{6. Filling blanks with student submitted code}
+
+\subsubsection*{7. Executing the solution}
+
+\subsubsection*{8. Checking that the problem is solved by the provided solution}
+
+
+
+
+
+
 
 An example implementation of these abstract methods is found in \texttt{FactorialExercise}, \textcolor{red}{(The code won't be provided so if referenced quote it)} an exercise in which the student is asked to use a while loop to calculate the factorial of some integer \texttt{n}, which is supplied on construction of the object. The overridden \texttt{setUp} method constructs the model solution \textcolor{red}{(Explain)}, which represents the code:
 
@@ -307,7 +350,7 @@ This demonstrates one of the two ways that solutions can be checked: either the 
 
 In this section I have presented the class \texttt{AbstractPExercise} and given an example implementation of it.
 
-\section{Adding and Removing Blanks}
+\section{Adding and removing blanks}
 \label{Sec:Blanks}
 
 This section explains the implementation of \texttt{FillableBlank} and its two implementations, before describing the algorithm that adds a blank to a MiniJava program that can later be filled in by a student, and the algorithm that replaces a blank with the original code snippet.
