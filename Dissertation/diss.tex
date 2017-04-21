@@ -223,6 +223,7 @@ It can be seen that the interpreter makes use of all the components meeting the 
 In this section I explained how MiniJava is interpreted.
 
 \section{Parsing the language}
+\label{Sec:Parsing}
 
 In this section I explain how a parser for MiniJava was implemented using the ANTLR parser generator \cite{ANTLR4}, and how a representation of an input MiniJava program can be built using it.
 
@@ -293,17 +294,16 @@ In this section I explain how the general notion of a question is represented us
 When presented to a student learning a programming language, a ``question'' can be broken up into the following components:
 \begin{itemize}
 \item{A description of what the student is expected to do.}
-\item{A solution to the problem presented with parts of the code left blank for students to fill in.}
+\item{A model solution to the problem presented with parts of the code left blank for students to fill in.}
 \item{A measure of difficulty so that both teaching staff and students can monitor progress and assess performance.}
 \end{itemize}
 
 Following these guidelines, a representation of a programming question should be capable of the following:
 \begin{enumerate}
 \item{Storing the description of what the student is expected to do.}
-\item{Building a MiniJava representation of the solution.}
-\item{Making some portions of the solution blank.}
-\item{Calculating the difficulty of the current problem, given how difficult the question is to answer and how much of the solution is blank.}
+\item{Building a MiniJava representation of the model solution.}
 \item{Adding and removing blanks from the solution to make the problem harder or easier.}
+\item{Calculating the difficulty of the current problem, given how difficult the question is to answer and how much of the model solution is blank.}
 \item{Filling those blanks with MiniJava representations of student submitted code.}
 \item{Executing the solution.}
 \item{Checking that the problem is solved by the provided solution.}
@@ -313,21 +313,25 @@ The abstract class \texttt{AbstractPExercise} provides the framework for classes
 
 \subsubsection*{1. Storing the description of what the student is expected to do}
 
-The \texttt{String} field, \texttt{question}, stores the question provided to students. This field is initialised in the constructor. 
+The \texttt{String} field, \texttt{question}, stores the question provided to students. This field is initialised in the constructor. In order to present the model solution along with the question, MiniJava program representations need to be converted back in to \texttt{String} representations. To implement this, the \texttt{stringRepr} method was added to both the \texttt{Expression} and \texttt{BlockStatement} interfaces, with the latter's version taking an integer argument representing how many blocks deep the statement is. This method is implemented in every MiniJava expression and statement by recursively combining String representations of the sub-expressions and sub-statements, effectively turning the representation in the abstract syntax into one in the concrete syntax.
 
 \subsubsection*{2. Building a MiniJava representation of the solution}
 
-\subsubsection*{3. Making some portions of the solution blank}
+
+
+\subsubsection*{3. Adding and removing blanks from the solution}
+
+The algorithms used to add and remove blanks from the solution code are complex enough to warrant their own section, and are thus discussed in section \ref{Sec:Blanks}.
 
 \subsubsection*{4. Calculating the difficulty of the current problem}
 
-\subsubsection*{5. Adding and removing blanks from the solution}
+As already stated, the difficulty of a question is related to how difficult it is to answer the question, and how much of the model solution is blank.
 
-\subsubsection*{6. Filling blanks with student submitted code}
+\subsubsection*{5. Filling blanks with student submitted code}
 
-\subsubsection*{7. Executing the solution}
+\subsubsection*{6. Executing the solution}
 
-\subsubsection*{8. Checking that the problem is solved by the provided solution}
+\subsubsection*{7. Checking that the problem is solved by the provided solution}
 
 
 
@@ -365,7 +369,6 @@ The algorithm that adds a blank to a MiniJava program is found in the \texttt{ad
 \caption{A figure demonstrating the different behaviour of a depth first search algorithm and my \texttt{addBlank} algorithm.}
 \label{Fig:Searches}
 \end{figure}
-\textcolor{red}{(Reverse Breadth First Search maybe?)}
 
 In order to ensure the increase in percentage blank is the smallest increment possible, the algorithm always selects a leaf to replace with a blank, where here a leaf is defined as a node that either has no children, or all its children are already blank. This desire to reach leaves quickly motivates the use of a depth first search algorithm, but using it without modification presents a problem. Figure \ref{Fig:Searches} shows the difference between the selection made by a depth first search algorithm and the selection that should be made. In the diagram, the black nodes represent blanks, and the white nodes represent nodes in the tree that we might choose to make blank. We see that a normal depth first search algorithm would select node A next, whereas \texttt{addBlank} should select node B. As such, we introduce the notion of ``marking'' a node. When we detect that all of node A's children are blank, we declare that that node is a leaf and we mark it. At this point, the algorithm is looking to replace only unmarked leaves, so on this pass node B will be selected, and on the next pass node A will once again not be selected. Only when all the leaves at this depth have been made blank will node A be made blank.
 
