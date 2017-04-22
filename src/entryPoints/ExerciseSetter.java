@@ -198,8 +198,8 @@ public class ExerciseSetter {
         if (result < -10)
             result = -10;
         int difference = numNodes - exercise.numNodes();
-        int multipler = difference < 0 ? -1 : 1;
-        result += (difference * difference * multipler) / 10f;
+        int multiplier = difference < 0 ? -1 : 1;
+        result += (difference * difference * multiplier) / 10f;
         return result;
     }
 }
