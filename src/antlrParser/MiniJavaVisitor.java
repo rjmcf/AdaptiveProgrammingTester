@@ -199,6 +199,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMakeStmntExpr(MiniJavaParser.MakeStmntExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code makePrint}
+	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMakePrint(MiniJavaParser.MakePrintContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code forInitLVD}
 	 * labeled alternative in {@link MiniJavaParser#forInit}.
 	 * @param ctx the parse tree

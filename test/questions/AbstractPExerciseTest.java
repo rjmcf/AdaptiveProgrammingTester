@@ -178,7 +178,10 @@ public class AbstractPExerciseTest {
         i.setUpId("i");
         assertTrue(test.fillBlank(ids.get(2), i));
         assertTrue(test.fillBlank(ids.get(3), five));
-        assertTrue(test.fillBlank(ids.get(4), i));
+
+        Id ns = new Id();
+        ns.setUpId("ns");
+        assertTrue(test.fillBlank(ids.get(4), ns));
 
         assertFalse(test.fillBlank(ids.get(4) + 10, zero));
 

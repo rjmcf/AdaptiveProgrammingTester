@@ -90,6 +90,7 @@ statementNTS
     |   CONTINUE SEMI																# continue
     |   SEMI																		# empty
     |   expressionStatement SEMI													# makeStmntExpr
+    |   PRINT parExpression SEMI                                                    # makePrint
     ;
 
 
@@ -327,6 +328,8 @@ ADD_ASSIGN      : '+=';
 SUB_ASSIGN      : '-=';
 MUL_ASSIGN      : '*=';
 DIV_ASSIGN      : '/=';
+
+PRINT           : 'System.out.println';
 
 // §3.8 Identifiers (must appear after all keywords in the grammar)
 

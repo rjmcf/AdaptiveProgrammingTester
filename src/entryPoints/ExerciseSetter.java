@@ -13,7 +13,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 
 public class ExerciseSetter {
-    JavaToMiniJava translator = new JavaToMiniJava();
     ArrayList<AbstractPExercise> possibleExs = new ArrayList<>();
     private static final int INITIAL_EX = 1;
     private int currentIndex;
@@ -100,7 +99,7 @@ public class ExerciseSetter {
     }
 
     public void setSolution(String s) {
-        exercise.setSolution((BlockStatement)translator.makeAST(s));
+        exercise.setSolution((BlockStatement)JavaToMiniJava.makeAST(s));
     }
 
     public ArrayList<Integer> getBlankIds() {
@@ -109,9 +108,9 @@ public class ExerciseSetter {
 
     public boolean fillBlank(int bId, String input) throws MiniJASTException {
         if (exercise.blankIsExpression(bId)) {
-            return fillBlank(bId, translator.makeExpr(input));
+            return fillBlank(bId, JavaToMiniJava.makeExpr(input));
         } else {
-            return fillBlank(bId, translator.makeStmnt(input));
+            return fillBlank(bId, JavaToMiniJava.makeStmnt(input));
         }
     }
 

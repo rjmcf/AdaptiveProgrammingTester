@@ -15,9 +15,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class JavaToMiniJava {
-    MiniJavaASTBuilder builder = new MiniJavaASTBuilder();
+    static MiniJavaASTBuilder builder = new MiniJavaASTBuilder();
 
-    public MiniJASTNode makeAST(String input) {
+    public static MiniJASTNode makeAST(String input) {
         try {
             InputStream is = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
             ANTLRInputStream inputS = new ANTLRInputStream(is);
@@ -32,7 +32,7 @@ public class JavaToMiniJava {
         }
     }
 
-    public Expression makeExpr(String input) {
+    public static Expression makeExpr(String input) {
         try {
             InputStream is = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
             ANTLRInputStream inputS = new ANTLRInputStream(is);
@@ -47,7 +47,7 @@ public class JavaToMiniJava {
         }
     }
 
-    public BlockStatement makeStmnt(String input) {
+    public static BlockStatement makeStmnt(String input) {
         try {
             InputStream is = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
             ANTLRInputStream inputS = new ANTLRInputStream(is);

@@ -43,6 +43,17 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     }
 
     @Override
+    public MiniJASTNode visitBlockStatementsEntry(MiniJavaParser.BlockStatementsEntryContext ctx) {
+        Block b = new Block(true);
+        for (MiniJavaParser.BlockStatementContext c : ctx.blockStatement()) {
+            BlockStatement bS = (BlockStatement)visit(c);
+            b.addBlockStmnt(bS);
+        }
+
+        return b;
+    }
+
+    @Override
     public MiniJASTNode visitLiteral(MiniJavaParser.LiteralContext ctx) {
         Literal l = new Literal();
         if (ctx.BooleanLiteral() != null)
@@ -119,6 +130,14 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         Id id = new Id();
         id.setUpId(ctx.Identifier().getText());
         return id;
+    }
+
+    @Override
+    public MiniJASTNode visitMakePrint(MiniJavaParser.MakePrintContext ctx) {
+        PrintStatement pS = new PrintStatement("standardOut.txt", false);
+        Expression e = (Expression)visit(ctx.parExpression());
+        pS.setUpPrint(e);
+        return pS;
     }
 
     @Override

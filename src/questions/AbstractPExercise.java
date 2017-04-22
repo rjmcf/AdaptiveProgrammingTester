@@ -12,6 +12,7 @@ import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.StatementBase;
+import parser.JavaToMiniJava;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,19 +23,20 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractPExercise implements Comparable<AbstractPExercise> {
     protected String question;
-    protected BlockStatement solution;
+    protected String solutionCode;
+    private BlockStatement solution;
     private int baseDifficulty;
     private boolean replaceMarked = false;
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
-    public abstract void setUp();
     public abstract boolean checkSolved();
     protected Context c;
 
-    protected void baseSetUp() {
+    public void setUp() {
         replaceMarked = false;
         replacedNodes = new Stack<>();
         replacedNodeTreeIndices = new Stack<>();
+        solution = (BlockStatement)JavaToMiniJava.makeAST(solutionCode);
     }
 
     public void runSolution() throws MiniJASTException {
@@ -51,7 +53,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         return (baseDifficulty - o.baseDifficulty);
     }
 
-    public AbstractPExercise(String q, int diff) { question = q; baseDifficulty = diff; }
+    public AbstractPExercise(String q, String c, int diff) { question = q; solutionCode = c; baseDifficulty = diff; }
 
     public int getBaseDifficulty() { return baseDifficulty; }
     public int getNodesBlank() {
