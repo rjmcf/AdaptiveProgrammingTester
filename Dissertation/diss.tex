@@ -2,12 +2,12 @@
 \documentclass[12pt,a4paper,twoside,openright]{report}
 \usepackage[pdfborder={0 0 0}]{hyperref}    % turns references into hyperlinks
 \usepackage[margin=25mm]{geometry}  % adjusts page layout
-\usepackage{amsmath}
+\usepackage{amsmath} % For masthy things
 \usepackage{graphicx}  % allows inclusion of PDF, PNG and JPG images
-\usepackage{verbatim}
 \usepackage{docmute}   % only needed to allow inclusion of proposal.tex
 \usepackage{fancyvrb} % Verbatim environment with samepage=true argument produces useful code listings restricted to the same page
 \usepackage{color} % Uses color to remind me of things to do.
+\usepackage{wrapfig} % used for wrapping text around images
 
 \graphicspath{ {figs/} }
 
@@ -361,18 +361,24 @@ In this section I have presented the class \texttt{AbstractPExercise}, shown how
 \section{Adding and removing blanks}
 \label{Sec:Blanks}
 
-This section describes the algorithm that adds a blank to a MiniJava program that can later be filled in by a student, and the algorithm that replaces a blank with the original code snippet.
+This section describes first the algorithm that adds a blank to a MiniJava program that can later be filled in by a student, followed by the algorithm that replaces a blank with the original code snippet.
 
-The purpose of these algorithms is to offer the most fine-grained adjustment of the number of blanks in a model solution possible, which in turn will give the greatest possible degree of control over the difficulty of the problem. This means that the algorithm that adds blanks to a model solution must select the blank at each iteration of the algorithm which causes the smallest increase possible in the percentage of the solution which is blank. In order to ensure this, the algorithm always selects the left-most, deepest leaf to replace with a blank, where here a leaf is defined as a node that either has no children, or all its children are already blank. This desire to reach leaves quickly motivates the use of a depth first search algorithm, but using it without modification presents a problem. Figure \ref{Fig:Searches} shows the difference between the selection made on the third iteration by a depth first search algorithm and my algorithm. In the diagram, the black nodes represent blanks, and the white nodes represent nodes in the tree that we might choose to make blank. We see that a normal depth first search algorithm would select node A next, whereas we should select node B, as it is the next deepest leaf. As such, we introduce the notion of ``marking'' a node. When we detect that all of node A's children are blank, we declare that that node is a leaf and we mark it. At this point, the algorithm is looking to replace only unmarked leaves, so on this pass node B will be selected, and on the next pass node A will once again not be selected. Only when all the leaves at this depth have been made blank will we switch which marking we are looking to replace, and node A will be made blank.
+The difficulty of a problem is based on the difficulty of the question itself and the percentage of the model solution that is blank when it is presented. Changing the question itself can be considered a coarse-grained adjustment to the problem's overall difficulty, while changing the percentage of the model solution that is blank is a much more fine-grained adjustment of overall difficulty. When we wish to adjust the difficulty of the problem, we would prefer to have the greatest control over the difficulty possible, able to make the finest-grained adjustments. For this reason, the algorithm that chooses which node in a model solution to replace with a blank should make the choice that causes the smallest growth in the percentage of the whole that is blank. Additionally, we would prefer to distribute these blanks across the whole solution, rather than concentrating them in any one part. 
 
-\begin{figure}
+\begin{wrapfigure}{r}{0.3\textwidth}
+  \centering
+    \includegraphics[width=0.28\textwidth]{ExampleTree}
+  \caption{An example of an AST with nodes labeled for clarity.}
+  \label{Fig:Tree}
+\end{wrapfigure}
+
+
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Searches}
 \caption{A figure demonstrating the different behaviour of a depth first search algorithm and my \texttt{addBlank} algorithm.}
 \label{Fig:Searches}
 \end{figure}
-
-For this algorithm 
 
 This section described the implementation of the algorithms that introduce blanks to and remove them from a MiniJava program.
 
