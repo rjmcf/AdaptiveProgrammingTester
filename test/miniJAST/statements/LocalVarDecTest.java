@@ -86,15 +86,6 @@ public class LocalVarDecTest {
             public boolean getIsLeaf() { return false; }
 
             @Override
-            public boolean getIsMarked() { return false; }
-
-            @Override
-            public void setMarked(boolean b) { }
-
-            @Override
-            public void setIsLeaf(boolean b) { }
-
-            @Override
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
             @Override
@@ -162,15 +153,6 @@ public class LocalVarDecTest {
 
             @Override
             public boolean getIsLeaf() { return false; }
-
-            @Override
-            public boolean getIsMarked() { return false; }
-
-            @Override
-            public void setMarked(boolean b) { }
-
-            @Override
-            public void setIsLeaf(boolean b) { }
 
             @Override
             public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }

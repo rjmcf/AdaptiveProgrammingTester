@@ -73,7 +73,6 @@ public class ExerciseSetterTest {
 
     @Test
     public void testReportPerformance() throws Exception {
-
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
         Literal one = new Literal();
