@@ -25,14 +25,12 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     private int baseDifficulty;
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
-    private Stack<Integer> lastNodeReplaced = new Stack<>();
     public abstract boolean checkSolved();
     protected Context c;
 
     public void setUp() {
         replacedNodes = new Stack<>();
         replacedNodeTreeIndices = new Stack<>();
-        lastNodeReplaced = new Stack<>();
         solution = (Statement)JavaToMiniJava.makeAST(solutionCode);
     }
 
@@ -190,6 +188,11 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         Stack<MiniJASTNode> nodes = new Stack<>();
         Stack<MiniJASTNode> parents = new Stack<>();
         Stack<Integer> index = new Stack<>();
+        Stack<Integer> lastNodeReplaced;
+        if (!replacedNodeTreeIndices.empty())
+            lastNodeReplaced = (Stack<Integer>)replacedNodeTreeIndices.peek().clone();
+        else
+            lastNodeReplaced = new Stack<>();
         Collections.reverse(lastNodeReplaced);
         boolean needToPop = false;
         nodes.push(solution);
@@ -301,15 +304,12 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         if (replacedNodeTreeIndices.peek().empty()) {
             solution = (Statement)replacedNodes.pop();
             replacedNodeTreeIndices.pop();
-            lastNodeReplaced = (Stack<Integer>)replacedNodeTreeIndices.peek().clone();
             return true;
         }
 
         MiniJASTNode toReplace = replacedNodes.pop();
         MiniJASTNode parent = solution;
         Stack<Integer> indices = replacedNodeTreeIndices.pop();
-        if (!replacedNodeTreeIndices.empty())
-            lastNodeReplaced = (Stack<Integer>)replacedNodeTreeIndices.peek().clone();
 
         Collections.reverse(indices);
         while (indices.size() > 1) {
