@@ -14,7 +14,7 @@ public class IfThenElseStmnt extends StatementBase {
     protected int trueStmnt;
     protected int falseStmnt;
 
-    protected void baseSetUpITE(Expression c, BlockStatement t, BlockStatement f) {
+    protected void baseSetUpITE(Expression c, Statement t, Statement f) {
         subNodes.clear();
         subNodes.add(c); subNodes.add(t); subNodes.add(f);
         cond = 0; trueStmnt = 1; falseStmnt = 2;
@@ -23,17 +23,17 @@ public class IfThenElseStmnt extends StatementBase {
     @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "if (" + ((Expression)subNodes.get(cond)).stringRepr() + ") \n" +
-                ((BlockStatement)subNodes.get(trueStmnt)).stringRepr(blocksDeep+1) + "\n" + pad(blocksDeep) +
-                "else \n" + ((BlockStatement)subNodes.get(falseStmnt)).stringRepr(blocksDeep+1);
+                ((Statement)subNodes.get(trueStmnt)).stringRepr(blocksDeep+1) + "\n" + pad(blocksDeep) +
+                "else \n" + ((Statement)subNodes.get(falseStmnt)).stringRepr(blocksDeep+1);
     }
 
-    public void setUpITE(Expression c, BlockStatement t, BlockStatement f) { baseSetUpITE(c, t, f); }
+    public void setUpITE(Expression c, Statement t, Statement f) { baseSetUpITE(c, t, f); }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {
         checkType((Expression)subNodes.get(cond), Expression.class);
-        checkType((BlockStatement)subNodes.get(trueStmnt), BlockStatement.class);
-        checkType((BlockStatement)subNodes.get(falseStmnt), BlockStatement.class);
+        checkType((Statement)subNodes.get(trueStmnt), Statement.class);
+        checkType((Statement)subNodes.get(falseStmnt), Statement.class);
 
         ReturnValues r = ((Expression)subNodes.get(cond)).evaluate(c);
         if (r.getPType() != PrimType.BOOLEAN)
@@ -43,13 +43,13 @@ public class IfThenElseStmnt extends StatementBase {
 
         if (((ReturnValuesBool)r).value) {
             stepIn(c);
-            FlowControl result = ((BlockStatement)subNodes.get(trueStmnt)).execute(c);
+            FlowControl result = ((Statement)subNodes.get(trueStmnt)).execute(c);
             stepOut(c);
             return result;
         }
         else {
             stepIn(c);
-            FlowControl result = ((BlockStatement)subNodes.get(falseStmnt)).execute(c);
+            FlowControl result = ((Statement)subNodes.get(falseStmnt)).execute(c);
             stepOut(c);
             return result;
         }

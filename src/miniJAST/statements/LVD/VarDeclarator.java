@@ -4,7 +4,6 @@ import miniJAST.Context;
 import miniJAST.exceptions.IncorrectEvaluationException;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
-import miniJAST.statements.BlockStatement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 

@@ -2,13 +2,11 @@ package entryPoints;
 
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.MiniJASTException;
-import miniJAST.statements.BlockStatement;
+import miniJAST.statements.Statement;
 import parser.JavaToMiniJava;
 import questions.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 
@@ -94,12 +92,12 @@ public class ExerciseSetter {
         return exercise.printSolution();
     }
 
-    public void setSolution(BlockStatement solution) {
+    public void setSolution(Statement solution) {
         exercise.setSolution(solution);
     }
 
     public void setSolution(String s) {
-        exercise.setSolution((BlockStatement)JavaToMiniJava.makeAST(s));
+        exercise.setSolution((Statement)JavaToMiniJava.makeAST(s));
     }
 
     public ArrayList<Integer> getBlankIds() {

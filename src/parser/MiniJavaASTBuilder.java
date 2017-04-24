@@ -29,16 +29,13 @@ import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.PrimTypeCarrier;
 import miniJAST.types.PrimType;
 
-import java.util.Collections;
-import java.util.List;
-
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
     public MiniJASTNode visitBlock(MiniJavaParser.BlockContext ctx) {
         Block b = new Block(ctx.isOuter);
         for (MiniJavaParser.BlockStatementContext c : ctx.blockStatement()) {
-            BlockStatement bS = (BlockStatement)visit(c);
+            Statement bS = (Statement)visit(c);
             b.addBlockStmnt(bS);
         }
 
@@ -49,7 +46,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     public MiniJASTNode visitBlockStatementsEntry(MiniJavaParser.BlockStatementsEntryContext ctx) {
         Block b = new Block(true);
         for (MiniJavaParser.BlockStatementContext c : ctx.blockStatement()) {
-            BlockStatement bS = (BlockStatement)visit(c);
+            Statement bS = (Statement)visit(c);
             b.addBlockStmnt(bS);
         }
 
@@ -323,21 +320,21 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     @Override
     public MiniJASTNode visitMakeIf(MiniJavaParser.MakeIfContext ctx) {
         IfThenStmnt itS = new IfThenStmnt();
-        itS.setUpIfThen((Expression)visit(ctx.parExpression()), (BlockStatement)visit(ctx.statement()));
+        itS.setUpIfThen((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statement()));
         return itS;
     }
 
     @Override
     public MiniJASTNode visitMakeITE(MiniJavaParser.MakeITEContext ctx) {
         IfThenElseStmnt iteS = new IfThenElseStmnt();
-        iteS.setUpITE((Expression)visit(ctx.parExpression()), (BlockStatement)visit(ctx.statementNSI()), (BlockStatement)visit(ctx.statement()));
+        iteS.setUpITE((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statementNSI()), (Statement)visit(ctx.statement()));
         return iteS;
     }
 
     @Override
     public MiniJASTNode visitMakeITENSI(MiniJavaParser.MakeITENSIContext ctx) {
         IfThenElseStmnt itensi = new IfThenElseStmnt();
-        itensi.setUpITE((Expression)visit(ctx.parExpression()), (BlockStatement)visit(ctx.statementNSI(0)), (BlockStatement)visit(ctx.statementNSI(1)));
+        itensi.setUpITE((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statementNSI(0)), (Statement)visit(ctx.statementNSI(1)));
         return itensi;
     }
 
@@ -372,7 +369,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         ForInit fI = ctx.forInit() == null ? null : (ForInit)visit(ctx.forInit());
         Expression cond = ctx.expression() == null ? null : (Expression)visit(ctx.expression());
         fS.setUpForStmnt(fI, cond);
-        BlockStatement s = ctx.statement() == null ? null : (BlockStatement)visit(ctx.statement());
+        Statement s = ctx.statement() == null ? null : (Statement)visit(ctx.statement());
         fS.setBody(s);
         if (ctx.expressionList() != null) {
             for (MiniJavaParser.ExpressionContext c : ctx.expressionList().expression()) {
@@ -389,7 +386,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         ForInit fI = ctx.forInit() == null ? null : (ForInit)visit(ctx.forInit());
         Expression cond = ctx.expression() == null ? null : (Expression)visit(ctx.expression());
         fS.setUpForStmnt(fI, cond);
-        BlockStatement s = ctx.statementNSI() == null ? null : (BlockStatement) visit(ctx.statementNSI());
+        Statement s = ctx.statementNSI() == null ? null : (Statement) visit(ctx.statementNSI());
         fS.setBody(s);
         if (ctx.expressionList() != null) {
             for (MiniJavaParser.ExpressionContext c : ctx.expressionList().expression()) {
@@ -403,21 +400,21 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
     @Override
     public MiniJASTNode visitMakeWhile(MiniJavaParser.MakeWhileContext ctx) {
         WhileStmnt wS = new WhileStmnt();
-        wS.setUpWhile((Expression)visit(ctx.parExpression()), (BlockStatement)visit(ctx.statement()));
+        wS.setUpWhile((Expression)visit(ctx.parExpression()), (Statement)visit(ctx.statement()));
         return wS;
     }
 
     @Override
     public MiniJASTNode visitMakeWhileNSI(MiniJavaParser.MakeWhileNSIContext ctx) {
         WhileStmnt wS = new WhileStmnt();
-        wS.setUpWhile((Expression)visit(ctx.parExpression()), (BlockStatement) visit(ctx.statementNSI()));
+        wS.setUpWhile((Expression)visit(ctx.parExpression()), (Statement) visit(ctx.statementNSI()));
         return wS;
     }
 
     @Override
     public MiniJASTNode visitMakeDo(MiniJavaParser.MakeDoContext ctx) {
         DoStmnt dS = new DoStmnt();
-        dS.setUpDo((BlockStatement)visit(ctx.statement()), (Expression)visit(ctx.parExpression()));
+        dS.setUpDo((Statement)visit(ctx.statement()), (Expression)visit(ctx.parExpression()));
         return dS;
     }
 }

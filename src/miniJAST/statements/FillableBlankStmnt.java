@@ -9,10 +9,10 @@ import miniJAST.exceptions.MiniJASTException;
 
 import java.util.ArrayList;
 
-public class FillableBlankStmnt extends FillableBlank implements BlockStatement {
-    BlockStatement studentStmnt;
+public class FillableBlankStmnt extends FillableBlank implements Statement {
+    Statement studentStmnt;
 
-    public void setStudentStmnt(BlockStatement sS) { studentStmnt = sS; }
+    public void setStudentStmnt(Statement sS) { studentStmnt = sS; }
     public boolean isFilled() { return studentStmnt != null; }
     @Override
     public boolean getIsLeaf() { return false; }
@@ -20,7 +20,7 @@ public class FillableBlankStmnt extends FillableBlank implements BlockStatement 
     public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
     public FillableBlankStmnt(int nReplaced) { super(nReplaced); }
-    public BlockStatement getStudentStmnt() { return studentStmnt; }
+    public Statement getStudentStmnt() { return studentStmnt; }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {

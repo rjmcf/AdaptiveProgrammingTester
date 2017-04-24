@@ -3,14 +3,14 @@ package miniJAST.statements.DoAndWhileLoops;
 import miniJAST.Context;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.expressions.Expression;
-import miniJAST.statements.BlockStatement;
+import miniJAST.statements.Statement;
 import miniJAST.statements.FlowControl;
 
 public class WhileStmnt extends CondLoopBase {
     @Override
     public String stringRepr(int blocksDeep) {
         return pad(blocksDeep) + "while (" + ((Expression)subNodes.get(cond)).stringRepr() + ") \n" +
-                ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
+                ((Statement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
     }
 
     @Override
@@ -18,5 +18,5 @@ public class WhileStmnt extends CondLoopBase {
         return condAndLoop(c);
     }
 
-    public void setUpWhile(Expression c, BlockStatement s) { baseSetUpCondLoop(c, s); }
+    public void setUpWhile(Expression c, Statement s) { baseSetUpCondLoop(c, s); }
 }

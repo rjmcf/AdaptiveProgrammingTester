@@ -8,13 +8,13 @@ public class Block extends StatementBase {
     boolean isOuterMost;
 
     public Block(boolean isOuter) { isOuterMost = isOuter; }
-    public void addBlockStmnt(BlockStatement b) { subNodes.add(b); }
+    public void addBlockStmnt(Statement b) { subNodes.add(b); }
 
     @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep-1) + "{\n";
         for (MiniJASTNode s : subNodes)
-            result += ((BlockStatement)s).stringRepr(blocksDeep) + "\n";
+            result += ((Statement)s).stringRepr(blocksDeep) + "\n";
         result += pad(blocksDeep-1) + "}";
         return result;
     }
@@ -24,9 +24,9 @@ public class Block extends StatementBase {
         if (!isOuterMost)
             stepIn(c);
         for (MiniJASTNode b : subNodes) {
-            checkType((BlockStatement)b, BlockStatement.class);
+            checkType((Statement)b, Statement.class);
 
-            FlowControl fc = ((BlockStatement)b).execute(c);
+            FlowControl fc = ((Statement)b).execute(c);
             switch (fc) {
                 case NONE:
                     break;

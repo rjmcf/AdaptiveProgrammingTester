@@ -6,7 +6,7 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.returnValues.ReturnValues;
 import miniJAST.expressions.returnValues.ReturnValuesBool;
-import miniJAST.statements.BlockStatement;
+import miniJAST.statements.Statement;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
 import miniJAST.types.PrimType;
@@ -15,7 +15,7 @@ public abstract class CondLoopBase extends StatementBase {
     protected int cond;
     protected int stmnt;
 
-    protected void baseSetUpCondLoop(Expression c, BlockStatement s) {
+    protected void baseSetUpCondLoop(Expression c, Statement s) {
         subNodes.clear();
         subNodes.add(c); cond = 0;
         subNodes.add(s); stmnt = 1;
@@ -23,7 +23,7 @@ public abstract class CondLoopBase extends StatementBase {
 
     protected FlowControl condAndLoop(Context c) throws MiniJASTException {
         checkType((Expression)subNodes.get(cond), Expression.class);
-        checkType((BlockStatement)subNodes.get(stmnt), BlockStatement.class);
+        checkType((Statement)subNodes.get(stmnt), Statement.class);
 
         Expression condE = ((Expression)subNodes.get(cond));
 
@@ -36,7 +36,7 @@ public abstract class CondLoopBase extends StatementBase {
         loop:
         while (((ReturnValuesBool)rC).value) {
             stepIn(c);
-            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c);
+            FlowControl fC = ((Statement)subNodes.get(stmnt)).execute(c);
             stepOut(c);
             switch (fC) {
                 case BREAK:

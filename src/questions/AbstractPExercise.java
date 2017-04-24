@@ -9,7 +9,7 @@ import miniJAST.exceptions.TypeException;
 import miniJAST.expressions.Expression;
 import miniJAST.expressions.ExpressionBase;
 import miniJAST.expressions.FillableBlankExpr;
-import miniJAST.statements.BlockStatement;
+import miniJAST.statements.Statement;
 import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.StatementBase;
 import parser.JavaToMiniJava;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractPExercise implements Comparable<AbstractPExercise> {
     protected String question;
     protected String solutionCode;
-    private BlockStatement solution;
+    private Statement solution;
     private int baseDifficulty;
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
@@ -33,7 +33,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         replacedNodes = new Stack<>();
         replacedNodeTreeIndices = new Stack<>();
         lastNodeReplaced = new Stack<>();
-        solution = (BlockStatement)JavaToMiniJava.makeAST(solutionCode);
+        solution = (Statement)JavaToMiniJava.makeAST(solutionCode);
     }
 
     public void runSolution() throws MiniJASTException {
@@ -41,7 +41,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         solution.execute(c);
     }
 
-    public void setSolution(BlockStatement s) {
+    public void setSolution(Statement s) {
         solution = s;
     }
 
@@ -119,7 +119,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
                         if (nodes.peek() instanceof FillableBlankExpr) {
                             ((FillableBlankExpr) nodes.peek()).setStudentExpr((Expression) replacement);
                         } else if (nodes.peek() instanceof FillableBlankStmnt) {
-                            ((FillableBlankStmnt) nodes.peek()).setStudentStmnt((BlockStatement) replacement);
+                            ((FillableBlankStmnt) nodes.peek()).setStudentStmnt((Statement) replacement);
                         } else {
                             throw new TypeException("node is neither Expression not Statement!");
                         }
@@ -299,7 +299,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
             return false;
 
         if (replacedNodeTreeIndices.peek().empty()) {
-            solution = (BlockStatement)replacedNodes.pop();
+            solution = (Statement)replacedNodes.pop();
             replacedNodeTreeIndices.pop();
             lastNodeReplaced = (Stack<Integer>)replacedNodeTreeIndices.peek().clone();
             return true;

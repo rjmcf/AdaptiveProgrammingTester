@@ -18,18 +18,18 @@ public class ForStmnt extends StatementBase {
     protected ArrayList<Integer> updates = new ArrayList<>();
     protected int stmnt;
 
-    public void setUpForStmnt( BlockStatement i, Expression c) {
+    public void setUpForStmnt(Statement i, Expression c) {
         subNodes.clear();
         subNodes.add(i); init = 0;
         subNodes.add(c); condI = 1;
     }
     public void addUpdate(Expression se) { subNodes.add(se); updates.add(subNodes.size()-1); }
-    protected void baseSetBody(BlockStatement s) { subNodes.add(s); stmnt = subNodes.size() - 1; }
+    protected void baseSetBody(Statement s) { subNodes.add(s); stmnt = subNodes.size() - 1; }
 
     @Override
     public String stringRepr(int blocksDeep) {
         String result = pad(blocksDeep) + "for (" + (subNodes.get(init) == null ? "" :
-                ((BlockStatement)subNodes.get(init)).stringRepr(0)) + "; " +
+                ((Statement)subNodes.get(init)).stringRepr(0)) + "; " +
                 (subNodes.get(condI) == null ? "" : ((Expression)subNodes.get(condI)).stringRepr()) + "; ";
         boolean once = true;
         for (int u : updates) {
@@ -40,17 +40,17 @@ public class ForStmnt extends StatementBase {
             }
             result += ((Expression)subNodes.get(u)).stringRepr();
         }
-        result += ") \n" + ((BlockStatement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
+        result += ") \n" + ((Statement)subNodes.get(stmnt)).stringRepr(blocksDeep + 1);
         return result;
     }
 
-    public void setBody(BlockStatement s) { baseSetBody(s); }
+    public void setBody(Statement s) { baseSetBody(s); }
 
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {
-        checkType((BlockStatement)subNodes.get(init), ForInit.class);
+        checkType((Statement)subNodes.get(init), ForInit.class);
         checkType((Expression)subNodes.get(condI), Expression.class);
-        checkType((BlockStatement)subNodes.get(stmnt), BlockStatement.class);
+        checkType((Statement)subNodes.get(stmnt), Statement.class);
 
         stepIn(c);
 
@@ -82,7 +82,7 @@ public class ForStmnt extends StatementBase {
         loop:
         while(((ReturnValuesBool)condR).value) {
             stepIn(c);
-            FlowControl fC = ((BlockStatement)subNodes.get(stmnt)).execute(c);
+            FlowControl fC = ((Statement)subNodes.get(stmnt)).execute(c);
             stepOut(c);
             switch(fC) {
                 case BREAK:

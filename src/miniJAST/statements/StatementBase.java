@@ -12,10 +12,8 @@ import miniJAST.types.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Objects;
 
-public abstract class StatementBase implements BlockStatement {
+public abstract class StatementBase implements Statement {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
     @Override
     public ArrayList<MiniJASTNode> getSubNodes() { return subNodes; }
@@ -77,7 +75,7 @@ public abstract class StatementBase implements BlockStatement {
             throw new TypeException("expected " + c.getName() + " but found " + e.getClass().getName());
     }
 
-    protected void checkType(BlockStatement e, Class<? extends BlockStatement> c) throws MiniJASTException {
+    protected void checkType(Statement e, Class<? extends Statement> c) throws MiniJASTException {
         if (e == null)
             return;
 

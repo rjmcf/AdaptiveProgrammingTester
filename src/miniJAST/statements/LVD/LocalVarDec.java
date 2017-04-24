@@ -4,7 +4,7 @@ import miniJAST.Context;
 import miniJAST.MiniJASTNode;
 import miniJAST.exceptions.*;
 import miniJAST.expressions.returnValues.*;
-import miniJAST.statements.BlockStatement;
+import miniJAST.statements.Statement;
 import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.FlowControl;
 import miniJAST.statements.StatementBase;
@@ -15,7 +15,7 @@ public class LocalVarDec extends StatementBase {
     protected PrimType type;
 
     public void setUpLVD(PrimType t) { subNodes.clear(); type = t; }
-    public void addVarDec(BlockStatement v) { subNodes.add(v); }
+    public void addVarDec(Statement v) { subNodes.add(v); }
 
     @Override
     public String stringRepr(int blocksDeep) {
@@ -26,7 +26,7 @@ public class LocalVarDec extends StatementBase {
                 oneTime = false;
             else
                 result += ", ";
-            result += ((BlockStatement) v).stringRepr(0);
+            result += ((Statement) v).stringRepr(0);
         }
         result += ";";
         return result;
@@ -35,7 +35,7 @@ public class LocalVarDec extends StatementBase {
     @Override
     public FlowControl execute(Context c) throws MiniJASTException {
         for (MiniJASTNode vB : subNodes) {
-            checkType((BlockStatement)vB, VarDeclarator.class);
+            checkType((Statement)vB, VarDeclarator.class);
             VarDeclarator v;
             try {
                 if (vB instanceof FillableBlankStmnt) {
