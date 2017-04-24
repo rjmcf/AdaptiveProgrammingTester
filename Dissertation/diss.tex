@@ -398,39 +398,26 @@ In contrast to adding a blank, the algorithm that removes a blank from the model
 
 This section described the implementation of the algorithms that introduce blanks to and remove them from a MiniJava program.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{The \texttt{ExerciseSetter}}
 
 In this section I describe how I made use of the language and its features to design the \texttt{ExerciseSetter}, one possible way in which students might interface with exercises designed to facilitate the learning of MiniJava.
 
-The \texttt{ExerciseSetter} stores a list of possible exercises in order of increasing difficulty. The initial exercise to be delivered can be easily adjusted by changing the field \texttt{INITIAL\char`_EX}, and the current exercise index is also stored, along with a reference to that exercise. To measure the difficulty of the exercise and the performance of the students, the number of attempts at a solution made, the number of nodes in the solution, and the number of blanks added are also stored. A lot of the code in this class goes toward keeping these values consistent. The \texttt{ExerciseSetter} also stores a reference to an \texttt{OutputStream}, where all the output can be written to. This allows the \texttt{ExerciseSetter} to be plugged in to other peripherals, like the GUI described below. Finally, it also stores a reference to the parser.
+The purpose of the \texttt{ExerciseSetter} class is to demonstrate one way in which students might interact with MiniJava and the question implementation described previously. It was designed with the possibility of being plugged in to yet more peripherals in mind, and as we will see in Section \ref{Sec:GUI} the GUI makes use of it. The basic intuition behind its design comes from the imagined use case of students in a class where the student to teacher ratio is very high, and students may not have instant access to a teacher in the case that they find the presented exercises to easy or too difficult. The challenge in this scenario would be to programmatically detect that the student finds the problem too easy or too hard, and to present an easier or a harder problem respectively. The \texttt{ExerciseSetter} facilitates this by implementing a very simple performance heuristic and by storing several questions of various difficulties, such that ideally all students could be catered too. Using the performance heuristic, the \texttt{ExerciseSetter} attempts to adjust the problems difficulty appropriately.
 
-A lot of the methods in this class are helper methods, simply passing messages between the exercise and the student. The important ones are \texttt{fillBlank}, \texttt{reportPerformance}, and \texttt{adjustQuestion}.
+In order to programmatically present easier or harder questions, it is sensible to have the list of exercises sorted according to difficulty. To do this, \texttt{AbstractPExercise} actually implements the \texttt{Comparable} interface, comparing based on the difficulty of the questions involved. The list of exercises in \texttt{ExerciseSetter} is then kept sorted as new exercises are added.
 
-\texttt{fillBlank} has two method signatures, one that takes a \texttt{MiniJASTNode}, and one that takes a \texttt{String}. The one that takes a \texttt{MiniJASTNode} is trivial and thus unimportant, but the one that takes a \texttt{String} is more interesting. This method makes use of the parser in an interesting way, as there is of course some ambiguity in the language. The specific ambiguity comes from certain code snippets having the potential to be both \texttt{Expression}s and \texttt{Statement}s. An example of this is the code snippet \texttt{total = 1}. This can be parsed as an assignment, and would thus be classed an \texttt{Expression}, or a variable declaration, where the surrounding context might be \texttt{int total = 1;}, which would categorise this snippet as a \texttt{Statement}. To make the decision, the \texttt{ExerciseSetter} first checks if the blank being filled represents an \texttt{Expression} or a \texttt{Statement}, and sets the entry point for the parser appropriately.
+The performance heuristic operates on the assumption that the performance of the students can be inferred from the number of attempts at solving the problem before their solution was correct and the comparison between the number of nodes in the model solution tree and the number of nodes in the student's solution tree. The more attempts a student required to solve the problem correctly, the more difficult they found the problem, it is assumed. Also, if a student used many more nodes to solve the problem than the model solution did, then it is likely that they haven't understood a core concept being tested: they may have unnecessarily unrolled a loop for example. This heuristic is found in the \texttt{reportPerformance} method of the \texttt{ExerciseSetter}, a method which returns a \texttt{float} value. If the returned value is positive, then the student supposedly did well, and the next problem should be harder, while if the returned value is negative the opposite is true. The magnitude of the float indicates the severity of the adjustment that should be made.
 
-\texttt{reportPerformance} is a possible implementation of a performance heuristic. Performance is based on the number of attempts the exercise took to solve, and the number of nodes in the solution compared with the model solution. The more attempts required and the more nodes in the solution, the worse the performance. A negative result here indicates that the next exercise should be easier, while a positive result indicates it should be harder.
+The class also provides an interface through which students may fill blanks by submitting their own code. There are two \texttt{fillBlank} methods in the \texttt{ExerciseSetter} class, one which takes a \texttt{MiniJASTNode} reference and uses the exercise's \texttt{fillBlank} method directly to fill the desired blank. The other takes a \texttt{String} argument containing the code with which to fill the blank. To get the representation of this code to actually fill the blank, of course the parser must be used, but this presents an interesting problem. Certain code snippets have the potential to be both \texttt{Expression}s and \texttt{Statement}s. An example of this is the code snippet \texttt{total = 1}. This can be parsed as an assignment, and would thus be classed an \texttt{Expression}, or a variable declaration, where the surrounding context might be \texttt{int total = 1;}, which would categorise this snippet as a \texttt{Statement}. Fortunately the parser generated by the ANTLR tool has a solution to this, as the starting terminal symbol for the grammar is not fixed. The \texttt{ExerciseSetter} can check whether the blank being filled represents an \texttt{Expression} or a \texttt{Statement}, and then sets the entry point of the parser to be either \texttt{expression} or \texttt{blockStatement} appropriately. 
 
-\texttt{adjustQuestion} is a possible implementation of how the performance might influence the difficulty of the next problem. If the next exercise needs to be harder, then the \texttt{ExerciseSetter} adds blanks to the solution until either the exercise is hard enough, or the entire solution is blank. If the latter occurs, then the \texttt{ExerciseSetter} attempts to present a harder problem, and calculate how much of it should be blank. If instead the exercise needs to be easier, then the \texttt{ExerciseSetter} removes blanks from the solution until either the exercise is easy enough, or there are no blanks in the solution. If the latter occurs, then the \texttt{ExerciseSetter} attempts to present an easier problem and calculates how much of it should be blank.
+If, once an exercise has been solved, the next exercise needs to be harder, according to the performance heuristic, then the \texttt{ExerciseSetter} should add blanks to the solution until either the exercise is hard enough, or the entire solution is blank. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present a harder problem and calculate how much of it should be blank to give the required difficulty. If instead the exercise needs to be easier, then the \texttt{ExerciseSetter} should remove blanks from the solution until either the exercise is easy enough, or there are no blanks in the solution. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present an easier problem and calculate how much of it should be blank. This functionality is implemented in the \texttt{adjustQuestion} method of the \texttt{ExerciseSetter}.
+
+To enable it to be plugged in to other peripherals, the \texttt{ExerciseSetter} simply propagates any custom exceptions raised during execution of the solution upwards, and returns \texttt{String}s when asked to present the current question or print the current solution.
 
 In this section I have detailed one of the ways that students might interface with MiniJava through the \texttt{ExerciseSetter}. This is only an example of a possible use for the tools, but shows how powerful they can be.
 
 \section{The GUI}
+\label{Sec:GUI}
 
 In this section I describe the implementation and function of the GUI peripheral.
 
