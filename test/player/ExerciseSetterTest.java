@@ -73,8 +73,9 @@ public class ExerciseSetterTest {
 
     @Test
     public void testReportPerformance() throws Exception {
-
         ArrayList<Integer> blankIds = setter.getBlankIds();
+
+        System.out.println(setter.getSolution());
 
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
@@ -120,8 +121,10 @@ public class ExerciseSetterTest {
             //pass
         }
 
+        System.out.println(setter.getSolution());
+
         blankIds = setter.getBlankIds();
-        setter.fillBlank(blankIds.get(0), total);
+        setter.fillBlank(blankIds.get(0), one);
         setter.fillBlank(blankIds.get(1), six);
         setter.fillBlank(blankIds.get(3), one);
         setter.fillBlank(blankIds.get(2), nId);

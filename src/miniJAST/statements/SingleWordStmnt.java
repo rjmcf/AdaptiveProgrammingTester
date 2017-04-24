@@ -16,15 +16,6 @@ public enum SingleWordStmnt implements BlockStatement{
         public boolean getIsLeaf() { return true; }
 
         @Override
-        public boolean getIsMarked() { return false; }
-
-        @Override
-        public void setIsLeaf(boolean b) { }
-
-        @Override
-        public void setMarked(boolean b) { }
-
-        @Override
         public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
         @Override
@@ -45,15 +36,6 @@ public enum SingleWordStmnt implements BlockStatement{
 
         @Override
         public boolean getIsLeaf() { return true; }
-
-        @Override
-        public boolean getIsMarked() { return false; }
-
-        @Override
-        public void setIsLeaf(boolean b) { }
-
-        @Override
-        public void setMarked(boolean b) { }
 
         @Override
         public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
@@ -78,15 +60,6 @@ public enum SingleWordStmnt implements BlockStatement{
         public boolean getIsLeaf() { return true; }
 
         @Override
-        public boolean getIsMarked() { return false; }
-
-        @Override
-        public void setIsLeaf(boolean b) { }
-
-        @Override
-        public void setMarked(boolean b) { }
-
-        @Override
         public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }
 
         @Override
@@ -107,15 +80,6 @@ public enum SingleWordStmnt implements BlockStatement{
 
         @Override
         public boolean getIsLeaf() { return true; }
-
-        @Override
-        public boolean getIsMarked() { return false; }
-
-        @Override
-        public void setIsLeaf(boolean b) { }
-
-        @Override
-        public void setMarked(boolean b) { }
 
         @Override
         public ArrayList<? extends MiniJASTNode> getSubNodes() { return null; }

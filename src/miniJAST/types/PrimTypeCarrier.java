@@ -22,21 +22,6 @@ public class PrimTypeCarrier implements MiniJASTNode {
     }
 
     @Override
-    public boolean getIsMarked() {
-        return false;
-    }
-
-    @Override
-    public void setIsLeaf(boolean b) {
-
-    }
-
-    @Override
-    public void setMarked(boolean b) {
-
-    }
-
-    @Override
     public ArrayList<? extends MiniJASTNode> getSubNodes() {
         return null;
     }

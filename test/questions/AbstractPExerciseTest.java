@@ -22,7 +22,9 @@ public class AbstractPExerciseTest {
 
     @Test
     public void testAddBlank() throws Exception {
-        while (test.addBlank());
+        System.out.println(test.printSolution());
+        while (test.addBlank())
+            System.out.println(test.printSolution());
 
         assertFalse(test.addBlank());
     }
@@ -59,12 +61,8 @@ public class AbstractPExerciseTest {
         test.addBlank();
         assertTrue(test.removeBlank());
 
-        test.makeHarder(20);
-        assertTrue(test.removeBlank());
-        assertTrue(test.removeBlank());
-        assertTrue(test.removeBlank());
-        assertTrue(test.removeBlank());
-        assertTrue(test.removeBlank());
+        test.makeHarder(21);
+        assertFalse(test.addBlank());
 
         assertTrue(test.removeBlank());
         assertTrue(test.removeBlank());
@@ -82,6 +80,14 @@ public class AbstractPExerciseTest {
         assertTrue(test.removeBlank());
         assertTrue(test.removeBlank());
         assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+        assertTrue(test.removeBlank());
+
         assertTrue(test.removeBlank());
 
         assertFalse(test.removeBlank());

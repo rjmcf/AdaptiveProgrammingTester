@@ -14,10 +14,7 @@ import miniJAST.statements.FillableBlankStmnt;
 import miniJAST.statements.StatementBase;
 import parser.JavaToMiniJava;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ListIterator;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,14 +23,13 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     protected String solutionCode;
     private BlockStatement solution;
     private int baseDifficulty;
-    private boolean replaceMarked = false;
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
+    private Stack<Integer> lastNodeReplaced = new Stack<>();
     public abstract boolean checkSolved();
     protected Context c;
 
     public void setUp() {
-        replaceMarked = false;
         replacedNodes = new Stack<>();
         replacedNodeTreeIndices = new Stack<>();
         solution = (BlockStatement)JavaToMiniJava.makeAST(solutionCode);
@@ -193,68 +189,70 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         Stack<MiniJASTNode> nodes = new Stack<>();
         Stack<MiniJASTNode> parents = new Stack<>();
         Stack<Integer> index = new Stack<>();
-        Stack<Boolean> childrenBlank = new Stack<>();
-        nodes.add(solution);
+        Collections.reverse(lastNodeReplaced);
+        boolean needToPop = false;
+        nodes.push(solution);
+
+        while(!lastNodeReplaced.empty()) {
+            needToPop = true;
+            parents.push(nodes.peek());
+            int i = lastNodeReplaced.pop();
+            index.push(i);
+            ArrayList<MiniJASTNode> allChildren = new ArrayList<>();
+            for (MiniJASTNode n : nodes.peek().getSubNodes()) {
+                allChildren.add(n);
+            }
+            List<? extends MiniJASTNode> newNodes = allChildren.subList(i, allChildren.size());
+            Collections.reverse(newNodes);
+            for (MiniJASTNode n : newNodes) {
+                nodes.push(n);
+            }
+        }
+        if (needToPop) {
+            nodes.pop();
+            int i = index.pop();
+            index.push(i + 1);
+        }
 
         while (true) {
             while (!nodes.empty()) {
                 if (!parents.empty() && nodes.peek() == parents.peek()) {
-                    // mark if children leaves
-                    if (childrenBlank.peek()) {
-                        nodes.peek().setMarked(!replaceMarked);
-                        nodes.peek().setIsLeaf(true);
-                    }
                     // pop node increase index
                     nodes.pop();
                     parents.pop();
                     index.pop();
                     if (!index.empty()) {
                         int i = index.pop();
-                        index.push(i+1);
+                        index.push(i + 1);
                     }
-                    childrenBlank.pop();
                     continue;
                 }
                 if (nodes.peek().getIsLeaf()) {
-                    if (nodes.peek().getIsMarked() == replaceMarked) {
-                        NodeCount replacedNodes;
-                        // if parents is empty, replace solution
-                        if (parents.empty()) {
-                            // Store the replaced node and its location so it can be reinserted
-                            this.replacedNodes.push(solution);
-                            replacedNodeTreeIndices.push(index);
+                    NodeCount replacedNodes;
+                    // Store the replaced node and its location so it can be reinserted
+                    this.replacedNodes.push(nodes.peek());
+                    replacedNodeTreeIndices.push((Stack<Integer>)index.clone());
 
-                            replacedNodes = solution.getTreeSize();
-                            solution = new FillableBlankStmnt(replacedNodes.empty + replacedNodes.filled);
-                            return true;
-                        }
-                        // replace parent.peek().getSubNodes.get(index.peek())
+                    // if parents is empty, replace solution
+                    if (parents.empty()) {
 
-                        // Store the replaced node and its location so it can be reinserted
-                        this.replacedNodes.push(nodes.peek());
-                        replacedNodeTreeIndices.push(index);
-
-                        // Get number of nodes being replaced
-                        replacedNodes = nodes.peek().getTreeSize();
-                        if (nodes.peek() instanceof StatementBase) {
-                            ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
-                                    new FillableBlankStmnt(replacedNodes.empty + replacedNodes.filled));
-                        } else if (nodes.peek() instanceof ExpressionBase) {
-                            ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
-                                    new FillableBlankExpr(replacedNodes.empty + replacedNodes.filled));
-                        } else {
-                            throw new ClassCastException("Node was neither Expression nor Statement!");
-                        }
+                        replacedNodes = solution.getTreeSize();
+                        solution = new FillableBlankStmnt(replacedNodes.empty + replacedNodes.filled);
                         return true;
-                    } else {
-                        // pop node, increase index, record that a child is not blank
-                        nodes.pop();
-                        int i = index.pop();
-                        index.push(i + 1);
-                        childrenBlank.pop();
-                        childrenBlank.push(false);
-                        continue;
                     }
+                    // Get number of nodes being replaced
+                    replacedNodes = nodes.peek().getTreeSize();
+                    if (nodes.peek() instanceof StatementBase) {
+                        ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
+                                new FillableBlankStmnt(replacedNodes.empty + replacedNodes.filled));
+                    } else if (nodes.peek() instanceof ExpressionBase) {
+                        ((ArrayList<MiniJASTNode>) parents.peek().getSubNodes()).set(index.peek(),
+                                new FillableBlankExpr(replacedNodes.empty + replacedNodes.filled));
+                    } else {
+                        throw new ClassCastException("Node was neither Expression nor Statement!");
+                    }
+                    lastNodeReplaced = index;
+                    return true;
                 }
                 if (nodes.peek() instanceof FillableBlank) {
                     // if parents is empty, solution is blank, so can't add blank
@@ -270,23 +268,16 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
                 parents.push(nodes.peek());
                 // push 0 onto indices
                 index.push(0);
-                // update current childrenBlank to false if exists
-                if (!childrenBlank.empty()) {
-                    childrenBlank.pop();
-                    childrenBlank.push(false);
-                }
-                // push true onto childrenLeaves
-                childrenBlank.push(true);
                 // push children onto nodes
                 ArrayList<? extends MiniJASTNode> children = nodes.peek().getSubNodes();
                 ListIterator<? extends MiniJASTNode> it = children.listIterator(children.size());
                 while (it.hasPrevious())
                     nodes.push(it.previous());
             }
-            // invert which marking is being searched for
-            replaceMarked ^= true;
-            nodes.add(solution);
+            nodes.push(solution);
         }
+
+
     }
     // TODO fix how ForInits and ExprStmnts are handled
 
@@ -314,28 +305,13 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
 
         MiniJASTNode toReplace = replacedNodes.pop();
         MiniJASTNode parent = solution;
-        boolean alwaysLast = true;
-        Stack<Integer> indicesRev = replacedNodeTreeIndices.pop();
-        Stack<Integer> indices = new Stack<>();
-        while (!indicesRev.empty()) {
-            indices.push(indicesRev.pop());
-        }
+        Stack<Integer> indices = replacedNodeTreeIndices.pop();
+        Collections.reverse(indices);
         while (indices.size() > 1) {
-            // check if it was the last index in the parent's subnodes.
-            if (indices.peek() < parent.getSubNodes().size() - 1)
-                alwaysLast = false;
-            // Make sure the parent is not a leaf
-            parent.setIsLeaf(false);
             parent = parent.getSubNodes().get(indices.pop());
         }
 
-        // Make sure parent is not a leaf
-        parent.setIsLeaf(false);
         ((ArrayList<MiniJASTNode>)parent.getSubNodes()).set(indices.pop(), toReplace);
-        if (alwaysLast) {
-            // invert since it was just inverted by last addBlank
-            replaceMarked ^= true;
-        }
         return true;
     }
 

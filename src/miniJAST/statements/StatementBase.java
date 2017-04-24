@@ -1,6 +1,7 @@
 package miniJAST.statements;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.MiniJASTNode;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
@@ -18,20 +19,15 @@ public abstract class StatementBase implements BlockStatement {
     protected ArrayList<MiniJASTNode> subNodes = new ArrayList<>();
     @Override
     public ArrayList<MiniJASTNode> getSubNodes() { return subNodes; }
-    private boolean isLeaf;
     @Override
     public boolean getIsLeaf() {
-        if (!isLeaf)
-            isLeaf = subNodes.size() == 0;
-        return isLeaf;
+        if (subNodes.size() == 0)
+            return true;
+        for (MiniJASTNode n : subNodes)
+            if (!(n instanceof FillableBlank))
+                return false;
+        return true;
     }
-    @Override
-    public void setIsLeaf(boolean b) { isLeaf = b; }
-    private boolean isMarked = false;
-    @Override
-    public boolean getIsMarked() { return isMarked; }
-    @Override
-    public void setMarked(boolean b) { isMarked = b; }
     protected void stepIn(Context c) {
         HashMap<String, Type> newMap1 = new HashMap<>();
         HashMap<String, Object> newMap2 = new HashMap<>();

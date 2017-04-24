@@ -1,6 +1,7 @@
 package miniJAST.expressions;
 
 import miniJAST.Context;
+import miniJAST.FillableBlank;
 import miniJAST.NodeCount;
 import miniJAST.exceptions.MiniJASTException;
 import miniJAST.exceptions.TypeException;
@@ -12,20 +13,15 @@ public abstract class ExpressionBase implements Expression {
     protected ArrayList<Expression> subNodes = new ArrayList<>();
     @Override
     public ArrayList<Expression> getSubNodes() { return subNodes; }
-    private boolean isLeaf;
     @Override
     public boolean getIsLeaf() {
-        if (!isLeaf)
-            isLeaf = subNodes.size() == 0;
-        return isLeaf;
+        if (subNodes.size() == 0)
+            return true;
+        for (Expression n : subNodes)
+            if (!(n instanceof FillableBlank))
+                return false;
+        return true;
     }
-    @Override
-    public void setIsLeaf(boolean b) { isLeaf = b; }
-    private boolean isMarked = false;
-    @Override
-    public boolean getIsMarked() { return isMarked; }
-    @Override
-    public void setMarked(boolean b) { isMarked = b; }
     @Override
     public abstract ReturnValues evaluate(Context c) throws MiniJASTException;
     @Override

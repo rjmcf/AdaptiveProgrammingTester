@@ -29,6 +29,9 @@ import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.PrimTypeCarrier;
 import miniJAST.types.PrimType;
 
+import java.util.Collections;
+import java.util.List;
+
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
 
     @Override
