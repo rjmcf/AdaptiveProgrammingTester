@@ -372,13 +372,12 @@ The difficulty of a problem is based on the difficulty of the question itself an
   \label{Fig:Tree}
 \end{wrapfigure}
 
+Figure \ref{Fig:Tree} shows an example AST, with its nodes numbered for reference. Using this tree we can compare different algorithms for selecting nodes, and see which best fulfils our requirements. Since we want to be able to add blanks to the model solution until the entire solution is blank, we should consider traversal algorithms. The algorithm will terminate when a node is selected to be made blank, and when it is next run it should (effectively) pick up from the same point. Since, clearly, the first choice of node to be replaced should be a leaf (any other choice would cause a larger percentage increase of the number of blank nodes, since such a node would have children that would simultaneously be made blank), some standard algorithms suggest themselves. The Depth First Traversal algorithm, when run on the example tree, would produce the output: 4,~5,~2,~8,~7,~6,~3,~1. Notice that node 2 is visited before node 8. This algorithm would concentrate all the blanks in the left hand side of the tree, reaching up to the left-most child of the root before considering the right hand side of the tree. This renders the Depth First Traversal algorithm unfit for our purposes. Another potential traversal algorithm to consider is the Reverse Level Order Traversal algorithm, which acts something like a Breadth First Traversal from the leaves upwards. When run on the example tree, this algorithm would produce the output: 8,~7,~4,~5,~6,~2,~3,~1. This algorithm suffers from a similar problem: node 7 is visited before node 4. This results in the blanks being concentrated on areas of the tree that have the deepest nodes, neglecting all other areas. This again means that the Reverse Level Order Traversal algorithm is not fit for our purposes. The ideal output for our algorithm would be as follows: 4,~5,~8,~2,~7,~6,~3,~1. This does a good job of distributing blanks across the tree without reaching the upper levels of the tree too soon. Since the tree is unbalanced, once we have visited node 2 we have no choice but to visit the long chain of nodes on the right hand side of the tree, but at least there are a decent number of blanks on both sides of the tree at that point. This output can be attained by a traversal algorithm that operates as described below, but before that it is worth making a somewhat subtle clarification. When describing these algorithm it has been useful to think of them as traversal algorithms, even though I would not be using them that way. At each execution of the algorithm, a single node is made blank. On the next execution, a different node will be made blank. After a finite number of executions, the entire solution will be blank. Since every node is selected exactly once, the combination 
+\begin{enumerate}
+\item{}
+\end{enumerate}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{Searches}
-\caption{A figure demonstrating the different behaviour of a depth first search algorithm and my \texttt{addBlank} algorithm.}
-\label{Fig:Searches}
-\end{figure}
+\mbox{}\\
 
 This section described the implementation of the algorithms that introduce blanks to and remove them from a MiniJava program.
 
