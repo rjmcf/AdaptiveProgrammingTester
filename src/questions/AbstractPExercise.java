@@ -32,6 +32,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     public void setUp() {
         replacedNodes = new Stack<>();
         replacedNodeTreeIndices = new Stack<>();
+        lastNodeReplaced = new Stack<>();
         solution = (BlockStatement)JavaToMiniJava.makeAST(solutionCode);
     }
 
@@ -300,12 +301,16 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
         if (replacedNodeTreeIndices.peek().empty()) {
             solution = (BlockStatement)replacedNodes.pop();
             replacedNodeTreeIndices.pop();
+            lastNodeReplaced = (Stack<Integer>)replacedNodeTreeIndices.peek().clone();
             return true;
         }
 
         MiniJASTNode toReplace = replacedNodes.pop();
         MiniJASTNode parent = solution;
         Stack<Integer> indices = replacedNodeTreeIndices.pop();
+        if (!replacedNodeTreeIndices.empty())
+            lastNodeReplaced = (Stack<Integer>)replacedNodeTreeIndices.peek().clone();
+
         Collections.reverse(indices);
         while (indices.size() > 1) {
             parent = parent.getSubNodes().get(indices.pop());

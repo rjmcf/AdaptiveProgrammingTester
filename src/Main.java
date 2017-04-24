@@ -1,11 +1,13 @@
-import questions.FillArrayToNExercise;
+import questions.FactorialExercise;
 
 public class Main {
     public static void main(String[] args) {
-        FillArrayToNExercise e = new FillArrayToNExercise(10);
-        e.setUp();
-        System.out.println(e.printSolution());
-        while(e.addBlank())
-            System.out.println(e.printSolution());
+        FactorialExercise fE = new FactorialExercise(6);
+        fE.setUp();
+        System.out.println(fE.printSolution());
+        for (int i = 0; i < 7; i++) {
+            fE.addBlank();
+            System.out.println(fE.printSolution());
+        }
     }
 }
