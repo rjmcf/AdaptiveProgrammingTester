@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
 
-public class TestForm {
+public class TestForm{
 
     private JPanel panel;
     private JSlider blankSlider;
@@ -18,6 +18,7 @@ public class TestForm {
     private JTextArea display;
     private JButton runButton;
     private JTextField questionField;
+    private JTextArea output;
     private static ExerciseSetter eS;
     private static String question;
     private static String solution;
@@ -44,14 +45,13 @@ public class TestForm {
                 try {
                     String submitted = display.getText();
                     eS.setSolution(submitted);
-                    if (eS.runSolution()) {
-                        display.append("\nExercise completed!\n");
+                    if (eS.submitAttempt()) {
+                        output.setText("Exercise completed!\n");
                     } else {
-                        //TODO why is VariableDecException caught and not thrown?
-                        display.append("\nA mistake was made somewhere.\n");
+                        output.setText("A mistake was made somewhere.\n");
                     }
                 } catch (MiniJASTException me) {
-                    display.append("\nA mistake was made somewhere. The following error was raised: \n\"" + me.getMessage() + "\"\n");
+                    output.setText("A mistake was made somewhere. The following error was raised: \n\"" + me.getMessage() + "\"\n");
                 }
             }
         });
@@ -66,7 +66,7 @@ public class TestForm {
 
     public static void main(String[] args) {
         eS = new ExerciseSetter(new StringWriter());
-        JFrame frame = new JFrame("TestForm");
+        JFrame frame = new JFrame("Adaptive Programming Exercises GUI");
         frame.setContentPane(new TestForm().panel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
@@ -79,13 +79,6 @@ public class TestForm {
         Difficulty diff = eS.getCurrentDifficulty();
         int nodes = eS.getNumNodes();
         baseSlider = new JSlider(min, max, diff.base);
-        baseSlider.setMajorTickSpacing(1);
-        baseSlider.setPaintTicks(true);
-        baseSlider.setSnapToTicks(true);
         blankSlider = new JSlider(1, nodes, diff.nodesBlank);
-        blankSlider.setMajorTickSpacing(5);
-        blankSlider.setMinorTickSpacing(1);
-        blankSlider.setPaintTicks(true);
-        blankSlider.setSnapToTicks(true);
     }
 }
