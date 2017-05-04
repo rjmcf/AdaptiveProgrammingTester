@@ -1,6 +1,5 @@
-package player;
+package entryPoints;
 
-import entryPoints.ExerciseSetter;
 import miniJAST.exceptions.BlankEmptyException;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
@@ -12,7 +11,6 @@ import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
 import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
-import miniJAST.statements.PrintStatement;
 import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -207,8 +205,6 @@ public class ExerciseSetterTest {
         assertTrue(setter.getCurrentDifficulty().nodesBlank > diff.nodesBlank);
         diff = setter.getCurrentDifficulty();
 
-        setter.presentQuestion();
-
         for (int i = 0; i < 3; i++)
             try {
                 assertFalse(setter.submitAttempt());
@@ -219,10 +215,6 @@ public class ExerciseSetterTest {
 
         VarDeclarator n = new VarDeclarator();
         n.setUpVarDec("n", false, six);
-        LocalVarDec lvd = new LocalVarDec();
-        lvd.setUpLVD(PrimType.INT);
-        lvd.addVarDec(total);
-        lvd.addVarDec(n);
 
         RelationExpr gT = new RelationExpr();
         gT.setUpRelationExpr(RelationOp.GT, nId, one);
@@ -234,9 +226,14 @@ public class ExerciseSetterTest {
         times.setUpAssignExpr(totId, AssignOp.TIMESEQ, minus);
 
         blankIds = setter.getBlankIds();
-        assertTrue(setter.fillBlank(blankIds.get(0), lvd));
-        assertTrue(setter.fillBlank(blankIds.get(1), gT));
-        assertTrue(setter.fillBlank(blankIds.get(2), times));
+        assertTrue(setter.fillBlank(blankIds.get(0), total));
+        assertTrue(setter.fillBlank(blankIds.get(1), n));
+        assertTrue(setter.fillBlank(blankIds.get(2), nId));
+        assertTrue(setter.fillBlank(blankIds.get(3), one));
+        assertTrue(setter.fillBlank(blankIds.get(4), totId));
+        assertTrue(setter.fillBlank(blankIds.get(5), nId));
+
+        setter.presentQuestion();
         assertTrue(setter.submitAttempt());
 
         assertTrue(setter.reportPerformance() < 0);

@@ -92,10 +92,6 @@ public class ExerciseSetter {
         return exercise.printSolution();
     }
 
-    public void setSolution(Statement solution) {
-        exercise.setSolution(solution);
-    }
-
     public void setSolution(String s) {
         exercise.setSolution((Statement)JavaToMiniJava.makeAST(s));
     }
@@ -190,7 +186,6 @@ public class ExerciseSetter {
     }
 
     public float reportPerformance() {
-        // TODO improve
         // Negative means bad, positive means good
         float result = (2.5f - attempts) * 2;
         if (result < -10)
@@ -198,6 +193,6 @@ public class ExerciseSetter {
         int difference = numNodes - exercise.numNodes();
         int multiplier = difference < 0 ? -1 : 1;
         result += (difference * difference * multiplier) / 10f;
-        return result;
+        return result / 4f;
     }
 }
