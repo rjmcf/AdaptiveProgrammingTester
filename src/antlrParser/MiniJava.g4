@@ -49,6 +49,7 @@ entry
 	| blockStatement+																# blockStatementsEntry
 	| statementTop																	# statementEntry
 	| expression																	# expressionEntry
+	| BLANK																			# blankBlock
 	;									
 
 block [boolean isOuter]
@@ -73,6 +74,7 @@ statement
     |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement	# makeFor
     |   WHILE parExpression statement												# makeWhile
     |   statementNTS																# makeStatementNTS
+    | 	BLANK																		# blankStmnt
     ;
     
 statementNSI
@@ -80,7 +82,8 @@ statementNSI
 	| 	IF parExpression statementNSI ELSE statementNSI								# makeITENSI
 	|   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statementNSI # makeForNSI
     |   WHILE parExpression statementNSI											# makeWhileNSI
-    |	statementNTS																# makeStatementNTSNSI												
+    |	statementNTS																# makeStatementNTSNSI	
+    | 	BLANK																		# blankStmntNSI										
     ;
     
 statementNTS
@@ -136,6 +139,7 @@ expression // Most binding comes first!
         |   op=DIV_ASSIGN
         )
         expression																# assignExpr
+    | BLANK																		# blankExpr
     ;
     
 // VARIABLES AND LITERALS
@@ -147,6 +151,7 @@ variableDeclarators
 variableDeclarator
     :   Identifier LBRACK RBRACK (ASSIGN variableInitializer)? 					# arrayVarDec 
     |	Identifier (ASSIGN variableInitializer)?				 				# singleVarDec
+    | 	BLANK																	# blankVarDec
     ;
 
 variableInitializer 
@@ -178,6 +183,9 @@ literal
     ;
 
 // LEXER
+
+BLANK		: '.'+
+			| '.'+ '(' IntegerLiteral ')' '.'+;
 
 // §3.9 Keywords
 

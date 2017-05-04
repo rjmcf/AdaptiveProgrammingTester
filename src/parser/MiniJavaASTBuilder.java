@@ -4,6 +4,7 @@ import antlrParser.MiniJavaBaseVisitor;
 import antlrParser.MiniJavaParser;
 import miniJAST.MiniJASTNode;
 import miniJAST.expressions.Expression;
+import miniJAST.expressions.FillableBlankExpr;
 import miniJAST.expressions.Id;
 import miniJAST.expressions.Literal;
 import miniJAST.expressions.arithExpr.AddExpr;
@@ -30,6 +31,31 @@ import miniJAST.types.PrimTypeCarrier;
 import miniJAST.types.PrimType;
 
 public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
+
+    @Override
+    public MiniJASTNode visitBlankBlock(MiniJavaParser.BlankBlockContext ctx) {
+        return new FillableBlankStmnt(0);
+    }
+
+    @Override
+    public MiniJASTNode visitBlankStmnt(MiniJavaParser.BlankStmntContext ctx) {
+        return new FillableBlankStmnt(0);
+    }
+
+    @Override
+    public MiniJASTNode visitBlankStmntNSI(MiniJavaParser.BlankStmntNSIContext ctx) {
+        return new FillableBlankStmnt(0);
+    }
+
+    @Override
+    public MiniJASTNode visitBlankExpr(MiniJavaParser.BlankExprContext ctx) {
+        return new FillableBlankExpr(0);
+    }
+
+    @Override
+    public MiniJASTNode visitBlankVarDec(MiniJavaParser.BlankVarDecContext ctx) {
+        return new FillableBlankStmnt(0);
+    }
 
     @Override
     public MiniJASTNode visitBlock(MiniJavaParser.BlockContext ctx) {
@@ -119,7 +145,7 @@ public class MiniJavaASTBuilder extends MiniJavaBaseVisitor<MiniJASTNode> {
         lvd.setUpLVD(((PrimTypeCarrier)visit(ctx.primitiveType())).type);
 
         for (MiniJavaParser.VariableDeclaratorContext c : ctx.variableDeclarators().variableDeclarator()) {
-            VarDeclarator vD = (VarDeclarator)visit(c);
+            Statement vD = (Statement)visit(c);
             lvd.addVarDec(vD);
         }
         return lvd;

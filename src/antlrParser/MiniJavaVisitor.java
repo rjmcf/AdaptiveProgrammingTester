@@ -39,6 +39,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpressionEntry(MiniJavaParser.ExpressionEntryContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code blankBlock}
+	 * labeled alternative in {@link MiniJavaParser#entry}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlankBlock(MiniJavaParser.BlankBlockContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MiniJavaParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -65,6 +72,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMakeVarDec(MiniJavaParser.MakeVarDecContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blankBlockStmnt}
+	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlankBlockStmnt(MiniJavaParser.BlankBlockStmntContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code stmnt}
 	 * labeled alternative in {@link MiniJavaParser#statementTop}.
@@ -122,6 +136,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMakeStatementNTS(MiniJavaParser.MakeStatementNTSContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code blankStmnt}
+	 * labeled alternative in {@link MiniJavaParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlankStmnt(MiniJavaParser.BlankStmntContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code makeBlockNSI}
 	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
 	 * @param ctx the parse tree
@@ -156,6 +177,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMakeStatementNTSNSI(MiniJavaParser.MakeStatementNTSNSIContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blankStmntNSI}
+	 * labeled alternative in {@link MiniJavaParser#statementNSI}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlankStmntNSI(MiniJavaParser.BlankStmntNSIContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code makeDo}
 	 * labeled alternative in {@link MiniJavaParser#statementNTS}.
@@ -294,6 +322,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultExpr(MiniJavaParser.MultExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code blankExpr}
+	 * labeled alternative in {@link MiniJavaParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlankExpr(MiniJavaParser.BlankExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code postInc}
 	 * labeled alternative in {@link MiniJavaParser#expression}.
 	 * @param ctx the parse tree
@@ -362,6 +397,13 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSingleVarDec(MiniJavaParser.SingleVarDecContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blankVarDec}
+	 * labeled alternative in {@link MiniJavaParser#variableDeclarator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlankVarDec(MiniJavaParser.BlankVarDecContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code arrayInitVals}
 	 * labeled alternative in {@link MiniJavaParser#variableInitializer}.
