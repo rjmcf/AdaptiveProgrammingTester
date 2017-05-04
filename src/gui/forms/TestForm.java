@@ -19,6 +19,7 @@ public class TestForm{
     private JButton runButton;
     private JTextField questionField;
     private JTextArea output;
+    private JButton nextQuestionButton;
     private static ExerciseSetter eS;
     private static String question;
     private static String solution;
@@ -35,6 +36,20 @@ public class TestForm{
                 int nodes = eS.getNumNodes();
                 blankSlider.setMaximum(nodes);
                 blankSlider.setValue(diff.nodesBlank);
+                nextQuestionButton.setVisible(false);
+                setQuestion();
+            }
+        });
+
+        nextQuestionButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Difficulty diff = eS.getCurrentDifficulty();
+                baseSlider.setValue(diff.base);
+                int nodes = eS.getNumNodes();
+                blankSlider.setMaximum(nodes);
+                blankSlider.setValue(diff.nodesBlank);
+                nextQuestionButton.setVisible(false);
                 setQuestion();
             }
         });
@@ -47,6 +62,15 @@ public class TestForm{
                     eS.setSolution(submitted);
                     if (eS.submitAttempt()) {
                         output.setText("Exercise completed!\n");
+                        output.append("This exercise took " + eS.getAttempts() + " attempts.\n");
+                        String adjustment = eS.reportPerformance() > 0 ? "harder" : "easier";
+                        output.append("The next question will be " + adjustment + ".\n");
+                        try {
+                            eS.adjustQuestion();
+                            nextQuestionButton.setVisible(true);
+                        } catch (ArrayIndexOutOfBoundsException aE) {
+                            output.append("There are no more " + adjustment + " exercises!");
+                        }
                     } else {
                         output.setText("A mistake was made somewhere.\n");
                     }
@@ -62,6 +86,7 @@ public class TestForm{
         solution = eS.getSolution();
         questionField.setText(question);
         display.setText(solution);
+        output.setText("");
     }
 
     public static void main(String[] args) {
