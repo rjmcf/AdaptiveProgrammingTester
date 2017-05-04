@@ -24,7 +24,7 @@
 \bibliographystyle{plain}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Title
 
 
@@ -41,7 +41,7 @@ Homerton College \\[5mm]
 2017
 \end{center}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Proforma, table of contents and list of figures
 
 \pagestyle{plain}
@@ -92,27 +92,102 @@ extent for a comparable purpose.
 
 \pagestyle{headings}
 
-\chapter{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction Chapter
 
-Finding the most efficient way to teach young people new skills is an important challenge, impacting educators, parents and learners. How well a student learns a new skill is determined by a number of factors. These range from differences between learners (e.g. ability and motivation) to the teaching method used. It is up for debate whether unguided or guided learning styles produce the best results, and similarly tasks requiring problem solving compared with those requiring reciting known solutions \textcolor{red}{[REF]}.Recently, computer science has been included into the national curriculum for children aged 5 and above. This has raised the question of how best to teach young people a programming language (e.g. Java). The typical method employed in a classroom setting is to give some instruction (which may involve a variety of worked examples) followed by a set of programming exercises for students to complete. A typical exercise given to students can be conceptualised in the following manner: some unfinished sample code is given to the students, and their task is to fill in the blanks in the code such that the completed code can perform the function required by the question. When students have a firm grasp on the language of choice, it may be reasonable to expect them to write all the code from scratch, that is, no code would be given at the start. However, when a student is first learning a language, is less able, or younger, they may find it helpful to have parts of the code provided for them. This enables them to see how the code constructs are used and reduces the complexity of the work and understanding required. This method is likely to enhance the student's learning experience and maintain their motivation to continue. The complexity of a given programming exercise can thus be characterised using two metrics: the difficulty of the question being answered, and the amount of code left to the student to complete themselves. Unfortunately, most instructional materials are designed to provide all students with the same set of problems which does not take account of the learners' individual characteristics and needs. Attempts have been made before to set exercise difficulty in response to student performance\cite{PhDThesis}. The author attempts to make use of computerised-adaptive testing (CAT) by developing a system that enables students to self-assess and develop their own user profile. Following exercises are then set for students with their difficulty determined by these user profiles: the performance of students is assessed by the students themselves, and thus a measure of the students' understanding of the subject matter is available directly. The system underwent human trials in 2003 and 2005 with encouraging results, showing increased mean scores in students who used their system versus students who did not. This shows that CAT systems have promise, and that tools designed with the intent to make the creation of such systems easier would be useful.A different approach to CAT would be a system that attempts to measure student performance programmatically, inferring how much the student has understood. The system could then present students with problems varying in complexity as a function of their understanding of the material. The specific questions that the students have to answer would be determined by their teacher and the appropriate curriculum. However, the amount of code that each student is expected to write can be adjusted programmatically by adding or removing blanks from a model solution.The aims of this project were to:
-\begin{enumerate}\item{Encode a representation of a programming exercise such that its difficulty may be altered programmatically.}\item{Design a system that measures the performance of students as they solve programming exercises, and adjusts the difficulty of the subsequent exercises accordingly.}
+\chapter{Introduction}
+\label{Ch:Intro}
+
+Finding the most effective way to teach young people new skills is an important challenge, impacting educators, parents and learners. Learners want to be delivered new information in an interesting and engaging way that enables them to make use of their new knowledge constructively, and educators want to feel productive as they teach. How well a student learns a new skill is determined by a number of factors. These range from differences between learners (e.g. ability and motivation) to the teaching method used. It is up for debate whether unguided or guided learning styles produce the best results, and similarly tasks requiring problem solving are compared with those requiring reciting known solutions \textcolor{red}{[REF]}.
+
+Recently, Computer Science has been included into the national curriculum in the UK for children aged 5 and above. This has raised the question of how best to teach young people a programming language (e.g. Java). The typical method employed in a classroom setting is to give some instruction (which may involve a variety of worked examples) followed by a set of programming exercises for students to complete.
+ 
+A typical exercise given to students can be conceptualised in the following manner: some unfinished sample code is given to the students, and their task is to fill in the blanks in the code such that the completed code can perform the function required by the question. When students have a firm grasp on the language of choice, it may be reasonable to expect them to write all the code from scratch, that is, no sample code would be given at the start. However, when a student is first learning a language, is less able, or younger, they may find it helpful to have parts of the code provided for them. This enables them to see how the code constructs are used and reduces the complexity of the work and understanding required. This method is likely to enhance the student's learning experience and maintain their motivation to continue. 
+
+The complexity of a given programming exercise can thus be characterised using two metrics: the difficulty of the question being answered, and the amount of code left to the student to complete themselves. Unfortunately, most instructional materials are designed to provide all students with the same set of problems which does not take account of the learners' individual characteristics and needs. 
+
+Attempts have been made before to set exercise difficulty in response to student performance\cite{PhDThesis}. The author attempts to make use of computerised-adaptive testing (CAT) by developing a system that enables students to develop their own user profile. The following exercises are then set for students with their difficulty determined by these user profiles. The performance of students is assessed by the students themselves, and thus a measure of the their understanding of the subject matter is available directly. The system underwent human trials in 2003 and 2005 with encouraging results, showing increased mean scores in students who used their system versus students who did not. This shows that CAT systems have promise, and that tools designed with the intent to make the creation of such systems easier would be useful.
+
+A different approach to CAT would be a system that attempts to measure student performance algorithmically, inferring how much the student has understood. The system could then present students with problems varying in complexity as a function of their understanding of the material. The specific questions that the students have to answer would be determined by their teacher and the appropriate curriculum. However, the amount of code that each student is expected to write can be adjusted, also algorithmically, by adding or removing blanks from a model solution.
+
+This project aims to develop a system that follows this new approach. The system will attempt to teach a programming language by delivering exercises to students for them to solve. The first problem delivered will always be the same, and each student's performance will be measured by the system. Depending on the individual student's performance, the difficulty of the next problem presented to them will be adjusted appropriately. This will be done by both changing the question being asked, and also changing the amount of the model solution that is initially left blank to fill in.
+
+To develop this system, I will extend Java with the concept of blanks in programs, and design an interpreter and a pretty-printer for this new language. As an extension, a parser could also be implemented for the language. After this, a representation of programming exercises will be encoded, and an algorithm that adds and removes blanks from the model solutions stored in the exercises will be written. These tools will be brought together in the system itself. This system will be able to measure the performance of a student using a heuristic, and use its measurements to adjust the difficulty of programming exercises appropriately. If a student has performed well (as measured by the performance heuristic), then the next exercise presented to them will be more difficult. On the contrary, if they have performed poorly, then the next exercise presented to them will be easier. Finally, as another extension, an extra peripheral will be added on top of the system in the form of a GUI. This GUI will demonstrate an example of how a student may interact with the system, by presenting the model solution code in a text box that students can directly edit to fill in the blanks in the solution, and giving feedback on the student's submissions.
+
+The aims of this project are to:
+\begin{enumerate}
+\item{Extend Java with the concept of blanks.}
+\item{Interpret, pretty-print, and, as an extension, parse this new language.}
+\item{Encode a representation of programming exercises for the language.}
+\item{Write algorithms that increase and decrease the difficulty of these exercises by adding and removing blanks from the model solution code.}
+\item{Design a system that measures the performance of students as they solve programming exercises, and adjusts the difficulty of the subsequent exercises accordingly.}
+\item{As another extension, design a GUI to demonstrate how students might interact with the system.}
 \end{enumerate}
+
+\textcolor{red}{Estimated word count: 1008}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preparation Chapter
 
 \chapter{Preparation}
 
-\textcolor{red}{
-\begin{itemize}
-\item{First attempt using Strings}
-\item{Why I had to make my own language}
-\item{Research into other projects etc, like Arjen and the PhD}
-\end{itemize}
-}
+In this chapter, I detail the preparation I undertook before starting on my implementation. I will give my ``starting point'' in Section \ref{Sec:SP}, explaining how much experience I had before work on this project began. In Section \ref{Sec:Overview}, I will give a brief overview of the project and how its components fit together. Then, in Section \ref{Sec:Method}, I will explain the specific software engineering methodologies I employed to ensure implementation went as smoothly as possible. Finally, I will give a detailed requirements analysis in Section \ref{Sec:ReqAnal}.
 
-Since part of my aim was to demonstrate a possible method for teaching Java, I wanted the language I was using to be as close to Java as possible. However, re-implementing all of Java would have been too much unnecessary complexity, so I designed MiniJava with reference to only a small subset of the Java 8 grammar \cite[p.714]{Java8}. Since nodes in the AST represent constructs in the source code, replacing a node in the AST with a notional ``blank'' node would be representative of making parts of the source code blank. 
+\section{Starting point}
+\label{Sec:SP}
 
-\textcolor{red}{"Are there any limitations of using antlr and how it compared to other parser generators / techniques"}
+I am able to program in Java, the language in which I will be implementing my tools. I have some experience of writing interpreters, primarily of Combinators. I have designed an educational program before as an Extended Project for the AQA Baccalaureate at school, which involved implementing maths tests for Key Stage 2 students. This project also required me to make a GUI which, along with the one I helped design for my Group Project last year, has given me some experience of implementing GUIs.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{An overview of the project and its components}
+\label{Sec:Overview}
+
+The overall aim of this project is to design a system that can algorithmically adapt the difficulty of programming exercises. Decisions about how to adjust the difficulty will be made by referring to measurements of student performance taken as they solve preceding exercises. In order to set programming exercises, we need a language in which a student will solve said exercises. Representations of programs written in this language need to be pretty-printed, and they need to be executable by interpreting the code. Programming exercises themselves require representations within the system, and these must store representations of the model solution for the exercise, written in the specified language. Wrapped around these exercises there must be a system for presenting questions, allowing completion of the model solutions, checking validity of submissions, and delivering feedback on submissions. This system should incorporate algorithms that increase and decrease the difficulty of problems by adding and removing blanks from the model solution code. As an extension, a GUI could be implemented that acted as an interface between users and the system itself. Finally, as another extension, implementing a parser would streamline the functionality of some of these components: the model solution in exercises could be defined in a \texttt{String} that could then be parsed to build the AST representation required, and the system could fill blanks by accepting \texttt{String}s containing the code to be substituted with, rather than users having to build AST representations themselves.
+
+\section{Methodologies in use}
+\label{Sec:Method}
+
+In order to ensure correct functionality of my system and its components, the implementation process will proceed under the influence of Test Driven Development (TDD). This will require writing unit tests for units that have not yet been written. These tests will be designed with respect to the requirements, such that any piece of software passing the tests will also satisfy the requirements. It will be shown that these tests fail before the unit is implemented, and that they are passed after. These tests will then be kept to act as regression tests.
+
+\section{Requirements analysis}
+\label{Sec:ReqAnal}
+
+This section will explore the requirements laid out in Chapter \ref{Ch:Intro} in detail, drawing particular attention to any implementation choices that were made.
+
+\subsection{Extending a language with blanks}
+
+Ideally, I would have preferred not to have to design my own language, but to simply add the concepts of blanks to Java itself. Programs in this extended language would then have to be executable.
+
+An early prototype I built to investigate how I might add blanks to Java involved storing a program as a \texttt{String} and executing it as Java code. This seemed a good solution to me as I have experience doing this very thing in Python. Dynamic execution of Python statements and expressions is supported by the \texttt{exec} and \texttt{eval} functions respectively. These functions even support supplying Python dictionaries containing maps of local and global variables. Unfortunately, doing this in Java is much more complex, requiring the use of external tools. Bearing in mind that these external tools have no inbuilt support for blanks in code, I would have to write some potentially very substantial extensions to these tools, and these factors combined persuaded me to follow an alternate path.
+
+I decided to design my own language that would very closely imitate Java, but include the concept of blanks in code within the grammar itself. This language would imitate Java in order to demonstrate that Java itself, a language very commonly taught to beginners including Part IA students in the Computer Lab, could be taught using my system. However, re-implementing all of Java would have been too much unnecessary complexity. I thus designed my language, which I call MiniJava, to only imitate a small subset of the Java grammar \cite[p.714]{Java8}. Since I would be storing MiniJava programs in the natural fashion of an Abstract Syntax Tree (AST), and since each code construct would have a representative class in the implementation, replacing a node in the AST with a representation of a blank would be equivalent to substituting a blank for part of the text of the original code.
+
+\subsection{Interpreting, pretty-printing, and parsing the language}
+
+Representations of programs written in MiniJava should be executable, and should also be able to be pretty-printed to allow a user to read the code intuitively as text. As an extension, it would be nice to be able to take a textual version of a program and convert it into an AST representation in my implementation by parsing it. 
+
+To interpret MiniJava, variables used throughout the program must be managed properly. This involves allowing the declaration of new variables, managing their scope, and updating their values as they are assigned to. The most common ways to keep track of variables are symbol tables\textcolor{red}{[REF]} and stack frames\textcolor{red}{[REF]}. However, there are certain extensions you have to implement when using a symbol table in conjunction with nested scope, so I decided to implement variable management using stack frames.
+
+I kept the goal of writing a parser of the language as an extension to this project, as a parser is not necessary to demonstrate the power of the other tools being written. It was decided that if I were to do this, I would use a parser generator, as writing a parser myself from scratch would be time consuming and error prone. Of the available parser generators, I investigated ANTLR\cite{ANTLR4} and JavaCC\footnote{https://javacc.org/ - last accessed 3rd May, 2017}. Both of these parser generators support tree building (which is necessary for building the AST representation of the program in my implementation of the language), however JavaCC provides this as a separate tool while ANTLR provides the functionality by default. Looking at examples using the two systems, the learning curve for JavaCC seemed much sharper and the representation of grammars seemed almost obfuscated; while ANTLR takes a grammar file containing a reasonably standard grammar definition as input, JavaCC requires the writing of Java classes to represent code constructs. For these reasons, although JavaCC is the more popular tool for parser generation, I decided to use ANTLR if I came to implement this extension to my project.
+
+\subsection{Encoding representations of programming exercises}
+
+A programming exercise should consist of a question, represented by a \texttt{String}, and a model solution, represented by a MiniJava AST and containing a number of blanks. An exercise should allow the blanks in its solution to be filled in by students, and complete solutions should be executable. Exercises should record constraints that must be satisfied by any complete solution to be declared valid. They should also be able to make themselves easier or harder by introducing blanks to or removing them from the model solution prior to the question being presented. Ideally, they should also provide some degree of variety, such that an exercise would not ask the question, ``What is the square of 5?'', for example, but rather ``What is the square of $n$?'', where $n$ can be randomised at question delivery.
+
+\subsection{The system that sets and adjusts exercises}
+
+This system should present a standard exercise to all students, to get an initial measure of ability. Depending on individual students' performance, the next problem presented to them will either be easier or harder. The system will continue to measure performance, and adjust the difficulty of the following exercises as appropriate. The system will adjust the difficulty of an exercise by changing the difficulty of the question asked, and also how much code must be written by the student to solve the exercise.
+
+\subsection{Extension: implementing a GUI}
+
+The GUI should act as an interface between users and the system itself. As such, it should provide controls to manually adjust the difficulty of a given question. It should also show the question itself alongside the code representation of the model solution requiring completion. On the condition that a parser has been implemented, the GUI should allow direct editing of the model solution, the result of which can then be parsed and set as the solution to the exercise to allow validation.
+
+\mbox{}\\
+This chapter has described the preparation undertaken before any code was written, including analysing requirements, deciding which libraries to use, and choosing software design methodologies to follow.
+
+\textcolor{red}{Estimated word count: 1486} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementation chapter
 \chapter{Implementation}
 
@@ -439,7 +514,17 @@ In this chapter I have described what I have implemented and how I have done it.
 
 \textcolor{red}{Estimated Word Count: 9200}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Evaluation Chapter
+
 \chapter{Evaluation}
+
+It was assumed in my proposal that the first of these aims would be trivial to achieve and that the majority of my effort would be focussed on the latter aim, but as I began to look into how I might encode this representation, it became increasingly apparent that I had overlooked some major complexity in the pursuit of this target.
+
+Part of writing systems that attempt to teach programming that is often very difficult to manage is the reporting of errors in a way that novice programmers would find useful. One tool that makes some headway in solving this problem is the Arjen tool [2]. This tool exploits the fact that novice programmers all tend to make the same types of errors, and explicitly searches for these errors in order to provide feedback tailored to a novice, perhaps providing pointers for how to solve or avoid the problem. A collaboration between my set of tools and a tool such as Arjen would certainly be beneficial for students, giving a much more supportive user experience.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conclusion Chapter
 
 \chapter{Conclusion}
 
