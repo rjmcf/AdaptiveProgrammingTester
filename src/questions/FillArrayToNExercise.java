@@ -23,12 +23,12 @@ public class FillArrayToNExercise extends AbstractPExercise {
     int max;
     Id nsID;
 
-    public FillArrayToNExercise(int n) {
-        super("Fill the array named 'ns' with numbers from 0 to " + (n - 1) + ".",
-                "{ int ns[] = new int[" + n + "]; " +
-                        "for (int i = 0; i < " + n + "; i++) ns[i] = i; }",
-                2);
-        max = n;
+    public FillArrayToNExercise() {
+        super(2);
+        int N = r.nextInt(8) + 2;
+        setQuestion("Fill the array named 'ns' with numbers from 0 to " + (N - 1) + ".");
+        setCode("{ int ns[] = new int[" + N + "]; for (int i = 0; i < " + N + "; i++) ns[i] = i; }");
+        max = N;
         nsID = new Id();
         nsID.setUpId("ns");
     }

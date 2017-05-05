@@ -19,13 +19,13 @@ public class AbstractPExerciseTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        testArrayN = new FillArrayToNExercise(5);
+        testArrayN = new FillArrayToNExercise();
         testArrayN.setUp();
-        testFac = new FactorialExercise(5);
+        testFac = new FactorialExercise();
         testFac.setUp();
-        testSq = new SquareExercise(5);
+        testSq = new SquareExercise();
         testSq.setUp();
-        testPr = new PrintingTest(5);
+        testPr = new PrintingTest();
         testPr.setUp();
     }
 
@@ -188,9 +188,9 @@ public class AbstractPExerciseTest {
         PrintStream pW = new PrintStream(fO);
         pW.println(ids);
 
-        Literal five = new Literal();
-        five.setUpLiteral(PrimType.INT, "5");
-        assertTrue(testArrayN.fillBlank(ids.get(0), five));
+        Literal n = new Literal();
+        n.setUpLiteral(PrimType.INT, String.valueOf(testArrayN.max));
+        assertTrue(testArrayN.fillBlank(ids.get(0), n));
 
         Literal zero = new Literal();
         zero.setUpLiteral(PrimType.INT, "0");
@@ -199,7 +199,7 @@ public class AbstractPExerciseTest {
         Id i = new Id();
         i.setUpId("i");
         assertTrue(testArrayN.fillBlank(ids.get(2), i));
-        assertTrue(testArrayN.fillBlank(ids.get(3), five));
+        assertTrue(testArrayN.fillBlank(ids.get(3), n));
 
         Id ns = new Id();
         ns.setUpId("ns");

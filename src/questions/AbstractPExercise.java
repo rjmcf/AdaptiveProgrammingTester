@@ -26,6 +26,7 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     private Stack<MiniJASTNode> replacedNodes = new Stack<>();
     private Stack<Stack<Integer>> replacedNodeTreeIndices = new Stack<>();
     public abstract boolean checkSolved();
+    protected Random r = new Random();
     protected Context c;
 
     public void setUp() {
@@ -49,6 +50,10 @@ public abstract class AbstractPExercise implements Comparable<AbstractPExercise>
     }
 
     public AbstractPExercise(String q, String c, int diff) { question = q; solutionCode = c; baseDifficulty = diff; }
+    public AbstractPExercise(int diff) { baseDifficulty = diff; }
+
+    protected void setQuestion(String q) { question = q; }
+    protected void setCode(String c) { solutionCode = c; }
 
     public int getBaseDifficulty() { return baseDifficulty; }
     public int getNodesBlank() {

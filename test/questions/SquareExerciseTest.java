@@ -10,7 +10,7 @@ public class SquareExerciseTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        sE = new SquareExercise(5);
+        sE = new SquareExercise();
         sE.setUp();
     }
 

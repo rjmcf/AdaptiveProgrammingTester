@@ -22,9 +22,9 @@ public class ExerciseSetter {
 
     public ExerciseSetter(Writer o) {
         output = o;
-        possibleExs.add(new SquareExercise(5));
-        possibleExs.add(new FactorialExercise(6));
-        possibleExs.add(new FillArrayToNExercise(10));
+        possibleExs.add(new SquareExercise());
+        possibleExs.add(new FactorialExercise());
+        possibleExs.add(new FillArrayToNExercise());
         setIndex(INITIAL_EX);
     }
 

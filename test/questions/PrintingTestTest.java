@@ -14,7 +14,7 @@ public class PrintingTestTest {
 
     @Test
     public void testCheckSolved() throws Exception {
-        PrintingTest t = new PrintingTest(6);
+        PrintingTest t = new PrintingTest();
         t.setUp();
         t.runSolution();
         assertTrue(t.checkSolved());

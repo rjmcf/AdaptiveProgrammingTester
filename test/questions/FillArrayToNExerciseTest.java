@@ -8,7 +8,7 @@ public class FillArrayToNExerciseTest {
 
     @Test
     public void returnsTrue() throws Exception {
-        FillArrayToNExercise test = new FillArrayToNExercise(10);
+        FillArrayToNExercise test = new FillArrayToNExercise();
         test.setUp();
         test.runSolution();
         assertTrue(test.checkSolved());

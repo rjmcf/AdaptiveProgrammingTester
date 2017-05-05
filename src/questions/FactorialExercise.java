@@ -16,22 +16,28 @@ import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.PrimType;
 
+import java.util.Random;
+
 public class FactorialExercise extends AbstractPExercise {
+    int N;
     int nFact;
     Id totalId;
 
-    public FactorialExercise(int N) {
-        super("Calculate the factorial of '" + N + "' and store it in 'total'.",
-                "{ int total = 1, n = " + N + "; " +
-                        "while (n > 1) total *= n--; }",
-                1);
+    public FactorialExercise() {
+        super(1);
+        N = r.nextInt(9) + 2;
+        setQuestion("Calculate the factorial of '" + N + "' and store it in 'total'.");
+        setCode("{ int total = 1, n = " + N + "; while (n > 1) total *= n--; }");
         nFact = 1;
-        while (N > 1) {
-            nFact *= N--;
+        int count = N;
+        while (count > 1) {
+            nFact *= count--;
         }
         totalId = new Id();
         totalId.setUpId("total");
     }
+
+    public int getN_TEST() { return N; }
 
     @Override
     public boolean checkSolved() {

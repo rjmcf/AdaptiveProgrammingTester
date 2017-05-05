@@ -10,7 +10,7 @@ public class FactorialExerciseTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        fE = new FactorialExercise(5);
+        fE = new FactorialExercise();
         fE.setUp();
     }
 

@@ -25,12 +25,13 @@ public class PrintingTest extends AbstractPExercise {
     int N;
     int NthNum;
 
-    public PrintingTest (int n) {
-        super("Print the " + n + "th triangle number",
-                "{ int j = 0;" +
+    public PrintingTest () {
+        super(0);
+        int n = r.nextInt(8) + 2;
+        setQuestion("Print the " + n + "th triangle number");
+        setCode("{ int j = 0;" +
                         "for (int i = 1; i <= " + n + "; i++) j += i;" +
-                        "System.out.println(j); }",
-                0);
+                        "System.out.println(j); }");
         N = n;
         int j = 0;
         for (int i = 1; i <= N; i++)

@@ -17,11 +17,11 @@ public class SquareExercise extends AbstractPExercise {
     int nSq;
     Id nSqId;
 
-    public SquareExercise(int N) {
-        super("Calculate the square of '" + N + "' and store it in 'nSq'.",
-                "{ int n = " + N + ", nSq; " +
-                        "nSq = n * n; }",
-                0);
+    public SquareExercise() {
+        super(0);
+        int N = r.nextInt(8) + 2;
+        setQuestion("Calculate the square of '" + N + "' and store it in 'nSq'.");
+        setCode("{ int n = " + N + ", nSq; nSq = n * n; }");
         nSq = N*N;
         nSqId = new Id();
         nSqId.setUpId("nSq");

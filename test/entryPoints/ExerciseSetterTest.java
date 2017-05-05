@@ -15,6 +15,7 @@ import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import questions.Difficulty;
+import questions.FactorialExercise;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -46,9 +47,9 @@ public class ExerciseSetterTest {
         VarDeclarator total = new VarDeclarator();
         total.setUpVarDec("total", false, one);
         setter.fillBlank(blankIds.get(0), total);
-        Literal six = new Literal();
-        six.setUpLiteral(PrimType.INT, "6");
-        setter.fillBlank(blankIds.get(1), six);
+        Literal N = new Literal();
+        N.setUpLiteral(PrimType.INT, String.valueOf(((FactorialExercise)setter.exercise).getN_TEST()));
+        setter.fillBlank(blankIds.get(1), N);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
         nId.setUpId("n");
@@ -78,9 +79,9 @@ public class ExerciseSetterTest {
         VarDeclarator total = new VarDeclarator();
         total.setUpVarDec("total", false, one);
         setter.fillBlank(blankIds.get(0), total);
-        Literal six = new Literal();
-        six.setUpLiteral(PrimType.INT, "6");
-        setter.fillBlank(blankIds.get(1), six);
+        Literal N = new Literal();
+        N.setUpLiteral(PrimType.INT, String.valueOf(((FactorialExercise)setter.exercise).getN_TEST()));
+        setter.fillBlank(blankIds.get(1), N);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
         nId.setUpId("n");
@@ -119,7 +120,7 @@ public class ExerciseSetterTest {
 
         blankIds = setter.getBlankIds();
         setter.fillBlank(blankIds.get(0), total);
-        setter.fillBlank(blankIds.get(1), six);
+        setter.fillBlank(blankIds.get(1), N);
         setter.fillBlank(blankIds.get(3), one);
         setter.fillBlank(blankIds.get(2), nId);
         setter.fillBlank(blankIds.get(4), totId);
@@ -145,16 +146,14 @@ public class ExerciseSetterTest {
         aE.setUpAddExpr(true, zero, one);
         total.setUpVarDec("total", false, aE);
 
-        Literal five = new Literal();
-        five.setUpLiteral(PrimType.INT, "5");
         AddExpr aE2 = new AddExpr();
-        aE2.setUpAddExpr(true, one, five);
+        aE2.setUpAddExpr(true, zero, N);
 
         blankIds = setter.getBlankIds();
         setter.fillBlank(blankIds.get(0), total);
         setter.fillBlank(blankIds.get(1), aE2);
-        setter.fillBlank(blankIds.get(3), one);
         setter.fillBlank(blankIds.get(2), nId);
+        setter.fillBlank(blankIds.get(3), one);
         setter.fillBlank(blankIds.get(4), totId);
         setter.fillBlank(blankIds.get(5), nId);
 
@@ -177,9 +176,9 @@ public class ExerciseSetterTest {
         VarDeclarator total = new VarDeclarator();
         total.setUpVarDec("total", false, one);
         setter.fillBlank(blankIds.get(0), total);
-        Literal six = new Literal();
-        six.setUpLiteral(PrimType.INT, "6");
-        setter.fillBlank(blankIds.get(1), six);
+        Literal n = new Literal();
+        n.setUpLiteral(PrimType.INT, String.valueOf(((FactorialExercise)setter.exercise).getN_TEST()));
+        setter.fillBlank(blankIds.get(1), n);
         setter.fillBlank(blankIds.get(3), one);
         Id nId = new Id();
         nId.setUpId("n");
@@ -213,8 +212,8 @@ public class ExerciseSetterTest {
                 //pass
             }
 
-        VarDeclarator n = new VarDeclarator();
-        n.setUpVarDec("n", false, six);
+        VarDeclarator nDec = new VarDeclarator();
+        nDec.setUpVarDec("n", false, n);
 
         RelationExpr gT = new RelationExpr();
         gT.setUpRelationExpr(RelationOp.GT, nId, one);
@@ -227,7 +226,7 @@ public class ExerciseSetterTest {
 
         blankIds = setter.getBlankIds();
         assertTrue(setter.fillBlank(blankIds.get(0), total));
-        assertTrue(setter.fillBlank(blankIds.get(1), n));
+        assertTrue(setter.fillBlank(blankIds.get(1), nDec));
         assertTrue(setter.fillBlank(blankIds.get(2), nId));
         assertTrue(setter.fillBlank(blankIds.get(3), one));
         assertTrue(setter.fillBlank(blankIds.get(4), totId));
