@@ -33,6 +33,7 @@ public class ExerciseSetter {
     public void reinitEx() {
         try {
             exercise = exercise.getClass().newInstance();
+
         } catch (IllegalAccessException iaE) {
             System.err.println("IllegalAccessException");
             iaE.printStackTrace();
@@ -47,6 +48,7 @@ public class ExerciseSetter {
             currentIndex = d.base;
             exercise = possibleExs.get(currentIndex);
         }
+        reinitEx();
         exercise.setUp();
         numNodes = exercise.numNodes();
         for (int i = 0; i < d.nodesBlank; i++) {
@@ -76,7 +78,6 @@ public class ExerciseSetter {
     public void setUp() {
         // TODO remove repeated exercise.setUp()
         exercise.setUp();
-        // TODO make sure this is ok
         if (nodesToRemove == 0)
             nodesToRemove = 2;
         exercise.makeHarder(nodesToRemove);

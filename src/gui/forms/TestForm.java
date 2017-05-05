@@ -45,6 +45,7 @@ public class TestForm{
             @Override
             public void mouseClicked(MouseEvent e) {
                 Difficulty diff = eS.getCurrentDifficulty();
+                eS.setCurrentDifficulty(diff);
                 baseSlider.setValue(diff.base);
                 int nodes = eS.getNumNodes();
                 blankSlider.setMaximum(nodes);
