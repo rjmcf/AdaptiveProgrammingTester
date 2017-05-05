@@ -31,6 +31,7 @@ public class TestForm{
                 int b = baseSlider.getValue();
                 int p = blankSlider.getValue();
                 eS.setCurrentDifficulty(new Difficulty(b, p));
+                eS.setUp();
                 Difficulty diff = eS.getCurrentDifficulty();
                 baseSlider.setValue(diff.base);
                 int nodes = eS.getNumNodes();
@@ -44,8 +45,15 @@ public class TestForm{
         nextQuestionButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                try {
+                    eS.adjustQuestion();
+
+                } catch (ArrayIndexOutOfBoundsException aE) {
+                    output.append("There are no more exercises!");
+                }
                 Difficulty diff = eS.getCurrentDifficulty();
                 eS.setCurrentDifficulty(diff);
+                eS.setUp();
                 baseSlider.setValue(diff.base);
                 int nodes = eS.getNumNodes();
                 blankSlider.setMaximum(nodes);
@@ -56,6 +64,9 @@ public class TestForm{
         });
 
         runButton.addMouseListener(new MouseAdapter() {
+            // TODO run code in separate thread
+            // TODO 'total not declared in this scope' for SquareExercise when using chars
+            // TODO reset attempts
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
@@ -66,17 +77,14 @@ public class TestForm{
                         output.append("This exercise took " + eS.getAttempts() + " attempts.\n");
                         String adjustment = eS.reportPerformance() > 0 ? "harder" : "easier";
                         output.append("The next question will be " + adjustment + ".\n");
-                        try {
-                            eS.adjustQuestion();
-                            nextQuestionButton.setVisible(true);
-                        } catch (ArrayIndexOutOfBoundsException aE) {
-                            output.append("There are no more " + adjustment + " exercises!");
-                        }
+                        nextQuestionButton.setVisible(true);
                     } else {
                         output.setText("A mistake was made somewhere.\n");
                     }
                 } catch (MiniJASTException me) {
                     output.setText("A mistake was made somewhere. The following error was raised: \n\"" + me.getMessage() + "\"\n");
+                } catch (NullPointerException nE) {
+                    output.setText("A mistake was made somewhere. Check for blanks that were removed but not filled.");
                 }
             }
         });

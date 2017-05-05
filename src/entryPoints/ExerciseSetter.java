@@ -161,6 +161,7 @@ public class ExerciseSetter {
     }
 
     public void adjustQuestion() {
+        // TODO find bug with 3 mistakes on easiest factorial exercise
         float performance = reportPerformance();
         int determiner = (int)(performance * 5f);
         exercise.setUp();

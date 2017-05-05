@@ -171,6 +171,8 @@ public class ExerciseSetterTest {
 
         ArrayList<Integer> blankIds = setter.getBlankIds();
 
+        setter.presentQuestion();
+
         Literal one = new Literal();
         one.setUpLiteral(PrimType.INT, "1");
         VarDeclarator total = new VarDeclarator();

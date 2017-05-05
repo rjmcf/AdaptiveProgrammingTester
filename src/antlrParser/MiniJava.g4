@@ -69,31 +69,31 @@ statementTop
 
 statement
     :   block [false]																# makeBlock
-    |   IF parExpression statement 													# makeIf
-    | 	IF parExpression statementNSI ELSE statement								# makeITE
+    |   IF LPAREN expression RPAREN statement 													# makeIf
+    | 	IF LPAREN expression RPAREN statementNSI ELSE statement								# makeITE
     |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement	# makeFor
-    |   WHILE parExpression statement												# makeWhile
+    |   WHILE LPAREN expression RPAREN statement												# makeWhile
     |   statementNTS																# makeStatementNTS
     | 	BLANK																		# blankStmnt
     ;
     
 statementNSI
 	: 	block [false]																# makeBlockNSI
-	| 	IF parExpression statementNSI ELSE statementNSI								# makeITENSI
+	| 	IF LPAREN expression RPAREN statementNSI ELSE statementNSI								# makeITENSI
 	|   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statementNSI # makeForNSI
-    |   WHILE parExpression statementNSI											# makeWhileNSI
+    |   WHILE LPAREN expression RPAREN statementNSI											# makeWhileNSI
     |	statementNTS																# makeStatementNTSNSI	
     | 	BLANK																		# blankStmntNSI										
     ;
     
 statementNTS
-	:	DO statement WHILE parExpression SEMI										# makeDo
+	:	DO statement WHILE LPAREN expression RPAREN SEMI										# makeDo
     |   RETURN SEMI																	# return
     |   BREAK SEMI																	# break
     |   CONTINUE SEMI																# continue
     |   SEMI																		# empty
     |   expressionStatement SEMI													# makeStmntExpr
-    |   PRINT parExpression SEMI                                                    # makePrint
+    |   PRINT LPAREN expression RPAREN SEMI                                                    # makePrint
     ;
 
 

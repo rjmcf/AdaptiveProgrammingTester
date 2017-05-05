@@ -73,13 +73,6 @@ public interface MiniJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMakeVarDec(MiniJavaParser.MakeVarDecContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code blankBlockStmnt}
-	 * labeled alternative in {@link MiniJavaParser#blockStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBlankBlockStmnt(MiniJavaParser.BlankBlockStmntContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code stmnt}
 	 * labeled alternative in {@link MiniJavaParser#statementTop}.
 	 * @param ctx the parse tree
