@@ -20,12 +20,14 @@ import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.PrimType;
 
 public class FillArrayToNExercise extends AbstractPExercise {
+    private static final int MIN = 5;
+    private static final int MAX = 15;
     int max;
     Id nsID;
 
     public FillArrayToNExercise() {
         super(2);
-        int N = r.nextInt(8) + 2;
+        int N = r.nextInt(MAX - MIN + 1) + MIN;
         setQuestion("Fill the array named 'ns' with numbers from 0 to " + (N - 1) + ".");
         setCode("{ int ns[] = new int[" + N + "]; for (int i = 0; i < " + N + "; i++) ns[i] = i; }");
         max = N;

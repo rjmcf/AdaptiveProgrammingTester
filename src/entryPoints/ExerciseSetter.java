@@ -30,7 +30,17 @@ public class ExerciseSetter {
 
     public Difficulty getCurrentDifficulty() { return new Difficulty(exercise.getBaseDifficulty(), exercise.getNodesBlank()); }
 
-    public void setOutput(Writer o) { output = o; }
+    public void reinitEx() {
+        try {
+            exercise = exercise.getClass().newInstance();
+        } catch (IllegalAccessException iaE) {
+            System.err.println("IllegalAccessException");
+            iaE.printStackTrace();
+        } catch (InstantiationException iE) {
+            System.err.println("InstantiationException");
+            iE.printStackTrace();
+        }
+    }
 
     public void setCurrentDifficulty(Difficulty d) {
         if (d.base != currentIndex) {

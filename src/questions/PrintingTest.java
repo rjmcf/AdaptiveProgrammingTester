@@ -22,12 +22,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class PrintingTest extends AbstractPExercise {
+    private static final int MIN = 4;
+    private static final int MAX = 10;
     int N;
     int NthNum;
 
     public PrintingTest () {
         super(0);
-        int n = r.nextInt(8) + 2;
+        int n = r.nextInt(MAX - MIN + 1) + MIN;
         setQuestion("Print the " + n + "th triangle number");
         setCode("{ int j = 0;" +
                         "for (int i = 1; i <= " + n + "; i++) j += i;" +

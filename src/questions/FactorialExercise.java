@@ -19,13 +19,15 @@ import miniJAST.types.PrimType;
 import java.util.Random;
 
 public class FactorialExercise extends AbstractPExercise {
+    private static final int MIN = 3;
+    private static final int MAX = 10;
     int N;
     int nFact;
     Id totalId;
 
     public FactorialExercise() {
         super(1);
-        N = r.nextInt(9) + 2;
+        N = r.nextInt(MAX - MIN + 1) + MIN;
         setQuestion("Calculate the factorial of '" + N + "' and store it in 'total'.");
         setCode("{ int total = 1, n = " + N + "; while (n > 1) total *= n--; }");
         nFact = 1;
