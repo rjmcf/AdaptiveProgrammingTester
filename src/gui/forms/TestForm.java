@@ -31,6 +31,7 @@ public class TestForm{
                 int b = baseSlider.getValue();
                 int p = blankSlider.getValue();
                 eS.setCurrentDifficulty(new Difficulty(b, p));
+                System.out.println(eS.getCurrentDifficulty().nodesBlank);
                 eS.setUp();
                 Difficulty diff = eS.getCurrentDifficulty();
                 baseSlider.setValue(diff.base);
@@ -46,7 +47,7 @@ public class TestForm{
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    eS.adjustQuestion();
+                    eS.adjustQuestion(eS.reportPerformance());
 
                 } catch (ArrayIndexOutOfBoundsException aE) {
                     output.append("There are no more exercises!");
@@ -65,8 +66,6 @@ public class TestForm{
 
         runButton.addMouseListener(new MouseAdapter() {
             // TODO run code in separate thread
-            // TODO 'total not declared in this scope' for SquareExercise when using chars
-            // TODO reset attempts
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
@@ -78,6 +77,7 @@ public class TestForm{
                         String adjustment = eS.reportPerformance() > 0 ? "harder" : "easier";
                         output.append("The next question will be " + adjustment + ".\n");
                         nextQuestionButton.setVisible(true);
+                        eS.resetAttempts();
                     } else {
                         output.setText("A mistake was made somewhere.\n");
                     }

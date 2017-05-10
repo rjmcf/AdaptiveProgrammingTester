@@ -15,7 +15,7 @@ public class ExerciseSetter {
     private static final int INITIAL_EX = 1;
     private int currentIndex;
     AbstractPExercise exercise;
-    private int attempts = 0;
+    int attempts = 0;
     int numNodes;
     int nodesToRemove;
     Writer output;
@@ -51,7 +51,8 @@ public class ExerciseSetter {
         reinitEx();
         exercise.setUp();
         numNodes = exercise.numNodes();
-        for (int i = 0; i < d.nodesBlank; i++) {
+        nodesToRemove = d.nodesBlank;
+        for (int i = 0; i < nodesToRemove; i++) {
             if (!exercise.addBlank()) {
                 break;
             }
@@ -70,6 +71,8 @@ public class ExerciseSetter {
     public int getIndex() { return currentIndex; }
 
     public int getAttempts() { return attempts; }
+
+    public void resetAttempts() { attempts = 0; }
 
     public int getMinBaseDifficulty() { return 0; }
     public int getMaxBaseDifficulty() { return possibleExs.size() - 1; }
@@ -160,38 +163,33 @@ public class ExerciseSetter {
         return runSolution();
     }
 
-    public void adjustQuestion() {
-        // TODO find bug with 3 mistakes on easiest factorial exercise
-        float performance = reportPerformance();
-        int determiner = (int)(performance * 5f);
+    public void adjustQuestion(float performance) {
+        int determiner = (int)performance;
         exercise.setUp();
         exercise.makeHarder(nodesToRemove);
         nodesToRemove += determiner;
         if (determiner > 0) {
             determiner = exercise.makeHarder(determiner);
-            while (determiner > 0) {
+            if (determiner > 0) {
                 currentIndex++;
                 if (currentIndex >= possibleExs.size())
                     throw new ArrayIndexOutOfBoundsException("No more harder exercises!");
                 exercise = possibleExs.get(currentIndex);
                 exercise.setUp();
-                nodesToRemove = determiner;
-                determiner = exercise.makeHarder(determiner);
+                nodesToRemove = exercise.numNodes() * 3 / 4;
+                exercise.makeHarder(nodesToRemove);
             }
         } else if (determiner < 0) {
             determiner *= -1;
             determiner = exercise.makeEasier(determiner);
-            while (determiner > 0) {
+            if (determiner > 0) {
                 currentIndex--;
                 if (currentIndex < 0)
                     throw new ArrayIndexOutOfBoundsException("No more easier exercises!");
                 exercise = possibleExs.get(currentIndex);
                 exercise.setUp();
-                nodesToRemove = exercise.numNodes() - determiner;
-                boolean cont = true;
-                while (cont)
-                    cont = exercise.addBlank();
-                determiner = exercise.makeEasier(determiner);
+                nodesToRemove = exercise.numNodes() * 3 / 4;
+                exercise.makeEasier(nodesToRemove);
             }
         }
         setUp();
@@ -200,11 +198,11 @@ public class ExerciseSetter {
     public float reportPerformance() {
         // Negative means bad, positive means good
         float result = (2.5f - attempts) * 2;
-        if (result < -10)
-            result = -10;
+        int mult = result < 0 ? -1 : 1;
+        result *= result * mult;
         int difference = numNodes - exercise.numNodes();
-        int multiplier = difference < 0 ? -1 : 1;
-        result += (difference * difference * multiplier) / 10f;
+        difference = difference > 0 ? 0 : difference;
+        result += difference;
         return result / 4f;
     }
 }

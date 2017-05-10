@@ -9,7 +9,6 @@ import miniJAST.expressions.assignment.AssignOp;
 import miniJAST.expressions.assignment.UnaryPostIncExpr;
 import miniJAST.expressions.boolExpr.RelationExpr;
 import miniJAST.expressions.boolExpr.RelationOp;
-import miniJAST.statements.LVD.LocalVarDec;
 import miniJAST.statements.LVD.VarDeclarator;
 import miniJAST.types.PrimType;
 import org.testng.annotations.BeforeMethod;
@@ -159,10 +158,7 @@ public class ExerciseSetterTest {
 
         assertTrue(setter.submitAttempt());
         assertEquals(setter.getAttempts(), 2);
-        FileOutputStream w = new FileOutputStream("test/testOutput.txt", true);
-        PrintStream pW = new PrintStream(w);
-        pW.println(setter.reportPerformance());
-        assertTrue(setter.reportPerformance() < 0 && setter.reportPerformance() > -5);
+        assertTrue(setter.reportPerformance() < 2 && setter.reportPerformance() > -2);
     }
 
     @Test
@@ -202,7 +198,7 @@ public class ExerciseSetterTest {
 
         assertTrue(setter.reportPerformance() > 0 && setter.reportPerformance() < 5);
 
-        setter.adjustQuestion();
+        setter.adjustQuestion(setter.reportPerformance());
         assertTrue(setter.getCurrentDifficulty().nodesBlank > diff.nodesBlank);
         diff = setter.getCurrentDifficulty();
 
@@ -239,7 +235,7 @@ public class ExerciseSetterTest {
 
         assertTrue(setter.reportPerformance() < 0);
 
-        setter.adjustQuestion();
+        setter.adjustQuestion(setter.reportPerformance());
 
         setter.presentQuestion();
 
