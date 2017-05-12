@@ -19,8 +19,8 @@ import miniJAST.types.PrimType;
 import java.util.Random;
 
 public class FactorialExercise extends AbstractPExercise {
-    private static final int MIN = 3;
-    private static final int MAX = 10;
+    private static final int MIN = 10;
+    private static final int MAX = 20;
     int N;
     int nFact;
     Id totalId;

@@ -7,7 +7,9 @@ Data = M(2:end, 2:end);
 clear title xlabel ylabel
 [C,h] = contour(X,Y,Data);
 clabel(C,h)
-title('Performance as a function of N^o of attempts taken and N^o of extra nodes', 'FontSize', 14);
+h = title('Performance as a function of N^o of attempts taken and N^o of extra nodes', 'FontSize', 14);
+P = get(h,'Position');
+set(h,'Position',[P(1) P(2)+0.1 P(3)])
 xlabel('Number of extra nodes', 'FontSize', 14) % x-axis label
 ylabel('Number of attempts', 'FontSize', 14) % y-axis label
 

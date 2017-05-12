@@ -186,6 +186,7 @@
                 <properties>
                   <editable value="true"/>
                   <enabled value="true"/>
+                  <font name="Courier"/>
                   <opaque value="true"/>
                   <tabSize value="4"/>
                   <visible value="true"/>

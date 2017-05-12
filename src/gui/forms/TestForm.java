@@ -31,7 +31,6 @@ public class TestForm{
                 int b = baseSlider.getValue();
                 int p = blankSlider.getValue();
                 eS.setCurrentDifficulty(new Difficulty(b, p));
-                System.out.println(eS.getCurrentDifficulty().nodesBlank);
                 eS.setUp();
                 Difficulty diff = eS.getCurrentDifficulty();
                 baseSlider.setValue(diff.base);
@@ -74,6 +73,9 @@ public class TestForm{
                     if (eS.submitAttempt()) {
                         output.setText("Exercise completed!\n");
                         output.append("This exercise took " + eS.getAttempts() + " attempts.\n");
+                        int difference = eS.getNumNodes() - eS.getNumExNodes();
+                        String moreOrFewer = difference < 0 ? "more" : "fewer";
+                        output.append("You used " + Math.abs(difference) + " " + moreOrFewer + " nodes than expected.\n");
                         String adjustment = eS.reportPerformance() > 0 ? "harder" : "easier";
                         output.append("The next question will be " + adjustment + ".\n");
                         nextQuestionButton.setVisible(true);

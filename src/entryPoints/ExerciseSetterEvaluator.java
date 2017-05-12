@@ -9,21 +9,21 @@ public class ExerciseSetterEvaluator {
     ExerciseSetter eS;
 
     public void evaluateDifficultyAdjustment() {
-        float adjustment = 0.75f;
+        float adjustment = 1;
         FileWriter fW;
         try {
-            fW = new FileWriter("src/entryPoints/evaluationDiff.txt", true);
+            fW = new FileWriter("src/entryPoints/evaluationDiff.txt", false);
             eS = new ExerciseSetter(fW);
             eS.setCurrentDifficulty(new Difficulty(0,1)); //The lowest difficulty
-            fW.write(adjustment + "\n");
+            fW.write(String.format("%.3f", eS.getCurrentDifficulty().base + ((double)eS.getCurrentDifficulty().nodesBlank / eS.getNumExNodes())));
             while (true) {
-                fW.write(eS.getCurrentDifficulty().base + ", " + eS.getCurrentDifficulty().nodesBlank + "\n");
-                fW.flush();
                 try {
                     eS.adjustQuestion(adjustment);
                 } catch (ArrayIndexOutOfBoundsException aE) {
                     break;
                 }
+                fW.write(", " + String.format("%.3f", eS.getCurrentDifficulty().base + ((double)eS.getCurrentDifficulty().nodesBlank / eS.getNumExNodes())));
+                fW.flush();
             }
             fW.write("\n");
             fW.flush();
@@ -73,7 +73,7 @@ public class ExerciseSetterEvaluator {
 
     public static void main(String[] args) {
         ExerciseSetterEvaluator eval = new ExerciseSetterEvaluator();
-        //eval.evaluateDifficultyAdjustment();
-        eval.evaluatePerformance();
+        eval.evaluateDifficultyAdjustment();
+        //eval.evaluatePerformance();
     }
 }

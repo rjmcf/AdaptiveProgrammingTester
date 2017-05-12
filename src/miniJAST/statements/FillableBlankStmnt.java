@@ -41,7 +41,7 @@ public class FillableBlankStmnt extends FillableBlank implements Statement {
     @Override
     public String stringRepr(int blocksDeep) {
         if (studentStmnt == null)
-            return pad(blocksDeep) + (SHOWIDS ? "..(" + getId() + ").." : ".....");
+            return pad(blocksDeep) + (SHOWIDS ? "..(" + getId() + ").." : "...");
         else
             return studentStmnt.stringRepr(blocksDeep);
     }

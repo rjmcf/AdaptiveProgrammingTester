@@ -74,9 +74,10 @@ public class ExerciseSetter {
 
     public void resetAttempts() { attempts = 0; }
 
-    public int getMinBaseDifficulty() { return 0; }
-    public int getMaxBaseDifficulty() { return possibleExs.size() - 1; }
+    public int getMinBaseDifficulty() { return possibleExs.get(0).getBaseDifficulty(); }
+    public int getMaxBaseDifficulty() { return possibleExs.get(possibleExs.size() - 1).getBaseDifficulty(); }
     public int getNumNodes() { return numNodes; }
+    public int getNumExNodes() { return exercise.numNodes(); }
 
     public void setUp() {
         // TODO remove repeated exercise.setUp()
@@ -176,7 +177,7 @@ public class ExerciseSetter {
                     throw new ArrayIndexOutOfBoundsException("No more harder exercises!");
                 exercise = possibleExs.get(currentIndex);
                 exercise.setUp();
-                nodesToRemove = exercise.numNodes() * 3 / 4;
+                nodesToRemove = exercise.numNodes() /2;//* 3 / 4;
                 exercise.makeHarder(nodesToRemove);
             }
         } else if (determiner < 0) {
@@ -188,7 +189,7 @@ public class ExerciseSetter {
                     throw new ArrayIndexOutOfBoundsException("No more easier exercises!");
                 exercise = possibleExs.get(currentIndex);
                 exercise.setUp();
-                nodesToRemove = exercise.numNodes() * 3 / 4;
+                nodesToRemove = exercise.numNodes() /2;//* 3 / 4;
                 exercise.makeEasier(nodesToRemove);
             }
         }
