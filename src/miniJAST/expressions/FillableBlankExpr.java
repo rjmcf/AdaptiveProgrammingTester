@@ -42,7 +42,7 @@ public class FillableBlankExpr extends FillableBlank implements Expression{
     @Override
     public String stringRepr() {
         if (studentExpr == null)
-            return SHOWIDS ? "..(" + getId() + ").." : "...";
+            return SHOWIDS ? "..(" + getId() + ").." : ".....";
         else
             return studentExpr.stringRepr();
     }

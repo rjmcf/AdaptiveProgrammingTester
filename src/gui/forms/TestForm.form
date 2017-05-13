@@ -174,7 +174,7 @@
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Solution"/>
+                  <text value="Solution:"/>
                 </properties>
               </component>
               <component id="d7434" class="javax.swing.JTextArea" binding="display">
@@ -186,7 +186,7 @@
                 <properties>
                   <editable value="true"/>
                   <enabled value="true"/>
-                  <font name="Courier"/>
+                  <font/>
                   <opaque value="true"/>
                   <tabSize value="4"/>
                   <visible value="true"/>

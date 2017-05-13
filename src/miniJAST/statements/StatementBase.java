@@ -27,14 +27,8 @@ public abstract class StatementBase implements Statement {
         return true;
     }
     protected void stepIn(Context c) {
-        HashMap<String, Type> newMap1 = new HashMap<>();
-        HashMap<String, Object> newMap2 = new HashMap<>();
-        for (String s : c.namesToTypes.peek().keySet())
-            newMap1.put(s, c.namesToTypes.peek().get(s));
-        c.namesToTypes.push(newMap1);
-        for (String s : c.namesToValues.peek().keySet())
-            newMap2.put(s, c.namesToValues.peek().get(s));
-        c.namesToValues.push(newMap2);
+        c.namesToTypes.push(new HashMap<>(c.namesToTypes.peek()));
+        c.namesToValues.push(new HashMap<>(c.namesToValues.peek()));
     }
     protected void stepOut(Context c) {
         if (c.namesToTypes.size() == 1)

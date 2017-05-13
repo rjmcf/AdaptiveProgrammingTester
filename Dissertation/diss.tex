@@ -63,7 +63,6 @@ Supervisor:         & Mr Michael B.~Gale                    \\
 
 \section*{Original Aims of the Project}
 
-
 \section*{Work Completed}
 
 \section*{Special Difficulties}
@@ -79,10 +78,10 @@ does not contain material that has already been used to any substantial
 extent for a comparable purpose.
 
 \bigskip
-\leftline{Signed [signature]}
+\leftline{Signed: Robin McFarland}
 
 \medskip
-\leftline{Date [date]}
+\leftline{Date: 13th May 2017}
 
 \tableofcontents
 
@@ -215,7 +214,7 @@ This chapter has described the preparation undertaken before any code was writte
 % Implementation chapter
 \chapter{Implementation}
 
-In this chapter I detail the work completed. I begin by describing how I implemented MiniJava in Section \ref{Sec:AST}, as well as an interpreter and a parser for MiniJava's grammar in Sections \ref{Sec:Interpret} and \ref{Sec:Parsing}. I then describe how I encoded a representation of a programming exercise solved using MiniJava, and give an example of the encoding of a specific exercise in Section \ref{Sec:Q&A}. In Section \ref{Sec:Blanks}, I describe the algorithm that allows the addition and removal of ``blanks'' within a MiniJava program.  In Section \ref{Sec:ExSet}, I describe how I developed the system that sets and adjusts the exercises, the \texttt{ExerciseSetter} class, and in Section \ref{Sec:GUI} I describe the implementation of the Graphical User Interface (GUI) as an extension.
+In this chapter I detail the work completed. I begin by describing how I implemented MiniJava in Section \ref{Sec:AST}, as well as an interpreter for MiniJava's grammar in Section \ref{Sec:Interpret}. I then describe how I encoded a representation of a programming exercise solved using MiniJava, and give an example of the encoding of a specific exercise, in Section \ref{Sec:Q&A}. In Section \ref{Sec:Blanks}, I describe the algorithms that allow the addition and removal of ``blanks'' within a MiniJava program. Then, in Section \ref{Sec:ExSet}, I describe how I developed the system that sets and adjusts the exercises, the \texttt{ExerciseSetter} class. In Sections \ref{Sec:Parsing} and \ref{Sec:GUI} I describe the implementation of the two extensions, the parser and the Graphical User Interface (GUI).
 
 \section{MiniJava's Abstract Syntax Tree}
 \label{Sec:AST}
@@ -224,11 +223,29 @@ In this section I describe the implementation of the MiniJava language. This lan
 
 \subsection{Classifications of syntactical constructs}
 
-Each class in my implementation represents a different production rule in the abstract syntax for MiniJava, found in Appendix \ref{App:Parser} in the form of a parser specification. In order to allow other parts of my code to operate on instances of these classes without needing to know exactly what they are, every class in the implementation implements the \texttt{MiniJASTNode} interface. This acts as the top of the object hierarchy for my implementation. 
+Each class in my implementation represents a different production rule in the abstract syntax for MiniJava, found in Appendix \ref{App:Parser} in the form of a parser specification. In order to allow other parts of my code to operate on instances of these classes without needing to know exactly what they are, every class in the implementation implements the \texttt{MiniJASTNode} interface. This acts as the top of the object hierarchy for my implementation, as shown in Figure \ref{Fig:TopLevelUML}.
 
-It is important to differentiate between MiniJava expressions and MiniJava statement as they must be used in different places. For example, in the production rule \texttt{WHILE~parExpression~statement} representing a \texttt{while} loop, \texttt{parExpression} may be substituted with any MiniJava expression (surrounded by parentheses), while \texttt{statement} may be substituted with any MiniJava statement. The reverse is not allowed however, meaning that \texttt{statement} may not be replaced by a MiniJava expression and vice versa. This distinction is made by the interfaces \texttt{Expression} and \texttt{Statement} (which all MiniJava expressions and statements implement respectively), and the abstract classes \texttt{ExpressionBase} and \texttt{StatementBase} (which all MiniJava expressions and statements extend respectively). Both interfaces and abstract class are used here because of the need to include blanks in the grammar. There are two classes representing blanks: \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt}. The first of these should be a MiniJava expression and the second should be a MiniJava statement, meaning they should extend \texttt{ExpressionBase} and \texttt{StatementBase} respectively, but both of them must also extend the abstract class \texttt{FillableBlank} (this is explained on page \pageref{Para:Blanks}). Since classes in Java cannot extend more than one base class, the only alternative is for them to implement the \texttt{Expression} and \texttt{Statement} interfaces. However, removing \texttt{ExpressionBase} and \texttt{StatementBase} would result in too much repeated code across the whole grammar, so the grammar requires both the interfaces and the abstract classes. The enumeration \texttt{SingleWordStmnt} (each value of which represents a MiniJava statement that is trivial, consisting of zero or one word) must also be a MiniJava statement, and since enumerations cannot extend classes, it must implement \texttt{Statement}, further cementing the need for both the interfaces and the abstract classes. Since the distinction between expressions and statements is the most high level distinction one can make, both the \texttt{Expression} and \texttt{Statement} interfaces extend the \texttt{MiniJASTNode} interface, ensuring that every class in the implementation also implements it.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{TopLevelUML}
+\caption{The UML diagram showing the top of the object hierarchy for \texttt{MiniJASTNode}s.}
+\label{Fig:TopLevelUML}
+\end{figure}
 
-As important as the distinction between expressions and statements is, there do exist some expressions that can be used in statements. For an example, the MiniJava code \texttt{i~=~5;} is a statement because it ends in a semicolon,~``\texttt{;}'', but this statement consists entirely of the expression \texttt{i~=~5} (this allows for the chaining of assignments found in the Java grammar \cite[p.589]{Java8}). This sort of expression within a statement construct is not possible with all expressions, for example the code \texttt{i~+~4;} would not be valid MiniJava. To make the distinction between expressions which may be used in statements like this and those which may not, I made the interface \texttt{StatementExpression}. This interface is only implemented by those expressions which can be used in a statement this way.
+It is important to differentiate between MiniJava expressions and MiniJava statements as they must be used in different places. For example, in the production rule \texttt{WHILE~parExpression~statement} representing a \texttt{while} loop, \texttt{parExpression} may be substituted with any MiniJava expression (surrounded by parentheses), while \texttt{statement} may be substituted with any MiniJava statement. The reverse is not allowed however, meaning that \texttt{statement} may not be replaced by a MiniJava expression and vice versa. This distinction is made by the interfaces \texttt{Expression} and \texttt{Statement} (which all MiniJava expressions and statements implement respectively), and the abstract classes \texttt{ExpressionBase} and \texttt{StatementBase} (which all MiniJava expressions and statements extend respectively). 
+
+Both interfaces and abstract classes are used here because of the need to include blanks in the grammar. There are two classes representing blanks: \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt}. The first of these should be a MiniJava expression and the second should be a MiniJava statement, meaning they should extend \texttt{ExpressionBase} and \texttt{StatementBase} respectively, but both of them must also extend the abstract class \texttt{FillableBlank}, as shown in Figure \ref{Fig:BlanksUML}. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{BlanksUML}
+\caption{The UML diagram showing how blanks fit into the object hierarchy, motivating the need for both abstract classes and interfaces to distinguish between expressions and statements.}
+\label{Fig:BlanksUML}
+\end{figure}
+
+Since classes in Java cannot extend more than one base class, the only alternative is for them to implement the \texttt{Expression} and \texttt{Statement} interfaces. However, removing \texttt{ExpressionBase} and \texttt{StatementBase} would result in too much repeated code across the whole grammar, so the grammar requires both the interfaces and the abstract classes.
+
+As important as the distinction between expressions and statements is, there do exist some expressions that can be used like statements. For an example, the MiniJava code \texttt{i~=~5;} is a statement because it ends in a semicolon,~``\texttt{;}'', but this statement consists entirely of the expression \texttt{i~=~5} (this allows for the chaining of assignments found in the Java grammar \cite[p.589]{Java8}). This sort of expression within a statement construct is not possible with all expressions, for example the code \texttt{i~+~4;} would not be valid MiniJava. To make the distinction between expressions which may be used in statements like this and those which may not, I made the interface \texttt{StatementExpression}, again, shown in Figure \ref{Fig:TopLevelUML}. This interface is only implemented by those expressions which can be used in a statement this way.
 
 \subsection{Implementing operator precedence and associativity}
 
@@ -250,48 +267,23 @@ MultiplicativeExpression:
 This means that for any expression $A$\texttt{ + }$B$, the expression $A$ must only contain subexpressions that use operators with precedence at least as high as \texttt{+} and \texttt{-}, and $B$ must only contain subexpressions that use operators with precedence higher than \texttt{+} and \texttt{-}. For any expression $A$\texttt{ * }$B$, neither $A$ nor $B$ can contain subexpressions that use operators with precedence lower than \texttt{*} and \texttt{/}. This in turn indicates that an expression such as \texttt{1~+~2~*~3~+~4} can only be interpreted as \texttt{1~+~(2~*~3)~+~4}, and an expression such as \texttt{1~*~2~+~3~*~4} can only be interpreted as \texttt{(1~*~2)~+~(3~*~4)}. I wanted an operator precedence for MiniJava that is hardcoded within the grammar of MiniJava itself, just as the operator precedence of Java is hardcoded within the grammar of Java. The production rules for Java shown above suggest a natural implementation of the class that represents addition expressions:
 \begin{Verbatim}[samepage=true]
 class AddExpr {
-    private boolean isPlus;
+    ...
     private AddExpr leftSide;
     private MultExpr rightSide;
     ...
 }
 \end{Verbatim}
-Here, the \texttt{isPlus} field records whether the expression is an addition or a subtraction, \texttt{leftSide} and \texttt{rightSide} store the left and right operands of the expression, and \texttt{MultExpr} is the class representing multiplication expressions. What has been implemented so far encapsulates parts (2) and (3) of the \texttt{AdditiveExpression} production rule above, but not part (1). This part is encapsulated by making the class \texttt{MultExpr} extend the class \texttt{AddExpr}, such that an instance of \texttt{MultExpr} may always be used in place of an instance of \texttt{AddExpr}. Note that since multiplication operators are higher in the operator precedence hierarchy, their representations are lower in the object hierarchy. This then is the solution to the operator precedence problem: to enforce an operator precedence hierarchy, first enforce an inverse object hierarchy in their representative classes, and then choose the type of each expression's operands to match the relevant terminal symbols in the relevant production rule.\footnote{Note that if you were to look at my implementation of \texttt{AddExpr}, \texttt{leftSide} and \texttt{rightSide} would both be \texttt{int}s, not \texttt{AddExpr} and \texttt{MultExpr} instances. The reason behind this is explained in section \ref{Sec:Blanks}.}
-
-\begin{figure}
-\centering
-\includegraphics{TopLevelUML}
-\caption{The UML diagram showing the top of the object hierarchy for \texttt{MiniJASTNode}s.}
-\label{Fig:UML}
-\end{figure}
-
-Figure \ref{Fig:UML} shows the top of the object hierarchy for the implementation of MiniJava. It demonstrates the distinction between MiniJava expressions and statements by way of the \texttt{Expression} and \texttt{Statement} interfaces, the extra classification of expressions that can be used as statements given by \texttt{StatementExpression}, and shows the beginnings of the operator precedence hierarchy hardcoded into the expressions.
+Here, \texttt{leftSide} and \texttt{rightSide} store the left and right operands of the expression, and \texttt{MultExpr} is the class representing multiplication expressions. What has been implemented so far encapsulates parts (2) and (3) of the \texttt{AdditiveExpression} production rule above, but not part (1). This part is encapsulated by making the class \texttt{MultExpr} extend the class \texttt{AddExpr}, such that an instance of \texttt{MultExpr} may always be used in place of an instance of \texttt{AddExpr}. Note that since multiplication operators are higher in the operator precedence hierarchy, their representations are lower in the object hierarchy. This then is the solution to the operator precedence problem: to enforce an operator precedence hierarchy, first enforce an inverse object hierarchy in their representative classes, and then choose the type of each expression's operands to match the relevant terminal symbols in the relevant production rule.\footnote{Note that if you were to look at my implementation of \texttt{AddExpr}, \texttt{leftSide} and \texttt{rightSide} would both be \texttt{int}s, not \texttt{AddExpr} and \texttt{MultExpr} instances. The reason behind this is explained in section \ref{Sec:Blanks}.}
 
 Note also that as a side-effect of this implementation, the ambiguous code \texttt{1~+~2~+~3} also only has one possible interpretation, namely \texttt{(1~+~2)~+~3}. This follows the established rules of operator associativity, which are now also hardcoded into the grammar.
 
 \subsection{Expression types}
 
-In MiniJava, every expression has a type which consists of a primitive type and may or may not be an array type. There are four possible primitive types: \texttt{boolean}, \texttt{char}, \texttt{int}, and \texttt{double}. The primitive types are represented in the grammar by the enumeration, \texttt{PrimType}. The type of an expression then is represented by the class \texttt{Type}, an instance of which stores the appropriate PrimType value and a flag determining whether or not it is an array type. These \texttt{Type}s are use by the interpreter to determine whether or not variables can contain certain values, and whether operators are being supplied with the appropriate operands.
-
-\subsection{Degenerate expressions}
-
-The majority of statements in MiniJava are composed of statements or expressions, but there are some that consist of only a single word, or even no words at all. To have an entire class representing each of these trivial statements seems wasteful, so the enumeration \label{Para:SingleWordStmnt}\texttt{SingleWordStmnt} represents four such statements: the break statement (\texttt{break;}), the continue statement (\texttt{continue;}), the return statement (\texttt{return;}), and the empty statement (\texttt{;}). Although there are no functions in the MiniJava grammar, the return statement can be used to immediately halt evaluation.
-
-\subsection{Expressions with multiple possible operators}
-
-As we have seen previously, \texttt{AddExpr} defines the boolean field \texttt{isPlus}, to determine whether this instance represents an addition or a subtraction. There are some expressions where the number of possible operators that can be used in that expression is greater than two, in which case a boolean field will not be enough to disambiguate. \texttt{RelationExpr} and \texttt{AssignExpr} are the two expressions for which this is the case, since there are four relation operators and five assignment operators. These possible operators are represented by the two enumerations \texttt{RelationOp} and \texttt{AssignOp}. Thus \texttt{RelationExpr} stores a value of \texttt{RelationOp}, and \texttt{AssignExpr} stores a value of \texttt{AssignOp}.
-
-\subsection{Assignment expressions}
-
-There are two possible MiniJava expressions that can be assigned to, i.e. they can appear on the left hand side of an assignment expression. These two, identifiers and array accesses, are represented by the classes \texttt{Id} and \texttt{ArrayAccess}. To signify that they can both be assigned to, both classes implement the \texttt{AssignLHS} interface, an interface used for only this purpose. Similarly, there are two possible MiniJava expressions that can be assigned to an array type variable. These are array creation expressions (for example \texttt{new int[4]}) and array initialisation expressions (for example \texttt{\{1, 2, 3, 4\}}), which are represented by the classes \texttt{arrayCreation} and \texttt{ArrayInit} respectively. To signify that both can be assigned to arrays, they both extend the abstract class, \texttt{ArrayAssignRightSide}. To justify why \texttt{AssignLHS} is an interface and \texttt{ArrayAssignRightSide} is an abstract class, we consider the difference between the expressions that can appear as subexpressions of other expressions, and those that cannot. Identifiers and array accesses may appear as a subexpression of some other expression. Because of this, the index operator used in array accesses must appear within the operator precedence hierarchy described previously, and so too must identifiers. If identifiers were not present in the operator precedence hierarchy, then they could never be substituted for the terminal symbols in the production rules seen previously, ruling out valid expressions like \texttt{i~+~j}. If identifiers and array accesses must appear in the operator precedence hierarchy, and high up in it too, then that means their representative classes must extend some class representing an operator lower down in the hierarchy. Thus \texttt{AssignLHS} must be an interface and not an abstract class, as \texttt{Id} and \texttt{ArrayAccess} already subclass some other class (namely \texttt{UnaryExpr}). Array creation and initialisation expressions however can never appear as a subexpression of some expression (since only single-dimensional arrays are allowed, expressions such as \texttt{\{\{1\},\{2,3,4\}\}} are not valid). This means that they do not appear in the operator precedence hierarchy, and thus their representations do not need to extend any base class. Thus \texttt{ArrayAssignRightSide} can usefully be an abstract class, reducing the amount of repeated code in these two classes.
-
-\subsection{Local variable declarations}
-
-MiniJava uses local variable declarations (for example, \texttt{int i = 4, ar[];}) in the same way that Java does: to declare and initialise new variables. Local variable declarations can be thought of as being made up of a primitive type and a list of so called ``variable declarators'', which are identifiers that may or may not be followed by square brackets to show the new variable is an array, and which may or may not be followed by an equals sign, ``\texttt{=}'', and a value with which to initialise the new variable. My implementation represents local variable declarations using the class \texttt{LocalVarDec}, which consists of a \texttt{PrimType} and a list of \texttt{VarDeclarator} instances. The \texttt{VarDeclarator} class stores a String containing the name of the variable, flags to determine whether the variable is an array type and whether an initialiser expression is given, and the initialiser expression itself if there is one.
+In MiniJava, every expression has a type which consists of a primitive type and may or may not be an array type. There are four possible primitive types: \texttt{boolean}, \texttt{char}, \texttt{int}, and \texttt{double}. The primitive types are represented in the grammar by the enumeration, \texttt{PrimType}. The type of an expression then is represented by the class \texttt{Type}, an instance of which stores the appropriate \texttt{PrimType} value and a flag determining whether or not it is an array type. These \texttt{Type}s are used by the interpreter to determine whether or not variables can contain certain values, and whether operators are being supplied with the appropriate operands.
 
 \subsection{Blanks in code}
 
-What distinguishes MiniJava from other languages is that the concept of a blank, a missing piece of code, is built into the grammar itself. \label{Para:Blanks} Representations of blanks in code should enable a user to fill one with their own code. To do this programmatically, it is necessary for representations of blanks to each come with a unique id, such that users can choose which blank they are filling and the blank be searchable within the AST representing the program. The abstract class \texttt{FillableBlank} fulfils this requirement by storing a \texttt{static} reference to an \texttt{AtomicInteger} and a private \texttt{int} field, \texttt{id}. Whenever a new blank needs to be represented in an AST, an instance of a class that extends \texttt{FillableBlank} can be supplied with a unique identifier that has not yet been used in this runtime environment, by using the \texttt{AtomicInteger}'s \texttt{incrementAndGet} method and storing the result in \texttt{id}. The two concrete classes that extend \texttt{FillableBlank} are \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt}. The first of these can be used to replace a MiniJava expression (and thus implements the \texttt{Expression} interface so that it can be stored in a MiniJava AST), and the second can replace a MiniJava statement (and thus implements \texttt{Statement}). \texttt{FillableBlankExpr} stores an \texttt{Expression} field, \texttt{studentExpr}, which, if not \texttt{null} is representative of the code with which a user has filled the blank. Similarly, \texttt{FillableBlankStmnt} stores an \texttt{Statement} field, \texttt{studentStmnt}.
+What distinguishes MiniJava from other languages is that the concept of a blank, a missing piece of code, is built into the grammar itself. Representations of blanks in code should enable a user to fill one with their own code. To do this programmatically, it is necessary for representations of blanks to each come with a unique id, such that users can choose which blank they are filling and the blank be searchable within the AST representing the program. The abstract class \texttt{FillableBlank} implements this functionality.The two concrete classes that extend \texttt{FillableBlank} are \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt}. The first of these can be used to replace a MiniJava expression (and thus implements the \texttt{Expression} interface so that it can be stored in a MiniJava AST), and the second can replace a MiniJava statement (and thus implements \texttt{Statement}). \texttt{FillableBlankExpr} stores an \texttt{Expression} field, \texttt{studentExpr}, which, if not \texttt{null} is representative of the code with which a user has filled the blank. Similarly, \texttt{FillableBlankStmnt} stores an \texttt{Statement} field, \texttt{studentStmnt}.\\
 
 In this section I have described the implementation of my MiniJava language.
 
@@ -308,6 +300,8 @@ To correctly interpret MiniJava, several requirements must be met by the interpr
 \item{If an exception is raised during execution, the exception should propagate up and halt execution, preferably delivering a useful message.}
 \end{enumerate}
 
+\subsection{Handling scope}
+
 The scope of variables is handled by the interpreter with instances of the \texttt{Context} class. Part of its definition is shown below:
 \begin{Verbatim}[samepage=true]
 public class Context {
@@ -316,15 +310,38 @@ public class Context {
     ...
 }
 \end{Verbatim}
-The \texttt{namesToTypes} field is a stack of maps from names (as \texttt{String} values) to instances of my \texttt{Type} class. Every variable that is declared in this scope will have an entry in the map on top of this stack, recording the type of that variable. The \texttt{namesToValues} field is a stack of maps from names to instances of \texttt{Object}. If a variable has an entry in the map on top of this stack, then the variable has the value stored in the map with it in this scope. It is possible for a variable to have an entry in the map on top of the \texttt{namesToTypes} stack, but not in the map on top of the \texttt{namesToValues} stack: this indicates that the variable has been declared but not initialised in this scope.
+The \texttt{namesToTypes} field is a stack of maps from names (as \texttt{String} values) to instances of my \texttt{Type} class. Every variable that is declared in this scope will have an entry in the map on top of this stack, recording the type of that variable. The \texttt{namesToValues} field is a stack of maps from names to instances of \texttt{Object}. If a variable has an entry in the map on top of this stack, then, in this scope, the variable has the value stored under it in the map. It is possible for a variable to have an entry in the map on top of the \texttt{namesToTypes} stack, but not in the map on top of the \texttt{namesToValues} stack: this indicates that the variable has been declared but not initialised in this scope.
 
-During execution, the interpreter must keep track when variables will go out of scope. This is handled by the \texttt{stepIn} and \texttt{stepOut} methods in \texttt{StatementBase}. The \texttt{stepIn} method is called whenever execution enters a new, deeper, scope. This method copies every key value pair in the maps on top of their respective stacks into new maps, and pushes these new maps onto the stack. Thus every entry in one of the stacks represents a different scope: as you move down the stack, you move outward through the nested scope. The \texttt{stepOut} method is called whenever execution leaves the current scope. At this point, all the variables that do not exist in the new scope should be forgotten, and every variable that does exist in this new scope should have their value updated to the value it was in the old scope. The \texttt{stepOut} method first pops the top off both stacks, storing the top of the \texttt{namesToValues} stack in the local variable \texttt{oldMap}. Then, for every key in \texttt{oldMap}, if this key also appears in the new top of the \texttt{namesToTypes} stack, the corresponding value in \texttt{oldMap} is used to update the top of the \texttt{namesToValues} stack. In this way, variables can be updated in deeper levels of scope, and retain their new values when execution moves up the nested scope.
+During execution, the interpreter must keep track when variables will go out of scope. This is handled by the \texttt{stepIn} and \texttt{stepOut} methods in \texttt{StatementBase}. The \texttt{stepIn} method is called whenever execution enters a new, deeper, scope. This method copies every key value pair in the maps on top of their respective stacks into new maps, and pushes these new maps onto the stack. Thus every entry in one of the stacks represents a different scope: as you move down the stack, you move outward through the nested scope. The \texttt{stepOut} method is called whenever execution leaves the current scope. Pseudocode for this method is shown below:
+\begin{Verbatim}[samepage=true, tabsize=4]
+void stepOut(Context c) {
+	if (the stacks have size 1)
+		return; // This keeps the outer level of scope available for 
+		        // solution validation
 
-Consider the expression \texttt{(2*3)+4}. In MiniJava, this expression might be represented by a \texttt{AddExpr} storing a literal with the value \texttt{4} as the right operand, and an \texttt{MultExpr} as the left operand. This \texttt{MultExr} would store literals with values \texttt{2} and \texttt{3} as the left and right operands. During the evaluation of an expression, the most deeply nested parts of the expression must be evaluated first, so that their values can be used further up in the nested expression. There is no point trying to evaluate the \texttt{AddExpr} before we know the value of \texttt{(2*3)}. Thus, the \texttt{MultExpr} needs a way to communicate to the \texttt{AddExpr} that it has a value of \texttt{6}, so that the \texttt{AddExpr} can be evaluated to \texttt{10}. Likewise, whatever context the \texttt{AddExpr} is in needs to be told it has the value \texttt{10}. The way this is done in MiniJava is using implementations of the \texttt{ReturnValues} abstract class. This class represents the notion that some value is being returned by an expression, but allows any type of value to be returned, no matter what primitive type the value takes, and whether it's an array or not. To return a value of a particular primitive type, the appropriate one of these four implementations must be used: \texttt{ReturnValuesBool}, \texttt{ReturnValuesChar}, \texttt{ReturnValuesInt}, or \texttt{ReturnValuesDouble}. Each of these has a public \texttt{value} field of the appropriate type. If an array value is being returned by an expression, then a further implementation of \texttt{ReturnValues} must be used, the generic class \texttt{ReturnValuesArray<T>}. This class makes use of Java Generics as it stores an internal \texttt{ArrayList<T>} of values.
+	pop both stacks in c, store top of namesToValues stack in oldMap
+	for (name n in keys of oldMap)
+		if (n is key of new top of namesToTypes)
+			set the value stored with n in the new top of namesToValues 
+			to be the same as that in oldMap
+}
+\end{Verbatim}
+
+At this point, all the variables that do not exist in the new scope should be forgotten, and every variable that does exist in this new scope should have their value updated to the value it was in the old scope. The \texttt{stepOut} method does this by popping the top off both stacks, and writing back the values of variables that are still in scope.
+
+\subsection{Propagating expression values}
+
+Consider the expression \texttt{(2*3)+4}. In MiniJava, this expression might be represented by an \texttt{AddExpr} storing a literal with the value \texttt{4} as the right operand, and a \texttt{MultExpr} as the left operand. This \texttt{MultExr} would store literals with values \texttt{2} and \texttt{3} as the left and right operands. During the evaluation of an expression, the most deeply nested parts of the expression must be evaluated first, so that their values can be used further up. There is no point trying to evaluate the \texttt{AddExpr} before we know the value of \texttt{(2*3)}. Thus, the \texttt{MultExpr} needs a way to communicate to the \texttt{AddExpr} that it has a value of \texttt{6}, so that the \texttt{AddExpr} can be evaluated to \texttt{10}. Likewise, whatever context the \texttt{AddExpr} is in needs to be told it has the value \texttt{10}. The way this is done in MiniJava is using implementations of the \texttt{ReturnValues} abstract class. This class represents the notion that some value is being returned by an expression, but allows any type of value to be returned, no matter what primitive type the value takes, and whether it is an array or not. To return a value of a particular primitive type, the appropriate one of these four implementations must be used: \texttt{ReturnValuesBool}, \texttt{ReturnValuesChar}, \texttt{ReturnValuesInt}, or \texttt{ReturnValuesDouble}. Each of these stores a value of the appropriate type. If an array value is being returned by an expression, then a further implementation of \texttt{ReturnValues} must be used, the generic class \texttt{ReturnValuesArray<T>}. This class makes use of Java Generics as it stores an internal \texttt{ArrayList<T>} of values.
+
+\subsection{Control flow}
 
 In the same way that MiniJava expressions dispense values, MiniJava statements dispense control flow commands. These commands can be to ``break'', to ``continue'', to ``return'', or there can be no command, in which case execution continues as normal. The MiniJava interpreter represents these commands using the \texttt{FlowControl} enumeration, which has the four values \texttt{BREAK}, \texttt{CONTINUE}, \texttt{RETURN}, and \texttt{NONE}. Whenever a statement is executed, the interpreter looks for which value is dispensed and reacts accordingly. 
 
+\subsection{Handling exceptions}
+
 Several custom exceptions are used by the interpreter, to differentiate between when an error occurs in the MiniJava program being interpreted, and when an error occurs in the interpreter itself. All these custom exceptions subclass the base class of \texttt{MiniJavaException}, and the majority of them are analogous to standard Java exceptions. For example, the \texttt{OutOfBoundsException} is thrown by the interpreter whenever an index is used in an array where no such index exists. This exception is analogous to Java's \texttt{IndexOutOfBoundsException}.
+
+\subsection{The interpreter itself}
 
 The MiniJava interpreter is implemented using the \texttt{evaluate} method in the \texttt{Expression} interface, and the \texttt{execute} method in the \texttt{Statement} interface. The method signatures of these two methods are shown below:
 \begin{Verbatim}[samepage=true]
@@ -338,141 +355,62 @@ public interface Statement extends MiniJASTNode {
     ...
 }
 \end{Verbatim}
-It can be seen that the interpreter makes use of all the components meeting the requirements for the interpreter. The \texttt{evaluate} method is overridden by every class representing a MiniJava expression, and the \texttt{execute} method is overridden by every class representing a MiniJava statement. This means that both methods are recursive: expressions being evaluated will call the \texttt{evaluate} method on their subexpressions for example. Typically, execution is initiated with an empty \texttt{Context} object that becomes more populated as more variables are declared. This interpreter can also be plugged in to peripherals. The values of variables in the outermost scope can be accessed after execution has terminated, and MiniJava has an inbuilt print statement, represented by the class \texttt{PrintStatement}, that can print the values of expressions to a file. Peripherals could also, if they wanted, make use of the custom exceptions thrown during execution, and the initial \texttt{Context} object.
+It can be seen that the interpreter makes use of all the components meeting the requirements for the interpreter. The \texttt{evaluate} method is overridden by every class representing a MiniJava expression, and the \texttt{execute} method is overridden by every class representing a MiniJava statement. This means that both methods are recursive: expressions being evaluated will call the \texttt{evaluate} method on their subexpressions for example. Typically, execution is initiated with an empty \texttt{Context} object that becomes more populated as more variables are declared. 
 
-It is important to remember that the MiniJava grammar also contains the notion of blanks in code, and thus the interpreter must be equipped to deal with these appropriately. If a blank has not yet been filled, then the interpreter should throw a custom exception, but if the blank has been filled, then execution must continue as if there was no blank there. The \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt} classes override the \texttt{evaluate} and \texttt{execute} methods in similar ways to fulfil these requirements. If the \texttt{Expression} or \texttt{Statement} field representing student code is discovered to be \texttt{null} at evaluation or execution, then the custom exception \texttt{BlankEmptyException} is thrown. If, however, the field is not \texttt{null}, then the blank simply acts as a conduit to pass information to and from the student code. \texttt{FillableBlankExpr} evaluates the student expression with the \texttt{Context} object supplies, and simply passes the returned \texttt{ReturnValues} object upwards as if it were itself an evaluated expression, while \texttt{FillableBlankStmnt} does the same for statements except with the returned \texttt{FlowControl} object.
+It is important to remember that the MiniJava grammar also contains the notion of blanks in code, and thus the interpreter must be equipped to deal with these appropriately. If a blank has not yet been filled, then the interpreter should throw a custom exception, but if the blank has been filled, then execution must continue as if there was no blank there. The \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt} classes override the \texttt{evaluate} and \texttt{execute} to implement this functionality. This is shown for \texttt{FillableBlankExpr} below, but \texttt{FillableBlankStmnt} is exactly analogous.
+\begin{Verbatim}[samepage=true, tabsize=4]
+ReturnValues FillableBlankExpr::evaluate(Context c) throws ...{
+	if (the blank is not filled)
+		throw BlankEmptyException;
+		
+	return the result of evaluating the stored expression with c.
+}
+\end{Verbatim}
 
 In this section I explained how MiniJava is interpreted.
-
-\section{Parsing the language}
-\label{Sec:Parsing}
-
-In this section I explain how a parser for MiniJava was implemented using the ANTLR parser generator \cite{ANTLR4}, and how a representation of an input MiniJava program can be built using it.
-
-The parser grammar (which can be found in Appendix \ref{App:Parser}) is based on an existing ANTLR parser grammar for Java\footnote{https://github.com/antlr/grammars-v4}. It would not have been worthwhile for me to write an entire grammar from scratch when there was such a readily available alternative. It is always good to use existing libraries or tools if they are available. 
-
-The ANTLR tool generates recursive descent parsers from input grammars. The typical usage of ANTLR follows this process:
-\begin{enumerate}
-\item{Write a grammar in a grammar file.}
-\item{Run the ANTLR tool on this grammar file to generate a parser.}
-\item{When this parser is executed with input source code, ANTLR's internal representation of the corresponding parse tree is built.}
-\item{Using either a ``listener'' or a ``visitor'', walk the generated parse tree, taking actions at each node, processing the source code as desired.}
-\end{enumerate}
-The following code shows how to build a MiniJava representation for the source code \texttt{i~=~4;}.
-\begin{Verbatim}[samepage=true, numbers=left]
-AssignExpr aE = new AssignExpr();
-Id i = new Id();
-i.setUpId("i");
-Literal four = new Literal();
-four.setUpLiteral(PrimType.INT, "4");
-aE.setUpAssignExpr(i, AssignOp.EQ, four);
-ExpressionStmnt eS = new ExpressionStmnt(aE);
-\end{Verbatim}
-Considering this representation as a parse tree, this can be seen as line 0 (i.e. the invisible line before line 1) visiting the \texttt{ExpressionStmnt} node and visiting its only child, the \texttt{AssignExpr} node in line 1. This node's first child is visited in lines 2 and 3, and its second child is visited in lines 4 and 5. Once all the children of the \texttt{AssignExpr} have been visited, the instance itself can be set up on line 6. Once all the \texttt{ExpressionStmnt}'s children have been visited, its instance can be set up on line 7. This example demonstrates that in general, program representations are generated by recursively visiting each expression or statement's children, in a similar way to how a program representation is interpreted.
-
-By default, the ANTLR tool generates a listener interface and base class along with the parser. A listener is characterised by providing callback methods that are triggered by an automatic parse tree walker: listener methods don't have to explicitly visit their children. A visitor on the other hand gives the user more control over the walk, requiring explicit commands to visit the children of each node. While this means that it takes less work to use a listener (as the parse tree walker is already built in), the visitor paradigm is more appropriate for building my library's representation of the MiniJava source code. While the listener methods all return \texttt{void}, requiring the instances representing the children nodes to be stored somewhere in memory prior to setting up the current node, the base visitor, \texttt{MiniJavaBaseVisitor<T>}, is generic, with method signatures such as \texttt{public T visitBlock}. This means that the visitor methods can be made to return \texttt{MiniJASTNode}s, which can be cast to \texttt{Expression}s or \texttt{Statement}s as appropriate (as shown in Figure \ref{Fig:UML} on page \pageref{Fig:UML}). By using a visitor rather than a listener, I was able to more closely imitate the way (shown above) that program representations are build in code. My visitor implementation can be found in \texttt{MiniJavaASTBuilder}, a class which extends the \texttt{MiniJavaBaseVisitor<MiniJASTNode>} class supplied by the ANTLR tool.
-
-Java, and by extension MiniJava, is a language that suffers from the ``dangling-else'' problem: a particular problem arising from an ambiguous grammar. Consider the MiniJava code shown below:
-\begin{Verbatim}[samepage=true,tabsize=4]
-if (i == true)		 (1)
-	if (j == false)	(2)
-		k = 1;
-else
-	k = 2;
-\end{Verbatim}
-A parser could not make a decision as to whether the \texttt{else} statement ``belongs'' to the first or the second \texttt{if} statement. Since the grammar is ambiguous, a decision must be made for the parser. The decision taken in Java\cite[p.417]{Java8}, and thus in MiniJava, is to attach the \texttt{else} statement to most inner \texttt{if} statement possible (which in the example above would be the one labeled \texttt{(2)}, even though the indentation may suggest that the programmer intended it to be the one labeled \texttt{(1)}). To implement this decision, the grammar distinguishes between \texttt{Statement}s and \texttt{StatementNSI}s (where NSI stands for ``No Short If'', i.e. no \texttt{if} without \texttt{else}). The way this solves the problem becomes apparent on inspection of the following rules in the grammar (presented in context in Appendix \ref{App:Parser}):
-\begin{Verbatim}[samepage=true, tabsize=4]
-statement:
-	...
-	| IF parExpression statement 				
-	| IF parExpression statementNSI ELSE statement	  
-	...
-	;
-	
-statementNSI:
-	...
-	| IF parExpression statementNSI ELSE statementNSI
-	...
-	;
-\end{Verbatim}
-The \texttt{statement} rule gives productions for both a short \texttt{if} (i.e. with no attached \texttt{else}) and a long \texttt{if}, while the \texttt{statementNSI} rule only produces a long \texttt{if}. It can be seen that using these rules to parse the code above will reach a dead end if the first \texttt{if} statement is parsed as a long \texttt{if}, since its first sub-statement would have to be a \texttt{statementNSI}, and this rule has no viable way of parsing the second \texttt{if} statement. Of course, the visitor rules for \texttt{statement}s and \texttt{statementNSI}s make no distinction as they build the MiniJava representation, returning just a standard short or long \texttt{if} representation as appropriate.
-
-Another problem encountered while writing the parser can be discovered on inspection of the local variable declaration production shown below:
-\begin{Verbatim}[samepage=true, tabsize=4]
-blockStatement: 
-	primitiveType variableDeclarators SEMI	# localVariableDeclaration
-	...
-	;
-\end{Verbatim}
-This production is used in the creation of \texttt{LocalVarDec} instances, which require the appropriate \texttt{PrimType} to set up correctly. As the visitor arrives at a node produced like this in the parse tree (by calling the \texttt{visitLocalVariableDeclaration} method found in \texttt{MiniJavaASTBuilder}) it needs to visit the node's children in order to gather the necessary objects to set up the \texttt{LocalVarDec} object. Since visitor methods return \texttt{MiniJASTNode}s, the \texttt{visitPrimitiveType} method (also found in \texttt{MiniJavaASTBuilder}) needs to return an object whose class implements \texttt{MiniJASTNode} and represents a primitive type. Until this point, no such class existed. The enumeration \texttt{PrimType} does not implement \texttt{MiniJASTNode}, as that would require overriding all the methods declared in the interface separately for each value, as they are in \texttt{SingleWordStmnt}. Since this would be a lot of wasted code, I instead wrote a new class, \texttt{PrimTypeCarrier}, for precisely this purpose. This class implements \texttt{MiniJASTNode} and has a public field of type \texttt{PrimType}, meaning it only needs to implement (trivially) all of the interface methods once. An instance of this class can thus be created in the \texttt{visitPrimitiveType} method (setting the \texttt{PrimType} field value appropriately), which can then be returned to the \texttt{visitLocalVariableDeclaration} method for setting up the \texttt{LocalVarDec} object.
-
-In this section I have described how the ANTLR parser generator can be used to generate parsers for the MiniJava grammar, and how program representations can be built using visitors.
-
 
 \section{Representing questions and solutions}
 \label{Sec:Q&A}
 
-In this section I explain how the general notion of a question is represented using the \texttt{AbstractPExercise} class, and give an example of how specific questions can be encoded by extending this class.
+In this section I explain how exercises are represented using the \texttt{AbstractPExercise} class, and give an example of how a specific exercise can be encoded by extending this class.
 
-When presented to a student learning a programming language, a ``question'' can be broken up into the following components:
+When presented to a student learning a programming language, an exercise can be broken up into the following components:
 \begin{itemize}
-\item{A description of what the student is expected to do.}
+\item{The question, telling the student what they are expected to do.}
 \item{A model solution to the problem presented with parts of the code left blank for students to fill in.}
-\item{A measure of difficulty so that both teaching staff and students can monitor progress and assess performance.}
 \end{itemize}
 
 Following these guidelines, a representation of a programming question should be capable of the following:
 \begin{enumerate}
-\item{Storing the description of what the student is expected to do.}
-\item{Building a MiniJava representation of the model solution.}
-\item{Adding and removing blanks from the solution to make the problem harder or easier.}
-\item{Calculating the difficulty of the current problem, given how difficult the question is to answer and how much of the model solution is blank.}
+\item{Adding and removing blanks from the model solution to make the problem harder or easier.}
 \item{Filling those blanks with MiniJava representations of student submitted code.}
-\item{Executing the solution.}
 \item{Checking that the problem is solved by the provided solution.}
 \end{enumerate}
 
 The abstract class \texttt{AbstractPExercise} provides the framework for classes extending it to fulfil all these requirements. I explain how the points above are addressed by \texttt{AbstractPExercise} in order.
 
-\subsubsection*{1. Storing the description of what the student is expected to do}
+\subsubsection*{1. Adding and removing blanks from the solution}
 
-The \texttt{String} field \texttt{question} stores the question provided to students. This field is initialised in the constructor. In order to present the model solution along with the question, MiniJava program representations need to be converted back in to \texttt{String} representations. To implement this, the \texttt{stringRepr} method was added to both the \texttt{Expression} and \texttt{Statement} interfaces, with the latter's version taking an integer argument representing how many blocks deep the statement is. This method is implemented in every MiniJava expression and statement by recursively combining String representations of the sub-expressions and sub-statements, effectively turning the representation in the abstract syntax into one in the concrete syntax. Depending on how blanks are filled by the specific peripheral in use, it may be useful to print blanks with their unique ids or without. The \texttt{FillableBlank} base class records with a \texttt{static final boolean} flag whether ids should be shown or not. If they should, then the blank with id $n$ is printed: ``\texttt{..(n)..}'', otherwise it is printed ``\texttt{.....}''.
+The algorithms used to add and remove blanks from the solution code are complex enough to warrant a dedicated section, and are thus discussed in Section \ref{Sec:Blanks}.
 
-\subsubsection*{2. Building a MiniJava representation of the solution}
+\subsubsection*{2. Filling blanks with student submitted code}
 
-Since the solution to the exercise needs to be executed (to ensure that it is correct), it must be stored as a representation of the MiniJava code. This representation is built by the parser using the \texttt{String} field \texttt{solutionCode} as input. The representation is stored in the \texttt{Statement} field \texttt{solution} of the \texttt{AbstractPExercise} class. 
+Since representations of blanks in code have their own unique identifier, the blank that a user wishes to fill can be selected using it. To fill a blank with the representation of a user's code, the representation of the blank itself must be found within the program's AST, before the representation of the code is stored within it. This is done using a depth-first-search through the AST to find blanks which, when found, have their identifiers compared with the target identifier. If they do not match, then the search moves on. If they do match, then the blank is filled with the student's code. If the search fails, then it can be reported that no blank with the suggested identifier exists within the solution.
 
-\subsubsection*{3. Adding and removing blanks from the solution}
+\subsubsection*{3. Checking that the problem is solved by the provided solution}
 
-The algorithms used to add and remove blanks from the solution code are complex enough to warrant their own section, and are thus discussed in section \ref{Sec:Blanks}.
+There are two possible ways of checking whether a solution is valid: either the value of a variable can be compared with a target value, or the result of a print statement can be inspected. The first of these approaches requires an \texttt{Id} field to be declared in the concrete class representing the problem, assigned the appropriate name in the constructor. Once the solution has been executed, the final value of this variable can be accessed by evaluating the \texttt{Id} with the \texttt{Context} object used during execution. In contrast, the second approach can be implemented by checking the contents of the file written to by the representation of the print statement. 
 
-\subsubsection*{4. Calculating the difficulty of the current problem}
+\subsection{An example exercise}
 
-As already stated, the difficulty of a question is related to how challenging it is to answer the question, and how much of the model solution is blank. Research into pedagogy was beyond the scope of this project, and it is expected that teaching staff would have a better understanding of how difficult different exercises would be for their own students anyway, so for now the difficulty measurement system is very much a place-holder. An integer is supplied to the base constructor by every implementation indicating the supposed difficulty of that question, with higher numbers assumed to indicate harder questions. This integer is combined with a float measuring the percentage of the model solution that is currently blank to give a measure of the difficulty of the overall problem. This means that for a question with difficulty $n$, the difficulty of the associated problem can range from $n$ to $n+1$.
-
-To work out how much of a MiniJava AST is blank, we need to count how many nodes in this tree have been replaced by a blank, and divide that by the total number of nodes in the tree. In order to calculate how many nodes in a tree have been replaced with a blank, we need to know how many nodes have been replaced by each \emph{specific} blank. As such, the \texttt{FillableBlank} base class stores an integer, supplied at a blank's construction, that records how many nodes this blank replaced. The standard way to count the number of nodes in a tree which has root $N$ is to count the number of nodes in each subtree that has a root that is one of $N$'s children, and add one to the total. Since we are counting not only the total number of nodes in the tree, but also how many of those nodes are blank, the method used to count the nodes must return both these numbers simultaneously. This is done using the class \texttt{NodeCount}, which stores two integer fields, one, \texttt{empty}, records the number of blank nodes in the tree, and the other, \texttt{filled}, records the number of nodes which are not blank. The \texttt{getTreeSize} method returns a \texttt{NodeCount} object, and is implemented by every class in the MiniJava implementation. It uses the recursive approach to counting nodes in a tree, distinguishing between nodes which are blank and nodes which aren't. To work out how much of the AST is blank, this method is called on the root of the tree so that the returned \texttt{NodeCount} object can be used to calculate the percentage using the formula \texttt{empty / (empty + filled)}.
-
-\subsubsection*{5. Filling blanks with student submitted code}
-
-Since representations of blanks in code have their own unique identifier, the blank that a user wishes to fill can be selected using it. To fill a blank with the representation of a user's code, the representation of the blank itself must be found within the program's AST, before the representation of the code is stored within it. This functionality is found within the \texttt{fillBlank} method of the \texttt{AbstractPExcercise} class. This method takes the identifier of the blank to be filled and the AST of the code to fill it with. The method then uses a depth-first-search through the AST to find blanks which, when found, have their identifiers compared with the target identifier. If they do not match, then the search moves on, but if they do match, then it is determined whether the blank is an instance of \texttt{FillableBlankExpr} or \texttt{FillableBlankStmnt}. If it is the former, then the blanks \texttt{studentExpr} field is set to the user's AST. If it is the latter, then it is the \texttt{studentStmnt} field that is set. If the search fails, then it can be reported that no blank with the suggested identifier exists within the solution.
-
-\subsubsection*{6. Executing the solution}
-
-Since the \texttt{AbstractPExercise} class stores the AST of the solution, executing the solution is as simple as using the inbuilt interpreter on it. The \texttt{runSolution} method in this class initialises its \texttt{c} field, which is a \texttt{Context} object for use in execution and solution verification, and calls the solution's \texttt{execute} method with \texttt{c} as an argument.
-
-\subsubsection*{7. Checking that the problem is solved by the provided solution}
-
-Since different questions have different requirements, the method in \texttt{AbstractPExercise} that checks the validity of solutions, \texttt{checkSolved}, must also be abstract. This method returns a \texttt{boolean}, which will have the value \texttt{true} if the solution is correct and \texttt{false} otherwise. There are two possible ways of checking whether a solution is valid: either the value of an variable can be compared with a target value, or the result of a print statement can be inspected. The first of these approaches requires an \texttt{Id} field to be declared in the concrete class representing the problem, assigned the appropriate name in the constructor. In the overridden \texttt{checkSolved} method, the final value of this variable can be accessed by extracting the \texttt{value} field from the \texttt{ReturnValues} object attained by calling the \texttt{Id} instance's \texttt{evaluate} method with \texttt{c}, the \texttt{Context} object used during execution. In contrast, the second approach can be implemented by checking the contents of the file written to by the representation of the print statement. 
-\mbox{}\\
-
-An example concrete class extending \texttt{AbstractPExercise} is \texttt{FactorialExercise}, which represents an exercise in which the student is asked to use a while loop to calculate the factorial of some integer $N$, which is supplied on construction of the object, storing the result in the variable \texttt{total}. The model solution code is shown below:
+An example concrete class extending \texttt{AbstractPExercise} is \texttt{FactorialExercise}, which represents an exercise in which the student is asked to use a \texttt{while} loop to calculate the factorial of a random integer $N$, storing the result in the variable \texttt{total}. The model solution code is shown below:
 \begin{Verbatim}[samepage=true]
 int total = 1, n = N;
 while (n > 1) {
     total *= n--;
 }
 \end{Verbatim}
-This code calculates $N\times(N-1)\times\dotsb\times2\times1=N!$  and stores it in \texttt{total} as required. In the \texttt{FactorialExercise} constructor, the value of $N!$ is calculated in the same way and stored in the \texttt{int} field, \texttt{nFact}, and the \texttt{totalID} field of type \texttt{Id} is set up with the name ``\texttt{total}''. The overridden \texttt{checkSolved} method evaluates \texttt{totalID} with the \texttt{Context} object \texttt{c} and compares its final value with the \texttt{nFact} field, returning \texttt{true} if they are the same and \texttt{false} otherwise.
+This code calculates $N\times(N-1)\times\dotsb\times2\times1=N!$  and stores it in \texttt{total} as required. In the \texttt{FactorialExercise} constructor, the value of $N!$ is calculated in the same way and stored, and a field of type \texttt{Id} is set up with the name ``\texttt{total}''. To check a solution, the class runs the solution, evaluates \texttt{totalID} with the appropriate \texttt{Context} object, and compares its final value with the correct answer stored previously, returning \texttt{true} if they are the same and \texttt{false} otherwise.
 
 In this section I have presented the class \texttt{AbstractPExercise}, shown how it fulfils the requirements for representing an exercise, and shown a concrete example that extends it.
 
@@ -481,7 +419,7 @@ In this section I have presented the class \texttt{AbstractPExercise}, shown how
 
 This section describes first the algorithm that adds a blank to a MiniJava program that can later be filled in by a student, followed by the algorithm that replaces a blank with the original code snippet.
 
-When we try to add a blank to the model solution, it is possible that the entire solution is already blank, in which case we would fail. For this reason, the algorithms that add and remove blanks both return \texttt{boolean}s, the value of which records if a blank was added or not.
+\subsection{Choosing the algorithm for adding blanks}
 
 The difficulty of a problem is based on the difficulty of the question itself and the percentage of the model solution that is blank when it is presented. Changing the question itself can be considered a coarse-grained adjustment to the problem's overall difficulty, while changing the percentage of the model solution that is blank is a much more fine-grained adjustment of overall difficulty. When we wish to adjust the difficulty of the problem, we would prefer to have the greatest control over the difficulty possible, able to make the finest-grained adjustments. For this reason, the algorithm that chooses which node in a model solution to replace with a blank should make the choice that causes the smallest growth in the percentage of the whole that is blank. Additionally, we would prefer to distribute these blanks across the whole solution, rather than concentrating them in any one part. 
 
@@ -502,41 +440,109 @@ Figure \ref{Fig:Tree} shows an example AST, with its nodes numbered for referenc
 
 It can be seen that this algorithm does indeed produce the desired output, 4,~5,~8,~2,~7,~6,~3,~1. During the first pass of the tree, the leaves labeled 4, 5, and 8 are returned and removed. Removing these leaves means that nodes 2 and 7 are now the leaves of the tree. On the next pass through, these leaves are returned and removed. The ``tree'' is now a simple chain of the nodes (returned in the order of bottom to top) 6, 3, 1.
 
-The problem my algorithm must solve is more complex than a simple traversal. Not only should my algorithm terminate mid-traversal and be able to pick up from that point at the start of the next execution, but the process of actually inserting a blank into the tree is non-trivial, and not only that, but the results of executing the algorithm have to be reversed in order to replace a blank with the original code snippet. To see how I implemented the algorithm, found in the \texttt{addBlank} method of \texttt{AbstractPExercise}, let us begin by considering the simple problem and introduce more complexity as we go.
+\subsection{Adding a blank}
 
-Since the first step is to traverse the tree as a Depth First Traversal, we must first implement this, using a \texttt{Stack<MiniJASTNode>} to store the nodes that still need to be dealt with. We start by pushing the root node (found in the \texttt{solution} field of the \texttt{AbstractPExercise} class) on to the nodes stack, as usual, and as usual we process this node before adding its children to the stack. Point 2 of the algorithm description says that when we find a leaf, we remove it from the tree. In the actual algorithm we wish to replace the node with a blank (the process for which I explain shortly), but since we are do not actually remove the node from the tree, we have a problem. Once we have made all the leaves of the tree blank, we have no more leaves to choose; this is in direct contrast to when we were simply removing leaves thereby creating more leaves. To fix this problem, we redefine the concept of leaves: a node is a leaf it has no children or all of its children are blank. In this way, by making leaves blank we are in fact creating more leaves. This definition of leaves is implemented in the \texttt{getIsLeaf} method declared in the \texttt{MiniJASTNode} interface and defined in the \texttt{ExpressionBase} and \texttt{StatementBase} abstract classes.
+The problem my algorithm must solve is more complex than a simple traversal. Not only should my algorithm terminate mid-traversal and be able to pick up from that point at the start of the next execution, but the process of actually inserting a blank into the tree is non-trivial. On top of that, the results of executing the algorithm have to be reversed in order to replace a blank with the original code snippet. 
 
-When we find a leaf, we wish to replace it with a blank. To do this, we have to replace the reference to the node in its parent with a reference to a new blank. At the moment, you cannot index nodes: you cannot access the $n$th child of a node, since they are simply stored in \texttt{private} fields. This means that it is very difficult to replace the reference to a child within a parent, without implementing a setter in every class that could translate the integer index to the appropriate field. This seems a lot more tiresome than simply allowing one to index nodes. To enable this, the \texttt{MiniJASTNode} interface declares the method \texttt{getSubNodes}, which returns \texttt{ArrayList<? extends MiniJASTNode>}. \texttt{StatementBase} and \texttt{ExpressionBase} both have a protected field, \texttt{subNodes}, which is returned by their overrides of this method. These fields are populated by the individual classes as their instances are set up. This means that rather than store their children directly as fields, each class in the implementation stores all its children in the \texttt{subNodes} field, and separately stores indexes into the array to provide access to the children during evaluation or execution. When we wish to replace a node with a blank, we store a blank at the appropriate index within its parent's \texttt{subNodes} field using the \texttt{getSubNodes} method. This means that we need to keep track of what the parent of the current node is, and also of the current node's index within its parents. These are stored in \texttt{Stack}s whose entries are updated as needed during the execution of the algorithm. 
+Since the first step is to traverse the tree as a Depth First Traversal, we must first implement this, using a \texttt{Stack<MiniJASTNode>} to store the nodes that still need to be dealt with. We start by pushing the root node (found in the \texttt{solution} field of the \texttt{AbstractPExercise} class) on to the nodes stack, as usual, and as usual we process this node before adding its children to the stack. Point 2 of the algorithm description says that when we find a leaf, we remove it from the tree. In the actual algorithm we wish to replace the node with a blank (the process for which I explain shortly), but since we are do not actually remove the node from the tree, we have a problem. Once we have made all the leaves of the tree blank, we have no more leaves to choose; this is in direct contrast to when we were simply removing leaves thereby creating more leaves. To fix this problem, we redefine the concept of leaves: a node is a leaf it has no children or all of its children are blank. In this way, by making leaves blank we are in fact creating more leaves.
 
-Since we need to be able to undo the effects of an execution of the algorithm to be able to restore the original code, we need to store the nodes that were replaced as well as the list of indices giving the path through the tree to each node's original location. These are stored as \texttt{private} fields of the \texttt{AbstractPExercise} class, \texttt{Stack<MiniJASTNode>~replacedNodes} and \texttt{Stack<Stack<Integer>>~replacedNodeTreeIndices}. Whenever we replace a node, it is pushed onto the first stack, and the current stack of indices is pushed onto the second. The indices are also useful in enabling us to restart the algorithm where it left off. At the beginning of the algorithm, we check if the \texttt{replacedNodeTreeIndices} has any entries. If it does, we take the top one, reverse it (since the integer on top of the stack is the index of the last node in its parent and the integer on the bottom of the stack is the index of the root we need to follow first), and follow the indices through the tree. At each entry of the stack, we need to push the current node on to the parents stack, the index on to the index stack, and the children at and after, but not before, the index on to the nodes stack. The children after the index need to be pushed on too, as they have not yet been processed this pass of the tree.
+When we find a leaf, we wish to replace it with a blank. To do this, we have to replace the reference to the node in its parent with a reference to a new blank. At the moment, you cannot index nodes: you cannot access the $n$th child of a node, since they are simply stored in \texttt{private} fields. This means that it is very difficult to replace the reference to a child within a parent, without implementing a setter in every class that could translate the integer index to the appropriate field. This seems a lot more tiresome than simply allowing one to index nodes. To enable this, rather than store their children directly as fields, each class in the implementation stores all its children in an array and separately stores indices into the array to provide access to the children. When we wish to replace a node with a blank, we store a blank at the appropriate index within its parent's array of children. This means that we need to keep track of what the parent of the current node is, and also of the current node's index within its parents.
 
-In contrast to adding a blank, the algorithm that removes a blank from the model solution, \texttt{removeBlank} in \texttt{AbstractPExercise}, is much simpler. We simply take the top off the \texttt{replacedNodes} and \texttt{replacedNodeTreeIndices} stacks, follow the indices to the parent of the specific node, and use the last index to reinsert the node back in to its parents \texttt{subNodes} field.
+Since we need to be able to undo the effects of an execution of the algorithm to be able to restore the original code, we need to store the nodes that were replaced as well as the list of indices giving the path through the tree to each node's original location. These are stored in \texttt{Stack}s in the  \texttt{AbstractPExercise} class. The indices are also useful in enabling us to restart the algorithm where it left off. At the beginning of the algorithm, we take the top of the stack of indices and follow them through the tree to where the last node was made blank, and then continue the traversal. 
+
+\subsection{Removing a blank}
+
+In contrast to adding a blank, the algorithm that removes a blank from the model solution is much simpler. We simply take the top off the stack of replaced nodes and the stack of indices, follow the indices to the parent of the specific node, and use the last index to reinsert the node back in to its parent.
 
 This section described the implementation of the algorithms that introduce blanks to and remove them from a MiniJava program.
 
 \section{The \texttt{ExerciseSetter}}
 \label{Sec:ExSet}
 
-In this section I describe how I made use of the language and its features to design the \texttt{ExerciseSetter}, one possible way in which students might interface with exercises designed to facilitate the learning of MiniJava.
+In this section I describe how I made use of the language and its features to design the \texttt{ExerciseSetter} class, which can set exercises and adjust their difficulty.
 
-The purpose of the \texttt{ExerciseSetter} class is to demonstrate one way in which students might interact with MiniJava and the question implementation described previously. It was designed with the possibility of being plugged in to yet more peripherals in mind, and as we will see in Section \ref{Sec:GUI} the GUI makes use of it. The basic intuition behind its design comes from the imagined use case of students in a class where the student to teacher ratio is very high, and students may not have instant access to a teacher in the case that they find the presented exercises to easy or too difficult. The challenge in this scenario would be to programmatically detect that the student finds the problem too easy or too hard, and to present an easier or a harder problem respectively. The \texttt{ExerciseSetter} facilitates this by implementing a very simple performance heuristic and by storing several questions of various difficulties, such that ideally all students could be catered too. Using the performance heuristic, the \texttt{ExerciseSetter} attempts to adjust the problems difficulty appropriately.
+The intuition behind the design of the \texttt{ExerciseSetter} comes from the imagined use case of students in a class where the student to teacher ratio is very high, and students may not have instant access to a teacher in the case that they find the presented exercises too easy or too difficult. The challenge in this scenario would be to programmatically detect that the student's capability is not matched with the difficulty of the exercise, and to present an easier or a harder problem appropriately. The \texttt{ExerciseSetter} facilitates this by implementing a very simple performance heuristic and by storing several questions of various difficulties, such that ideally all students could be catered too. Using the performance heuristic, the \texttt{ExerciseSetter} attempts to adjust the current problem's difficulty appropriately.
 
-In order to programmatically present easier or harder questions, it is sensible to have the list of exercises sorted according to difficulty. To do this, \texttt{AbstractPExercise} actually implements the \texttt{Comparable} interface, comparing based on the difficulty of the questions involved. The list of exercises in \texttt{ExerciseSetter} is then kept sorted as new exercises are added.
+The performance heuristic operates on the assumption that the performance of the students can be inferred from the number of attempts at solving the problem before their solution was correct, and the comparison between the number of nodes in the model solution tree and the number of nodes in the student's solution tree. The more attempts a student required to solve the problem correctly, the more difficult they found the problem. Also, if a student used many more nodes to solve the problem than the model solution did, then it is likely that they haven't understood a core concept being tested: they may have unnecessarily unrolled a loop for example. 
 
-The performance heuristic operates on the assumption that the performance of the students can be inferred from the number of attempts at solving the problem before their solution was correct and the comparison between the number of nodes in the model solution tree and the number of nodes in the student's solution tree. The more attempts a student required to solve the problem correctly, the more difficult they found the problem, it is assumed. Also, if a student used many more nodes to solve the problem than the model solution did, then it is likely that they haven't understood a core concept being tested: they may have unnecessarily unrolled a loop for example. This heuristic is found in the \texttt{reportPerformance} method of the \texttt{ExerciseSetter}, a method which returns a \texttt{float} value. If the returned value is positive, then the student supposedly did well, and the next problem should be harder, while if the returned value is negative the opposite is true. The magnitude of the float indicates the severity of the adjustment that should be made.
+If, once an exercise has been solved, the next exercise needs to be harder, according to the performance heuristic, then the \texttt{ExerciseSetter} should add blanks to the solution until either the exercise is hard enough, or the entire solution is blank. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present a harder question, with enough of the solution blank that the answer is not given to the student at first glance. If instead the exercise needs to be easier, then the \texttt{ExerciseSetter} should remove blanks from the solution until either the exercise is easy enough, or there are no blanks in the solution. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present an easier question.
 
-The class also provides an interface through which students may fill blanks by submitting their own code. There are two \texttt{fillBlank} methods in the \texttt{ExerciseSetter} class, one which takes a \texttt{MiniJASTNode} reference and uses the exercise's \texttt{fillBlank} method directly to fill the desired blank. The other takes a \texttt{String} argument containing the code with which to fill the blank. To get the representation of this code to actually fill the blank, of course the parser must be used, but this presents an interesting problem. Certain code snippets have the potential to be both \texttt{Expression}s and \texttt{Statement}s. An example of this is the code snippet \texttt{total = 1}. This can be parsed as an assignment, and would thus be classed an \texttt{Expression}, or a variable declaration, where the surrounding context might be \texttt{int total = 1;}, which would categorise this snippet as a \texttt{Statement}. Fortunately the parser generated by the ANTLR tool has a solution to this, as the starting terminal symbol for the grammar is not fixed. The \texttt{ExerciseSetter} can check whether the blank being filled represents an \texttt{Expression} or a \texttt{Statement}, and then sets the entry point of the parser to be either \texttt{expression} or \texttt{blockStatement} appropriately. 
+In this section I have detailed the implementation of the \texttt{ExerciseSetter}.
 
-If, once an exercise has been solved, the next exercise needs to be harder, according to the performance heuristic, then the \texttt{ExerciseSetter} should add blanks to the solution until either the exercise is hard enough, or the entire solution is blank. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present a harder problem and calculate how much of it should be blank to give the required difficulty. If instead the exercise needs to be easier, then the \texttt{ExerciseSetter} should remove blanks from the solution until either the exercise is easy enough, or there are no blanks in the solution. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present an easier problem and calculate how much of it should be blank. This functionality is implemented in the \texttt{adjustQuestion} method of the \texttt{ExerciseSetter}.
+\section{Extension: the parser}
+\label{Sec:Parsing}
 
-To enable it to be plugged in to other peripherals, the \texttt{ExerciseSetter} simply propagates any custom exceptions raised during execution of the solution upwards, and returns \texttt{String}s when asked to present the current question or print the current solution.
+In this section I explain how a parser for MiniJava was implemented as an extension using the ANTLR parser generator\cite{ANTLR4}, and how a representation of an input MiniJava program can be built using it.
 
-In this section I have detailed one of the ways that students might interface with MiniJava through the \texttt{ExerciseSetter}. This is only an example of a possible use for the tools, but shows how powerful they can be.
+The parser grammar (which can be found in Appendix \ref{App:Parser}) is based on an existing ANTLR parser grammar for Java\footnote{https://github.com/antlr/grammars-v4/tree/master/java - last accessed May 13th}. It would not have been worthwhile for me to write an entire grammar from scratch when there was such a readily available alternative. It is always good to use existing libraries or tools if they are available. 
 
-\section{The GUI}
+The ANTLR tool generates recursive descent parsers from input grammars. The typical usage of ANTLR follows this process:
+\begin{enumerate}
+\item{Write a grammar in a grammar file.}
+\item{Run the ANTLR tool on this grammar file to generate a parser.}
+\item{When this parser is executed with input source code, ANTLR's internal representation of the corresponding parse tree is built.}
+\item{Using either a ``listener'' or a ``visitor'', walk the generated parse tree, taking actions at each node, processing the source code as desired.}
+\end{enumerate}
+The following code shows how to build a MiniJava representation for the source code \texttt{i~=~4;}.
+\begin{Verbatim}[samepage=true, numbers=left]
+AssignExpr aE = new AssignExpr();
+Id i = new Id();
+i.setUpId("i");
+Literal four = new Literal();
+four.setUpLiteral(PrimType.INT, "4");
+aE.setUpAssignExpr(i, AssignOp.EQ, four);
+ExpressionStmnt eS = new ExpressionStmnt(aE);
+\end{Verbatim}
+Considering this representation as a parse tree, this can be seen as line 0 (i.e. the invisible line before line 1) visiting the \texttt{ExpressionStmnt} node and visiting its only child, the \texttt{AssignExpr} node in line 1. This node's first child is visited in lines 2 and 3, and its second child is visited in lines 4 and 5. Once all the children of the \texttt{AssignExpr} have been visited, the instance itself can be set up on line 6. Once all the \texttt{ExpressionStmnt}'s children have been visited, its instance can be set up on line 7. This example demonstrates that in general, program representations are generated by recursively visiting each expression or statement's children, in a similar way to how a program representation is interpreted.
+
+By default, the ANTLR tool generates a listener interface and base class along with the parser. A listener is characterised by providing callback methods that are triggered by an automatic parse tree walker: listener methods don't have to explicitly visit their children. A visitor on the other hand gives the user more control over the walk, requiring explicit commands to visit the children of each node. While this means that it takes less work to use a listener (as the parse tree walker is already built in), the visitor paradigm is more appropriate for building my library's representation of the MiniJava source code. While the listener methods all return \texttt{void}, requiring the instances representing the children nodes to be stored somewhere in memory prior to setting up the current node, the base visitor, \texttt{MiniJavaBaseVisitor<T>}, is generic, with methods returning a \texttt{T} object. This means that the visitor methods can be made to return \texttt{MiniJASTNode}s, which can be cast to \texttt{Expression}s or \texttt{Statement}s as appropriate (as shown in Figure \ref{Fig:TopLevelUML} on page \pageref{Fig:TopLevelUML}). By using a visitor rather than a listener, I was able to more closely imitate the way that program representations are build in code (shown above). My visitor implementation can be found in \texttt{MiniJavaASTBuilder}, a class which extends the \texttt{MiniJavaBaseVisitor<MiniJASTNode>} class supplied by the ANTLR tool.
+
+\subsection{Challenges when parsing}
+
+Java, and by extension MiniJava, is a language that suffers from the ``dangling-else'' problem: a particular problem arising from an ambiguous grammar. Consider the MiniJava code shown below:
+\begin{Verbatim}[samepage=true,tabsize=4]
+if (i == true)		 (1)
+	if (j == false)	(2)
+		k = 1;
+else
+	k = 2;
+\end{Verbatim}
+A parser could not make a decision as to whether the \texttt{else} statement ``belongs'' to the first or the second \texttt{if} statement. Since the grammar is ambiguous, a decision must be made for the parser. The decision taken in Java\cite[p.417]{Java8}, and thus in MiniJava, is to attach the \texttt{else} statement to most inner \texttt{if} statement possible (which in the example above would be the one labeled \texttt{(2)}, even though the indentation may suggest that the programmer intended it to be the one labeled \texttt{(1)}). To implement this decision, the grammar distinguishes between \texttt{Statement}s and \texttt{StatementNSI}s (where NSI stands for ``No Short If'', i.e. there are no \texttt{if}s without associated \texttt{else}s). The way this solves the problem becomes apparent on inspection of the following rules in the grammar (presented in context in Appendix \ref{App:Parser}):
+\begin{Verbatim}[samepage=true, tabsize=4]
+statement:
+	...
+	| IF parExpression statement 				
+	| IF parExpression statementNSI ELSE statement	  
+	...
+	;
+	
+statementNSI:
+	...
+	| IF parExpression statementNSI ELSE statementNSI
+	...
+	;
+\end{Verbatim}
+The \texttt{statement} rule gives productions for both a short \texttt{if} (i.e. with no attached \texttt{else}) and a long \texttt{if}, while the \texttt{statementNSI} rule only produces a long \texttt{if}. It can be seen that using these rules to parse the code above will reach a dead end if the first \texttt{if} statement is parsed as a long \texttt{if}, since its first sub-statement would have to be a \texttt{statementNSI}, and this rule has no viable way of parsing the second \texttt{if} statement. 
+
+Another problem encountered while writing the parser can be discovered on inspection of the local variable declaration production shown below:
+\begin{Verbatim}[samepage=true, tabsize=4]
+blockStatement: 
+	primitiveType variableDeclarators SEMI	# localVariableDeclaration
+	...
+	;
+\end{Verbatim}
+This production is used in the creation of \texttt{LocalVarDec} instances, which require the appropriate \texttt{PrimType} to set up correctly. As the visitor arrives at a node produced like this in the parse tree (by calling the \texttt{visitLocalVariableDeclaration} method found in \texttt{MiniJavaASTBuilder}) it needs to visit the node's children in order to gather the necessary objects to set up the \texttt{LocalVarDec} object. Since visitor methods return \texttt{MiniJASTNode}s, the \texttt{visitPrimitiveType} method (also found in \texttt{MiniJavaASTBuilder}) needs to return an object whose class implements \texttt{MiniJASTNode} and represents a primitive type. Until this point, no such class existed. The enumeration \texttt{PrimType} does not implement \texttt{MiniJASTNode}, as that would require overriding all the methods declared in the interface separately for each value, as they are in \texttt{SingleWordStmnt}. Since this would be a lot of wasted code, I instead wrote a new class, \texttt{PrimTypeCarrier}, for precisely this purpose. This class implements \texttt{MiniJASTNode} and has a public field of type \texttt{PrimType}, meaning it only needs to implement (trivially) all of the interface methods once. An instance of this class can thus be created in the \texttt{visitPrimitiveType} method (setting the \texttt{PrimType} field value appropriately), which can then be returned to the \texttt{visitLocalVariableDeclaration} method for setting up the \texttt{LocalVarDec} object.
+
+\subsection{Using the parser}
+
+The \texttt{ExerciseSetter} class provides an interface through which students may fill blanks by submitting their own code as a \texttt{String}. To get the representation of this code to actually fill the blank, of course the parser must be used, but this presents an interesting problem. Certain code snippets have the potential to be both \texttt{Expression}s and \texttt{Statement}s. An example of this is the code snippet \texttt{total = 1}. This can be parsed as an assignment, and would thus be classed an \texttt{Expression}, or a variable declaration, where the surrounding context might be \texttt{int total = 1;}, which would categorise this snippet as a \texttt{Statement}. Fortunately the parser  has a solution to this, as the starting terminal symbol for the grammar is not fixed. The \texttt{ExerciseSetter} can check whether the blank being filled represents an \texttt{Expression} or a \texttt{Statement}, and then sets the entry point of the parser to be either \texttt{expression} or \texttt{blockStatement} appropriately.\\
+
+In this section I have described how the ANTLR parser generator can be used to generate parsers for the MiniJava grammar, and how program representations can be built using visitors.
+
+\section{Extension: the GUI}
 \label{Sec:GUI}
 
-In this section I describe the implementation and function of the GUI peripheral.
+In this section I describe the implementation and function of the GUI as an extension.
 
 \begin{figure}[h]
 \centering
@@ -545,15 +551,11 @@ In this section I describe the implementation and function of the GUI peripheral
 \label{Fig:GUI}
 \end{figure}
 
-The GUI demonstrates some of the possible uses of this set of tools. It shows how a teacher might manually set the difficulty of a particular exercise and how a student could fill in the blanks and run their solution. An example screen from the GUI is shown in Fig \ref{Fig:GUI}. The top slider determines the difficulty of the question: the further to the left the slider is, the easier the question will be. The bottom slider affects the difficulty of the problem: the further it is to the left, the fewer blanks there will be and thus the easier the problem will be to solve. When the ``Generate'' button is clicked on, the corresponding exercise will be displayed in the box on the right. 
+The GUI demonstrates some of the possible uses of this set of tools. It shows how a teacher might manually set the difficulty of a particular exercise and how a student could fill in the blanks and run their solution. An example screen from the GUI is shown in Fig \ref{Fig:GUI}. The top slider determines the difficulty of the question: the further to the left the slider is, the easier the question will be. The bottom slider affects the difficulty of the problem: the further it is to the left, the fewer blanks there will be and thus the easier the problem will be to solve. When the ``Generate'' button is clicked on, the corresponding exercise will be displayed on the right. 
 
-As shown in the screenshot, the box on the right is editable, allowing students to directly input their own code, filling in the blanks or otherwise. When the ``Run'' button is clicked on, the code in this box is parsed and set as the solution to the exercise. This solution is then run, and the validity of the solution checked. The GUI reports whether the solution was correct or not, and attempts to present error messages in a user friendly manner if any were produced.
+As shown in the screenshot, the ``Solution'' box on the right is editable, allowing students to directly input their own code, filling in the blanks or otherwise. When the ``Run'' button is clicked, the code in this box is parsed and set as the solution to the exercise. This solution is then run, and the validity of the solution checked. The GUI reports whether the solution was correct or not, and attempts to present error messages in a user friendly manner if any were produced. If the solution was correct, the student's performance is measured and the difficulty of the next exercise set accordingly. Example inputs and outputs of the GUI are shown in Section \ref{Sec:GUIEval} of the Evaluation.
 
-The GUI was designed using the IntelliJ UI Designer plugin\footnote{https://www.jetbrains.com/help/idea/2017.1/swing-designing-gui.html}. This plugin allowed me to drag and drop components into place on the form before programming their functionality with the adjoining bound class. The class stores a reference to an \texttt{ExerciseSetter} object, which is where all the data comes from, and where the commands from the user are delivered to.
-
-This section described the function and then the implementation of the GUI peripheral.\\
-
-In this chapter I have described what I have implemented and how I have done it. I started by giving the design of the language MiniJava, explaining some of these choices by introducing the parser and the concept of ``blanks'' within a MiniJava program. From there I explained how a programming exercise is conceptualised in the abstract sense, and gave an example of an implementation of a specific question. I finished by giving two possible uses for the set of tools, the \texttt{ExerciseSetter} and the Graphical User Interface (GUI).
+The GUI was designed using the IntelliJ Swing plugin\footnote{https://www.jetbrains.com/help/idea/2017.1/swing-designing-gui.html}. This plugin allowed me to drag and drop components into place on the form before programming their functionality with the adjoining bound class. The class stores a reference to an \texttt{ExerciseSetter} object, which is where all the data comes from, and where the commands from the user are delivered to.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Evaluation Chapter
@@ -570,18 +572,20 @@ A test suite consisting of a total of 113 tests (all of which pass when run on t
 \subsection{The \texttt{ExerciseSetter} class}
 \label{Sec:ExSetEval}
 
-The aim of the \texttt{ExerciseSetter} class is to be capable of delivering programming exercises, measuring the performance of students who solve these exercises, and adapting the difficulty of the following exercises appropriately. It has been shown in Section \ref{Sec:ExSet} that the \texttt{ExerciseSetter} class can deliver exercises by printing the question and a \texttt{String} representation of the incomplete model solution. In Section \ref{Sec:Blanks} the algorithm that adapted the difficulty of exercises was shown. All that remains is to analyse the way performance is measure.
+The aim of the \texttt{ExerciseSetter} class is to be capable of delivering programming exercises, measuring the performance of students who solve these exercises, and adapting the difficulty of the following exercises appropriately. It has been shown in Section \ref{Sec:ExSet} that the \texttt{ExerciseSetter} class can deliver exercises by printing the question and a \texttt{String} representation of the incomplete model solution. In Section \ref{Sec:Blanks} the algorithm that adapted the difficulty of exercises was shown. All that remains is to analyse the way performance is measured.
 
-The class has a method \texttt{reportPerformance} which returns a \texttt{float} value that represents the performance of a student once they have solved an exercise. If this value is positive, the student has performed well enough to be given a more difficult exercise, whereas if it is negative then the next exercise will be easier. Figure \ref{Fig:PerfGraph} shows how the measured performance depends on both the number of attempts a student has made to give a correct solution and also the number of extra nodes they used in their solution compared with that of the model solution. This graph shows the contours of the surface, which is a function of two variables. The orange line labelled 0 represents the zero contour, such that any solution that maps to a point above that line (on the 2D plot) is unsatisfactory, and will result in the next exercise being easier. Solutions mapping to points below the zero contour are good enough that the next exercise will be harder.
+The class has a method \texttt{reportPerformance} which returns a \texttt{float} value that represents the performance of a student once they have solved an exercise. If this value is positive, the student has performed to the required standard to be given a more difficult exercise, whereas if it is negative then the next exercise will be easier. Figure \ref{Fig:PerfGraph} shows how the measured performance depends on both the number of attempts a student has made to give a correct solution and also the number of extra nodes they used in their solution compared with that of the model solution. It shows the contours of the surface, which is a function of two variables. The orange line labelled 0 represents the zero contour, such that any solution that maps to a point above that line (on the 2D plot) is unsatisfactory, and will result in the next exercise being easier. Solutions mapping to points below the zero contour are of a standard such that the next exercise will be harder.
 
-The performance varies as a function of the number of attempts squared, strictly punishing solutions that required many attempts, as this indicates a lack of understanding of the question being answered. The cut-off point for the number of attempts is 2.5, that is if a student requires two attempts or fewer, the system determines that the next exercise can be harder, but if a student requires three attempts or more, the next exercise will be easier. This was chosen to allow one careless mistake before assuming lack of comprehension.
+The performance varies as a function of the number of attempts squared, punishing solutions that required multiple attempts, as this indicates a lack of understanding of the question being answered. The cut-off point for the number of attempts is 2.5, that is if a student requires two attempts or fewer, the system determines that the next exercise can be harder, but if a student requires three attempts or more, the next exercise will be easier. This was chosen to allow for one careless mistake before assuming lack of comprehension.
 
-If the student uses fewer nodes than the model solution, then either they have found a more efficient solution, or they have ``cheated'' and not used the appropriate syntax constructs being taught (i.e. reached $n!$ by simply calculating $n\times(n-1)\times\dotsb$ all at once rather than using the expected while loop). At present the system is not able to tell the difference, but an area of future work might be to enable the system to check for certain code constructs being used in the presented solution. Since, at the moment, a student using fewer nodes could be indicative of understanding or of cheating, the performance function does not take this into account, shown by the horizontal contours to the left of the $x=0$ vertical. When the number of extra nodes used is greater than zero, it is almost certainly a sign that a student has not understood the best way to solve the question (i.e. unrolled the while loop to calculate $n!$). For this reason, the greater the number of extra nodes used, the worse the measured performance.
+If the student uses fewer nodes than the model solution, then either they have found a more efficient solution, or they have ``cheated'' and not used the appropriate syntax constructs being taught (i.e. reached $n!$ by simply calculating $n\times(n-1)\times\dotsb$ all at once rather than using the expected \texttt{while} loop). At present, when a student uses fewer nodes, the system cannot tell the difference between a student showing greater understanding and one ``cheating''. Therefore, the performance function does not take this into account, shown by the horizontal contours to the left of the $x=0$ vertical. When the number of extra nodes used is greater than zero, it is almost certainly a sign that a student has not understood the best way to solve the question (i.e. unrolled the while loop to calculate $n!$). For this reason, the greater the number of extra nodes used, the worse the measured performance.
+
+An area of future work might be to enable the system to check for certain code constructs being used in the presented solution. This would enable differentiation between students using constructs more efficiently, and those simply not using them.
 
 \begin{figure}
   \centering
     \includegraphics[width=0.8\textwidth]{PerfGraph}
-  \caption{A graph showing the contours of the performance function.}
+  \caption{A graph showing the contours of the performance surface, dependent on the number of attempts required and the number of extra nodes used.}
   \label{Fig:PerfGraph}
 \end{figure}
 
@@ -589,9 +593,10 @@ If the student uses fewer nodes than the model solution, then either they have f
 
 The functionality of the parser is ensured by the continued running of regression tests after every change is made. Some of these tests are in the test suite itself, but the parser is also used to simplify the usage of some of the other components. For example, the exercises stored in the \texttt{ExerciseSetter} store their model solution as a \texttt{String} that is then parsed to allow the solution to be executed. Thus, whenever an exercise is instantiated, the parser is also being regression tested. 
 
-Since the GUI also makes use of the parser to allow students to directly edit the model solution however they choose, any use and evaluation of the GUI also functions as testing of the parser.
+Since the GUI also makes use of the parser to allow students to directly edit the model solution however they choose, any use and evaluation of the GUI also functions as a test of the parser.
 
 \subsection{The GUI extension}
+\label{Sec:GUIEval}
 
 Investigating the GUI is the best way to evaluate the system as a whole, since it brings together all of the components and provides an interface for users. The screenshots in Figure \ref{Fig:GoodGUIScreens} show the output given when a student solves the exercise in the best way possible, in one attempt and with no more nodes than expected.
 
@@ -615,21 +620,21 @@ Investigating the GUI is the best way to evaluate the system as a whole, since i
   \begin{subfigure}{.55\textwidth}
     \centering
     \includegraphics[width=.9\linewidth]{NextQ}
-    \caption{The harder question resulting from this good performance.}
+    \caption{The harder question presented next.}
     \label{SFig:GGS3}
   \end{subfigure} 
-\caption{Screenshots of the GUI when the student has performed well.}
+\caption{Screenshots of the GUI when the student has performed to a standard deserving of a more difficult exercise.}
 \label{Fig:GoodGUIScreens}
 \end{figure}
 
-The result of solving the question perfectly (shown in Figure \ref{SFig:GGS2}) is recorded in the ``Output:'' part of the GUI, which gives the statistics of the solution (i.e. then number of attempts and the number of nodes used) and states that the next question will be harder. This question (shown in Figure \ref{SFig:GGS3}) is presented when the student presses the ``Next Question'' button. While a solution has only one way of being successful, there are a variety of ways in which it can be unsatisfactory. Some possible ways are shown in Figure \ref{Fig:BadGUIScreens}.
+The result of a perfect solution (shown in Figure \ref{SFig:GGS2}) is recorded in the ``Output:'' part of the GUI, which gives feedback on the number of attempts and the number of nodes used, and states that the next question will be harder. This question (shown in Figure \ref{SFig:GGS3}) is presented when the student presses the ``Next Question'' button. While a solution has only one way of being successful, there are a variety of ways in which it can be unsatisfactory. Some possible ways are shown in Figure \ref{Fig:BadGUIScreens}.
 
 \begin{figure}
 \centering
   \begin{subfigure}{.55\textwidth}
     \centering
     \includegraphics[width=.9\linewidth]{AMistake}
-    \caption{A mistake has been made .}
+    \caption{A mistake has been made.}
     \label{SFig:BGS1}
   \end{subfigure}%
   \\
@@ -637,21 +642,21 @@ The result of solving the question perfectly (shown in Figure \ref{SFig:GGS2}) i
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics[width=.9\linewidth]{EasierForAttempts}
-    \caption{The result of solving the question in one attempt and with no extra nodes.}
+    \caption{The result of solving the question in more than one attempt.}
     \label{SFig:BGS2}
   \end{subfigure}
   \;
   \begin{subfigure}{.45\textwidth}
     \centering
     \includegraphics[width=.9\linewidth]{EasierForNodes}
-    \caption{The harder question resulting from this good performance.}
+    \caption{The result of solving the question using many more nodes than required.}
     \label{SFig:BGS3}
   \end{subfigure} 
-\caption{Screenshots of the GUI when the student has performed well.}
+\caption{Screenshots of the GUI when the student has shown lack of understanding.}
 \label{Fig:BadGUIScreens}
 \end{figure}
 
-When a mistake is made, the error thrown by the interpreter is propagated up and shown by the GUI, as demonstrated by Figure \ref{SFig:BGS1}. This should hopefully help the student to find the error they made and correct it. In this case, the error tells us that ``The variable n has not been declared". Indeed, in the first line of the code, the punctuation after the word ``total'' should be a comma, not a semi-colon, to show that ``n = 7'' was part of the local variable declaration, not an assignment. For this particular solution, we imagine that the student made another mistake (which is not shown), before finally submitting a correct answer as in Figure \ref{SFig:BGS2}. Since the student took three attempts to solve the exercise, the system determines that the student has not properly understood the exercise so, as stated in the ``Output:'' box, the next exercise will be easier. Another possible issue a student could have is not understanding how to use the appropriate code construct to attain the most efficient result. This is shown in Figure \ref{SFig:BGS3}, where rather than use a while loop to calculate a factorial they have simply written out the whole long calculation. It is debatable which of the two solutions is preferable in general, but given the purpose of this exercise was to teach how to use while loops, I decided that the given solution was unsatisfactory. This can be seen in the ``Output:'' panel that lists that even though the problem was solved in one attempt, nine more nodes were used than expected, so the next question will be easier.
+When a mistake is made, the error thrown by the interpreter is propagated up and shown by the GUI, as demonstrated by Figure \ref{SFig:BGS1}. This enables the student to find the error they made and correct it. In this case, the error tells us that ``The variable n has not been declared". Indeed, in the first line of the code, the punctuation after the word ``total'' should be a comma, not a semi-colon, to show that ``n = 7'' was part of the local variable declaration, not an assignment. For this particular solution, we imagine that the student made another mistake (which is not shown), before finally submitting a correct answer as in Figure \ref{SFig:BGS2}. Since the student took three attempts to solve the exercise, the system determines that the student has not properly understood the exercise so, as stated in the ``Output:'' box, the next exercise will be easier. Another possible issue a student could have is not understanding how to use the appropriate code construct to attain the most efficient result. This is shown in Figure \ref{SFig:BGS3}, where rather than use a while loop to calculate a factorial they have simply written out the whole long calculation. It is debatable which of the two solutions is preferable in general, but given the purpose of this exercise was to teach how to use while loops, I decided that the given solution was unsatisfactory. This can be seen in the ``Output:'' panel that lists that even though the problem was solved in one attempt, nine more nodes were used than expected, so the next question will be easier.
 
 \section{Trends in difficulty against performance}
 \label{Sec:DiffTrends}
@@ -667,9 +672,9 @@ In Section \ref{Sec:ExSetEval} I analysed the way that the \texttt{ExerciseSette
 
 Figure \ref{Fig:DiffGraph} shows how the difficulty of exercises presented by the \texttt{ExerciseSetter} increases over a number of submissions. To generate this graph, I set the difficulty of the exercise being delivered by the \texttt{ExerciseSetter} to be as low as possible, that is, the simplest question with only a single blank in its model solution. I then made repeated correct submissions, tailored such that they all had a measured performance of one. In practice this is unrealistic, as it corresponds to the understanding of the student increasing at exactly the same rate as the difficulty, however, analysing this result can still be instructive. The difficulty of the exercise was increased by adding blanks to the model solution until the entire solution was blank. After the next correct submission, the next most difficult question was set.  
 
-At present, there are three questions that the \texttt{ExerciseSetter} can ask. These can be seen in the graph as the three distinct groups of points, separated by quite severe increases in difficulty. These sudden increases can be explained by my choice of how the system should adjust the difficulty when a new question is asked for the first time. Instead of giving the exercise the lowest difficulty possible (i.e. leaving only a single blank in its model solution), the system sets half of the model solution to be blank. This was done to ensure that a student trying a new problem for the first time would not be given the majority of the code at first attempt.
+At present, there are three questions that the \texttt{ExerciseSetter} can ask. These can be seen in the graph as the three distinct groups of points, separated by significant in difficulty. These increases can be explained by my choice of how the system should adjust the difficulty when a new question is asked for the first time. Instead of giving the exercise the lowest difficulty possible (i.e. leaving only a single blank in its model solution), the system sets half of the model solution to be blank. This was done to ensure that a student trying a new problem for the first time would not be given the majority of the code for their first attempt.
 
-For the three example questions I have implemented to demonstrate the power of these tools, it is a trend that the more complex the question, the more nodes the model solution requires to solve the problem. This has the unintended effect of making the rate of increase in difficulty slower as the difficulty of the question itself increases. This trend can be seen more explicitly in Figure \ref{Fig:DiffGraphComp}, where each solid line corresponds to a single question. Since the gradient of these lines decreases as the questions get more difficult, so too does the rate of increase in difficulty across submissions. This is a trend that we might desire in our system; it might be expected that students will need more support as the questions get more difficult, so it would be useful for the rate of increase in difficulty to be slower for harder questions. 
+For the three questions I have implemented, it is a trend that the more complex the question, the more nodes the model solution requires to solve the problem. This has the unintended effect of making the rate of increase in difficulty slower as the difficulty of the question itself increases. This trend can be seen more explicitly in Figure \ref{Fig:DiffGraphComp}, where each solid line corresponds to a single question. Since the gradient of these lines decreases as the questions get more difficult, so too does the rate of increase in difficulty across submissions. This is a desirable trend, as students are likely to need more support as the questions get more difficult. 
 
 Although this trend may not hold for all questions (i.e. there may be some simple questions that require a lot of nodes to answer, and some complex ones that can be solved with very few nodes), I believe that it will hold for a large number of questions, making this a useful side effect of my particular implementation.
 
@@ -685,9 +690,9 @@ In this section I have described the trends present in the way difficulty is mod
 \section{Development process}
 \label{Sec:DevProc}
 
-Throughout the implementation process, I followed the principles of Test Driven Development (TDD)\footnote{http://agiledata.org/essays/tdd.html - last accessed 10th May}. This methodology revolves around the writing of unit tests before the appropriate code is written. These tests are designed with reference to the requirements specification, such that any software that passes these tests fulfils the requirements. I found it very useful to develop the software in this manner, and would want to incorporate this methodology in my next large project.
+Throughout the implementation process, I followed the principles of Test Driven Development (TDD)\footnote{http://agiledata.org/essays/tdd.html - last accessed 10th May}. This methodology revolves around the writing of unit tests before the appropriate code is written. These tests are designed with reference to the requirements specification, such that any software that passes these tests fulfils the requirements. I found it very useful to develop the software in this manner, since I found that most bugs that I introduced were caught the first time I executed the code, and thus could not cause more problems later in the process, when they might have been harder to find.
 
-The creation of prototypes to further investigate certain ideas has also been beneficial, allowing me to avoid expending too much effort on a method that would not have worked. However, at times I might have benefited from strictly laying out the interfaces between the components before I started to make prototypes of them. Sometimes the prototypes became the components themselves, and it was only when I tried to get them to work together that I realised that the interface one component expected was not necessarily the one that another component offered. Starting again now, I would outline the project not only in text form, but also as a UML diagram.\\
+The development of prototypes has also been beneficial, allowing me to avoid dead ends by testing my ideas at an early stage. However, at times I might have benefited from determining the interfaces between the components before I started to make prototypes of them. Sometimes the prototypes became the components themselves, and it was only when I tried to get them to work together that I realised that the interface one component expected was not necessarily the one that another component offered. In future, I would outline the project not only in text form, but also as a UML diagram.\\
 
 This section has evaluated the functionality of the individual components, some of the trends found in the data, and my own development process.
 
@@ -696,17 +701,19 @@ This section has evaluated the functionality of the individual components, some 
 
 \chapter{Conclusion}
 
-In conclusion, the project was a success. The software I produced fulfils all of the original aims, and I was able to implement two extensions on top of the core functionality that have enabled me to properly demonstrate the power of the underlying system.
+In conclusion, the project was a success, as the software I developed fulfils all of the original aims. Furthermore, I was able to implement two extensions on top of the core functionality that have enabled me to demonstrate the power of the underlying system.
 
-I have designed a new language, called MiniJava, such that its programs can incorporate gaps that must be filled in so that they can be executed. I have written an interpreter and a pretty-printer for this language, to allow arbitrary code snippets to be executed, and so that internal representations of these programs to be printed using the concrete semantics. I encoded a representation of programming exercises to be solved using MiniJava, and wrote algorithms to introduce blanks to and remove them from the model solutions for these exercises, making them harder and easier respectively. Using concrete examples of these exercises, I implemented a system that could deliver questions to a student, allow them to fill in the blanks with their own arbitrary code, and execute the complete solution to determine whether the problem was solved. This system measures the performance of the student using a heuristic, and adjusts the difficulty of the next exercise based on this measurement. As extensions, I implemented a parser for MiniJava to streamline the process of accepting student input, and created a GUI to demonstrate how both teachers and students might use the system.
+I have designed a new language, called MiniJava, such that its programs can incorporate blanks that must be filled in so that they can be executed. I have written an interpreter and a pretty-printer for this language, to allow arbitrary code snippets to be executed, and so that internal representations of these programs can be printed using the concrete semantics. I encoded a representation of programming exercises to be solved using MiniJava, and wrote algorithms to introduce blanks to and remove them from the model solutions for these exercises, making them harder and easier respectively. Using concrete examples of these exercises, I implemented a system that could deliver questions to a student, allow them to fill in the blanks with their own arbitrary code, and execute the complete solution to determine whether the problem was solved. This system measures the performance of the student using a heuristic, and adjusts the difficulty of the next exercise based on this measurement. As extensions, I implemented a parser for MiniJava to streamline the process of accepting student input, and created a GUI to demonstrate how both teachers and students might use the system.
 
-This project was subject to several limitations, not least of which was my lack of expertise in the field of teaching. A lot of the choices I made were based on my intuition, and given the time and resources I would have benefitted greatly from the guidance of an education professional throughout the development process. Further to this, the system suffers from a paucity of possible questions that may be delivered, due to a lack of time and, again, expertise. Given more variety of questions of a similar difficulty, the system would not need to present the same question multiple times, as currently it is very possible for students to simply learn the answers without understanding the material. 
+This project was subject to several limitations, not least of which was my lack of expertise in the field of teaching. Choices I made regarding pedagogic practice were based on my intuition, and given the time and resources I would have benefitted greatly from the guidance of an education professional throughout the development process. Further to this, the system suffers from a paucity of possible questions that may be delivered, due to a lack of time and, again, expertise. Given more variety of questions of a similar difficulty, the system would not need to present the same question multiple times, as currently it is possible for students to simply learn the answers through repetition of the material without actually understanding the underlying principles. 
 
 \section{Further work}
 
-Part of writing systems that attempt to teach programming that is often very difficult to manage is the reporting of errors in a way that novice programmers would find useful. One tool that makes some headway in solving this problem is the Arjen tool\cite{Arjen}. This tool exploits the fact that novice programmers all tend to make the same types of errors, and explicitly searches for these errors in order to provide feedback tailored to a novice, perhaps providing pointers for how to solve or avoid the problem. A collaboration between my set of tools and a tool such as Arjen would certainly be beneficial for students, giving a much more supportive user experience.
+One of the difficulties in teaching programming is that it is often difficult to report errors in a way that novice programmers would find useful. Often, these errors use technical jargon that beginners may not have learnt, and usually require a deeper understanding of the language (and Computer Science in general) than can be expected of them. One tool that has made some headway in solving this problem is Arjen\cite{Arjen}. This works by exploiting the fact that novice programmers all tend to make the same types of errors, and explicitly searches for these errors in order to provide feedback tailored to a novice, perhaps providing pointers for how to solve or avoid the problem. A collaboration between my system and a tool such as Arjen would be worthy of further investigation, since it is likely to be beneficial for students, giving a much more supportive user experience.
 
-Another extension I considered in my proposal but did not have time for in my implementation was to consider different syntactic constructs separately, and attempt to record a student's expertise with each construct. This would allow a much more thorough analysis of a student's understanding, and allow the system to provide a  more tailored and directed learning experience.  
+Another extension I considered in my proposal but did not have time for in my implementation was to consider different syntactic constructs separately, and attempt to record a student's expertise with each construct. This would allow a much more thorough analysis of a student's understanding, and allow the system to provide a  more tailored and directed learning experience. \\
+
+In summary, this project has been both a useful insight into the development of complex software in general, and also a successful implementation of a system for giving programming exercises adaptive difficulty.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % the bibliography
@@ -717,7 +724,7 @@ Another extension I considered in my proposal but did not have time for in my im
 % the appendices
 \appendix
 
-\chapter{The Parser}
+\chapter{The Grammar}
 \label{App:Parser}
 
 \begin{Verbatim}[tabsize=4]
