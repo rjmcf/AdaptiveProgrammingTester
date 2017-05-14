@@ -15,11 +15,11 @@ text(7,2,'C  ','HorizontalAlignment','right', 'FontSize', 14, 'Color', 'm')
 plot(0,2, 'b+')
 text(0,2,'A  ','HorizontalAlignment','right', 'FontSize', 14, 'Color', 'b')
 hold off
-h = title('Performance as a function of N^o of attempts taken and N^o of extra nodes', 'FontSize', 14);
+h = title('Performance as a function of number of attempts and extra nodes', 'FontSize', 14);
 P = get(h,'Position');
 set(h,'Position',[P(1) P(2)+0.1 P(3)])
-xlabel('Number of extra nodes', 'FontSize', 14) % x-axis label
-ylabel('Number of attempts', 'FontSize', 14) % y-axis label
+xlabel('Number of extra nodes used', 'FontSize', 14) % x-axis label
+ylabel('Number of attempts required', 'FontSize', 14) % y-axis label
 
 ax = gca;
 ax.YTick = [1 2 3 4 5];
