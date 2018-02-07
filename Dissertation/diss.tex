@@ -1,5 +1,5 @@
 % Template for a Computer Science Tripos Part II project dissertation
-\documentclass[12pt,a4paper,twoside,openright]{report}
+\documentclass[12pt,a4paper,twoside]{report}
 \usepackage[pdfborder={0 0 0}]{hyperref}    % turns references into hyperlinks
 \usepackage[margin=25mm]{geometry}  % adjusts page layout
 \usepackage{amsmath} % For masthy things
@@ -9,6 +9,7 @@
 \usepackage{color} % Uses color to remind me of things to do.
 \usepackage{wrapfig} % used for wrapping text around images
 \usepackage{subcaption}
+\usepackage[toc,title]{appendix}
 
 \graphicspath{ {figs/} }
 
@@ -36,7 +37,7 @@
 \vspace*{60mm}
 \begin{center}
 \Huge
-\textbf{Giving Programming Exercises Adaptive Difficulty} \\[5mm]
+\textbf{A System For Giving Programming Exercises Adaptive Difficulty} \\[5mm]
 Computer Science Tripos -- Part II \\[5mm]
 Homerton College \\[5mm]
 2017
@@ -53,9 +54,9 @@ Homerton College \\[5mm]
 \begin{tabular}{ll}
 Name:               & \bf Robin McFarland                       \\
 College:            & \bf Homerton College                     \\
-Project Title:      & \bf Giving Programming Exercises Adaptive Difficulty \\
+Project Title:      & \bf A System For Giving Programming Exercises \\ & \bf Adaptive Difficulty \\
 Examination:        & \bf Computer Science Tripos -- Part II, July 2017  \\
-Word Count:         & \bf TBC  \\
+Word Count:         & \bf 11,826  \\
 Project Originator: & Mr Michael B.~Gale                   \\
 Supervisor:         & Mr Michael B.~Gale                    \\ 
 \end{tabular}
@@ -63,9 +64,15 @@ Supervisor:         & Mr Michael B.~Gale                    \\
 
 \section*{Original Aims of the Project}
 
+The original aims were to design a system that measures the performance of a student as they solve programming exercises and algorithmically determines the difficulty of the next exercise based on that performance. This required implementing a language which incorporated ``blanks'' into its grammar, writing an interpreter for this language, encoding representations of programming exercises, developing algorithms to add and remove blanks from programs, and writing heuristics to measure performance and adjust question difficulty. Implementing a parser and a GUI were possible extensions, as was measuring competence with different syntax constructs separately (e.g. \texttt{for} loops and \texttt{if} statements), and producing graphs of progress against time to motivate students.
+
 \section*{Work Completed}
 
+I was able to fulfil all the core aims of the project and implement two extensions. I managed to implement a new language, write an interpreter for it, encode representations of programming exercises, implement algorithms to add and remove blanks from programs, and write heuristics to measure performance and adjust question difficulty. I also implemented a parser and designed and implemented a GUI as my two extensions.
+
 \section*{Special Difficulties}
+
+None.
  
 \newpage
 \section*{Declaration}
@@ -81,7 +88,7 @@ extent for a comparable purpose.
 \leftline{Signed: Robin McFarland}
 
 \medskip
-\leftline{Date: 13th May 2017}
+\leftline{Date: 19th May 2017}
 
 \tableofcontents
 
@@ -89,6 +96,8 @@ extent for a comparable purpose.
 
 \newpage
 \section*{Acknowledgements}
+
+I would like to thank my Project Supervisor, Michael Gale, and my Director of Studies, Dr John Fawcett, for all their support and guidance. Thanks also to my whole family and all my friends, for reminding me that I am never alone. This would not have been possible without you.
 
 \pagestyle{headings}
 
@@ -99,32 +108,32 @@ extent for a comparable purpose.
 \label{Ch:Intro}
 \section{Motivation}
 
-Finding the most effective way to teach young people new skills is an important challenge, impacting educators, parents and learners. Students want to be given new information in an interesting and engaging way that enables them to make use of their new knowledge constructively, and educators want to feel productive as they teach. How well a student learns a new skill is determined by a number of factors. These range from differences between learners (e.g. ability and motivation) to the teaching method used. It is up for debate whether unguided or guided learning styles produce the best results\cite{GuidedVsUnGuided}, and similarly tasks requiring problem solving have been compared with those requiring reciting known solutions\cite{PBL}.
+Finding the most effective way to teach young people new skills is an important challenge, impacting educators and learners. Students want to be given information in an interesting and engaging way that enables them to make use of it constructively, and educators want to be effective. How well students learn a new skill is determined by a number of factors, ranging from differences between learners (e.g. ability and motivation) to the teaching method used. It is debatable whether unguided or guided learning styles produce better results \cite{GuidedVsUnGuided}, and similarly tasks requiring problem solving have been compared with those requiring reciting known solutions \cite{PBL}.
 
-Recently, Computer Science has been included into the national curriculum in the UK for children aged 5 and above. This has raised the question of how best to teach young people a programming language (e.g. Java). The typical method employed in a classroom setting is to give some instruction (which may involve a variety of worked examples) followed by a set of programming exercises for students to complete.
+Recently, Computer Science has been included into the UK national curriculum for children aged 5 and above. This has raised the question of how best to teach young people a programming language (e.g. Java). The typical method employed in the classroom is to give instruction (typically including worked examples) followed by programming exercises.
  
-A typical exercise can be conceptualised in the following manner: a sample of incomplete code is given to the students, and their task is to fill in the blanks such that the completed code can perform the function required by the question. When students have a firm grasp of the language, it may be reasonable to expect them to write all the code from scratch, that is, no sample code would be given at the start. However, when a student is first learning a language, is less able, or younger, they may find it helpful to have parts of the code provided for them. This enables them to see how the syntax is used and reduces the complexity of the work and understanding required. This method is likely to enhance the student's learning experience and maintain their motivation to continue. 
+Exercises can be conceptualised as a question and a sample of incomplete code. A student must fill in the blanks such that the completed code can perform the function required by the question. When students have a firm grasp of the language, it may be reasonable to expect them to write code without guidance. However, when a student is first learning a language, is less able, or younger, they may find it helpful to have parts of the code provided. This enables them to see how the syntax is used, reduces the complexity of the work, and is likely to enhance the student's learning experience and maintain their motivation to continue. 
 
 \section{Context of the work}
 
-Attempts have been made before to vary exercise difficulty in response to student performance\cite{PhDThesis}. The author makes use of computerised-adaptive testing (CAT) by developing a system that enables students to develop their own user profile. The difficulty of the exercises set for students is determined by their user profiles. Students also assess their own performance which provides a measure of their understanding of the subject matter. The system underwent human trials in 2003 and 2005 with encouraging results, showing increased mean scores in students who used their system versus students who did not. This shows that CAT systems have promise.
+A previous attempt to vary exercise difficulty in response to student performance \cite{PhDThesis} used computerised-adaptive testing (CAT) by developing a system that enables students to manage their own user profile, which determines the difficulty of their exercises. Students also assess their own performance which provides a measure of their understanding of the subject matter. The system was tested and found increased mean scores in students who used it versus students who did not. This shows that CAT systems have promise.
 
 \section{Project aims}
 
-A different approach to CAT would be a system that attempts to measure student performance algorithmically, inferring how much the student has understood. The system could then present students with problems varying in complexity as a function of their understanding of the material. The specific questions that the students have to answer would be determined by their teacher and the appropriate curriculum. However, the amount of code that each student is expected to write can be adjusted algorithmically, by adding or removing blanks from a model solution.
+A different approach to CAT would be to measure student performance algorithmically, inferring how much the student has understood and presenting students with problems varying in complexity as a function of their understanding of the material. The specific questions that the students have to answer would be determined by their teacher and the appropriate curriculum. However, the amount of code that each student is expected to write can be adjusted algorithmically, by adding or removing blanks from a model solution.
 
-This project aims to develop a system that utilises this new approach. The system will attempt to teach a programming language by setting exercises for students. The first problem presented will always be the same, and each student's performance will be assessed by the system. Depending on an individual student's performance, the difficulty of the next problem presented to them will be adjusted appropriately. This will be done by changing the amount of the model solution that is initially left blank to fill in. If it is determined that the question is too easy or too hard, given the current competence of the student, then the question itself will be changed.
+This project aims to develop a system that utilises this approach to teach a programming language by responsively setting exercises for students. The first problem presented will always be the same, and each student's performance will be assessed by the system. The difficulty of the next problem will be adjusted appropriately by changing the amount of the model solution that is left blank to fill in. If it is determined that the exercise is too easy or too hard, given the current competence of the student, then the exercise itself will be changed.
 
-To develop this system, I designed a new language that can incorporate gaps in program code and write an interpreter and pretty-printer for it. After this, a representation of programming exercises is encoded, and an algorithm that adds and removes blanks from the model solutions stored in the exercises is written. These tools are brought together in the system itself. This system is able to measure the performance of a student using a heuristic, and use its measurements to adjust the difficulty of programming exercises appropriately. If a student has performed well (as measured by the performance heuristic), then the next exercise presented to them will be more difficult. Conversely, if they have performed poorly, then the next exercise presented to them will be easier. 
+To develop this system, I design a new language that can incorporate gaps in programs and write an interpreter and pretty-printer for it. After this, a representation of programming exercises is encoded, and an algorithm that adds and removes blanks from programs is written. These tools are brought together into a system which measures the performance of a student using a heuristic and adjusts the difficulty of programming exercises appropriately.
 
-Extensions to this work include writing a parser for the new language, and implementing a Graphical User Interface (GUI). This GUI demonstrates an example of how a student may interact with the system, by presenting the model solution code in a text box that students can directly edit to fill in the blanks in the solution, and gives feedback on the student's submissions.
+Extensions to this work include writing a parser for the new language, and implementing a Graphical User Interface (GUI). This GUI demonstrates how a student may interact with the system, by presenting model solution code that students can directly edit to fill in the blanks, and giving feedback on solutions.
 
 The aims of this project are to:
 \begin{enumerate}
-\item{Develop a new language, incorporating the concept of blanks in code.}
+\item{Develop a new language, incorporating the concept of blanks in programs.}
 \item{Implement an interpreter and pretty-printer for this language.}
-\item{Encode a representation of programming exercises for the language.}
-\item{Write algorithms that increase and decrease the difficulty of these exercises by adding and removing blanks from the model solution code.}
+\item{Encode a representation of programming exercises.}
+\item{Write algorithms that add and remove blanks from programs.}
 \item{Design a system that measures the performance of students as they solve programming exercises, and adjusts the difficulty of the subsequent exercises accordingly.}
 \item{As an extension, parse the language.}
 \item{As another extension, design a GUI to demonstrate how students might interact with the system.}
@@ -135,17 +144,17 @@ The aims of this project are to:
 
 \chapter{Preparation}
 
-In this chapter, I detail the preparation I undertook before starting on my implementation. I will give my ``starting point'' in Section \ref{Sec:SP}, explaining how much experience I had before work on this project began. In Section \ref{Sec:Overview}, I will give a brief overview of the project and how its components fit together. Then, in Section \ref{Sec:Method}, I will explain the specific software engineering methodologies I employed to ensure implementation went as smoothly as possible. Finally, I will give a detailed requirements analysis in Section \ref{Sec:ReqAnal}.
+In this chapter, I detail the preparation I undertook before starting my implementation. I explain what experience I had before this project began in Section \ref{Sec:SP}. In Section \ref{Sec:Overview}, I give a brief overview of the project and how its components fit together. Then, in Section \ref{Sec:ReqAnal} I give a detailed requirements analysis, explaining my choices of methods and libraries. In Section \ref{Sec:Method}, I explain the specific software engineering methodologies I employed to ensure implementation went as smoothly as possible and finally, in Section \ref{Sec:SRS}, I give the concrete deliverables for my project as a Software Requirements Specification.
 
 \section{Starting point}
 \label{Sec:SP}
 
-I have experience in programming in Java, the language in which I will be implementing my tools. I have some experience of writing interpreters, primarily of Combinators. I have designed an educational program before as an Extended Project for the AQA Baccalaureate. The aim of my Extended Project was to investigate if using a computer could make Key Stage 2 students more motivated to learn maths. The project involved automating the maths tests in their textbooks by designing templates that were instantiated at run time to provide a variety of questions. I have experience designing GUIs, since one was used to present the questions and accept solutions for the Extended Project, and another was an integral part of the Group Project last year. At the same time as I was working on my Extended Project, I was also volunteering as a teaching assistant working with the Key Stage 2 students. This, along with my job with Cambridge Coding Academy, my time co-directing a Junior School play, and tennis coaching training, has given me experience of teaching and of working with children in general.
+I have experience in programming in Java (the language in which I will be implementing my tools) and some experience of writing interpreters, primarily of Combinators. I designed an educational program as an Extended Project for the AQA Baccalaureate, the aim of which was to investigate if using a computer could make Key Stage 2 students more motivated to learn maths. This involved automating the maths tests in their textbooks by designing templates that were instantiated at run time to provide a variety of questions. I have experience designing GUIs, since I used one for my Extended Project, and another was an integral part of the Group Project last year. Finally, I have experience of teaching and working with children through volunteering as a teaching assistant with a Key Stage 2 class and co-directing the Junior school play, training as a tennis coach and working with Cambridge Coding Academy.
 
 \section{An overview of the project and its components}
 \label{Sec:Overview}
 
-The overall aim of this project is to design a system that can algorithmically adapt the difficulty of programming exercises. Decisions about how to adjust the difficulty are made by referring to measurements of student performance taken as they solve preceding exercises. In order to set programming exercises, we need a language in which a student will solve said exercises. Representations of programs written in this language can be pretty-printed, and are executable by interpreting the code. Programming exercises themselves require representations within the system, and these store representations of the model solution for the exercise, written in the specified language. Wrapped around these exercises is a system for presenting questions, allowing completion of the model solutions, checking validity of submissions, and delivering feedback on submissions. This system incorporates algorithms that increase and decrease the difficulty of problems by adding and removing blanks from the model solution code. As an extension, a parser is implemented to streamline the functionality of some of these components: the model solution in exercises is defined in a \texttt{String} that is then parsed to build the AST representation required, and the system fills blanks by parsing \texttt{String}s containing the code to be substituted. Finally, as another extension, a GUI is implemented that acts as an interface between the system, students and teachers, making use of the parser to allow students to directly edit the model solution code as much as they like.
+The overall aim of this project is to design a system that algorithmically adapts the difficulty of programming exercises. Decisions about how to adjust the difficulty are made by referring to measurements of student performance taken as they solve preceding exercises. In order to set programming exercises, we need a language to solve them with. Representations of programs written in this language can be pretty-printed, and are executable by interpreting the code. Programming exercises themselves require representations within the system, and these store the AST of their model solution. Wrapped around these exercises is a system for presenting questions, allowing completion of the model solutions, checking validity of submissions, and delivering feedback. This system incorporates algorithms that increase and decrease the difficulty of problems by adding and removing blanks from the model solution code. As an extension, a parser is implemented to streamline some functionality: the model solution in exercises is defined in a \texttt{String} that is then parsed to build the AST representation required, and the system fills blanks by parsing \texttt{String}s containing the code to be substituted. Finally, as another extension, a GUI is implemented that acts as an interface between the system, students and teachers, making use of the parser to allow students to directly edit the model solution code.
 
 \section{Detailed discussion}
 \label{Sec:ReqAnal}
@@ -154,83 +163,108 @@ This section will explore the requirements laid out in the Introduction in detai
 
 \subsection{Extending a language with blanks}
 
-Ideally, I would have preferred not to have to design my own language, but to simply add the concepts of blanks to Java itself. However, further investigation showed that this was more problematic than I had anticipated.
+Ideally, I would have preferred to simply add the concepts of blanks to Java itself. However, investigation showed that this was more problematic than anticipated.
 
-An early prototype I built to investigate how I might add blanks to Java involved storing a program as a \texttt{String} and executing it as Java code. This seemed a good solution to me as I have experience doing this in Python. Dynamic execution of Python statements and expressions is supported by the \texttt{exec} and \texttt{eval} functions respectively. These functions even support supplying Python dictionaries containing maps of local and global variables. Unfortunately, doing this in Java is much more complex, requiring the use of external tools. Bearing in mind that these external tools have no inbuilt support for blanks in code, I would have to write some potentially very substantial extensions to these tools, and these factors combined persuaded me to follow an alternate path.
+An early prototype I built to investigate how to add blanks to Java involved storing a program as a \texttt{String} and executing it as Java code. I have done this in Python, where dynamic execution of statements and expressions is supported by the \texttt{exec} and \texttt{eval} functions respectively. Unfortunately, doing this in Java is much more complex, requiring the use of external tools which have no inbuilt support for blanks in code. I would have had to write some substantial extensions to these tools, and therefore decided to follow an alternate path.
 
-I decided to design my own language that would very closely imitate Java, but include the concept of blanks in code within the grammar itself. This language would imitate Java in order to demonstrate that Java itself, a language taught to Part IA students in the Computer Lab and many other beginners, could be developed to teach using my system. For the purposes of this project it was unnecessary to re-implement all of Java. I thus designed my language, which I call MiniJava, to imitate a small subset of the Java grammar \cite[p.714]{Java8}. 
+I decided to design my own language that would very closely imitate Java, but include the concept of blanks in code within the grammar itself. This language would imitate Java in order to demonstrate that Java itself, a language taught to many beginners, could be taught using my system. For the purposes of this project it was unnecessary to re-implement all of Java. I thus designed my language, which I call MiniJava, to imitate a small subset of the Java grammar \cite[p.714]{Java8}. 
 
 \subsection{Interpreting and pretty-printing the language}
 
-Representations of programs written in MiniJava should be executable, and should also be able to be pretty-printed to allow a user to read the code intuitively as text. As an extension, it would be nice to be able to take a textual version of a program and convert it into an AST representation in my implementation by parsing it. 
+Representations of programs written in MiniJava should be executable and be able to be pretty-printed. As an extension, it would be nice to take a textual version of a program and convert it into an AST representation by parsing it. 
 
-To interpret MiniJava, variables used throughout the program must be managed properly. This involves allowing the declaration of new variables, managing their scope, and updating their values as they are assigned. The most effective methods for managing variables as the interpreter runs are to store them in symbol tables or in stack frames. Early prototypes showed that storing variables in symbol tables made the management of scope more complex, as the ``depth'' at which a variable is declared must be explicitly stored too, so that the variable can go out of scope at the appropriate time. When variables are stored in stack frames, scope management becomes implicit within the structure of the stack, so I decided to use this method. 
+An interpreter of MiniJava must allow the declaration of new variables, manage their scope, and update them when they are assigned. The most effective methods for managing variables as the interpreter runs are to store them in symbol tables or in stack frames. Early prototypes showed that storing variables in symbol tables made the management of scope more complex, as the ``depth'' at which a variable is declared must be explicitly stored too, so that the variable can go out of scope at the appropriate time. When variables are stored in stack frames, scope management becomes implicit within the structure of the stack, so I decided to use this method. 
 
 \subsection{Encoding representations of programming exercises}
 
-In my system, I define a programming ``exercise'' as consisting of a question, represented by a \texttt{String}, and a model solution, represented by a MiniJava AST. An exercise allows the blanks in its solution to be filled in by students, and complete solutions are executable. Exercises record constraints that must be satisfied by any complete solution to be declared valid (e.g. If the question is solved by setting the variable \texttt{result} to a certain value, then the solution is validated by checking that the variable does indeed have that value once the solution is run). They also provide a means of making them easier or harder by introducing blanks to, or removing them from, the model solution prior to the question being presented. The algorithm I designed to do this is described in Section \ref{Sec:Blanks}, and takes inspiration from both the standard Depth First Search algorithm and the more obscure Reverse Level Order Traversal. Designing this algorithm was a significant challenge during the preparation phase of this project.
+In my system, I define a programming ``exercise'' as consisting of a question, represented by a \texttt{String}, and a model solution, represented by a MiniJava AST. An exercise allows the blanks in its solution to be filled in by students, and complete solutions are executable. Exercises record constraints that must be satisfied for a solution to be declared valid (e.g. if the question is solved by setting the variable \texttt{result} to a certain value, then the solution is validated by checking that the variable has that value once the solution is run). They are made harder or easier by adding or removing blanks from their model solution. The algorithm I designed to do this is described in Section \ref{Sec:Blanks}, and takes inspiration from both the standard Depth First Search algorithm and the more obscure Reverse Level Order Traversal. Designing this algorithm was a significant challenge during the preparation phase of this project.
 
 A representation of an exercise incorporates a degree of variety, such that an exercise would not always ask the question, ``What is the square of 5?'', for example, but rather ``What is the square of $n$?'', where $n$ is a random positive integer between some minimum and maximum values\footnote{Note that I am not asking students to solve the problem ``write a routine that squares any number'', but simply randomising the specific number that they are asked to square.}.
 
 \subsection{Setting and adjusting exercises}
 
-An exercise is set by first delivering its respective question, and then presenting the incomplete model solution to the student. The blanks in this solution should be obvious, and they also should be editable. In the case that students can not directly modify the code in its entirety, this will require labelling each blank with a unique identifier, so that students can select the correct blank to fill. Alternatively, if students can directly modify the model solution, then these identifiers will not need to be shown. Once the solution has been completed and submitted, the solution must be run so that the system can decide whether or not it solves the problem. This will require the system to interpret the code, since there are infinitely many ways of implementing a correct solution. Either way, some feedback needs to be delivered to the student, either telling them that their solution was correct, or that they have made a mistake. 
+An exercise is set by presenting first its question, and then the incomplete model solution to the student. The blanks in this solution should be conspicuous and they should be editable. If students can not directly modify the code, this will require labelling each blank with a unique identifier, so that students can select which one to fill. Once the solution has been submitted, the solution must be run so that the system can decide whether it solves the problem. The system will interpret the code, since there are many possible correct solutions. Feedback needs to be delivered to the student, telling them that their solution was correct or that they have made a mistake. 
 
-Once a solution has been validated and shown to be correct, the performance of the student must be measured. Performance can be measured in many ways but for the purposes of this project I have defined the performance heuristic as dependent on the number of attempts a student required in order to produce a correct solution, and the number of nodes in their solution's AST compared with the model solution's AST. If a student required multiple attempts to solve the question it seems likely that they have not understood the underlying concepts being tested. Similarly, using many more nodes than is necessary may indicate a lack of understanding, and thus results in a lower performance measurement. 
+Once a solution has been validated, the performance of the student must be measured. Performance can be measured in many ways but for the purposes of this project I have defined the performance heuristic as dependent on the number of attempts a student required in order to produce a correct solution, and the number of nodes in their solution's AST compared with the model solution's AST. If a student required multiple attempts to solve the question it seems likely that they have not understood the underlying concepts being tested. Similarly, using many more nodes than is necessary may indicate a lack of understanding, and thus results in a lower performance measurement. 
 
-Once we know how well the student performed we can decide how difficult their next exercise should be to best match their competence. For example, if it is determined that a student has ``mastered'' the current question, then they will be presented with a more difficult question to answer. However, if they have performed well, but not ``mastered'' the material, then the next question will increase the amount of the model solution that is left blank. 
+Once the system has measured how the student performed, it decides how difficult their next exercise should be to best match their competence. For example, if it is determined that a student has mastered the current question, then they will be presented with a more difficult question. However, if they have performed well, but not fully understood the material, then the next question will increase the amount of the model solution that is left blank. 
 
 \subsection{Extension: Parsing the language}
 
-I kept the goal of writing a parser of the language as an extension to this project, as a parser is not necessary to demonstrate the power of the other tools being written. I decided that if I did implement a parser I would use a parser generator, as writing a parser myself from scratch would be time consuming and error prone. Of the available parser generators, I investigated ANTLR \cite{ANTLR4} and JavaCC\footnote{https://javacc.org/ - last accessed 3rd May, 2017}, as they both use Java and are both popular. Both of these parser generators support tree building (which is necessary for building the AST representation of a program in my implementation of the language), however JavaCC provides this as a separate tool while ANTLR provides the functionality by default. Looking at how the two tools are used to generate parsers for very simple grammars, I found ANTLR's work flow much more amenable. ANTLR also has more high profile users, like IntelliJ IDEA, Groovy, Twitter and Numbers (Apple's spreadsheet program). Based on this high recommendation, and my own opinion that it is more intuitive to use, I decided to use ANTLR if I came to implement this extension to my project.
+Writing a parser of the language is an extension to this project, as a parser is not necessary to demonstrate the power of the system. I decided that if I did implement a parser I would use a parser generator, as writing a parser myself would be time consuming and error prone. Of the available parser generators, I investigated ANTLR \cite{ANTLR4} and JavaCC\footnote{https://javacc.org/ - last accessed 3rd May, 2017}, as both are popular and use Java. Both support tree building (necessary for building the AST representation of a program in my implementation of the language), however JavaCC provides this as a separate tool while ANTLR provides the functionality by default. Looking at how the two tools are used to generate parsers for very simple grammars, I found ANTLR's work flow much more amenable. ANTLR also has more high profile users, like IntelliJ IDEA, Groovy\footnote{http://groovy-lang.org/ - last accessed 18th May 2017}, Twitter and Numbers (Apple's spreadsheet program). Based on this, and my own opinion that it is more intuitive to use, I decided to use ANTLR if I implemented this extension.
 
 \subsection{Extension: Implementing a GUI}
 
-The GUI should act as an interface between the system and both teachers and students. Teachers should be able to manually adjust the difficulty of a given question. Students meanwhile should be shown the question itself alongside the code representation of the model solution requiring completion. On the condition that a parser has been implemented, the GUI should allow direct editing of the model solution, the result of which can then be parsed and set as the solution to the exercise to allow validation. The most popular frameworks for implementing GUIs in Java are Swing\footnote{https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html} and JavaFX\footnote{http://www.oracle.com/technetwork/java/javafx/documentation/reference-137773.html}, since they have the most support. Although I have more experience working with JavaFX from the group project, I was not the person who did the work on the initial set up. Also, the Swing plugin for IntelliJ (the IDE that I am using) has a drag and drop interface for designing UIs, and greatly improves the experience of working with Swing, so I decided to use this if I was able to work on the extension.
+The GUI should act as an interface between the system, teachers and students. Teachers should be able to manually adjust the difficulty of a given question. Students should be shown the question alongside the code representation of the incomplete model solution. If a parser has been implemented, the GUI should allow direct editing of the model solution, the result of which can then be parsed and set as the solution to the exercise to allow validation. The most popular frameworks for implementing GUIs in Java are Swing\footnote{https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html} and JavaFX\footnote{http://www.oracle.com/technetwork/java/javafx/documentation/reference-137773.html}, since they have the most support. Although I have more experience working with JavaFX from the group project, the Swing plugin for IntelliJ (the IDE that I am using) has a drag and drop interface for designing UIs, and greatly improves the experience of working with Swing, so I decided to use this if I implemented the extension.
 
 \section{Methodologies in use}
 \label{Sec:Method}
 
-In order to ensure correct functionality of my system and its components, the implementation process proceeded under the influence of Test Driven Development (TDD). This required writing unit tests for code that had not yet been written. These tests were designed with respect to the requirements, such that any piece of software passing the tests also satisfies the requirements. It was shown that these tests failed before the unit was implemented, and that they are passed after. These tests were then kept to act as regression tests.
+In order to ensure correct functionality of my system I used Test Driven Development (TDD). This required writing unit tests for code that had not yet been written. These tests were designed with respect to the requirements, such that any component passing the tests also satisfies the requirements. These tests were then kept to act as regression tests.
 
 \section{Software Requirements Specification}
+\label{Sec:SRS}
 
-The following requirements are annotated with the appropriate identifiers from the MoSCoW method of prioritising requirements\footnote{http://research.omicsgroup.org/index.php/MoSCoW - last accessed 10th May}.
+The following requirements are annotated with the appropriate identifiers from the MoSCoW method for prioritising requirements\footnote{http://research.omicsgroup.org/index.php/MoSCoW - last accessed 10th May}.
 
 \begin{enumerate}
-\item{The language in which a student should solve exercises will be made to support blanks. \textbf{M}}
+\item{A language supporting blanks will be implemented. \textbf{M}}
 \item{This language will be interpreted and pretty-printed. \textbf{M}}
 \item{This language will also be parsed. \textbf{C}}
 \item{Representations of programming exercises will be implemented. \textbf{M}}
-\item{These exercises will have components that are randomly generated to provide variety. \textbf{C}}
-\item{A system that sets exercises will be developed to measure the performance of a student and adjust the difficulty of following exercises. \textbf{M}}
+\item{Exercises will have parts that are randomly generated to provide variety. \textbf{N}}
+\item{A system will be developed to measure the performance of a student and adjust the difficulty of exercises. \textbf{M}}
 \item{A GUI will be implemented to demonstrate how users might interface with the system. \textbf{C}}
 \end{enumerate}
 
-\mbox{}\\
-This chapter has described the preparation undertaken before any code was written, including analysing requirements, deciding which libraries to use, and choosing software design methodologies to follow.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Implementation chapter
+
 \chapter{Implementation}
 
-In this chapter I detail the work completed. I begin by describing how I implemented MiniJava in Section \ref{Sec:AST}, as well as an interpreter for MiniJava's grammar in Section \ref{Sec:Interpret}. I then describe how I encoded a representation of a programming exercise solved using MiniJava, and give an example of the encoding of a specific exercise, in Section \ref{Sec:Q&A}. In Section \ref{Sec:Blanks}, I describe the algorithms that allow the addition and removal of ``blanks'' within a MiniJava program. Then, in Section \ref{Sec:ExSet}, I describe how I developed the system that sets and adjusts the exercises, the \texttt{ExerciseSetter} class. In Sections \ref{Sec:Parsing} and \ref{Sec:GUI} I describe the implementation of the two extensions, the parser and the Graphical User Interface (GUI).
+In this chapter I detail the work completed. I begin by describing how I implemented MiniJava in Section \ref{Sec:AST}, as well as an interpreter for MiniJava's grammar in Section \ref{Sec:Interpret}. I then describe how I encoded a representation of a programming exercise and give an example of the encoding of a specific exercise in Section \ref{Sec:Q&A}. In Section \ref{Sec:Blanks}, I describe the algorithms that allow the addition and removal of ``blanks'' within a MiniJava program. Then, in Section \ref{Sec:ExSet}, I describe how I developed the system that sets and adjusts the exercises, the \texttt{ExerciseSetter} class. In Sections \ref{Sec:Parsing} and \ref{Sec:GUI} I describe the implementation of the two extensions, the parser and the Graphical User Interface (GUI).
 
 \section{MiniJava's Abstract Syntax Tree}
 \label{Sec:AST}
 
-In this section I describe the implementation of the MiniJava language. This language was designed to be similar to a small subset of Java, and is the language in which students complete the exercises delivered by my system. I have  incorporated the concept of blanks in programs into its grammar, to make adding blanks to the model solutions of exercises much easier.
+In this section I describe the implementation of the MiniJava language. This is the language in which students complete the exercises set by my system.
+
+\subsection{Class hierarchy}		
+ 		
+Each class in my implementation represents a different production in the abstract syntax for MiniJava, found in Appendix \ref{App:Parser} in the form of a parser specification. In order to allow other parts of my code to operate on instances of these classes without needing to know exactly what they are, every class in the implementation implements the \texttt{MiniJASTNode} interface. This acts as the top of the class hierarchy for my implementation, as shown in Figure \ref{Fig:TopLevelUML}.		
+ 		
+ \begin{figure}[h]		
+ \centering		
+ \includegraphics[width=0.8\textwidth]{TopLevelUML}		
+ \caption{The UML diagram showing the top of the class hierarchy for \texttt{MiniJASTNode}s.}		
+ \label{Fig:TopLevelUML}		
+ \end{figure}		
+ 		
+ It is important to differentiate between MiniJava expressions and MiniJava statements as they must be used in different places. For example, in the production \texttt{WHILE~parExpression~statement} representing a \texttt{while} loop, \texttt{parExpression} may be substituted with any MiniJava expression (surrounded by parentheses), while \texttt{statement} may be substituted with any MiniJava statement. The reverse is not allowed however, meaning that \texttt{statement} may not be replaced by a MiniJava expression and \texttt{parExpression} may not be replaced by a MiniJava statement in brackets. This distinction is made by the interfaces \texttt{Expression} and \texttt{Statement} (which all MiniJava expressions and statements implement respectively), and the abstract classes \texttt{ExpressionBase} and \texttt{StatementBase} (which all MiniJava expressions and statements extend respectively). 		
+ 		
+ Both interfaces and abstract classes are used here because of the need to include blanks in the grammar. There are two classes representing blanks: \texttt{FillableBlankExpr} and \texttt{FillableBlankStmnt}. The first of these should be a MiniJava expression and the second should be a MiniJava statement, meaning they should extend \texttt{ExpressionBase} and \texttt{StatementBase} respectively, but both of them must also extend the abstract class \texttt{FillableBlank}, as shown in Figure \ref{Fig:BlanksUML}. 		
+ 
+ \begin{figure}[h]		
+ \centering		
+ \includegraphics[width=0.8\textwidth]{BlanksUML}		
+ \caption{The UML diagram showing how blanks fit into the class hierarchy, motivating the need for both abstract classes and interfaces to distinguish between expressions and statements. Other classes such as \texttt{ExpressionsBase} and \texttt{StatementBase} are excluded for clarity.}		
+ \label{Fig:BlanksUML}		
+ \end{figure}		
+ 		
+ Since classes in Java cannot extend more than one base class, the only alternative is for them to implement the \texttt{Expression} and \texttt{Statement} interfaces. However, removing \texttt{ExpressionBase} and \texttt{StatementBase} would result in too much repeated code across the whole grammar, so both the interfaces and the abstract classes are required.		
+
+As important as the distinction between expressions and statements is, there do exist some expressions that can be used like statements. For an example, the MiniJava code \texttt{i~=~5;} is a statement (indicated by the semicolon,~``\texttt{;}''), but this statement consists entirely of the assignment expression \texttt{i~=~5}\footnote{Considering assignments as expressions allows for the chaining of assignments found in the Java grammar \cite[p.589]{Java8}.}. This sort of expression within a statement construct is not possible with all expressions, for example the code \texttt{i~+~4;} would not be valid MiniJava. To make the distinction between expressions which may be used in statements like this and those which may not, I made the interface \texttt{StatementExpression}, again, shown in Figure \ref{Fig:TopLevelUML}. This interface is only implemented by those expressions which can be used in a statement this way.
 
 \subsection{Implementing operator precedence and associativity}
 
-A feature of MiniJava is the concept of operator precedence, which is used to disambiguate an otherwise ambiguous grammar of expressions. Without the concept of operator precedence, the code \texttt{1~+~2~*~3} is ambiguous, as it can be read as either \texttt{(1~+~2)~*~3} which equates to 9, or as \texttt{1~+~(2~*~3)} which equates to 7. Since a single arithmetic expression cannot have more than one value, a decision must be made as to which of these interpretations is declared valid. The decision taken aligns with the standard arithmetic order of operations, such that the answer of 7 is the correct answer in this case. This example demonstrates that the multiplication operator, ``\texttt{*}'', has a higher precedence than the addition operator, ``\texttt{+}''. All the possible operators in MiniJava are found within this precedence hierarchy, and I needed some way to encode this. The method I chose for this is the natural choice, since it is suggested by the Java grammar itself \cite[p.723]{Java8}. The production rule for \texttt{AdditiveExpression} is as follows:
+A feature of MiniJava is the concept of operator precedence, which is used to disambiguate the grammar of expressions. Without the concept of operator precedence, the code \texttt{1~+~2~*~3} is semantically ambiguous, as it can be read as either \texttt{(1~+~2)~*~3} which equates to 9, or as \texttt{1~+~(2~*~3)} which equates to 7. Since a single arithmetic expression cannot have more than one value, a decision must be made as to which of these interpretations is declared valid. The decision taken aligns with the standard arithmetic order of operations, such that the answer of 7 is the correct answer in this case. This example demonstrates that the multiplication operator, ``\texttt{*}'', has a higher precedence than the addition operator, ``\texttt{+}''. All the possible operators in MiniJava are found within this precedence hierarchy, and I needed some way to encode this. The method I chose for this is the natural choice, since it is suggested by the Java grammar itself \cite[p.723]{Java8}. The production for \texttt{AdditiveExpression} is as follows:
 \begin{Verbatim}[samepage=true]
 AdditiveExpression:
     MultiplicativeExpression                        (1)
     AdditiveExpression + MultiplicativeExpression   (2)
     AdditiveExpression - MultiplicativeExpression   (3)
 \end{Verbatim}
-and the production rule for \texttt{MultiplicativeExpression} is as follows:
+and the production for \texttt{MultiplicativeExpression} is as follows:
 \begin{Verbatim}[samepage=true]
 MultiplicativeExpression:
     UnaryExpression
@@ -238,7 +272,7 @@ MultiplicativeExpression:
     MultiplicativeExpression / UnaryExpression 
     // Note that the modulus operator, %, was removed from MiniJava
 \end{Verbatim}
-This means that for any expression $A$\texttt{ + }$B$, the expression $A$ must only contain subexpressions that use operators with precedence at least as high as \texttt{+} and \texttt{-}, and $B$ must only contain subexpressions that use operators with precedence higher than \texttt{+} and \texttt{-}. For any expression $A$\texttt{ * }$B$, neither $A$ nor $B$ can contain subexpressions that use operators with precedence lower than \texttt{*} and \texttt{/}. This in turn indicates that an expression such as \texttt{1~+~2~*~3~+~4} can only be interpreted as \texttt{1~+~(2~*~3)~+~4}, and an expression such as \texttt{1~*~2~+~3~*~4} can only be interpreted as \texttt{(1~*~2)~+~(3~*~4)}. I wanted an operator precedence for MiniJava that is hardcoded within the grammar of MiniJava itself, just as the operator precedence of Java is hardcoded within the grammar of Java. The production rules for Java shown above suggest a natural implementation of the class that represents addition expressions:
+This means that for any expression $A$\texttt{ + }$B$, the expression $A$ must only contain subexpressions that use operators with precedence at least as high as \texttt{+} and \texttt{-}, and $B$ must only contain subexpressions that use operators with precedence higher than \texttt{+} and \texttt{-}. For any expression $A$\texttt{ * }$B$, neither $A$ nor $B$ can contain subexpressions that use operators with precedence lower than \texttt{*} and \texttt{/}. This in turn indicates that an expression such as \texttt{1~+~2~*~3~+~4} can only be interpreted as \texttt{1~+~(2~*~3)~+~4}, and an expression such as \texttt{1~*~2~+~3~*~4} can only be interpreted as \texttt{(1~*~2)~+~(3~*~4)}. I wanted an operator precedence for MiniJava that is hardcoded within the grammar of MiniJava itself. Normally, these ambiguities of the grammar would be disambiguated by the parser, but since I would not necessarily implement a parser, I decided to have the implementation of the grammar itself prevent any ambiguities. The productions for Java shown above suggest a natural implementation of the class that represents addition expressions:
 \begin{Verbatim}[samepage=true]
 class AddExpr {
     ...
@@ -247,17 +281,21 @@ class AddExpr {
     ...
 }
 \end{Verbatim}
-Here, \texttt{leftSide} and \texttt{rightSide} store the left and right operands of the expression, and \texttt{MultExpr} is the class representing multiplication expressions. What has been implemented so far encapsulates parts (2) and (3) of the \texttt{AdditiveExpression} production rule above, but not part (1). This part is encapsulated by making the class \texttt{MultExpr} extend the class \texttt{AddExpr}, such that an instance of \texttt{MultExpr} may always be used in place of an instance of \texttt{AddExpr}. Note that since multiplication operators are higher in the operator precedence hierarchy, their representations are lower in the object hierarchy. This then is the solution to the operator precedence problem: to enforce an operator precedence hierarchy, first enforce an inverse object hierarchy in their representative classes, and then choose the type of each expression's operands to match the relevant terminal symbols in the relevant production rule.\footnote{Note that if you were to look at my implementation of \texttt{AddExpr}, \texttt{leftSide} and \texttt{rightSide} would both be \texttt{int}s, not \texttt{AddExpr} and \texttt{MultExpr} instances. The reason behind this is explained in section \ref{Sec:Blanks}.}
+Here, \texttt{leftSide} and \texttt{rightSide} store the left and right operands of the expression, and \texttt{MultExpr} is the class representing multiplication expressions. What has been implemented so far encapsulates parts (2) and (3) of the \texttt{AdditiveExpression} production above, but not part (1). This part is encapsulated by making the class \texttt{MultExpr} extend the class \texttt{AddExpr}, such that an instance of \texttt{MultExpr} may always be used in place of an instance of \texttt{AddExpr}. Note that multiplication operators are higher in the operator precedence hierarchy and their representations are lower in the class hierarchy. This then is the solution to the operator precedence problem: to enforce an operator precedence hierarchy, first enforce an inverse class hierarchy in their representative classes, and then choose the type of each expression's operands to match the relevant terminal symbols in the relevant production.\footnote{Note that if you were to look at my implementation of \texttt{AddExpr}, \texttt{leftSide} and \texttt{rightSide} would both be \texttt{int}s, not \texttt{AddExpr} and \texttt{MultExpr} instances. The reason behind this is explained in section \ref{Sec:Blanks}.}
 
-Note also that as a side-effect of this implementation, the ambiguous code \texttt{1~+~2~+~3} also only has one possible interpretation, namely \texttt{(1~+~2)~+~3}. This follows the established rules of operator associativity, which are now also hardcoded into the grammar.
+Note also that as a side-effect of this implementation, the syntactically ambiguous code \texttt{1~+~2~+~3} also only has one possible interpretation, namely \texttt{(1~+~2)~+~3}. This follows the established rules of operator associativity, which are now also hardcoded into the grammar.
 
 \subsection{Expression types}
 
-In MiniJava, every expression has a type which consists of a primitive type and may or may not be an array type. There are four possible primitive types: \texttt{boolean}, \texttt{char}, \texttt{int}, and \texttt{double}. The primitive types are represented in the grammar by the enumeration, \texttt{PrimType}. The type of an expression then is represented by the class \texttt{Type}, an instance of which stores the appropriate \texttt{PrimType} value and a flag determining whether or not it is an array type. These \texttt{Type}s are used by the interpreter to determine whether or not variables can contain certain values, and whether operators are being supplied with the appropriate operands.
+In MiniJava, every expression has a primitive type and may or may not be an array. There are four possible primitive types: \texttt{boolean}, \texttt{char}, \texttt{int}, and \texttt{double}. The primitive types are represented in the grammar by the enumeration, \texttt{PrimType}. The actual type of an expression is represented by the class \texttt{Type}, an instance of which stores the appropriate \texttt{PrimType} value and a flag determining whether or not the expression is an array. These \texttt{Type}s are used by the interpreter to determine whether or not variables can contain certain values, and whether operators are being supplied with the appropriate operands.
 
 \subsection{Blanks in code}
 
-What distinguishes MiniJava from other languages is that the concept of a blank, a missing piece of code, is built into the grammar itself. Representations of blanks in code should enable a user to fill one with their own code. To do this programmatically, it is necessary for representations of blanks to each come with a unique id, such that users can choose which blank they are filling and the blank be searchable within the AST representing the program. The abstract class \texttt{FillableBlank} implements this functionality. Concrete classes representing blanks store the student code used to fill them, so that when filled blanks are evaluated, the student code can be evaluated instead.
+What distinguishes MiniJava from other languages is that the concept of a blank, a missing piece of code, is built into the grammar itself. Representations of blanks in code should enable a user to fill one with their own code. To do this algorithmically in the absence of a parser, it is necessary for representations of blanks to each come with a unique id. This means that users can choose which blank they are filling, and the system can search for blanks within the AST representing the program. The abstract class \texttt{FillableBlank} implements this functionality. Concrete classes extending this class are \texttt{FillableBlankExpr} (which represents a blank to be filled with an expression) and \texttt{FillableBlankStmnt} (which represents a blank to be filled with a statement). Both are required because the interpreter treats expressions and statements differently. 
+
+If a parser for the language is implemented then the functionality of blanks having unique identifiers becomes obsolete, since we can allow the student to directly edit the model solution and simply parse the result. However, even if a parser has been implemented, there may be applications where you do not want a student to edit all of the code, in which case you would still need to have a way to select blanks, and identifiers would be required here.
+
+I explain how blanks are inserted in to and removed from programs in Section \ref{Sec:Blanks}.
 
 \section{Interpreting the language}
 \label{Sec:Interpret}
@@ -266,7 +304,7 @@ In this section I explain how MiniJava programs are interpreted.
 
 To correctly interpret MiniJava, several requirements must be met by the interpreter:
 \begin{enumerate}
-\item{The scope of variables must be handled, such that when a variable is used its current value can be accessed, and the same variable can't be declared twice in one scope.}
+\item{The scope of variables must be handled, such that when a variable is used its current value can be accessed, and the same variable can not be declared twice in one scope.}
 \item{Expressions must be able to propagate their values upwards, so that surrounding expressions and statements can use them.}
 \item{Flow control must be handled, such that break and continue statements can be used in loops.}
 \item{If an exception is raised during execution, the exception should propagate up and halt execution, preferably delivering a useful message.}
@@ -284,7 +322,7 @@ public class Context {
 \end{Verbatim}
 The \texttt{namesToTypes} field is a stack of maps from names (as \texttt{String} values) to instances of my \texttt{Type} class. Every variable that is declared in this scope will have an entry in the map on top of this stack, recording the type of that variable. The \texttt{namesToValues} field is a stack of maps from names to instances of \texttt{Object}. If a variable has an entry in the map on top of this stack, then, in this scope, the variable has the value stored under it in the map. It is possible for a variable to have an entry in the map on top of the \texttt{namesToTypes} stack and not in the map on top of the \texttt{namesToValues} stack: this indicates that the variable has been declared but not initialised in this scope.
 
-During execution, the interpreter must keep track of when variables will go out of scope. This is handled by the \texttt{stepIn} and \texttt{stepOut} methods. The \texttt{stepIn} method is called whenever execution enters a new, deeper, scope. This method copies every key value pair in the maps on top of their respective stacks into new maps, and pushes these new maps onto the stack. Thus every entry in one of the stacks represents a different scope: as you move down the stack, you move outward through the nested scope. The \texttt{stepOut} method is called whenever execution leaves the current scope. Pseudocode for this method is shown below:
+During execution, the interpreter must keep track of when variables will go out of scope. This is handled by the \texttt{stepIn} and \texttt{stepOut} methods. The \texttt{stepIn} method is called whenever execution enters a new, deeper, scope. This method copies every key value pair in the maps on top of their respective stacks into new maps, and pushes these new maps onto the stack. Thus every entry in one of the stacks represents a different scope: as you move into the stack, you move outward through the nested scope. The \texttt{stepOut} method is called whenever execution leaves the current scope. Pseudocode for this method is shown below:
 \begin{Verbatim}[samepage=true, tabsize=4]
 void stepOut(Context c) {
 	if (the stacks have size 1)
@@ -303,7 +341,7 @@ At this point, all the variables that do not exist in the new scope should be fo
 
 \subsection{Propagating expression values}
 
-Consider the expression \texttt{(2*3)+4}. In MiniJava, this expression might be represented by an \texttt{AddExpr} storing a literal with the value \texttt{4} as the right operand, and a \texttt{MultExpr} as the left operand. This \texttt{MultExr} would store literals with values \texttt{2} and \texttt{3} as the left and right operands. During the evaluation of an expression, the most deeply nested parts of the expression must be evaluated first, so that their values can be used further up. There is no point trying to evaluate the \texttt{AddExpr} before we know the value of \texttt{(2*3)}. Thus, the \texttt{MultExpr} needs a way to communicate to the \texttt{AddExpr} that it has a value of \texttt{6}, so that the \texttt{AddExpr} can be evaluated to \texttt{10}. Likewise, whatever context the \texttt{AddExpr} is in needs to be told it has the value \texttt{10}. The way this is done in MiniJava is using implementations of the \texttt{ReturnValues} abstract class. This class represents the notion that some value is being returned by an expression, but allows any type of value to be returned, no matter what primitive type the value takes, and whether it is an array or not. Returning specific primitive types is handled by extending the base class. 
+Consider the expression \texttt{(2*3)+4}. In MiniJava, this expression might be represented by an \texttt{AddExpr} storing a literal with the value \texttt{4} as the right operand, and a \texttt{MultExpr} as the left operand. This \texttt{MultExr} would store literals with values \texttt{2} and \texttt{3} as the left and right operands. During the evaluation of an expression, the most deeply nested parts of the expression must be evaluated first, so that their values can be used further up. There is no point trying to evaluate the \texttt{AddExpr} before we know the value of \texttt{(2*3)}. Thus, the \texttt{MultExpr} needs a way to communicate to the \texttt{AddExpr} that it has a value of \texttt{6}, so that the \texttt{AddExpr} can be evaluated to \texttt{10}. Likewise, whatever context the \texttt{AddExpr} is in needs to be told it has the value \texttt{10}. The way this is done in MiniJava is using implementations of the \texttt{ReturnValues} abstract class. This class represents the notion that some value is being returned by an expression but allows any type of value to be returned, no matter what primitive type the value takes and whether it is an array or not. Returning specific primitive types is handled by extending the base class. 
 
 \subsection{Control flow}
 
@@ -311,9 +349,9 @@ In the same way that MiniJava expressions dispense values, MiniJava statements d
 
 \subsection{Handling exceptions}
 
-Several custom exceptions are used by the interpreter, to differentiate between when an error occurs in the MiniJava program being interpreted, and when an error occurs in the interpreter itself. The majority of these are analogous to standard Java exceptions. For example, the \texttt{OutOfBoundsException} is thrown by the interpreter whenever an index is used in an array where no such index exists. This exception is analogous to Java's \texttt{IndexOutOfBoundsException}.
+Several custom exceptions, all extending \texttt{MiniJASTException}, are used by the interpreter to differentiate between when an error occurs in the MiniJava program being interpreted and when an error occurs in the interpreter itself. The majority of these are analogous to standard Java exceptions. For example, the \texttt{OutOfBoundsException} is thrown by the interpreter whenever an index is used in an array where no such index exists. This exception is analogous to Java's \texttt{IndexOutOfBoundsException}. 
 
-\subsection{The interpreter itself}
+\subsection{The interpreter}
 
 The MiniJava interpreter is implemented using the \texttt{evaluate} method in the \texttt{Expression} interface, and the \texttt{execute} method in the \texttt{Statement} interface. The method signatures of these two methods are shown below:
 \begin{Verbatim}[samepage=true]
@@ -335,7 +373,7 @@ ReturnValues evaluate(Context c) throws MiniJASTException{
 	if (the blank is not filled)
 		throw BlankEmptyException;
 		
-	return the result of evaluating the stored expression with c.
+	return the result of evaluating the stored expression with c;
 }
 \end{Verbatim}
 
@@ -365,11 +403,13 @@ The algorithms used to add and remove blanks from the solution code are complex 
 
 \subsubsection*{2. Filling blanks with student submitted code}
 
-Since representations of blanks in code have their own unique identifier, the blank that a user wishes to fill can be selected using it. To fill a blank with the representation of a user's code, the representation of the blank itself must be found within the program's AST, before the representation of the code is stored within it. This is done using a depth-first-search through the AST to find blanks which, when found, have their identifiers compared with the target identifier. If they do not match, then the search moves on. If they do match, then the blank is filled with the student's code. If the search fails, then it can be reported that no blank with the suggested identifier exists within the solution.
+If students can edit all the code and have their solutions parsed, then blanks are not so much filled as they are eliminated. However, in the case that students are not allowed to edit all the code we need some way to fill blanks programmatically.
+
+Since representations of blanks in code have their own unique identifier, the blank that a user wishes to fill can be selected using its identifier. To fill a blank with the representation of a user's code, the representation of the blank itself must be found within the program's AST, before the representation of the code is stored within it. Since the tree is not structured, that is the nodes are not sorted, searching the tree is $O(n)$ in the number of nodes. Since blanks are more likely to be found at the bottom of the tree than the top (see Section \ref{Sec:Blanks} for justification), this is done using a depth-first-search through the AST to find blanks which, when found, have their identifiers compared with the target identifier. If they do not match, then the search moves on. If they do match, then the blank is filled with the student's code. If the search fails, then it can be reported that no blank with the suggested identifier exists within the solution.
 
 \subsubsection*{3. Checking that the problem is solved by the provided solution}
 
-There are two possible ways of checking whether a solution is valid: either the value of a variable can be compared with a target value, or the result of a print statement can be inspected. The first of these approaches requires an \texttt{Id} field to be declared in the concrete class representing the problem. Once the solution has been executed, the final value of this variable can be accessed by evaluating the \texttt{Id} with the \texttt{Context} object used during execution. In contrast, the second approach can be implemented by checking the contents of the file written to by the representation of the print statement. 
+Given that the amount of information about a program's execution that can be attained after a program has finished execution is limited, there are two possible ways of checking whether a solution is valid. Either the value of a variable can be compared with a target value, or the result of a print statement can be inspected. The first of these approaches requires an \texttt{Id} field to be declared in the concrete class representing the problem. Once the solution has been executed, the final value of this variable can be accessed by evaluating the \texttt{Id} with the \texttt{Context} object used during execution. In contrast, the second approach can be implemented by checking the contents of the file written to by the representation of the print statement. 
 
 \subsection{An example exercise}
 
@@ -380,27 +420,28 @@ while (n > 1) {
     total *= n--;
 }
 \end{Verbatim}
-This code calculates $N\times(N-1)\times\dotsb\times2\times1=N!$  and stores it in \texttt{total} as required. In the \texttt{FactorialExercise} constructor, the value of $N!$ is calculated in the same way and stored, and a field of type \texttt{Id} is set up with the name ``\texttt{total}''. To check a solution, the class runs the solution, evaluates \texttt{totalID} with the appropriate \texttt{Context} object, and compares its final value with the correct answer stored previously, returning \texttt{true} if they are the same and \texttt{false} otherwise.
-
-In this section I have presented the class \texttt{AbstractPExercise}, shown how it fulfils the requirements for representing an exercise, and shown a concrete example that extends it.
+This code calculates $N\times(N-1)\times\dotsb\times2\times1=N!$  and stores it in \texttt{total} as required. In the \texttt{FactorialExercise} constructor, the value of $N!$ is calculated in the same way and stored, and a field of type \texttt{Id} is set up with the name ``\texttt{total}''. To check a solution, the class runs the solution, evaluates the \texttt{Id} field with the appropriate \texttt{Context} object, and compares its final value with the correct answer stored previously, returning \texttt{true} if they are the same and \texttt{false} otherwise.
 
 \section{Adding and removing blanks}
 \label{Sec:Blanks}
 
-This section describes first the algorithm that adds a blank to a MiniJava program that can later be filled in by a student, followed by the algorithm that replaces a blank with the original code snippet.
+This section describes first the algorithm that adds a blank to a MiniJava program followed by the algorithm that replaces a blank with the original code snippet.
 
 \subsection{Choosing the algorithm for adding blanks}
 
-The difficulty of a problem is based on the difficulty of the question itself and the percentage of the model solution that is blank when it is presented. Changing the question itself can be considered a coarse-grained adjustment to the problem's overall difficulty, while changing the percentage of the model solution that is blank is a much more fine-grained adjustment of overall difficulty. When we wish to adjust the difficulty of the problem, we would prefer to have the greatest control over the difficulty possible, able to make the finest-grained adjustments. For this reason, the algorithm that chooses which node in a model solution to replace with a blank should make the choice that causes the smallest growth in the percentage of the whole that is blank. Additionally, we would prefer to distribute these blanks across the whole solution, rather than concentrating them in any one part. 
+For this project, I define the difficulty of a problem to be based on the difficulty of the question and the percentage of the model solution that is blank when it is presented. Changing the question itself can be considered a coarse-grained adjustment to the problem's overall difficulty, while changing the percentage of the model solution that is blank is a much more fine-grained adjustment of overall difficulty. When we wish to adjust the difficulty of the problem, we would prefer to have the greatest control over the difficulty possible, able to make the finest-grained adjustments. For this reason, the algorithm that chooses which node in a model solution to replace with a blank should make the choice that causes the smallest growth in the percentage of the whole that is blank. Additionally, we would prefer to distribute these blanks across the whole solution, rather than concentrating them in any one part. 
 
 \begin{wrapfigure}{r}{0.3\textwidth}
   \centering
     \includegraphics[width=0.28\textwidth]{ExampleTree}
   \caption{An example of an AST with nodes labeled for clarity.}
+  \vspace{-5mm}
   \label{Fig:Tree}
 \end{wrapfigure}
 
-Figure \ref{Fig:Tree} shows an example AST, with its nodes numbered for reference. Using this tree we can compare different algorithms for selecting nodes, and see which best fulfils our requirements. Since we want to be able to add blanks to the model solution until the entire solution is blank, we should consider traversal algorithms. The algorithm will terminate when a node is selected to be made blank, and when it is next run it should (effectively) pick up from the same point. Since, clearly, the first choice of node to be replaced should be a leaf (any other choice would cause a larger percentage increase of the number of blank nodes, since such a node would have children that would simultaneously be made blank), some standard algorithms suggest themselves. The Depth First Traversal algorithm, when run on the example tree, would produce the output: 4,~5,~2,~8,~7,~6,~3,~1. Notice that node 2 is visited before node 8. This algorithm would concentrate all the blanks in the left hand side of the tree, reaching up to the left-most child of the root before considering the right hand side of the tree. This renders the Depth First Traversal algorithm unfit for our purposes, since it does not distribute blanks across the tree. Another potential traversal algorithm to consider is the Reverse Level Order Traversal algorithm, which acts something like a Breadth First Traversal from the leaves upwards. When run on the example tree, this algorithm would produce the output: 8,~7,~4,~5,~6,~2,~3,~1. This algorithm suffers from a similar problem: node 7 is visited before node 4. This results in the blanks being concentrated on areas of the tree that have the deepest nodes, neglecting all other areas. This again means that the Reverse Level Order Traversal algorithm is not fit for our purposes. The ideal output for our algorithm would be as follows: 4,~5,~8,~2,~7,~6,~3,~1. This does a good job of distributing blanks across the tree without reaching the upper levels of the tree too soon. Since the tree is unbalanced, once we have visited node 2 we have no choice but to visit the long chain of nodes on the right hand side of the tree, but at least there are a decent number of blanks on both sides of the tree at that point. This output can be attained by a traversal algorithm that operates as described below, but before that it is worth making a somewhat subtle clarification. When describing these algorithms it has been useful to think of them as traversal algorithms, even though I would not be using them that way. At each execution of the algorithm, a single node is made blank. On the next execution, a different node will be made blank. After a finite number of executions, the entire solution will be blank. Since every node is selected exactly once, the combination of all the executions leading to an empty model solution can be considered a traversal of the tree. The following algorithm is difficult to describe as a simple traversal, since that is not its aim. As such, the following description includes directions to remove nodes from the tree, something that you definitely wouldn't find in a standard traversal. The simplest description of this algorithm comes with the appreciation that the purpose of the algorithm is in fact to replace nodes with blanks\footnote{Replacing a node with a blank is similar enough to deleting the node entirely that they can be interchangeable in this context. This is explained in the following paragraphs.}, not traverse the tree. With that in mind, here is a description of the ideal ``traversal'' algorithm:
+Figure \ref{Fig:Tree} shows an example AST, with its nodes numbered for reference. Using this tree we can compare different algorithms for selecting nodes, and see which best fulfils our requirements. Since we want to be able to add blanks to the model solution until the entire solution is blank, we should consider traversal algorithms. The algorithm will terminate when a node is selected to be made blank, and when it is next run it should (effectively) pick up from the same point. Since the first choice of node to be replaced should be a leaf (any other choice would cause a larger percentage increase of the number of blank nodes, since such a node would have children that would simultaneously be made blank), some standard algorithms suggest themselves. The Depth First Traversal algorithm, when run on the example tree, would produce the output: 4,~5,~2,~8,~7,~6,~3,~1. Notice that node 2 is visited before node 8. This algorithm would concentrate all the blanks in the left hand side of the tree, reaching up to the left-most child of the root before considering the right hand side of the tree. This renders the Depth First Traversal algorithm unfit for our purposes, since it does not distribute blanks across the tree. Another potential traversal algorithm to consider is the Reverse Level Order Traversal algorithm, which acts something like a Breadth First Traversal from the leaves upwards. When run on the example tree, this algorithm would produce the output: 8,~7,~4,~5,~6,~2,~3,~1. This algorithm suffers from a similar problem: node 7 is visited before node 4. This results in the blanks being concentrated on areas of the tree that have the deepest nodes, neglecting all other areas. This again means that the Reverse Level Order Traversal algorithm is not fit for our purposes. 
+
+The ideal output for our algorithm would be as follows: 4,~5,~8,~2,~7,~6,~3,~1. This does a good job of distributing blanks across the tree without reaching the upper levels of the tree too soon. Since the tree is unbalanced, once we have visited node 2 we have no choice but to visit the long chain of nodes on the right hand side of the tree, but at least there are a decent number of blanks on both sides of the tree at that point. This output can be attained by a traversal algorithm that operates as described below, but before that it is worth making a somewhat subtle clarification. When describing these algorithms it has been useful to think of them as traversal algorithms, even though I would not be using them that way. At each execution of the algorithm, a single node is made blank. On the next execution, a different node will be made blank. After a finite number of executions, the entire solution will be blank. Since every node is selected exactly once, the combination of all the executions leading to an empty model solution can be considered a traversal of the tree. The following algorithm is difficult to describe as a simple traversal, since that is not its aim. As such, the following description includes directions to remove nodes from the tree, which would not be found in a standard traversal. The simplest description of this algorithm comes with the appreciation that the purpose of the algorithm is in fact to replace nodes with blanks\footnote{Replacing a node with a blank is similar enough to deleting the node entirely that they can be interchangeable in this context. This is explained in the subsequent paragraphs.}, not traverse the tree. With that in mind, here is a description of the ideal ``traversal'' algorithm:
 
 \begin{enumerate}
 \item{Traverse the tree as in the Depth First Traversal algorithm.}
@@ -412,7 +453,7 @@ It can be seen that this algorithm does indeed produce the desired output, 4,~5,
 
 \subsection{Adding a blank}
 
-The problem my algorithm must solve is more complex than a simple traversal. Not only should my algorithm terminate mid-traversal and be able to pick up from that point at the start of the next execution, but the process of actually inserting a blank into the tree is non-trivial. On top of that, the results of executing the algorithm have to be reversed in order to replace a blank with the original code snippet. The pseudocode for the algorithm is in the appendices, Section \ref{Pseudo:AddBlank}.
+The problem my algorithm must solve is more complex than a simple traversal. Not only should my algorithm terminate mid-traversal and be able to pick up from that point at the start of the next execution, but the process of actually inserting a blank into the tree is non-trivial. On top of that, the results of executing the algorithm have to be reversed in order to replace a blank with the original code snippet. The pseudocode for the algorithm is found in Appendix \ref{App:AddBlank}.
 
 Note that once we have made all the leaves of the tree blank in the first pass, we have no more leaves to choose; this is in direct contrast to when we were simply removing leaves thereby creating more leaves. To fix this problem, we redefine the concept of leaves: a node is a leaf that has no children or all of its children are blank. In this way, by making leaves blank we are in fact creating more leaves.
 
@@ -420,27 +461,25 @@ Since we need to be able to undo the effects of an execution of the algorithm to
 
 \subsection{Removing a blank}
 
-In contrast to adding a blank, the algorithm that removes a blank from the model solution is much simpler. We simply take the top off the stack of replaced nodes and the stack locations of replaced nodes, navigate to the correct location and reinsert the node back in to its parent.
+In contrast to adding a blank, the algorithm that removes a blank from the model solution is much simpler. We simply take the top off the stack of replaced nodes and the stack of the locations of replaced nodes, navigate to the correct location and reinsert the node back in to its parent.
 
 \section{The \texttt{ExerciseSetter}}
 \label{Sec:ExSet}
 
 In this section I describe how I made use of the language and its features to design the \texttt{ExerciseSetter} class, which can set exercises and adjust their difficulty.
 
-The intuition behind the design of the \texttt{ExerciseSetter} comes from the imagined use case of students in a class where the student to teacher ratio is very high, and students may not have instant access to a teacher in the case that they find the presented exercises too easy or too difficult. The challenge in this scenario would be to programmatically detect that the student's capability is not matched with the difficulty of the exercise, and to present an easier or a harder problem appropriately. The \texttt{ExerciseSetter} facilitates this by implementing a very simple performance heuristic and by storing several questions of various difficulties, such that ideally all students could be catered too. Using the performance heuristic, the \texttt{ExerciseSetter} attempts to adjust the current problem's difficulty appropriately.
+The principle behind the design of the \texttt{ExerciseSetter} comes from considering a hypothetical classroom where the student to teacher ratio is very high, and students may not have access to a teacher if they find the exercises too easy or too difficult. The challenge in this scenario would be to programmatically detect that the student's capability is not matched with the difficulty of the exercise, and to present an easier or a harder problem appropriately. The \texttt{ExerciseSetter} facilitates this by implementing a very simple performance heuristic and by storing several questions of various difficulties, such that ideally all students could be catered too. Using the performance heuristic, the \texttt{ExerciseSetter} attempts to adjust the current problem's difficulty appropriately.
 
-The performance heuristic operates on the assumption that the performance of the students can be inferred from the number of attempts at solving the problem before their solution was correct, and the comparison between the number of nodes in the model solution tree and the number of nodes in the student's solution tree. The more attempts a student required to solve the problem correctly, the more difficult they found the problem. Also, if a student used many more nodes to solve the problem than the model solution did, then it is likely that they haven't understood a core concept being tested: they may have unnecessarily unrolled a loop for example. 
+The performance heuristic operates on the assumption that the performance of the students can be inferred from the number of attempts at solving the problem before their solution was correct, and the comparison between the number of nodes in the model solution tree and the number of nodes in the student's solution tree. It is likely that the more attempts a student required to solve the problem correctly, the more difficult they found the problem. Also, if a student used many more nodes to solve the problem than the model solution did, then it is likely that they have not understood a core concept being tested: they may have unnecessarily unrolled a loop for example. 
 
-If, once an exercise has been solved, the next exercise needs to be harder, according to the performance heuristic, then the \texttt{ExerciseSetter} should add blanks to the solution until either the exercise is hard enough, or the entire solution is blank. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present a harder question, with enough of the solution blank that the answer is not given to the student at first glance. If instead the exercise needs to be easier, then the \texttt{ExerciseSetter} should remove blanks from the solution until either the exercise is easy enough, or there are no blanks in the solution. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present an easier question.
-
-In this section I have detailed the implementation of the \texttt{ExerciseSetter}.
+If, once an exercise has been solved, the next exercise needs to be harder, according to the performance heuristic, then the \texttt{ExerciseSetter} should add blanks to the solution until either the exercise is hard enough, or the entire solution is blank. If the latter occurs, then the \texttt{ExerciseSetter} should attempt to present a harder question, with enough of the solution blank that the answer is not given to the student at first glance. If instead the exercise needs to be easier, then the \texttt{ExerciseSetter} should remove blanks from the solution until either the exercise is easy enough, or there are no blanks in the solution. If the latter occurs, then the \texttt{ExerciseSetter} should present an easier question.
 
 \section{Extension: the parser}
 \label{Sec:Parsing}
 
-In this section I explain how a parser for MiniJava was implemented as an extension using the ANTLR parser generator\cite{ANTLR4}, and how a representation of an input MiniJava program can be built using it.
+In this section I explain how a parser for MiniJava was implemented as an extension using the ANTLR parser generator \cite{ANTLR4}, and how a representation of an input MiniJava program can be built using it.
 
-The parser grammar (which can be found in Appendix \ref{App:Parser}) is based on an existing ANTLR parser grammar for Java\footnote{https://github.com/antlr/grammars-v4/tree/master/java - last accessed May 13th}. It would not have been worthwhile for me to write an entire grammar from scratch when there was such a readily available alternative. It is always good to use existing libraries or tools if they are available. 
+The parser grammar (which can be found in Appendix \ref{App:Parser}) is based on an existing ANTLR parser grammar for Java\footnote{https://github.com/antlr/grammars-v4/tree/master/java - last accessed May 13th 2017}. It seemed unnecessary to write an entire grammar from scratch when there was such a readily available alternative. It is always good to use existing libraries or tools if they are available. 
 
 The ANTLR tool generates recursive descent parsers from input grammars. The typical usage of ANTLR follows this process:
 \begin{enumerate}
@@ -449,7 +488,8 @@ The ANTLR tool generates recursive descent parsers from input grammars. The typi
 \item{When this parser is executed with input source code, ANTLR's internal representation of the corresponding parse tree is built.}
 \item{Using either a ``listener'' or a ``visitor'', walk the generated parse tree, taking actions at each node, processing the source code as desired.}
 \end{enumerate}
-The following code shows how to build a MiniJava representation for the source code \texttt{i~=~4;}.
+
+The following code shows how to build a MiniJava representation for the source code \texttt{i~=~4;} without a parser.
 \begin{Verbatim}[samepage=true, numbers=left]
 AssignExpr aE = new AssignExpr();
 Id i = new Id();
@@ -459,9 +499,10 @@ four.setUpLiteral(PrimType.INT, "4");
 aE.setUpAssignExpr(i, AssignOp.EQ, four);
 ExpressionStmnt eS = new ExpressionStmnt(aE);
 \end{Verbatim}
+
 Considering this representation as a parse tree, this can be seen as line 0 (i.e. the invisible line before line 1) visiting the \texttt{ExpressionStmnt} node and visiting its only child, the \texttt{AssignExpr} node in line 1. This node's first child is visited in lines 2 and 3, and its second child is visited in lines 4 and 5. Once all the children of the \texttt{AssignExpr} have been visited, the instance itself can be set up on line 6. Once all the \texttt{ExpressionStmnt}'s children have been visited, its instance can be set up on line 7. This example demonstrates that in general, program representations are generated by recursively visiting each expression or statement's children, in a similar way to how a program representation is interpreted.
 
-By default, the ANTLR tool generates a listener interface and base class along with the parser. A listener is characterised by providing callback methods that are triggered by an automatic parse tree walker: listener methods don't have to explicitly visit their children. A visitor on the other hand gives the user more control over the walk, requiring explicit commands to visit the children of each node. While this means that it takes less work to use a listener (as the parse tree walker is already built in), the visitor paradigm is more appropriate for building my library's representation of the MiniJava source code. While the listener methods all return \texttt{void}, requiring the instances representing the children nodes to be stored somewhere in memory prior to setting up the current node, the base visitor, \texttt{MiniJavaBaseVisitor<T>}, is generic, with methods returning a \texttt{T} object. This means that the visitor methods can be made to return \texttt{MiniJASTNode}s, which can be cast to \texttt{Expression}s or \texttt{Statement}s as appropriate. By using a visitor rather than a listener, I was able to more closely imitate the way that program representations are build in code (shown above). My visitor implementation can be found in \texttt{MiniJavaASTBuilder}, a class which extends the \texttt{MiniJavaBaseVisitor<MiniJASTNode>} class supplied by the ANTLR tool.
+By default, the ANTLR tool generates a listener interface and base class along with the parser. A listener is characterised by providing callback methods that are triggered by an automatic parse tree walker: listener methods do not have to explicitly visit their children. A visitor on the other hand gives the user more control over the walk, requiring explicit commands to visit the children of each node. While this means that it takes less work to use a listener (as the parse tree walker is already built in), the visitor paradigm is more appropriate for building my representation of the MiniJava source code. While the listener methods all return \texttt{void}, requiring the instances representing the children nodes to be stored somewhere in memory prior to setting up the current node, the base visitor, \texttt{MiniJavaBaseVisitor<T>}, is generic, with methods returning a \texttt{T} object. This means that the visitor methods can be made to return \texttt{MiniJASTNode}s, which can be cast to \texttt{Expression}s or \texttt{Statement}s as appropriate. By using a visitor rather than a listener, I was able to more closely imitate the way that program representations are build in code (shown above).
 
 \subsection{Challenges when parsing}
 
@@ -473,7 +514,7 @@ if (i == true)		 (1)
 else
 	k = 2;
 \end{Verbatim}
-A parser could not make a decision as to whether the \texttt{else} statement ``belongs'' to the first or the second \texttt{if} statement. Since the grammar is ambiguous, a decision must be made for the parser. The decision taken in Java\cite[p.417]{Java8}, and thus in MiniJava, is to attach the \texttt{else} statement to most inner \texttt{if} statement possible (which in the example above would be the one labeled \texttt{(2)}, even though the indentation may suggest that the programmer intended it to be the one labeled \texttt{(1)}). To implement this decision, the grammar distinguishes between \texttt{statement}s and \texttt{statementNSI}s (where NSI stands for ``No Short If'', i.e. there are no \texttt{if}s without associated \texttt{else}s). The way this solves the problem becomes apparent on inspection of the following rules in the grammar (presented in context in Appendix \ref{App:Parser}):
+A parser could not make a decision as to whether the \texttt{else} statement ``belongs'' to the first or the second \texttt{if} statement, since the code is semantically ambiguous. Thus, a decision must be made for the parser. The decision taken in Java \cite[p.417]{Java8}, and thus in MiniJava, is to attach the \texttt{else} statement to most inner \texttt{if} statement possible (which in the example above would be the one labeled \texttt{(2)}, even though the indentation may suggest that the programmer intended it to be the one labeled \texttt{(1)}). To implement this decision, the grammar distinguishes between \texttt{statement}s and \texttt{statementNSI}s (where NSI stands for ``No Short If'', i.e. there are no \texttt{if}s without associated \texttt{else}s). The way this solves the problem becomes apparent on inspection of the following rules in the grammar (presented in context in Appendix \ref{App:Parser}):
 \begin{Verbatim}[samepage=true, tabsize=4]
 statement:
 	...
@@ -481,14 +522,15 @@ statement:
 	| IF parExpression statementNSI ELSE statement	  
 	...
 	;
-	
+\end{Verbatim}
+\begin{Verbatim}[samepage=true, tabsize=4]
 statementNSI:
 	...
 	| IF parExpression statementNSI ELSE statementNSI
 	...
 	;
 \end{Verbatim}
-The \texttt{statement} rule gives productions for both a short \texttt{if} (i.e. with no attached \texttt{else}) and a long \texttt{if}, while the \texttt{statementNSI} rule only produces a long \texttt{if}. It can be seen that using these rules to parse the code above will reach a dead end if the first \texttt{if} statement is parsed as a long \texttt{if}, since its first sub-statement would have to be a \texttt{statementNSI}, and this rule has no viable way of parsing the second \texttt{if} statement. 
+The \texttt{statement} rule gives productions for both a short \texttt{if} (i.e. with no attached \texttt{else}) and a long \texttt{if}, while the \texttt{statementNSI} rule only produces a long \texttt{if}. It can be seen that using these rules to parse the code above will reach a dead end if the first \texttt{if} statement is parsed as a long \texttt{if}, since its first sub-statement would have to be a \texttt{statementNSI}, and this rule has no viable way of parsing the second (short) \texttt{if} statement. 
 
 Another problem encountered while writing the parser can be discovered on inspection of the local variable declaration production shown below:
 \begin{Verbatim}[samepage=true, tabsize=4]
@@ -497,25 +539,25 @@ blockStatement:
 	...
 	;
 \end{Verbatim}
-This production is used in the creation of \texttt{LocalVarDec} instances, which require the appropriate \texttt{PrimType} to set up correctly. As the visitor arrives at a node produced like this in the parse tree it needs to visit the node's children in order to gather the necessary objects to set up the \texttt{LocalVarDec} object. Since visitor methods return \texttt{MiniJASTNode}s, the method called when parsing the \texttt{primitiveType} terminal symbol needs to return an object whose class implements \texttt{MiniJASTNode} and represents a primitive type. Until this point, no such class existed. The enumeration \texttt{PrimType} does not implement \texttt{MiniJASTNode}, as that would require overriding all the methods declared in the interface separately for each value. Since this would be a lot of wasted code, I instead wrote a new class, \texttt{PrimTypeCarrier}, which implements \texttt{MiniJASTNode} and stores a value of \texttt{PrimType}. An instance of this class is created when parsing the \texttt{primitiveType} terminal symbol which is returned to the method used to set up the \texttt{LocalVarDec} object.
+This production is used in the creation of \texttt{LocalVarDec} instances, which require the appropriate \texttt{PrimType} to set up correctly. As the visitor arrives at a node in the parse tree resulting from this production, it needs to visit the node's children in order to gather the necessary objects to set up the \texttt{LocalVarDec} object. Since visitor methods return \texttt{MiniJASTNode}s, the method called when parsing the \texttt{primitiveType} terminal symbol needs to return an object whose class implements \texttt{MiniJASTNode} and represents a primitive type. Until this point, no such class existed. The enumeration \texttt{PrimType} does not implement \texttt{MiniJASTNode}, as that would require overriding all the methods declared in the interface separately for each value. Since this would be a lot of wasted code, I instead wrote a new class, \texttt{PrimTypeCarrier}, which implements \texttt{MiniJASTNode} and stores a value of \texttt{PrimType}. An instance of this class is created when parsing the \texttt{primitiveType} terminal symbol which is returned to the method used to set up the \texttt{LocalVarDec} object.
 
 \subsection{Using the parser}
 
-The \texttt{ExerciseSetter} class provides an interface through which students may fill blanks by submitting their own code as a \texttt{String}. To get the representation of this code to actually fill the blank, of course the parser must be used, but this presents an interesting problem. Certain code snippets have the potential to be both \texttt{Expression}s and \texttt{Statement}s. An example of this is the code snippet \texttt{total = 1}. This can be parsed as an assignment, and would thus be classed an \texttt{Expression}, or a variable declaration, where the surrounding context might be \texttt{int total = 1;}, which would categorise this snippet as a \texttt{Statement}. Fortunately the parser  has a solution to this, as the starting terminal symbol for the grammar is not fixed. The \texttt{ExerciseSetter} can check whether the blank being filled represents an \texttt{Expression} or a \texttt{Statement}, and then sets the entry point of the parser to be either \texttt{expression} or \texttt{blockStatement} appropriately.\\
+The \texttt{ExerciseSetter} class provides an interface through which students may fill blanks by submitting their own code as a \texttt{String}. To acquire the representation of this code to actually fill the blank the parser must be used, but this presents an interesting problem. Certain code snippets have the potential to be both \texttt{Expression}s and \texttt{Statement}s. An example of this is the code snippet \texttt{total = 1}. This can be parsed as an assignment, and would thus be classed an \texttt{Expression}, or a variable declaration, where the surrounding context might be \texttt{int total = 1;}, which would categorise this snippet as a \texttt{Statement}. Fortunately the parser  has a solution to this, as the starting terminal symbol for the grammar is not fixed. The \texttt{ExerciseSetter} can check whether the blank being filled represents an \texttt{Expression} or a \texttt{Statement}, and then sets the entry point of the parser to be either \texttt{expression} or \texttt{blockStatement} appropriately.\\\pagebreak
 
 \section{Extension: the GUI}
 \label{Sec:GUI}
 
 In this section I describe the implementation and function of the GUI as an extension.
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width = \textwidth]{GUI}
 \caption{An example screenshot taken of the GUI peripheral.}
 \label{Fig:GUI}
 \end{figure}
 
-The GUI demonstrates some of the possible uses of this set of tools. It shows how a teacher might manually set the difficulty of a particular exercise and how a student could fill in the blanks and run their solution. An example screen from the GUI is shown in Fig \ref{Fig:GUI}. The top slider determines the difficulty of the question: the further to the left the slider is, the easier the question will be. The bottom slider affects the difficulty of the problem: the further it is to the left, the fewer blanks there will be and thus the easier the problem will be to solve. When the ``Generate'' button is clicked on, the corresponding exercise will be displayed on the right. 
+The GUI demonstrates some of the possible uses of this set of tools. It shows how a teacher might manually set the difficulty of a particular exercise and how a student could fill in the blanks and run their solution. An example screen from the GUI is shown in Fig \ref{Fig:GUI}. The top slider determines the difficulty of the question: the further to the left the slider is, the easier the question will be. The bottom slider affects the difficulty of the problem: the further it is to the left, the fewer blanks there will be and thus the easier the problem will be to solve. When the ``Generate'' button is clicked, the corresponding exercise will be displayed on the right. 
 
 As shown in the screenshot, the ``Solution'' box on the right is editable, allowing students to directly input their own code, filling in the blanks or otherwise. When the ``Run'' button is clicked, the code in this box is parsed and set as the solution to the exercise. This solution is then run, and the validity of the solution checked. The GUI reports whether the solution was correct or not, and attempts to present error messages in a user friendly manner if any were produced. If the solution was correct, the student's performance is measured and the difficulty of the next exercise set accordingly. Example inputs and outputs of the GUI are shown in Section \ref{Sec:GUIEval} of the Evaluation.
 
@@ -526,7 +568,7 @@ The GUI was designed using the IntelliJ Swing plugin\footnote{https://www.jetbra
 
 \chapter{Evaluation}
 
-In this chapter I demonstrate that all of the original goals of the project were achieved. In Section \ref{Sec:Func} I show that all the components fulfil the requirements laid out in Chapter 1. The trends that emerge as the difficulty is adjusted are analysed in Section \ref{Sec:DiffTrends}, and the development process is critiqued in Section \ref{Sec:DevProc}.
+In this chapter I demonstrate that all of the original goals of the project were achieved. I show in Section \ref{Sec:Func} that all the components fulfil the requirements laid out in Chapter 1. The trends that emerge as the difficulty is adjusted are analysed in Section \ref{Sec:DiffTrends}, and the development process is critiqued in Section \ref{Sec:DevProc}.
 
 \section{Correct functionality}
 \label{Sec:Func}
@@ -553,7 +595,16 @@ The tests for the parser on the other hand are mainly regression tests. This mea
 
 The aim of the \texttt{ExerciseSetter} class is to be capable of measuring a student's performance and adjusting the difficulty of the following exercises appropriately.
 
-The measurement of a student's performance is represented by a \texttt{float} value. If this value is positive then the student has performed well, if it is negative the student performed poorly. The magnitude of this value indicates the size of the adjustment necessary for the next exercise. Figure \ref{Fig:PerfGraph} shows how the measured performance depends on both the number of attempts a student has made to give a correct solution and also the number of extra nodes they used in their solution compared with that of the model solution. It shows the contours of the surface, which is a function of both variables. The orange line labelled 0 represents the zero contour. That is, any solution that maps to a point above that line (on the 2D plot) is unsatisfactory, and will result in the next exercise being easier. Solutions mapping to points below the zero contour are of an acceptable standard such that the next exercise will be harder. As a hypothetical example, say student A provided a correct solution in two attempts, using the expected number of nodes, student B required four attempts but still used the expected number of nodes, and while student C also provided a correct solution in two attempts, they used nine nodes more than necessary. As can be seen on Figure \ref{Fig:PerfGraph} only student A's solution has a performance value greater than zero.
+The measurement of a student's performance is represented by a \texttt{float} value. If this value is positive then the student has performed well, if it is negative the student performed poorly. The magnitude of this value indicates the size of the adjustment necessary for the next exercise. Figure \ref{Fig:PerfGraph} shows how the measured performance depends on both the number of attempts a student has made to give a correct solution and also the number of extra nodes they used in their solution compared with that of the model solution. It shows the contours of the surface, which is a function of both variables. 
+
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=0.8\textwidth]{PerfGraph}
+  \caption{The contours of the performance surface, dependent on the number of attempts required and the number of extra nodes used. Points A, B and C show the performance measurement of three hypothetical students.}
+  \label{Fig:PerfGraph}
+\end{figure}
+
+The orange line labelled 0 represents the zero contour. That is, any solution that maps to a point above that line (on the 2D plot) is unsatisfactory, and will result in the next exercise being easier. Solutions mapping to points below the zero contour are of an acceptable standard such that the next exercise will be harder. As a hypothetical example, say student A provided a correct solution in two attempts, using the expected number of nodes, student B required four attempts but still used the expected number of nodes, and while student C also provided a correct solution in two attempts, they used nine nodes more than necessary. As can be seen on Figure \ref{Fig:PerfGraph} only student A's solution has a performance value greater than zero.
 
 The performance measurement varies as a function of the number of attempts squared, meaning that the difference in measured performance between two and three attempts is about one whereas the difference between four and five attempts is four. This is so that solutions that required more numerous attempts are taken as indicative of poorer performance. In my opinion, requiring multiple attempts suggests a lack of understanding of the concepts underlying the question being answered or that the student is simply guessing. I have defined the cut-off point for the number of attempts as 2.5. That is, if a student requires two attempts or fewer, the system determines that the next exercise can be harder, but if a student requires three attempts or more, the next exercise will be easier. This cut off was chosen to allow for one careless mistake before assuming lack of comprehension.
 
@@ -561,19 +612,14 @@ If the student uses fewer nodes than the model solution, they may either have fo
 
 During the evaluation of this system, I became aware of a possible limitation. At the moment, there is no way for a student to ``fail'' a question and no way for them to give up. This means that if a student is given a low performance score for a solution, and thus the same question but with fewer blanks, then the student has already answered this question at a greater difficulty, and this new question might feel trivial to them. Whether this is a problem is debatable: a student could find it frustrating to have to answer the same question again, or they might appreciate being shown more of the model solution if their own was very different. An alternative implementation that provides a way for a student to give up might be such that a correct solution always results in a harder question, and that an easier question is only delivered if the student is forced to give up. This new approach might fail students in another way, in that if a student is reduced to guessing and manages to guess the correct response, then that student may not have understood the underlying material and nevertheless be presented with a harder question. An area of further work might be determining which of these approaches promotes greater knowledge retention.
 
-\begin{figure}
-  \centering
-    \includegraphics[width=0.8\textwidth]{PerfGraph}
-  \caption{The contours of the performance surface, dependent on the number of attempts required and the number of extra nodes used. Points A, B and C show the performance measurement of three hypothetical students.}
-  \label{Fig:PerfGraph}
-\end{figure}
-
 \subsection{The GUI extension}
 \label{Sec:GUIEval}
 
 The GUI brings together all of the components and provides an interface for users. The screenshots in Figure \ref{Fig:GoodGUIScreens} show the output given when a student solves the exercise in the best way possible, that is in one attempt and with no more nodes than expected.
 
-\begin{figure}
+The result of a perfect solution (shown in Figure \ref{SFig:GGS2}) is recorded in the ``Output:'' part of the GUI, which gives feedback on the number of attempts and the number of nodes used, and states that the next question will be harder. This question (shown in Figure \ref{SFig:GGS3}) is presented when the student presses the ``Next Question'' button. While a solution has only one way of being successful, there are a variety of ways in which it can be unsatisfactory. Some possible ways are shown in Figure \ref{Fig:BadGUIScreens}.
+
+\begin{figure}[h]
 \centering
   \begin{subfigure}{.45\textwidth}
     \centering
@@ -599,8 +645,6 @@ The GUI brings together all of the components and provides an interface for user
 \caption{Screenshots of the GUI when the student has performed to a standard required for a more difficult exercise.}
 \label{Fig:GoodGUIScreens}
 \end{figure}
-
-The result of a perfect solution (shown in Figure \ref{SFig:GGS2}) is recorded in the ``Output:'' part of the GUI, which gives feedback on the number of attempts and the number of nodes used, and states that the next question will be harder. This question (shown in Figure \ref{SFig:GGS3}) is presented when the student presses the ``Next Question'' button. While a solution has only one way of being successful, there are a variety of ways in which it can be unsatisfactory. Some possible ways are shown in Figure \ref{Fig:BadGUIScreens}.
 
 \begin{figure}
 \centering
@@ -640,25 +684,25 @@ These figures have demonstrated that the GUI acts as a successful interface betw
 \section{Adjusting the difficulty}
 \label{Sec:DiffTrends}
 
-I explained the way that the \texttt{ExerciseSetter} class measured the performance of a student by reference to their correct solution in Section \ref{Sec:ExSetEval}. In this section I explain how the performance measurement is used to determine the difficulty of the following exercise, and the trends that arise from this method.
+I explained the way that the \texttt{ExerciseSetter} class measured the performance of a student by reference to their correct solution in Section \ref{Sec:ExSetEval}. In this section I explain how the performance measurement is used to determine the difficulty of the subsequent exercise, and the trends that arise from this method.
 
 \begin{figure}
 \centering
 \includegraphics[width = .9\linewidth]{DiffGraph}
-\caption{Increase in measured difficulty with repeated submissions each with a measured performance of one.\textcolor{red}{Is this graph meaningful?}}
+\caption{Increase in measured difficulty with repeated correct solutions each with a measured performance of one.}
 \label{Fig:DiffGraph}
 \end{figure}
 
 Figure \ref{Fig:DiffGraph} shows how the difficulty of the exercises presented by the \texttt{ExerciseSetter} increases as a function of correct solutions submitted. To generate this graph, I determined the difficulty of the exercise being set by the \texttt{ExerciseSetter} to be as low as possible, that is, the simplest question with only a single blank in its model solution. I then submitted a number of correct solutions, tailored such that they all had a measured performance value of one. In practice this is unrealistic, as it corresponds to the student's performance increasing at exactly the same rate as the increase in difficulty. However, as a hypothetical model this can still be instructive. The level of difficulty of each exercise was increased by adding another blank to the model solution until the entire solution was blank. After the final correct submission, the next most difficult question was set.  
 
-At present, there are three questions that the \texttt{ExerciseSetter} can ask which are shown on the graph as three distinct groups of points. The points are separated by small increases in difficulty within questions and a significant increase in difficulty between each of the three questions. The significant increases can be explained by my choice of how the system determines the level of difficulty when a question is presented for the first time. Instead of giving the exercise the lowest difficulty possible (i.e. leaving only a single blank in its model solution), the system sets half of the model solution to be blank. This ensures that when a student attempts a problem for the first time they are not provided with the majority of the code.
+At present, there are three questions that the \texttt{ExerciseSetter} can ask which are shown on the graph as three distinct groups of points. The points are separated by small increases in difficulty within questions and a significant increase in difficulty between each of the three questions. The significant increases can be explained by my choice of how the system determines the level of difficulty when a question is presented for the first time. Instead of giving the exercise the lowest difficulty possible (i.e. leaving only a single blank in its model solution), the system presents half of the model solution. This ensures that when a student attempts a problem for the first time they are not provided with the majority of the code.
 
 For the three questions illustrated, there is a tendency for the model solution to require more nodes to solve the problem when the question is more complex. This has the unintended effect of making the rate of increase in difficulty slower as the difficulty of the question itself increases. This can be seen more explicitly in Figure \ref{Fig:DiffGraphComp}, where each solid line corresponds to a single question. It will be noted that the gradient of these lines decreases as the questions get more complex as does the increase in difficulty as a function of a correct solution. This is desirable as students are likely to require smaller increments in difficulty as the questions get more complex. Although this tendency may not hold for all questions (i.e. there may be some simple questions that require a lot of nodes to answer, and some complex ones that can be solved with very few nodes), I believe that it will hold for a large number of questions, making this a useful side effect of my particular implementation.
 
 \begin{figure}
 \centering
 \includegraphics[width = .9\linewidth]{DiffGraphComp}
-\caption{This demonstrates the different rates of increase of difficulty found for the different questions. The straight lines are extrapolated past the original points to show that they intersect and thus are not parallel.}
+\caption{Demonstrating the different rates of increase of difficulty found for the different questions. The straight lines are extrapolated past the original points to show that they intersect and thus are not parallel.}
 \label{Fig:DiffGraphComp}
 \end{figure}
 
@@ -667,7 +711,7 @@ In this section I have described the trends present in the way difficulty is mod
 \section{Development process}
 \label{Sec:DevProc}
 
-Throughout the implementation process, I followed the principles of Test Driven Development (TDD)\footnote{http://agiledata.org/essays/tdd.html - last accessed 10th May}. This methodology revolves around the writing of unit tests before the appropriate code is written. These tests are designed with reference to the requirements specification, such that any software that passes these tests fulfils the requirements. I found it very useful to develop the software in this manner, since I found that most bugs that I introduced were caught the first time I executed the code, and thus could not cause more problems later in the process, when they might have been harder to find.
+Throughout the implementation process, I followed the principles of Test Driven Development (TDD)\footnote{http://agiledata.org/essays/tdd.html - last accessed 10th May 2015}. This methodology revolves around the writing of unit tests before the appropriate code is written. These tests are designed with reference to the requirements specification, such that any software that passes these tests fulfils the requirements. I found it very useful to develop the software in this manner, since I found that most bugs that I introduced were caught the first time I executed the code, and thus could not cause more problems later in the process, when they might have been harder to find.
 
 The development of prototypes has also been beneficial, allowing me to avoid dead ends by testing my ideas at an early stage. However, at times I might have benefited from determining the interfaces between the components before I started to make prototypes of them. Sometimes the prototypes became the components themselves, and it was only when I tried to get them to work together that I realised that the interface one component expected was not necessarily the one that another component offered. In future, I would outline the project not only in text form, but also as a UML diagram.
 
@@ -678,21 +722,21 @@ I recognise that a limitation of the project is that my evaluation has relied on
 
 \chapter{Conclusion}
 
-In conclusion the project was a success, as the software I developed fulfils all of the original aims. Furthermore, I was able to implement two extensions on top of the core functionality that have enabled me to demonstrate the power of the underlying system.
+In conclusion the project was a success, as the software I developed fulfils all of my original aims. Furthermore, I was able to implement two extensions on top of the core functionality that have enabled me to demonstrate the power of the underlying system.
 
-I have designed a new language, MiniJava, such that its programs can incorporate blanks that must be filled in before they can be executed. I have written an interpreter and a pretty-printer for this language, to execute arbitrary code and print representations of programs as MiniJava code. I encoded a representation of programming exercises and wrote algorithms to introduce blanks to and remove them from the model solutions for these exercises, making them harder and easier respectively. Using concrete examples of such exercises I implemented a system that delivers questions to a student, allows them to fill in the blanks with their own arbitrary code, and executes the completed code to determine whether the problem was solved. This system measures the performance of the student using a heuristic and adjusts the difficulty of the next exercise based on this measurement. As extensions, I implemented a parser for MiniJava to streamline the process of accepting student input, and created a GUI to demonstrate how both teachers and students might use the system.
+I have designed a new language, MiniJava, such that its programs can incorporate blanks that must be filled in before they can be executed. I have written an interpreter and a pretty-printer for this language, to execute arbitrary code and print representations of programs as MiniJava code. I encoded a representation of programming exercises and wrote algorithms to introduce blanks to and remove them from the model solutions for these exercises, making them harder and easier respectively. Using concrete examples of such exercises I implemented a system that sets exercises for a student, allows them to fill in the blanks with their own arbitrary code, and executes the completed code to determine whether the problem was solved. This system measures the performance of the student using a heuristic and adjusts the difficulty of the next exercise based on this measurement. As extensions, I implemented a parser for MiniJava to streamline the process of accepting student input, and created a GUI to demonstrate how both teachers and students might use the system. 
 
-This project has several limitations. The choices I made regarding pedagogic practice were based on my experience as a learner and teaching assistant in a variety of settings. With hindsight it would have been useful to include more pedagogical theory in the preparation phase to inform these choices. A further limitation is that the system has a limited number of questions that may be set which means that the system needs to present the same question multiple times. This means that currently it is possible for students to simply learn the answers through repetition of the material without actually understanding the underlying principles. 
+This project has several limitations. The choices I made regarding pedagogical practice were based on my experience as a learner and teaching assistant in a variety of settings. With hindsight it would have been better to use more theory to inform these choices. A further limitation is that the system has a limited number of questions that may be set which means that the system needs to present the same question multiple times. This means that currently it is possible for students to simply learn the answers through repetition of the material without actually understanding the underlying principles. 
 
 \section{Further work}
 
-MiniJava is only a subset of the full Java grammar. Since it is Java that students need to learn, adding the rest of Java's features to MiniJava would be worthwhile to enable the system to be used at a higher level. Currently this system would be useful for students who are beginning to learn Java as they only need to understand the features present in MiniJava, but it wouldn't be useful for a student who needs to learn more complex principles such as how to write functions and classes.
+MiniJava is only a subset of the full Java grammar. Since it is Java that students need to learn, adding the rest of Java's features to MiniJava would be worthwhile to enable the system to be used at a higher level. Currently this system would be useful for students who are beginning to learn Java as they only need to understand the features present in MiniJava, but it would not be useful for a student who needs to learn more complex principles such as how to write functions and classes.
 
 One of the difficulties in teaching programming is that it is often difficult to report errors in a way that novice programmers find useful. Often these errors are presented using technical jargon that beginners may not have learnt, and usually require a deeper understanding of the language (and Computer Science in general) than can be expected of them. One tool that has made some headway in solving this problem is Arjen \cite{Arjen}. This works by exploiting the fact that novice programmers all tend to make the same types of errors and explicitly searches for these errors in order to provide feedback tailored to a novice, perhaps giving pointers for how to solve or avoid the problem. Since Arjen takes a Java source file as input it is feasible that students' MiniJava solutions could be passed to the tool as code before they are parsed, especially if the rest of Java's features have been implemented. The reports generated by Arjen could then be passed back to the student, giving them better explanations of their mistakes. Such a collaboration would be likely to provide a much more supportive user experience for novice programmers.
 
 Another extension I considered in my proposal but did not have time to implement was to consider different syntactic constructs separately and attempt to record a student's expertise with each construct. This means that when students use a specific syntax construct (e.g. a \texttt{for} loop) the system could assess and record whether a student understands how to use that construct. The system could then focus attention on areas that a student had demonstrated less comprehension of, enabling it to provide a more tailored and directed learning experience.\\
 
-In summary, this project has been both a useful insight into the development of complex software in general, and also a successful implementation of a system for giving programming exercises adaptive difficulty.
+In summary, this project has provided both a useful insight into the development of complex software in general, and also a successful implementation of a system for giving programming exercises adaptive difficulty.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % the bibliography
@@ -701,13 +745,10 @@ In summary, this project has been both a useful insight into the development of 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % the appendices
-\appendix
+\begin{appendices}
 
-\chapter{Pseudocode for complex algorithms}
-\label{App:Pseudocode}
-
-\section{Adding a blank}
-\label{Pseudo:AddBlank}
+\chapter{Pseudocode for \texttt{addBlank}}
+\label{App:AddBlank}
 \begin{Verbatim}[samepage=true,tabsize=4]
 public boolean addBlank() {
 	set up stacks to store nodes, parents, and indices;
@@ -725,7 +766,7 @@ public boolean addBlank() {
 			return true;
 		} if (we find a blank) {
 			if (the blank is the root of the tree)
-				return false; // We can't add a blank to a blank solution
+				return false; // We can not add a blank to a blank solution
 			else 
 				carry on with the DFS
 		} else { // we have searched the whole tree
@@ -955,5 +996,7 @@ DIV_ASSIGN      : '/=';
 \chapter{Project proposal}
 
 \input{proposal}
+
+\end{appendices}
 
 \end{document}

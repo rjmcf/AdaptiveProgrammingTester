@@ -1,8 +1,8 @@
 y = csvread('/Users/Rjmcf/Documents/Cambridge/Year 3/Personal Project/AdaptiveProgrammingTester/src/entryPoints/evaluationDiff.txt');
 x = 1:length(y);
 plot(x,y,'x-');
-%h = title('Differing rates of increase in difficulty for different questions', 'FontSize', 16);
-h = title('Difficulty increase with number of correct solutions', 'FontSize', 16);
+%h = title('Rates of increase in difficulty for each question', 'FontSize', 16);
+h = title('Increase in difficulty with number of correct solutions', 'FontSize', 16);
 P = get(h,'Position');
 set(h,'Position',[P(1) P(2)+0.3 P(3)])
 % hold on;
